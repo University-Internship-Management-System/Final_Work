@@ -7,10 +7,8 @@ namespace UniversityInternshipManagmentSystem.Models
         public string CompEmail { get; set; }
         public string Location { get; set; }
 
-        // Default Constructor
         public CompanySupervisor() { }
 
-        // Parameterized Constructor
         public CompanySupervisor(
             string name,
             string email,
