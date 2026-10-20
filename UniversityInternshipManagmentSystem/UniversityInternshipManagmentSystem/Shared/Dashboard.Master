@@ -1,0 +1,45 @@
+<%@ Master Language="C#" %>
+<%@ Register Src="~/Shared/Sidebar.ascx" TagPrefix="uims" TagName="Sidebar" %>
+<%@ Register Src="~/Shared/Footer.ascx" TagPrefix="uims" TagName="Footer" %>
+
+<%-- Layout for the ROLE pages (Student, Company, Academic, Coordinator): sidebar on the left + footer --%>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UIMS</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Shared/uims.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="uims-shell">
+
+            <aside class="uims-sidebar">
+                <uims:Sidebar runat="server" />
+            </aside>
+            <div class="uims-overlay" onclick="document.body.classList.remove('uims-side-open')"></div>
+
+            <div class="uims-main">
+                <%-- Small top bar, only visible on phones/tablets: opens the sidebar --%>
+                <div class="uims-topbar">
+                    <button type="button" class="uims-menu-btn" aria-label="Open menu"
+                        onclick="document.body.classList.add('uims-side-open')">&#9776;</button>
+                    <span>UIMS</span>
+                </div>
+
+                <main class="uims-content">
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+                </main>
+
+                <uims:Footer runat="server" />
+            </div>
+
+        </div>
+    </form>
+
+    <script src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
+</body>
+</html>

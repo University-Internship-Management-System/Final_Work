@@ -1,0 +1,29 @@
+<%@ Master Language="C#" %>
+<%@ Register Src="~/Shared/Navbar.ascx" TagPrefix="uims" TagName="Navbar" %>
+<%@ Register Src="~/Shared/Footer.ascx" TagPrefix="uims" TagName="Footer" %>
+
+<%-- Layout for PUBLIC pages (Home, About, Contact, Login): navbar on top + footer at the bottom --%>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University Internship Management System</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Shared/uims.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body class="uims-public d-flex flex-column min-vh-100">
+    <form id="form1" runat="server" class="d-flex flex-column flex-grow-1">
+        <uims:Navbar runat="server" />
+
+        <main class="flex-grow-1">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </main>
+
+        <uims:Footer runat="server" />
+    </form>
+
+    <script src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
+</body>
+</html>

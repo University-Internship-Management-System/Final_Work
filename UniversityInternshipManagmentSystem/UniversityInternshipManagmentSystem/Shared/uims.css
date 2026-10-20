@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* =====================================================================
+   UIMS design system (University of Jordan)
+   Use the variables below instead of typing colors by hand:  color: var(--uims-primary);
+   ===================================================================== */
+:root {
+    /* Brand */
+    --uims-primary: #07523E;
+    --uims-dark: #04382D;
+    --uims-accent: #178568;
+    --uims-mint: #EAF4EF;
+    --uims-bg: #F8FAF9;
+    --uims-white: #FFFFFF;
+    --uims-text: #183B31;
+    --uims-muted: #65756E;
+    --uims-border: #E2E8E5;
+
+    /* Status */
+    --uims-success: #16A34A;   /* Approved / Completed */
+    --uims-warning: #F59E0B;   /* Pending / In Progress */
+    --uims-danger: #DC2626;    /* Rejected / Errors */
+    --uims-info: #2563EB;      /* Information / Submitted */
+
+    --uims-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --uims-sidebar-width: 260px;
+}
+
+/* ---------- Base ---------- */
+body {
+    font-family: var(--uims-font);
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--uims-text);
+    background: var(--uims-bg);
+}
+
+a { color: var(--uims-accent); }
+a:hover { color: var(--uims-primary); }
+
+/* ---------- Typography ---------- */
+.uims-hero-title { font-size: 46px; font-weight: 700; line-height: 1.15; }  /* Hero heading   44-48px Bold */
+h1, .page-title  { font-size: 32px; font-weight: 700; }                     /* Page title     30-32px Bold */
+h2, .section-title { font-size: 24px; font-weight: 600; }                   /* Section heading   24px SemiBold */
+h3, .card-title  { font-size: 18px; font-weight: 600; }                     /* Card title        18px SemiBold */
+.small-label     { font-size: 13px; font-weight: 500; color: var(--uims-muted); } /* Small labels 12-13px Medium */
+.text-muted      { color: var(--uims-muted) !important; }
+
+/* ---------- Bootstrap overrides (so normal Bootstrap classes use our colors) ---------- */
+.btn { font-size: 14px; font-weight: 600; border-radius: 10px; }
+
+.btn-primary {
+    --bs-btn-bg: var(--uims-primary);
+    --bs-btn-border-color: var(--uims-primary);
+    --bs-btn-hover-bg: var(--uims-dark);
+    --bs-btn-hover-border-color: var(--uims-dark);
+    --bs-btn-active-bg: var(--uims-dark);
+    --bs-btn-active-border-color: var(--uims-dark);
+    --bs-btn-disabled-bg: var(--uims-primary);
+    --bs-btn-disabled-border-color: var(--uims-primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--uims-primary);
+    --bs-btn-border-color: var(--uims-primary);
+    --bs-btn-hover-bg: var(--uims-primary);
+    --bs-btn-hover-border-color: var(--uims-primary);
+    --bs-btn-active-bg: var(--uims-dark);
+    --bs-btn-active-border-color: var(--uims-dark);
+}
+
+.card {
+    border: 1px solid var(--uims-border);
+    border-radius: 14px;
+    background: var(--uims-white);
+}
+
+.form-control, .form-select {
+    border-color: var(--uims-border);
+    border-radius: 10px;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--uims-accent);
+    box-shadow: 0 0 0 .2rem rgba(23, 133, 104, .18);
+}
+
+/* ---------- Status badges:  <span class="badge badge-approved">Approved</span> ---------- */
+.badge { font-size: 12px; font-weight: 500; border-radius: 99px; padding: .4em .8em; }
+.badge-approved  { background: #DCFCE7; color: #15803D; }
+.badge-pending   { background: #FEF3C7; color: #B45309; }
+.badge-rejected  { background: #FEE2E2; color: #B91C1C; }
+.badge-submitted { background: #DBEAFE; color: #1D4ED8; }
+
+/* =====================================================================
+   PUBLIC LAYOUT  (Public.Master): navbar + footer
+   ===================================================================== */
+.uims-navbar {
+    background: var(--uims-white);
+    border-bottom: 1px solid var(--uims-border);
+    padding: 12px 0;
+}
+.uims-navbar .navbar-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; color: var(--uims-primary);
+}
+.uims-logo {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--uims-primary); color: var(--uims-white);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+}
+.uims-navbar .nav-link {
+    font-size: 14px; font-weight: 500; color: var(--uims-text);
+}
+.uims-navbar .nav-link:hover { color: var(--uims-accent); }
+
+/* =====================================================================
+   DASHBOARD LAYOUT  (Dashboard.Master): sidebar + content + footer
+   ===================================================================== */
+.uims-shell { display: flex; min-height: 100vh; }
+
+.uims-sidebar {
+    width: var(--uims-sidebar-width);
+    flex: none;
+    position: sticky; top: 0; height: 100vh;
+    display: flex; flex-direction: column;
+    background: linear-gradient(180deg, var(--uims-dark), var(--uims-primary));
+    color: var(--uims-mint);
+    padding: 22px 16px;
+    overflow-y: auto;
+}
+.uims-side-brand { display: flex; align-items: center; gap: 10px; color: var(--uims-white); text-decoration: none; margin-bottom: 4px; }
+.uims-side-brand:hover { color: var(--uims-white); }
+.uims-side-brand strong { font-size: 18px; font-weight: 700; }
+.uims-side-brand .uims-logo { background: var(--uims-white); color: var(--uims-primary); }
+.uims-side-role { font-size: 12px; font-weight: 500; letter-spacing: .6px; text-transform: uppercase; color: #9FCDBB; margin: 0 0 22px 48px; }
+
+.uims-side-links { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.uims-side-link {
+    display: block; padding: 10px 14px; border-radius: 10px;
+    font-size: 14px; font-weight: 500;
+    color: var(--uims-mint); text-decoration: none;
+}
+.uims-side-link:hover { background: rgba(255, 255, 255, .10); color: var(--uims-white); }
+.uims-side-link.active { background: var(--uims-accent); color: var(--uims-white); font-weight: 600; }
+
+.uims-side-user { border-top: 1px solid rgba(255, 255, 255, .18); padding-top: 14px; margin-top: 14px; }
+.uims-side-user .name { font-size: 14px; font-weight: 600; color: var(--uims-white); }
+.uims-side-logout { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 500; color: #9FCDBB; text-decoration: none; }
+.uims-side-logout:hover { color: var(--uims-white); }
+
+.uims-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.uims-content { flex: 1; padding: 32px; }
+
+.uims-topbar { display: none; }
+.uims-overlay { display: none; }
+
+@media (max-width: 991px) {
+    .uims-sidebar { position: fixed; left: calc(-1 * var(--uims-sidebar-width) - 10px); top: 0; z-index: 1040; transition: left .25s; }
+    body.uims-side-open .uims-sidebar { left: 0; }
+    body.uims-side-open .uims-overlay { display: block; position: fixed; inset: 0; background: rgba(0, 0, 0, .4); z-index: 1030; }
+    .uims-topbar {
+        display: flex; align-items: center; gap: 12px;
+        background: var(--uims-white); border-bottom: 1px solid var(--uims-border);
+        padding: 10px 16px; font-weight: 600; color: var(--uims-primary);
+    }
+    .uims-menu-btn { border: 1px solid var(--uims-border); background: var(--uims-white); border-radius: 8px; padding: 4px 10px; font-size: 18px; line-height: 1.2; }
+    .uims-content { padding: 20px 16px; }
+}
+
+/* =====================================================================
+   FOOTER  (Footer.ascx, used by both layouts)
+   ===================================================================== */
+.uims-footer {
+    background: var(--uims-white);
+    border-top: 1px solid var(--uims-border);
+    color: var(--uims-muted);
+    font-size: 13px;
+    padding: 18px 0;
+}
+.uims-footer a { color: var(--uims-muted); text-decoration: none; margin-left: 16px; }
+.uims-footer a:hover { color: var(--uims-primary); }
+.uims-footer-inner { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; padding: 0 32px; }
+
+/* On the public pages the footer is dark green */
+.uims-public .uims-footer { background: var(--uims-dark); color: #BFDDD0; border-top: 0; padding: 28px 0; }
+.uims-public .uims-footer a { color: #BFDDD0; }
+.uims-public .uims-footer a:hover { color: var(--uims-white); }
