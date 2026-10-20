@@ -1,0 +1,16 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# NuGet packages (they are restored when you build)
+packages/
+
+# Misc
+*.log
+Thumbs.db
