@@ -384,7 +384,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Academic\" />
-    <Folder Include="App_Data\" />
     <Folder Include="Company\" />
     <Folder Include="Coordinator\" />
   </ItemGroup>
@@ -437,4 +436,63 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
+  <ItemGroup>
+    <Content Include="App_Data\firebase-realtime-dummy-data.json" />
+    <Content Include="Student\StudentDashboardPage\Dashboard.aspx" />
+    <Content Include="Student\Content\Student.css" />
+    <Content Include="Student\MyProfile.aspx" />
+    <Content Include="Student\StudentProfilePage\Profile.aspx" />
+    <Content Include="Student\Profile.aspx" />
+    <Content Include="Student\StudentDashboardPage\Dashboard.css" />
+    <Content Include="Student\StudentProfilePage\Profile.css" />
+    <Content Include="Student\Content\Student.js" />
+    <Content Include="Student\Tests\Start-StudentLocalTest.ps1" />
+    <Content Include="Student\Tests\Verify-StudentAuthentication.ps1" />
+    <Content Include="Student\PROFILE-WRITES.md" />
+    <Content Include="Student\Tests\Verify-EditProfile.ps1" />
+    <Content Include="Student\SHARED-LAYOUT.md" />
+    <Content Include="Student\INTEGRATION.md" />
+    <Content Include="Student\FINALIZATION.md" />
+    <Content Include="Student\Tests\Verify-StudentModule.ps1" />
+    <Content Include="Student\Tests\Verify-StudentPages.cjs" />
+    <Content Include="Student\Images\university-campus.jpg" />
+    <Content Include="Student\Images\University_of_Jordan_Logo.svg" />
+    <Compile Include="Student\StudentDashboardPage\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\StudentDashboardPage\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\StudentProfilePage\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\StudentProfilePage\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\StudentPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\Data\StudentModels.cs" />
+    <Compile Include="Student\Data\StudentRepository.cs" />
+    <Compile Include="Student\Data\StudentDevelopmentSignIn.cs" />
+    <Compile Include="Student\Data\ProfileValidation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ContactUs\ContactPage\Contact.aspx" />
+    <Content Include="ContactUs\ContactPage\Contact.css" />
+    <Content Include="ContactUs\ContactPage\Contact.js" />
+    <Content Include="ContactUs\ContactPage\INTEGRATION.md" />
+    <Content Include="ContactUs\ContactPage\Verify-Contact.ps1" />
+    <Content Include="ContactUs\ContactPage\Test-ContactHttp.ps1" />
+    <Compile Include="ContactUs\ContactPage\Contact.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContactUs\ContactPage\Contact.aspx.designer.cs" />
+    <Compile Include="ContactUs\ContactPage\ContactService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
 </Project>
