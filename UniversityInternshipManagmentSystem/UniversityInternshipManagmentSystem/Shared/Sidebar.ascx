@@ -1,9 +1,10 @@
 <%@ Control Language="C#" %>
+<%@ Import Namespace="UniversityInternshipManagmentSystem.Config" %>
 
 <script runat="server">
     // =====================================================================
-    //  EDIT THE MENUS HERE.   Format:  "Link text|~/Folder/Page.aspx"
-    //  The role comes from Session["role"]  ("student", "company", "academic", "coordinator")
+    //  Role Menus (100% English):  "Link text|~/Folder/Page.aspx"
+    //  Role retrieved from Session["role"] ("student", "company", "academic", "coordinator")
     // =====================================================================
     string[] GetMenu(string role)
     {
@@ -11,11 +12,11 @@
         {
             case "student":
                 return new[] {
-                    "Dashboard|~/Student/Dashboard.aspx",
+                    "Dashboard|~/Student/Dashboard/Dashboard.aspx",
                     "My Profile|~/Student/Profile.aspx",
-                    "Explore Opportunities|~/Student/Opportunities.aspx",
+                    "Browse Opportunities|~/Student/Opportunities.aspx",
                     "My Applications|~/Student/Applications.aspx",
-                    "My Tasks|~/Student/Tasks.aspx",
+                    "Tasks & Reports|~/Student/Tasks.aspx",
                     "My Progress|~/Student/Progress.aspx"
                 };
             case "company":
@@ -67,13 +68,14 @@
     protected void Page_Load(object sender, EventArgs e)
     {
         string role = ((Session["role"] as string) ?? "").ToLower();
-        string currentPage = Request.AppRelativeCurrentExecutionFilePath;
+        string currentPage = Request.AppRelativeCurrentExecutionFilePath ?? "";
 
         var html = new System.Text.StringBuilder();
         foreach (string item in GetMenu(role))
         {
             string[] parts = item.Split('|');
-            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase);
+            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase) ||
+                          (parts[1].IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0 && currentPage.IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0);
             html.Append("<a class=\"uims-side-link" + (active ? " active" : "") + "\" href=\"" + ResolveUrl(parts[1]) + "\">"
                         + Server.HtmlEncode(parts[0]) + "</a>");
         }
@@ -85,8 +87,9 @@
 
     protected void btnLogout_Click(object sender, EventArgs e)
     {
-        Session.Clear();
-        Response.Redirect("~/Default.aspx");
+        AuthHelper.SignOut();
+        Response.Redirect("~/login/Login.aspx?msg=" + Server.UrlEncode("You have been signed out successfully."), false);
+        Context.ApplicationInstance.CompleteRequest();
     }
 </script>
 
@@ -102,5 +105,5 @@
 
 <div class="uims-side-user">
     <div class="name"><asp:Literal ID="litName" runat="server" /></div>
-    <asp:LinkButton ID="btnLogout" runat="server" CssClass="uims-side-logout" CausesValidation="false" OnClick="btnLogout_Click">Log out</asp:LinkButton>
+    <asp:LinkButton ID="btnLogout" runat="server" CssClass="uims-side-logout" CausesValidation="false" OnClick="btnLogout_Click">Sign Out</asp:LinkButton>
 </div>

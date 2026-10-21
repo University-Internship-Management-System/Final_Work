@@ -10,6 +10,7 @@
 
 # NuGet packages (they are restored when you build)
 packages/
+nuget.exe
 
 # Misc
 *.log
