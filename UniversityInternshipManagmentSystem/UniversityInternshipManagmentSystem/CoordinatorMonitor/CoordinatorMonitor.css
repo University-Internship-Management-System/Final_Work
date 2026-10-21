@@ -1,0 +1,45 @@
+body { background: #f6f8fa; }
+        .cm-hero-card { border: 4px solid var(--uims-warning); border-radius: 16px; background: white; padding: 30px; margin-bottom: 28px; }
+        .cm-hero-kicker { display: inline-block; padding: 5px 12px; background: var(--uims-warning); border-radius: 7px; font-size: 12px; font-weight: 700; margin-bottom: 14px; }
+        .cm-hero-card h1 { font-size: clamp(26px, 2.5vw, 36px); font-weight: 800; color: var(--uims-dark); }
+        .cm-hero-card p { color: var(--uims-muted); margin: 0; }
+        @media (max-width: 600px) { .cm-hero-card { padding: 22px; } }
+        .admin-card { border: 1px solid #dfe6ea; border-radius: 14px; box-shadow: 0 10px 25px rgba(18, 43, 57, .04); }
+        .monitor-table { min-width: 900px; }
+        .monitor-table th { white-space: nowrap; font-size: .85rem; color: #183b31; padding: 16px 12px; background: #f8faf9; }
+        .monitor-table td { padding: 14px 12px; vertical-align: middle; }
+        .status-badge { display: inline-block; padding: 5px 9px; border-radius: 7px; background: #fff4d6; color: #8d6200; font-weight: 700; font-size: .76rem; white-space: nowrap; }
+        .hours-track { width: 96px; height: 7px; background: #e2e8e5; border-radius: 99px; margin-top: 7px; }
+        .student-detail dt { color: #65756E; font-size: .85rem; font-weight: 500; }
+        .student-detail dd { color: #183B31; margin-bottom: 1rem; overflow-wrap: anywhere; }
+        .detail-overlay { position: fixed; inset: 0; z-index: 1050; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(15, 23, 42, .24); }
+        .detail-dialog { width: min(820px, 100%); max-height: min(85vh, 900px); overflow-y: auto; background: #fff; border-radius: 16px; box-shadow: 0 24px 70px rgba(4, 56, 45, .25); }
+        .monitor-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0; }
+        .monitor-tab { border: 1px solid #E2E8E5; background: #fff; color: #183B31; border-radius: 10px; padding: 10px 16px; font-weight: 600; }
+        .monitor-tab:hover, .monitor-tab[aria-selected="true"] { background: #07523E; border-color: #07523E; color: #fff; }
+        .monitor-panel[hidden] { display: none !important; }
+        .student-actions { display: flex; flex-wrap: nowrap; align-items: center; gap: 7px; white-space: nowrap; }
+        .student-actions .btn { padding: 6px 10px; white-space: nowrap; font-size: .82rem; }
+        .student-actions .more-button { width: 34px; padding: 5px; font-size: 1.2rem; line-height: 1; }
+        .action-menu { position: fixed; z-index: 1200; min-width: 190px; padding: 6px; background: #fff; border: 1px solid #e2e8e5; border-radius: 10px; box-shadow: 0 12px 32px rgba(4,56,45,.14); }
+        .action-menu[hidden], .student-drawer[hidden], .drawer-backdrop[hidden], .drawer-panel[hidden] { display: none !important; }
+        .action-menu button { display: block; width: 100%; border: 0; background: transparent; color: #183b31; padding: 9px 11px; text-align: left; border-radius: 6px; }
+        .action-menu button:hover, .action-menu button:focus { background: #eaf4ef; }
+        .monitor-filters { background: #f8faf9; border-radius: 10px; }
+        .monitor-filters .form-control, .monitor-filters .form-select { min-height: 42px; }
+        .monitor-filters .btn { min-height: 42px; }
+        .student-row:hover { background: #f8faf9; }
+        .hours-track { max-width: 100%; }
+        .drawer-backdrop { position: fixed; inset: 0; z-index: 1250; background: rgba(15,23,42,.28); }
+        .student-drawer { position: fixed; z-index: 1251; right: 0; top: 0; bottom: 0; width: min(600px, 100%); overflow-y: auto; background: #fff; box-shadow: -16px 0 45px rgba(4,56,45,.15); }
+        .drawer-head { position: sticky; top: 0; z-index: 1; background: #fff; border-bottom: 1px solid #e2e8e5; padding: 22px 26px; }
+        .drawer-content { padding: 24px 26px; }
+        .drawer-tabs { display: flex; gap: 5px; overflow-x: auto; border-bottom: 1px solid #e2e8e5; margin-bottom: 22px; }
+        .drawer-tabs button { white-space: nowrap; border: 0; border-bottom: 3px solid transparent; background: transparent; padding: 11px 13px; color: #65756e; font-weight: 600; }
+        .drawer-tabs button[aria-selected="true"] { color: #07523e; border-bottom-color: #07523e; }
+        .drawer-section { background: #f8faf9; border: 1px solid #e2e8e5; border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+        .drawer-section h3 { font-size: 1rem; font-weight: 700; margin-bottom: 15px; }
+        .drawer-empty { color: #65756e; margin-bottom: 0; }
+        body.drawer-open { overflow: hidden; }
+        .monitor-table .student-name { font-weight: 600; min-width: 130px; }
+        @media (max-width: 700px) { .detail-overlay { padding: 12px; } .detail-dialog { max-height: 92vh; } }

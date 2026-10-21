@@ -36,13 +36,14 @@
                     "Account|~/Academic/Account.aspx"
                 };
             case "coordinator":
+            case "admin":
                 return new[] {
-                    "Dashboard|~/Coordinator/Dashboard.aspx",
-                    "Students|~/Coordinator/Students.aspx",
-                    "Companies|~/Coordinator/Companies.aspx",
-                    "Academic Supervisors|~/Coordinator/AcademicSupervisors.aspx",
+                    "Dashboard|~/CoordinatorDashbord/CoordinatorDashbord.aspx",
+                    "Students|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=students",
+                    "Companies|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=companies",
+                    "Academic Supervisors|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=academic",
                     "Assign Supervisors|~/Coordinator/Assign.aspx",
-                    "Monitor Progress|~/Coordinator/Monitor.aspx",
+                    "Monitor Progress|~/CoordinatorMonitor/CoordinatorMonitor.aspx",
                     "Completion Review|~/Coordinator/FinalCompletionReview.aspx",
                     "Contact Messages|~/Coordinator/Messages.aspx",
                     "Account|~/Coordinator/Account.aspx"
@@ -59,7 +60,8 @@
             case "student": return "Student";
             case "company": return "Company Supervisor";
             case "academic": return "Academic Supervisor";
-            case "coordinator": return "Coordinator";
+            case "coordinator":
+            case "admin": return "Coordinator";
             default: return "Guest";
         }
     }
@@ -68,12 +70,21 @@
     {
         string role = ((Session["role"] as string) ?? "").ToLower();
         string currentPage = Request.AppRelativeCurrentExecutionFilePath;
+        // Keep direct Coordinator page previews navigable when no login session exists.
+        // This only selects navigation links; it does not grant access to page data.
+        if (String.IsNullOrEmpty(role) && (currentPage.StartsWith("~/Coordinator/", StringComparison.OrdinalIgnoreCase) || currentPage.StartsWith("~/CoordinatorDashbord/", StringComparison.OrdinalIgnoreCase) || currentPage.StartsWith("~/CoordinatorMonitor/", StringComparison.OrdinalIgnoreCase)))
+        {
+            role = "coordinator";
+        }
 
         var html = new System.Text.StringBuilder();
         foreach (string item in GetMenu(role))
         {
             string[] parts = item.Split('|');
-            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase);
+            string[] target = parts[1].Split('?');
+            bool active = currentPage.Equals(target[0], StringComparison.OrdinalIgnoreCase)
+                          && (target.Length == 1 ? String.IsNullOrEmpty(Request.QueryString["view"])
+                                                 : Request.QueryString["view"] == target[1].Split('=')[1]);
             html.Append("<a class=\"uims-side-link" + (active ? " active" : "") + "\" href=\"" + ResolveUrl(parts[1]) + "\">"
                         + Server.HtmlEncode(parts[0]) + "</a>");
         }
