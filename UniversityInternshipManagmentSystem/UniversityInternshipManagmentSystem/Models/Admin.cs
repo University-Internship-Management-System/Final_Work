@@ -9,7 +9,7 @@ namespace UniversityInternshipManagmentSystem.Models
     {
         public Admin() { }
 
-        public Admin(string name, string role, string email, bool firstLogin,string phoneNumber, string profilePic) : base(name, role, email, firstLogin, phoneNumber, profilePic)
+        public Admin(string name, string email, bool firstLogin,string phoneNumber, string profilePic) : base(name, "Admin", email, firstLogin, phoneNumber, profilePic)
         {
 
         }

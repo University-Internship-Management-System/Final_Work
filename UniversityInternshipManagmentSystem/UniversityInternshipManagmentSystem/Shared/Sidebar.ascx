@@ -1,9 +1,10 @@
 <%@ Control Language="C#" %>
+<%@ Import Namespace="UniversityInternshipManagmentSystem.Config" %>
 
 <script runat="server">
     // =====================================================================
-    //  EDIT THE MENUS HERE.   Format:  "Link text|~/Folder/Page.aspx"
-    //  The role comes from Session["role"]  ("student", "company", "academic", "coordinator")
+    //  Role Menus (100% English):  "Link text|~/Folder/Page.aspx"
+    //  Role retrieved from Session["role"] ("student", "company", "academic", "coordinator")
     // =====================================================================
     string[] GetMenu(string role)
     {
@@ -11,11 +12,11 @@
         {
             case "student":
                 return new[] {
-                    "Dashboard|~/Student/Dashboard.aspx",
+                    "Dashboard|~/Student/Dashboard/Dashboard.aspx",
                     "My Profile|~/Student/Profile.aspx",
-                    "Explore Opportunities|~/Student/Opportunities.aspx",
+                    "Browse Opportunities|~/Student/Opportunities.aspx",
                     "My Applications|~/Student/Applications.aspx",
-                    "My Tasks|~/Student/Tasks.aspx",
+                    "My Tasks|~/Student/StudentTasksPage/StudentTasksForm.aspx",
                     "My Progress|~/Student/Progress.aspx"
                 };
             case "company":
@@ -69,22 +70,20 @@
     protected void Page_Load(object sender, EventArgs e)
     {
         string role = ((Session["role"] as string) ?? "").ToLower();
-        string currentPage = Request.AppRelativeCurrentExecutionFilePath;
-        // Keep direct Coordinator page previews navigable when no login session exists.
-        // This only selects navigation links; it does not grant access to page data.
-        if (String.IsNullOrEmpty(role) && (currentPage.StartsWith("~/Coordinator/", StringComparison.OrdinalIgnoreCase) || currentPage.StartsWith("~/CoordinatorDashbord/", StringComparison.OrdinalIgnoreCase) || currentPage.StartsWith("~/CoordinatorMonitor/", StringComparison.OrdinalIgnoreCase)))
-        {
-            role = "coordinator";
-        }
+        string currentPage = Request.AppRelativeCurrentExecutionFilePath ?? "";
 
         var html = new System.Text.StringBuilder();
         foreach (string item in GetMenu(role))
         {
+            // Active on the exact page, on any page inside the same page folder
+            // (so "My Tasks" stays highlighted on the week pages too),
+            // or on any Dashboard page for the Dashboard link.
             string[] parts = item.Split('|');
-            string[] target = parts[1].Split('?');
-            bool active = currentPage.Equals(target[0], StringComparison.OrdinalIgnoreCase)
-                          && (target.Length == 1 ? String.IsNullOrEmpty(Request.QueryString["view"])
-                                                 : Request.QueryString["view"] == target[1].Split('=')[1]);
+            string folder = parts[1].Substring(0, parts[1].LastIndexOf('/'));
+            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase)
+                          || (folder.Split('/').Length > 2 && currentPage.StartsWith(folder + "/", StringComparison.OrdinalIgnoreCase))
+                          || (parts[1].IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0
+                              && currentPage.IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0);
             html.Append("<a class=\"uims-side-link" + (active ? " active" : "") + "\" href=\"" + ResolveUrl(parts[1]) + "\">"
                         + Server.HtmlEncode(parts[0]) + "</a>");
         }
@@ -96,8 +95,9 @@
 
     protected void btnLogout_Click(object sender, EventArgs e)
     {
-        Session.Clear();
-        Response.Redirect("~/Default.aspx");
+        AuthHelper.SignOut();
+        Response.Redirect("~/login/Login.aspx?msg=" + Server.UrlEncode("You have been signed out successfully."), false);
+        Context.ApplicationInstance.CompleteRequest();
     }
 </script>
 
@@ -113,5 +113,5 @@
 
 <div class="uims-side-user">
     <div class="name"><asp:Literal ID="litName" runat="server" /></div>
-    <asp:LinkButton ID="btnLogout" runat="server" CssClass="uims-side-logout" CausesValidation="false" OnClick="btnLogout_Click">Log out</asp:LinkButton>
+    <asp:LinkButton ID="btnLogout" runat="server" CssClass="uims-side-logout" CausesValidation="false" OnClick="btnLogout_Click">Sign Out</asp:LinkButton>
 </div>
