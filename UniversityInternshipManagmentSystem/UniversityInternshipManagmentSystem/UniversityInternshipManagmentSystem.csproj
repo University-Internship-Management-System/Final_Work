@@ -198,6 +198,10 @@
     <Content Include="Shared\Sidebar.ascx" />
     <Content Include="Shared\uims.css" />
     <Content Include="Site.Master" />
+    <Content Include="Student\StudentTasksPage\StudentTasks.css" />
+    <Content Include="Student\StudentTasksPage\StudentTasksForm.aspx" />
+    <Content Include="Student\StudentTasksPage\WeekTasks.js" />
+    <Content Include="Student\StudentTasksPage\WeekTasksForm.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -231,6 +235,7 @@
     </Compile>
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Config\FirebaseDb.cs" />
+    <Compile Include="Config\TaskDb.cs" />
     <Compile Include="Config\AuthHelper.cs" />
     <Compile Include="login\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -310,6 +315,8 @@
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\CompanySupervisor.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\Tasks.cs" />
+    <Compile Include="Models\TaskSubmission.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
@@ -326,6 +333,21 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="Student\StudentTasksPage\StudentTasksForm.aspx.cs">
+      <DependentUpon>StudentTasksForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\StudentTasksPage\StudentTasksForm.aspx.designer.cs">
+      <DependentUpon>StudentTasksForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\StudentTasksPage\TaskViews.cs" />
+    <Compile Include="Student\StudentTasksPage\WeekTasksForm.aspx.cs">
+      <DependentUpon>WeekTasksForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\StudentTasksPage\WeekTasksForm.aspx.designer.cs">
+      <DependentUpon>WeekTasksForm.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -339,7 +361,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Company\" />
     <Folder Include="Coordinator\" />
-    <Folder Include="Student\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

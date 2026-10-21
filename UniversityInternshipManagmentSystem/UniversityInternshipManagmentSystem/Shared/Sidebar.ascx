@@ -16,7 +16,7 @@
                     "My Profile|~/Student/Profile.aspx",
                     "Browse Opportunities|~/Student/Opportunities.aspx",
                     "My Applications|~/Student/Applications.aspx",
-                    "Tasks & Reports|~/Student/Tasks.aspx",
+                    "My Tasks|~/Student/StudentTasksPage/StudentTasksForm.aspx",
                     "My Progress|~/Student/Progress.aspx"
                 };
             case "company":
@@ -73,9 +73,15 @@
         var html = new System.Text.StringBuilder();
         foreach (string item in GetMenu(role))
         {
+            // Active on the exact page, on any page inside the same page folder
+            // (so "My Tasks" stays highlighted on the week pages too),
+            // or on any Dashboard page for the Dashboard link.
             string[] parts = item.Split('|');
-            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase) ||
-                          (parts[1].IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0 && currentPage.IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0);
+            string folder = parts[1].Substring(0, parts[1].LastIndexOf('/'));
+            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase)
+                          || (folder.Split('/').Length > 2 && currentPage.StartsWith(folder + "/", StringComparison.OrdinalIgnoreCase))
+                          || (parts[1].IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0
+                              && currentPage.IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0);
             html.Append("<a class=\"uims-side-link" + (active ? " active" : "") + "\" href=\"" + ResolveUrl(parts[1]) + "\">"
                         + Server.HtmlEncode(parts[0]) + "</a>");
         }
