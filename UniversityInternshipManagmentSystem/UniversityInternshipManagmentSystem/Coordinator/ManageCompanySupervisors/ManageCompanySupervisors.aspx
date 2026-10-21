@@ -1,38 +1,37 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManageCompanySupervisors.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.ManageCompanySupervisorsPage" MasterPageFile="~/Shared/Dashboard.Master" %>
+﻿<%@ Page Title="Company supervisors" Language="C#" Async="true" AutoEventWireup="true" CodeBehind="ManageCompanySupervisors.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.ManageCompanySupervisorsPage" MasterPageFile="~/Shared/Dashboard.Master" %>
 <asp:Content ID="head" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" href="company-supervisors.css" />
+    <link href="company-supervisors.css?v=20261021-3" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="MainContent" runat="server">
-    <header class="company-heading">
-        <div><p class="company-eyebrow">COORDINATOR / ACCOUNT MANAGEMENT</p><h1 class="page-title">Company supervisors</h1><p class="text-muted">Manage company contacts and supervisor accounts.</p></div>
-        <a class="btn btn-primary" href="#companyEditor" id="addCompany">Add supervisor</a>
-    </header>
-    <p class="company-preview" role="note">Interface preview. You can fill in and review the form; accounts are not saved yet.</p>
-    <div class="company-grid">
+    <header class="company-heading"><div><p class="company-eyebrow">COORDINATOR / ACCOUNT MANAGEMENT</p><h1 class="page-title">Company supervisors</h1><p class="text-muted">Manage company contacts and sign-in access.</p></div><asp:LinkButton ID="addCompany" runat="server" Visible="false" Text="Add supervisor" CssClass="btn btn-primary" OnClick="AddClick" CausesValidation="false" /></header>
+    <asp:Panel ID="messagePanel" runat="server" CssClass="company-preview" role="status" Visible="false"><asp:Literal ID="message" runat="server" Mode="Encode" /></asp:Panel>
+    <asp:Panel ID="workspace" runat="server" Visible="false">
         <section class="card company-card" aria-labelledby="directoryTitle">
-            <div class="company-section-heading"><div><h2 id="directoryTitle">Company directory</h2><p class="text-muted">Supervisor details and account access.</p></div><span class="company-count">0 accounts loaded</span></div>
-            <div class="company-tools"><div><label for="companySearch">Search companies or supervisors</label><input type="search" id="companySearch" class="form-control" placeholder="Search name, company or email" disabled /></div><div><label for="statusFilter">Account status</label><select id="statusFilter" class="form-select" disabled><option>All statuses</option><option>Active</option><option>Inactive</option></select></div></div>
-            <div class="table-responsive"><table class="table company-table"><thead><tr><th scope="col">Company / Supervisor</th><th scope="col">Location</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead><tbody><tr><td colspan="4"><div class="company-empty"><span class="company-empty-icon" aria-hidden="true">C</span><h3>No company accounts loaded</h3><p>Company records, editing and account activation will be available when this page is connected to Firebase.</p><a href="#companyEditor" class="btn btn-outline-primary">Prepare a supervisor account</a></div></td></tr></tbody></table></div>
+            <div class="company-section-heading"><div><h2 id="directoryTitle">Company directory</h2><p class="text-muted">Find a supervisor, edit company details or manage account access.</p></div><span class="company-count"><asp:Literal ID="companyCount" runat="server" /> accounts</span></div>
+            <div class="company-search-tools"><asp:Label runat="server" AssociatedControlID="companySearch" CssClass="visually-hidden" Text="Search companies or supervisors" /><asp:TextBox ID="companySearch" ClientIDMode="Static" runat="server" CssClass="form-control" MaxLength="120" placeholder="Search company, supervisor or email" /><asp:Button ID="searchButton" ClientIDMode="Static" runat="server" Text="Search" CssClass="btn btn-outline-primary" OnClick="SearchClick" CausesValidation="false" formnovalidate="formnovalidate" /></div>
+            <table class="table company-table"><thead><tr><th scope="col">Company</th><th scope="col">Supervisor</th><th scope="col">Contact</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead><tbody>
+                <asp:Repeater ID="companies" runat="server" OnItemCommand="CompaniesCommand"><ItemTemplate><tr data-company-row><td><strong><%#: Eval("CompanyName") %></strong><small><%#: Eval("Location") %></small></td><td><span class="company-mobile-label">Supervisor</span><%#: Eval("Name") %></td><td><small><%#: Eval("Email") %></small><small><%#: Eval("CompEmail") %></small><small><%#: Eval("PhoneNumber") %></small></td><td><span class="company-mobile-label">Status</span><span class='<%# Eval("StatusClass") %>'><%#: Eval("StatusText") %></span></td><td><div class="company-row-actions"><asp:LinkButton runat="server" Text="Edit" CssClass="btn btn-outline-primary btn-sm" CommandName="EditCompany" CommandArgument='<%# Eval("Id") %>' CausesValidation="false" /><asp:LinkButton runat="server" Text='<%# Eval("ToggleText") %>' CssClass='<%# Eval("ToggleClass") %>' Enabled='<%# Eval("CanToggle") %>' CommandName="ToggleLogin" CommandArgument='<%# Eval("Id") %>' CausesValidation="false" OnClientClick="return confirm('Change sign-in access for this company supervisor?');" /></div></td></tr></ItemTemplate></asp:Repeater>
+            </tbody></table>
+            <p id="companyLiveEmpty" class="company-empty" hidden>No matching companies. Try another name or email.</p>
+            <asp:Panel ID="emptyDirectory" runat="server" CssClass="company-empty" Visible="false"><h3>No matching accounts</h3><p>Add a company supervisor or change your search.</p></asp:Panel>
+            <p class="company-auth-note">Inactive accounts cannot sign in until reactivated. “No login linked” means the database record does not have a matching Authentication UID.</p>
         </section>
+        <asp:Panel ID="editorPanel" runat="server" Visible="false">
         <section id="companyEditor" class="card company-card" aria-labelledby="editorTitle">
-            <p class="company-eyebrow">NEW ACCOUNT</p><h2 id="editorTitle">Add company supervisor</h2><p class="text-muted">This account will have the Company Supervisor role.</p>
-            <fieldset class="company-fields"><legend>Supervisor details</legend>
-                <label for="supervisorName">Full name <span aria-hidden="true">*</span></label><input id="supervisorName" class="form-control" autocomplete="name" maxlength="100" minlength="2" required />
-                <label for="loginEmail">Login email <span aria-hidden="true">*</span></label><input id="loginEmail" type="email" class="form-control" autocomplete="email" maxlength="254" required /><small>The supervisor will use this email to sign in.</small>
-                <label for="phoneNumber">Phone number <span aria-hidden="true">*</span></label><input id="phoneNumber" type="tel" class="form-control" autocomplete="tel" maxlength="25" pattern="\+?[0-9 \(\)\-]{7,25}" placeholder="+962 7X XXX XXXX" required />
-            </fieldset>
-            <fieldset class="company-fields"><legend>Company information</legend>
-                <label for="companyName">Company name <span aria-hidden="true">*</span></label><input id="companyName" class="form-control" autocomplete="organization" maxlength="150" minlength="2" required />
-                <label for="companyEmail">Company email <span aria-hidden="true">*</span></label><input id="companyEmail" type="email" class="form-control" maxlength="254" required />
-                <label for="companyLocation">Location <span aria-hidden="true">*</span></label><input id="companyLocation" class="form-control" maxlength="200" placeholder="City and office address" required />
-            </fieldset>
-            <fieldset class="company-fields"><legend>Account access</legend>
-                <label for="temporaryPassword">Temporary password <span aria-hidden="true">*</span></label><div class="company-password"><input id="temporaryPassword" type="password" class="form-control" autocomplete="new-password" minlength="12" maxlength="128" required aria-describedby="passwordHelp" /><button id="togglePassword" type="button" aria-controls="temporaryPassword" aria-pressed="false">Show</button></div><small id="passwordHelp">At least 12 characters. The supervisor must change it at first login.</small>
-                <label for="accountStatus">Initial account status</label><select id="accountStatus" class="form-select"><option value="Active">Active</option><option value="Inactive">Inactive</option></select><small>Active accounts can sign in. Inactive accounts have sign-in access disabled.</small>
-            </fieldset>
-            <div class="company-actions"><button type="button" id="reviewCompany" class="btn btn-primary">Review account</button><button type="button" id="clearCompany" class="btn btn-outline-primary">Clear</button></div><p id="companyFeedback" class="company-feedback" role="status" hidden></p>
-        </section>
-    </div>
-    <dialog id="companyReview" aria-labelledby="reviewTitle"><div class="company-review-heading"><h2 id="reviewTitle">Review supervisor account</h2><button type="button" id="closeReview" aria-label="Close review">&times;</button></div><p class="text-muted">Check the details below. This preview does not create an account.</p><dl id="reviewDetails"></dl><p class="company-preview">The password is hidden and will not be saved in company profile data.</p><button type="button" id="returnToForm" class="btn btn-primary">Back to form</button></dialog>
-    <script src="<%= ResolveUrl("~/Coordinator/ManageCompanySupervisors/company-supervisors.js") %>" defer></script>
+            <p class="company-eyebrow">COMPANY ACCOUNT</p><h2 id="editorTitle"><asp:Literal ID="editorHeading" runat="server" Text="Add company supervisor" /></h2>
+            <fieldset class="company-fields"><legend>Supervisor details</legend><div class="company-form-grid">
+                <div><asp:Label runat="server" AssociatedControlID="supervisorName" Text="Full name *" /><asp:TextBox ID="supervisorName" ClientIDMode="Static" runat="server" CssClass="form-control" MaxLength="100" autocomplete="name" /></div>
+                <div><asp:Label runat="server" AssociatedControlID="loginEmail" Text="Login email *" /><asp:TextBox ID="loginEmail" runat="server" CssClass="form-control" MaxLength="254" inputmode="email" /><small>Login email is fixed after account creation.</small></div>
+                <div><asp:Label runat="server" AssociatedControlID="phoneNumber" Text="Phone number *" /><asp:TextBox ID="phoneNumber" runat="server" CssClass="form-control" MaxLength="25" TextMode="Phone" placeholder="+962 7X XXX XXXX" /></div>
+            </div></fieldset>
+            <fieldset class="company-fields"><legend>Company information</legend><div class="company-form-grid">
+                <div><asp:Label runat="server" AssociatedControlID="companyName" Text="Company name *" /><asp:TextBox ID="companyName" runat="server" CssClass="form-control" MaxLength="150" /></div>
+                <div><asp:Label runat="server" AssociatedControlID="companyEmail" Text="Company email *" /><asp:TextBox ID="companyEmail" runat="server" CssClass="form-control" MaxLength="254" inputmode="email" /></div>
+                <div><asp:Label runat="server" AssociatedControlID="companyLocation" Text="Location *" /><asp:TextBox ID="companyLocation" runat="server" CssClass="form-control" MaxLength="200" placeholder="City and office address" /></div>
+            </div></fieldset>
+            <asp:Panel ID="passwordSection" runat="server"><fieldset class="company-fields"><legend>Account access</legend><div class="company-password-field"><asp:Label runat="server" AssociatedControlID="temporaryPassword" Text="Temporary password *" /><div class="company-password"><asp:TextBox ID="temporaryPassword" ClientIDMode="Static" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="new-password" aria-describedby="passwordHelp" /><button id="togglePassword" type="button" aria-controls="temporaryPassword" aria-pressed="false">Show</button></div><small id="passwordHelp">At least 12 characters. A password change is required at first login.</small></div></fieldset></asp:Panel>
+            <div class="company-actions"><asp:Button ID="saveButton" runat="server" Text="Create account" CssClass="btn btn-primary" OnClick="SaveClick" formnovalidate="formnovalidate" /><asp:Button runat="server" Text="Cancel" CssClass="btn btn-outline-primary" OnClick="CancelClick" CausesValidation="false" formnovalidate="formnovalidate" /></div>
+        </section></asp:Panel>
+    </asp:Panel>
+    <script src="<%= ResolveUrl("~/Coordinator/ManageCompanySupervisors/company-supervisors.js?v=20261021-3") %>" defer></script>
 </asp:Content>

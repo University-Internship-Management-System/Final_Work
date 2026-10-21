@@ -43,6 +43,15 @@ public partial class CoordinatorAcademicAccounts : Page
     }
     protected async void Page_Load(object sender, EventArgs e)
     {
+        if (Session["userId"] == null)
+        {
+            Response.Redirect("~/Default.aspx", false);
+            return;
+        }
+
+        AuthHelper.RequireAuth(this, AuthHelper.RoleCoordinator);
+        if (Response.IsRequestBeingRedirected) return;
+
         await LoadAccounts();
     }
     private void Tell(string message, bool error = false)
