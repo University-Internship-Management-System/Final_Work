@@ -82,6 +82,6 @@
     </form>
 
     <script src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
-    <script src="<%= ResolveUrl("~/Scripts/Student/opportunities.js") %>"></script>
+    <script src="<%= ResolveUrl("Opportunities.js") %>"></script>
 </body>
 </html>
