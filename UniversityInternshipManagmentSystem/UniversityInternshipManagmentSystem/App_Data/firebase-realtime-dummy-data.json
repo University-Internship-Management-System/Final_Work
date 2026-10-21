@@ -1,0 +1,224 @@
+{
+  "Students": {
+    "student_001": {
+      "Name": "Ahmad Ali",
+      "Role": "Student",
+      "Email": "student1@example.com",
+      "FirstLogin": true,
+      "PhoneNumber": "+962700000101",
+      "ProfilePicUrl": "",
+      "UniEmail": "student1@university.example.com",
+      "Major": "Computer Science",
+      "CompanyId": "",
+      "AcademicSupervisorId": "academic_001",
+      "GPA": 3.65,
+      "CvUrl": "",
+      "PortfolioUrl": "",
+      "SkillsList": [
+        "C#",
+        "SQL",
+        "Problem Solving"
+      ]
+    },
+    "student_002": {
+      "Name": "Sara Mahmoud",
+      "Role": "Student",
+      "Email": "student2@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000102",
+      "ProfilePicUrl": "",
+      "UniEmail": "student2@university.example.com",
+      "Major": "Computer Science",
+      "CompanyId": "",
+      "AcademicSupervisorId": "academic_001",
+      "GPA": 3.82,
+      "CvUrl": "https://example.com/demo/cv/student_2.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_2",
+      "SkillsList": [
+        "C#",
+        "SQL",
+        "Problem Solving"
+      ]
+    },
+    "student_003": {
+      "Name": "Yousef Hassan",
+      "Role": "Student",
+      "Email": "student3@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000103",
+      "ProfilePicUrl": "",
+      "UniEmail": "student3@university.example.com",
+      "Major": "Computer Science",
+      "CompanyId": "company_001",
+      "AcademicSupervisorId": "academic_001",
+      "GPA": 2.95,
+      "CvUrl": "https://example.com/demo/cv/student_3.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_3",
+      "SkillsList": [
+        "C#",
+        "SQL",
+        "Problem Solving"
+      ]
+    },
+    "student_004": {
+      "Name": "Lina Samir",
+      "Role": "Student",
+      "Email": "student4@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000104",
+      "ProfilePicUrl": "",
+      "UniEmail": "student4@university.example.com",
+      "Major": "Computer Science",
+      "CompanyId": "company_001",
+      "AcademicSupervisorId": "academic_001",
+      "GPA": 3.4,
+      "CvUrl": "https://example.com/demo/cv/student_4.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_4",
+      "SkillsList": [
+        "C#",
+        "SQL",
+        "Problem Solving"
+      ]
+    },
+    "student_005": {
+      "Name": "Zaid Omar",
+      "Role": "Student",
+      "Email": "student5@example.com",
+      "FirstLogin": true,
+      "PhoneNumber": "+962700000105",
+      "ProfilePicUrl": "",
+      "UniEmail": "student5@university.example.com",
+      "Major": "Software Engineering",
+      "CompanyId": "",
+      "AcademicSupervisorId": "academic_002",
+      "GPA": 3.1,
+      "CvUrl": "https://example.com/demo/cv/student_5.pdf",
+      "PortfolioUrl": "",
+      "SkillsList": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
+    },
+    "student_006": {
+      "Name": "Noor Ibrahim",
+      "Role": "Student",
+      "Email": "student6@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000106",
+      "ProfilePicUrl": "",
+      "UniEmail": "student6@university.example.com",
+      "Major": "Software Engineering",
+      "CompanyId": "company_002",
+      "AcademicSupervisorId": "academic_002",
+      "GPA": 3.9,
+      "CvUrl": "https://example.com/demo/cv/student_6.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_6",
+      "SkillsList": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
+    },
+    "student_007": {
+      "Name": "Leen Adel",
+      "Role": "Student",
+      "Email": "student7@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000107",
+      "ProfilePicUrl": "",
+      "UniEmail": "student7@university.example.com",
+      "Major": "Software Engineering",
+      "CompanyId": "company_002",
+      "AcademicSupervisorId": "academic_002",
+      "GPA": 3.25,
+      "CvUrl": "https://example.com/demo/cv/student_7.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_7",
+      "SkillsList": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
+    },
+    "student_008": {
+      "Name": "Sami Tareq",
+      "Role": "Student",
+      "Email": "student8@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000108",
+      "ProfilePicUrl": "",
+      "UniEmail": "student8@university.example.com",
+      "Major": "Software Engineering",
+      "CompanyId": "company_002",
+      "AcademicSupervisorId": "academic_002",
+      "GPA": 2.8,
+      "CvUrl": "https://example.com/demo/cv/student_8.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_8",
+      "SkillsList": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
+    }
+  },
+  "Admins": {
+    "admin_001": {
+      "Name": "Rana Khalil",
+      "Role": "Admin",
+      "Email": "coordinator@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000001",
+      "ProfilePicUrl": ""
+    }
+  },
+  "AcademicSupervisors": {
+    "academic_001": {
+      "Name": "Omar Haddad",
+      "Role": "AcademicSupervisor",
+      "Email": "academic1@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000011",
+      "ProfilePicUrl": "",
+      "UniversityEmail": "academic1@university.example.com",
+      "Major": "Computer Science"
+    },
+    "academic_002": {
+      "Name": "Dina Nasser",
+      "Role": "AcademicSupervisor",
+      "Email": "academic2@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000012",
+      "ProfilePicUrl": "",
+      "UniversityEmail": "academic2@university.example.com",
+      "Major": "Software Engineering"
+    }
+  },
+  "CompanySupervisors": {
+    "company_001": {
+      "Name": "Khaled Mansour",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor1@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000021",
+      "ProfilePicUrl": "",
+      "CompanyName": "Demo Amman Software",
+      "CompEmail": "training1@company.example.com",
+      "Location": "Amman, Jordan"
+    },
+    "company_002": {
+      "Name": "Hala Saleh",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor2@example.com",
+      "FirstLogin": true,
+      "PhoneNumber": "+962700000022",
+      "ProfilePicUrl": "",
+      "CompanyName": "Demo Irbid Digital",
+      "CompEmail": "training2@company.example.com",
+      "Location": "Irbid, Jordan"
+    }
+  }
+}
