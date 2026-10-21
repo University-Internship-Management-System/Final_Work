@@ -19,11 +19,11 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
             {
                 if (Session["userId"] == null)
                 {
-                    Response.Redirect("~/Default.aspx", false);
+                    Response.Redirect("~/login/Login.aspx", false);
                     return;
                 }
 
-                string studentId = (string)Session["userId"];
+                string studentId = (string)(Session["dbRecordId"] ?? Session["userId"]);   // dbRecordId = the Students table key set by the login
                 string opportunityId = Request.QueryString["opportunityId"];
 
                 if (string.IsNullOrEmpty(opportunityId))
@@ -77,11 +77,11 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
         {
             if (Session["userId"] == null)
             {
-                Response.Redirect("~/Default.aspx", false);
+                Response.Redirect("~/login/Login.aspx", false);
                 return;
             }
 
-            string studentId = Session["userId"].ToString();
+            string studentId = (Session["dbRecordId"] ?? Session["userId"]).ToString();
             string opportunityId = Request.QueryString["opportunityId"];
 
             if (string.IsNullOrEmpty(opportunityId))
@@ -113,10 +113,13 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
                         );
 
                         // 3. حفظ الطلب في قاعدة بيانات Firebase تحت جدول "Applications"
-                        await FirebaseDb.Post("Applications", newApplication);
+                        var response = await FirebaseDb.Post("Applications", newApplication);
 
                         // 4. إظهار الـ Pop-up Modal (نجاح العملية) من خلال تشغيل السكريبت أو إظهار رسالة
-                        ScriptManager.RegisterStartupScript(this, GetType(), "showModal", "var myModal = new bootstrap.Modal(document.getElementById('successModal')); myModal.show();", true);
+                        if (response.IsSuccessStatusCode)
+                            ScriptManager.RegisterStartupScript(this, GetType(), "saved", "window.applicationSaved = true;", true);
+                        else
+                            ScriptManager.RegisterStartupScript(this, GetType(), "failed", "alert('Could not save your application. Please try again.');", true);
                     }
                 }
             }

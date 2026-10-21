@@ -45,12 +45,12 @@ namespace UniversityInternshipManagmentSystem.Student
             {
                 // Get logged-in student ID from Session
                 string studentId =
-                    Session["studentId"] as string;
+                    Session["userId"] as string;
 
                 // Check if student is logged in
                 if (string.IsNullOrWhiteSpace(studentId))
                 {
-                    Response.Redirect("~/Login.aspx", false);
+                    Response.Redirect("~/login/Login.aspx", false);
                     Context.ApplicationInstance.CompleteRequest();
                     return;
                 }
@@ -66,7 +66,7 @@ namespace UniversityInternshipManagmentSystem.Student
             try
             {
                 string studentId =
-                    Session["studentId"] as string;
+                    (Session["dbRecordId"] ?? Session["userId"]) as string;   // dbRecordId = the Students table key set by the login
 
                 if (string.IsNullOrWhiteSpace(studentId))
                     return;
@@ -149,8 +149,8 @@ namespace UniversityInternshipManagmentSystem.Student
                         if (latestSubmissions.TryGetValue(
                             task.TaskId, out submission))
                         {
-                            if (submission.Status ==
-                                SubmissionState.Submitted)
+                            if (submission.Status == SubmissionState.Submitted
+                                || submission.Status == SubmissionState.Evaluated)
                             {
                                 submitted++;
                             }

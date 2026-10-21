@@ -105,6 +105,8 @@
                             <div class="d-flex justify-content-end gap-2 mt-4">
                                 <a href="../Opportunities/Opportunities.aspx" class="btn btn-outline-secondary">Cancel</a>
                                 <button type="button" id="btnSubmitApp" class="btn btn-primary px-4">Confirm Application</button>
+                                <%-- Hidden server button: the Confirm button above clicks it after the checks pass, and it saves the application --%>
+                                <asp:Button ID="btnSubmit" runat="server" ClientIDMode="Static" OnClick="btnSubmit_Click" Text="Submit" style="display:none" />
                             </div>
 
                         </div>

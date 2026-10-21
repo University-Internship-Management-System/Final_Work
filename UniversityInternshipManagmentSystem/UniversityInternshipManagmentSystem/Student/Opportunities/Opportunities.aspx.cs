@@ -18,7 +18,7 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
         {
             if (Session["userId"] == null)
             {
-                Response.Redirect("~/Default.aspx", false);
+                Response.Redirect("~/login/Login.aspx", false);
                 return;
             }
 
@@ -67,7 +67,7 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
 
         private async Task LoadPageAsync()
         {
-            string studentId = (string)Session["userId"];
+            string studentId = (string)(Session["dbRecordId"] ?? Session["userId"]);   // dbRecordId = the Students table key set by the login
 
             // جلب بيانات الطالب لمعرفة تخصصه (Major)
             string studentJson = await FirebaseDb.Get("Students", studentId);

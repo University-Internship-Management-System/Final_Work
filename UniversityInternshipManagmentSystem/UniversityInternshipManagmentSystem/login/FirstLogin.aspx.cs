@@ -187,6 +187,9 @@ namespace UniversityInternshipManagmentSystem.login
             {
                 try
                 {
+                    string existing = await FirebaseDb.Get(table, uid, idToken);
+                    if (string.IsNullOrEmpty(existing) || existing.Trim() == "null") continue;   // no record here: do not create an empty one
+
                     await FirebaseDb.Patch(table, uid, updatePayload, idToken);
                 }
                 catch

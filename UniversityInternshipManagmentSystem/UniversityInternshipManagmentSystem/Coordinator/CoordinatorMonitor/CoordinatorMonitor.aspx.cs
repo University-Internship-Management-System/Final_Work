@@ -16,7 +16,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (Session["userId"] == null)
             {
-                Response.Redirect("~/Default.aspx", false);
+                Response.Redirect("~/login/Login.aspx", false);
                 Context.ApplicationInstance.CompleteRequest();
                 return;
             }

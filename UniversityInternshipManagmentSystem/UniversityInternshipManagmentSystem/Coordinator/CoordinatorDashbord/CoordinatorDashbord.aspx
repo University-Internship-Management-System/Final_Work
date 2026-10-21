@@ -1,4 +1,4 @@
-<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="CoordinatorDashbord.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.CoordinatorDashbord" MasterPageFile="~/Shared/Dashboard.Master" %>
+﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="CoordinatorDashbord.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.CoordinatorDashbord" MasterPageFile="~/Shared/Dashboard.Master" %>
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link href="CoordinatorDashbord.css" rel="stylesheet" />
 </asp:Content>
@@ -24,19 +24,19 @@
                 </div>
                 <div class="row g-4 mt-2">
                     <div class="col-xl-6"><section class="card admin-card p-4 h-100"><h2 class="section-title mb-3">Account management and allocation</h2>
-                        <a class="feature-row" runat="server" href="~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=students"><strong><svg class="feature-icon"><use href="#i-student" /></svg> Manage students</strong><small>Review student profiles and placement information</small></a>
-                        <a class="feature-row" runat="server" href="~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=companies"><strong><svg class="feature-icon"><use href="#i-building" /></svg> Manage companies</strong><small>View company supervisors and organizations</small></a>
-                        <a class="feature-row" runat="server" href="~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=academic"><strong><svg class="feature-icon"><use href="#i-user" /></svg> Academic supervisors</strong><small>Review supervisor profiles and majors</small></a>
+                        <a class="feature-row" runat="server" href="~/Coordinator/ManageStudents/ManageStudents.aspx"><strong><svg class="feature-icon"><use href="#i-student" /></svg> Manage students</strong><small>Review student profiles and placement information</small></a>
+                        <a class="feature-row" runat="server" href="~/Coordinator/ManageCompanySupervisors/ManageCompanySupervisors.aspx"><strong><svg class="feature-icon"><use href="#i-building" /></svg> Manage companies</strong><small>View company supervisors and organizations</small></a>
+                        <a class="feature-row" runat="server" href="~/Coordinator/ManageAcademicSupervisors/ManageAcademicSupervisors.aspx"><strong><svg class="feature-icon"><use href="#i-user" /></svg> Academic supervisors</strong><small>Review supervisor profiles and majors</small></a>
                     </section></div>
                     <div class="col-xl-6"><section class="card admin-card p-4 h-100"><h2 class="section-title mb-3">Monitoring and completion</h2>
-                        <a class="feature-row" runat="server" href="~/CoordinatorMonitor/CoordinatorMonitor.aspx"><strong><svg class="feature-icon"><use href="#i-briefcase" /></svg> Placement monitoring</strong><small>Students, companies, tasks, hours and progress</small></a>
+                        <a class="feature-row" runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx"><strong><svg class="feature-icon"><use href="#i-briefcase" /></svg> Placement monitoring</strong><small>Students, companies, tasks, hours and progress</small></a>
                         <div class="feature-row"><strong><svg class="feature-icon"><use href="#i-check" /></svg> Evaluations</strong><small>Available when evaluation records are added to Firebase</small></div>
                         <div class="feature-row"><strong><svg class="feature-icon"><use href="#i-check" /></svg> Final completion review</strong><small>Available when final review records are connected</small></div>
                     </section></div>
                 </div>
                 <div class="row g-4 mt-1">
                     <div class="col-xl-6"><section class="card admin-card preview-card p-4 h-100" aria-labelledby="studentsPreviewHeading">
-                        <div class="d-flex justify-content-between align-items-center mb-3"><h2 id="studentsPreviewHeading" class="section-title mb-0">Students</h2><a runat="server" href="~/CoordinatorMonitor/CoordinatorMonitor.aspx" class="btn btn-outline-primary btn-sm">View all</a></div>
+                        <div class="d-flex justify-content-between align-items-center mb-3"><h2 id="studentsPreviewHeading" class="section-title mb-0">Students</h2><a runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx" class="btn btn-outline-primary btn-sm">View all</a></div>
                         <div class="table-responsive"><table class="table preview-table align-middle mb-0"><thead><tr><th>Name</th><th>Major</th><th>Placement</th></tr></thead><tbody><asp:Literal ID="litStudentPreview" runat="server" /></tbody></table></div>
                     </section></div>
                     <div class="col-xl-6"><section class="card admin-card preview-card p-4 h-100" aria-labelledby="evaluationsPreviewHeading">

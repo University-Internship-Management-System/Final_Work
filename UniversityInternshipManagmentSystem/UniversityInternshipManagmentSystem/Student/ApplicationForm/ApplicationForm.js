@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var modal = new bootstrap.Modal(successModalEl);
 
+    // The server sets this flag only after the application was really saved
+    if (window.applicationSaved) modal.show();
+
     btnSubmit.addEventListener('click', function(e) {
         e.preventDefault();
 
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // 2. Trigger Pop-up Modal
-        modal.show();
+        // 2. Save it: press the hidden server button (runs btnSubmit_Click, which writes to Firebase)
+        document.getElementById('btnSubmit').click();
     });
 });

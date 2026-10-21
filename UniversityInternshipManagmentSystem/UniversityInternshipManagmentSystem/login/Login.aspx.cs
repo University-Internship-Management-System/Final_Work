@@ -62,12 +62,6 @@ namespace UniversityInternshipManagmentSystem.login
                 return;
             }
 
-            // Check if demo evaluation credentials match
-            if (TryAuthenticateDemoAccount(email, password))
-            {
-                return;
-            }
-
             // Perform live Firebase Authentication
             await AuthenticateWithFirebaseAsync(email, password);
         }
@@ -205,7 +199,8 @@ namespace UniversityInternshipManagmentSystem.login
                     if (!string.IsNullOrEmpty(json) && json.Trim() != "null")
                     {
                         var obj = JObject.Parse(json);
-                        if (obj.HasValues)
+                        // A record with no Name and no Role is only a leftover FirstLogin flag, not a real profile
+                        if (obj.HasValues && (obj["Name"] != null || obj["Role"] != null || obj["name"] != null || obj["role"] != null))
                         {
                             string name = obj["Name"]?.ToString() ?? obj["name"]?.ToString() ?? "";
                             string rawRole = obj["Role"]?.ToString() ?? obj["role"]?.ToString() ?? "";
@@ -291,137 +286,6 @@ namespace UniversityInternshipManagmentSystem.login
             if (table.Contains("Academic")) return AuthHelper.RoleAcademic;
             if (table.Contains("Admin") || table.Contains("Coordinator")) return AuthHelper.RoleCoordinator;
             return AuthHelper.RoleStudent;
-        }
-
-        #endregion
-
-        #region Evaluation Demo Accounts
-
-        /// <summary>
-        /// Provides mock accounts for evaluation and academic demo presentation.
-        /// Supports first-time login testing with temporary password enforcement.
-        /// </summary>
-        private bool TryAuthenticateDemoAccount(string email, string password)
-        {
-            string normalizedEmail = email.ToLowerInvariant();
-
-            // First-time login demo account (Ahmad - New Student)
-            if (normalizedEmail == "student.new@ju.edu.jo" && (password == "TempPassword123!" || password == (Session["demo_student_new_pwd"] as string)))
-            {
-                bool isFirst = Session["demo_student_new_pwd_set"] == null;
-                AuthHelper.SetUserSession("demo-student-new", "mock-token", email, "Ahmad (First-Time Student)", AuthHelper.RoleStudent, isFirst);
-                PreserveReturnUrlIfPresent();
-
-                if (isFirst)
-                {
-                    SafeRedirect(FirstLoginUrl);
-                }
-                else
-                {
-                    if (TryRedirectToReturnUrl()) return true;
-                    SafeRedirect(AuthHelper.GetDashboardUrl(AuthHelper.RoleStudent));
-                }
-                return true;
-            }
-
-            // Also support Firebase RTDB sample accounts with FirstLogin = true as demo accounts
-            if (normalizedEmail == "student1@example.com" && (password == "TempPassword123!" || password == "password123" || password == (Session["demo_student1_pwd"] as string)))
-            {
-                bool isFirst = Session["demo_student1_pwd_set"] == null;
-                AuthHelper.SetUserSession("demo-student1", "mock-token", email, "Ahmad Ali", AuthHelper.RoleStudent, isFirst);
-                Session["dbRecordId"] = "student_001";
-                Session["dbTable"] = TableStudents;
-                PreserveReturnUrlIfPresent();
-
-                if (isFirst)
-                {
-                    SafeRedirect(FirstLoginUrl);
-                }
-                else
-                {
-                    if (TryRedirectToReturnUrl()) return true;
-                    SafeRedirect(AuthHelper.GetDashboardUrl(AuthHelper.RoleStudent));
-                }
-                return true;
-            }
-
-            if (normalizedEmail == "student5@example.com" && (password == "TempPassword123!" || password == "password123" || password == (Session["demo_student5_pwd"] as string)))
-            {
-                bool isFirst = Session["demo_student5_pwd_set"] == null;
-                AuthHelper.SetUserSession("demo-student5", "mock-token", email, "Zaid Omar", AuthHelper.RoleStudent, isFirst);
-                Session["dbRecordId"] = "student_005";
-                Session["dbTable"] = TableStudents;
-                PreserveReturnUrlIfPresent();
-
-                if (isFirst)
-                {
-                    SafeRedirect(FirstLoginUrl);
-                }
-                else
-                {
-                    if (TryRedirectToReturnUrl()) return true;
-                    SafeRedirect(AuthHelper.GetDashboardUrl(AuthHelper.RoleStudent));
-                }
-                return true;
-            }
-
-            if (normalizedEmail == "supervisor2@example.com" && (password == "TempPassword123!" || password == "password123" || password == (Session["demo_supervisor2_pwd"] as string)))
-            {
-                bool isFirst = Session["demo_supervisor2_pwd_set"] == null;
-                AuthHelper.SetUserSession("demo-company2", "mock-token", email, "Hala Saleh (Demo Irbid Digital)", AuthHelper.RoleCompany, isFirst);
-                Session["dbRecordId"] = "company_002";
-                Session["dbTable"] = TableCompany;
-                PreserveReturnUrlIfPresent();
-
-                if (isFirst)
-                {
-                    SafeRedirect(FirstLoginUrl);
-                }
-                else
-                {
-                    if (TryRedirectToReturnUrl()) return true;
-                    SafeRedirect(AuthHelper.GetDashboardUrl(AuthHelper.RoleCompany));
-                }
-                return true;
-            }
-
-            // Standard student demo account (already completed first login)
-            if (normalizedEmail == "student@ju.edu.jo" && password == "password123")
-            {
-                AuthHelper.SetUserSession("demo-student", "mock-token", email, "Ahmad Mohammad", AuthHelper.RoleStudent, false);
-                if (TryRedirectToReturnUrl()) return true;
-                SafeRedirect(AuthHelper.GetDashboardUrl(AuthHelper.RoleStudent));
-                return true;
-            }
-
-            // Company supervisor demo account
-            if (normalizedEmail == "company@umniah.com" && password == "password123")
-            {
-                AuthHelper.SetUserSession("demo-company", "mock-token", email, "Eng. Khaled (Umniah)", AuthHelper.RoleCompany, false);
-                if (TryRedirectToReturnUrl()) return true;
-                SafeRedirect(AuthHelper.GetDashboardUrl(AuthHelper.RoleCompany));
-                return true;
-            }
-
-            // Academic supervisor demo account
-            if (normalizedEmail == "academic@ju.edu.jo" && password == "password123")
-            {
-                AuthHelper.SetUserSession("demo-academic", "mock-token", email, "Dr. Omar Abdullah", AuthHelper.RoleAcademic, false);
-                if (TryRedirectToReturnUrl()) return true;
-                SafeRedirect(AuthHelper.GetDashboardUrl(AuthHelper.RoleAcademic));
-                return true;
-            }
-
-            // Coordinator demo account
-            if (normalizedEmail == "coordinator@ju.edu.jo" && password == "password123")
-            {
-                AuthHelper.SetUserSession("demo-coordinator", "mock-token", email, "Dr. Samer (Coordinator)", AuthHelper.RoleCoordinator, false);
-                if (TryRedirectToReturnUrl()) return true;
-                SafeRedirect(AuthHelper.GetDashboardUrl(AuthHelper.RoleCoordinator));
-                return true;
-            }
-
-            return false;
         }
 
         #endregion
