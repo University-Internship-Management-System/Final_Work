@@ -1,0 +1,30 @@
+﻿/* Dashboard content only; uses Shared/uims.css variables. */
+.student-dashboard .sd-welcome { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 24px; padding: 26px 28px; border-radius: 14px; background: var(--deep); color: var(--paper); }
+.student-dashboard .sd-welcome h2 { margin: 9px 0; font-size: 22px; }
+.student-dashboard .sd-welcome p { max-width: 550px; color: var(--soft); line-height: 1.8; }
+.student-dashboard .sd-stat { background: var(--uims-white); height: 100%; padding: 20px; border: 1px solid var(--line); border-radius: 12px; }
+.student-dashboard .sd-stat-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; }
+.student-dashboard .sd-stat-icon { padding: 7px 10px; border-radius: 9px; background: var(--soft); color: var(--green); font-size: 18px; }
+.student-dashboard .sd-number { margin: 10px 0 4px; font-size: 30px; font-weight: 700; letter-spacing: -1px; }
+.student-dashboard .sd-number small { font-size: 14px; font-weight: 400; letter-spacing: 0; }
+.student-dashboard .sd-progress-total { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 18px 0 12px; }
+.student-dashboard .sd-progress-total strong { font-size: 31px; letter-spacing: -1px; }
+.student-dashboard .sd-training-detail { display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--line); font-size: 12px; }
+.student-dashboard .sd-feedback { margin: 0 0 16px; padding: 16px; border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; background: var(--soft); font-size: 13px; line-height: 1.8; }
+.student-dashboard .sd-campus { min-height: 230px; background: linear-gradient(90deg, var(--uims-dark) 0%, color-mix(in srgb, var(--uims-dark) 92%, transparent) 48%, color-mix(in srgb, var(--uims-dark) 25%, transparent) 100%), url('../Images/university-campus.jpg') center 46% / cover; }
+.student-dashboard .sd-campus p { max-width: 520px; }
+.student-dashboard .sd-empty { padding: 30px 24px; text-align: center; min-height: 190px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.student-dashboard .sd-empty-icon { display: grid; place-items: center; width: 42px; height: 42px; margin-bottom: 13px; background: var(--soft); color: var(--green); font-size: 23px; border-radius: 12px; }
+.student-dashboard .sd-empty h3 { font-size: 14px; margin-bottom: 8px; }
+.student-dashboard .sd-empty p { max-width: 430px; color: var(--deep); font-size: 12px; line-height: 1.8; }
+.student-dashboard .sd-stat-link { display: block; }
+.student-dashboard .sd-stat-link:hover { background: var(--soft); border-color: var(--green); }
+.student-dashboard .sd-activity-list { list-style: none; margin: 0; padding: 0 22px; }
+.student-dashboard .sd-activity-list li { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.student-dashboard .sd-activity-list li:last-child { border-bottom: 0; }
+@media (max-width: 575.98px) {
+    .student-dashboard .sd-campus { background-position: 65% center; }
+    .student-dashboard .sd-welcome { flex-direction: column; align-items: flex-start; gap: 18px; padding: 23px; }
+    .student-dashboard .sd-stat { padding: 14px; }
+    .student-dashboard .sd-stat-top { flex-wrap: wrap; }
+}
