@@ -157,6 +157,15 @@
     <Content Include="Shared\Sidebar.ascx" />
     <Content Include="Shared\uims.css" />
     <Content Include="Site.Master" />
+    <Content Include="Student\ApplicationForm\ApplicationForm.aspx" />
+    <Content Include="Student\ApplicationForm\ApplicationForm.css" />
+    <Content Include="Student\ApplicationForm\ApplicationForm.js" />
+    <Content Include="Student\MyApplications\MyApplications.aspx" />
+    <Content Include="Student\MyApplications\MyApplications.css" />
+    <Content Include="Student\MyApplications\MyApplications.js" />
+    <Content Include="Student\Opportunities\Opportunities.aspx" />
+    <Content Include="Student\Opportunities\Opportunities.css" />
+    <Content Include="Student\Opportunities\Opportunities.js" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -212,6 +221,27 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="Student\ApplicationForm\ApplicationForm.aspx.cs">
+      <DependentUpon>ApplicationForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\ApplicationForm\ApplicationForm.aspx.designer.cs">
+      <DependentUpon>ApplicationForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\MyApplications\MyApplications.aspx.cs">
+      <DependentUpon>MyApplications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\MyApplications\MyApplications.aspx.designer.cs">
+      <DependentUpon>MyApplications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\Opportunities\Opportunities.aspx.cs">
+      <DependentUpon>Opportunities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\Opportunities\Opportunities.aspx.designer.cs">
+      <DependentUpon>Opportunities.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -225,7 +255,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Company\" />
     <Folder Include="Coordinator\" />
-    <Folder Include="Student\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
