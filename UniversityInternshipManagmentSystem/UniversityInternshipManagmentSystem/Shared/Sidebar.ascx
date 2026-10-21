@@ -3,7 +3,9 @@
 <script runat="server">
     // =====================================================================
     //  EDIT THE MENUS HERE.   Format:  "Link text|~/Folder/Page.aspx"
-    //  The role comes from Session["role"]  ("student", "company", "academic", "coordinator")
+    //  The role comes from Session["role"] and must be one of the User.Role values:
+    //  "Student", "CompanySupervisor", "AcademicSupervisor", "Admin"   (capital letters do not matter)
+    //  The Admin menu uses the pages in the Coordinator folder.
     // =====================================================================
     string[] GetMenu(string role)
     {
@@ -15,10 +17,10 @@
                     "My Profile|~/Student/Profile.aspx",
                     "Explore Opportunities|~/Student/Opportunities.aspx",
                     "My Applications|~/Student/Applications.aspx",
-                    "My Tasks|~/Student/Tasks.aspx",
+                    "My Tasks|~/Student/StudentTasksPage/StudentTasksForm.aspx",
                     "My Progress|~/Student/Progress.aspx"
                 };
-            case "company":
+            case "companysupervisor":
                 return new[] {
                     "Dashboard|~/Company/Dashboard.aspx",
                     "Manage Opportunities|~/Company/Opportunities.aspx",
@@ -28,14 +30,14 @@
                     "Final Evaluation|~/Company/FinalEvaluation.aspx",
                     "Account|~/Company/Account.aspx"
                 };
-            case "academic":
+            case "academicsupervisor":
                 return new[] {
                     "Dashboard|~/Academic/Dashboard.aspx",
                     "Student Progress|~/Academic/Progress.aspx",
                     "Final Evaluation|~/Academic/FinalEvaluation.aspx",
                     "Account|~/Academic/Account.aspx"
                 };
-            case "coordinator":
+            case "admin":
                 return new[] {
                     "Dashboard|~/Coordinator/Dashboard.aspx",
                     "Students|~/Coordinator/Students.aspx",
@@ -57,9 +59,9 @@
         switch (role)
         {
             case "student": return "Student";
-            case "company": return "Company Supervisor";
-            case "academic": return "Academic Supervisor";
-            case "coordinator": return "Coordinator";
+            case "companysupervisor": return "Company Supervisor";
+            case "academicsupervisor": return "Academic Supervisor";
+            case "admin": return "Admin";
             default: return "Guest";
         }
     }
@@ -73,7 +75,11 @@
         foreach (string item in GetMenu(role))
         {
             string[] parts = item.Split('|');
-            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase);
+            // Active on the exact page, or on any page inside the same page folder
+            // (so "My Tasks" stays highlighted on the week pages too)
+            string folder = parts[1].Substring(0, parts[1].LastIndexOf('/'));
+            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase)
+                          || (folder.Split('/').Length > 2 && currentPage.StartsWith(folder + "/", StringComparison.OrdinalIgnoreCase));
             html.Append("<a class=\"uims-side-link" + (active ? " active" : "") + "\" href=\"" + ResolveUrl(parts[1]) + "\">"
                         + Server.HtmlEncode(parts[0]) + "</a>");
         }
