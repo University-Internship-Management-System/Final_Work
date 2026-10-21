@@ -1,0 +1,345 @@
+{
+  "Students": {
+    "student_test_001": {
+      "Name": "Test Student",
+      "Role": "Student",
+      "Email": "student1@test.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000001",
+      "ProfilePicUrl": "",
+      "UniEmail": "student1@ju.edu.jo",
+      "Major": "Computer Science",
+      "CompanyId": "company_test_001",
+      "AcademicSupervisorId": "academic_test_001",
+      "GPA": 3.4,
+      "CvUrl": "",
+      "PortfolioUrl": "",
+      "SkillsList": [
+        "C#",
+        "JavaScript",
+        "SQL"
+      ]
+    },
+    "student_test_002": {
+      "Name": "Second Student",
+      "Role": "Student",
+      "Email": "student2@test.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000002",
+      "ProfilePicUrl": "",
+      "UniEmail": "student2@ju.edu.jo",
+      "Major": "Computer Science",
+      "CompanyId": "company_test_001",
+      "AcademicSupervisorId": "academic_test_001",
+      "GPA": 3.1,
+      "CvUrl": "",
+      "PortfolioUrl": "",
+      "SkillsList": [
+        "Java",
+        "HTML"
+      ]
+    }
+  },
+  "CompanySupervisors": {
+    "company_test_001": {
+      "Name": "Company Supervisor",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@orange.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000010",
+      "ProfilePicUrl": "",
+      "CompanyName": "Orange Jordan",
+      "CompEmail": "info@orange.example",
+      "Location": "Amman"
+    }
+  },
+  "AcademicSupervisors": {
+    "academic_test_001": {
+      "Name": "Academic Supervisor",
+      "Role": "AcademicSupervisor",
+      "Email": "academic@ju.edu.jo",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000020",
+      "ProfilePicUrl": "",
+      "UniversityEmail": "academic@ju.edu.jo",
+      "Major": "Computer Science"
+    }
+  },
+  "Admins": {
+    "admin_test_001": {
+      "Name": "Admin",
+      "Role": "Admin",
+      "Email": "admin@ju.edu.jo",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000030",
+      "ProfilePicUrl": ""
+    }
+  },
+  "Tasks": {
+    "task001": {
+      "TaskName": "Set up the development environment",
+      "TaskDescription": "Install Visual Studio, Git and clone the team repository.",
+      "Status": "Open",
+      "StartDate": "2026-10-05T09:00:00+03:00",
+      "DeadLine": "2026-10-09T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git",
+      "MaxScore": 10
+    },
+    "task002": {
+      "TaskName": "Build the login page",
+      "TaskDescription": "Create the login form with validation and a show/hide password button.",
+      "Status": "Open",
+      "StartDate": "2026-10-07T09:00:00+03:00",
+      "DeadLine": "2026-10-11T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 1,
+      "ToolsUsed": "HTML, CSS, JavaScript",
+      "MaxScore": 20
+    },
+    "task003": {
+      "TaskName": "Database schema design",
+      "TaskDescription": "Design the tables for students, companies and tasks, then draw the diagram.",
+      "Status": "Open",
+      "StartDate": "2026-10-12T09:00:00+03:00",
+      "DeadLine": "2026-10-15T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 2,
+      "ToolsUsed": "draw.io, Firebase",
+      "MaxScore": 15
+    },
+    "task004": {
+      "TaskName": "REST API documentation",
+      "TaskDescription": "Document every endpoint with an example request and response.",
+      "Status": "Open",
+      "StartDate": "2026-10-13T09:00:00+03:00",
+      "DeadLine": "2026-10-17T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 2,
+      "ToolsUsed": "Postman, Markdown",
+      "MaxScore": 10
+    },
+    "task005": {
+      "TaskName": "Weekly presentation slides",
+      "TaskDescription": "Prepare 5 slides that summarise what you learned this week.",
+      "Status": "Open",
+      "StartDate": "2026-10-14T09:00:00+03:00",
+      "DeadLine": "2026-10-18T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 2,
+      "ToolsUsed": "PowerPoint",
+      "MaxScore": 10
+    },
+    "task006": {
+      "TaskName": "Unit tests for services",
+      "TaskDescription": "Write unit tests for the three main services and report the coverage.",
+      "Status": "Open",
+      "StartDate": "2026-10-19T09:00:00+03:00",
+      "DeadLine": "2026-10-23T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, NUnit",
+      "MaxScore": 20
+    },
+    "task007": {
+      "TaskName": "Code review checklist",
+      "TaskDescription": "Review a teammate's pull request using the team checklist.",
+      "Status": "Open",
+      "StartDate": "2026-10-20T09:00:00+03:00",
+      "DeadLine": "2026-10-24T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 3,
+      "ToolsUsed": "GitHub",
+      "MaxScore": 10
+    },
+    "task008": {
+      "TaskName": "Fix the reported bugs",
+      "TaskDescription": "Fix the three bugs from the issue list and explain each fix.",
+      "Status": "Open",
+      "StartDate": "2026-10-21T09:00:00+03:00",
+      "DeadLine": "2026-10-25T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, GitHub",
+      "MaxScore": 15
+    },
+    "task013": {
+      "TaskName": "Old survey task",
+      "TaskDescription": "This task was cancelled by the supervisor.",
+      "Status": "Closed",
+      "StartDate": "2026-10-18T09:00:00+03:00",
+      "DeadLine": "2026-10-22T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 3,
+      "ToolsUsed": "None",
+      "MaxScore": 5
+    },
+    "task009": {
+      "TaskName": "Integrate Firebase",
+      "TaskDescription": "Connect the tasks page to the Firebase database.",
+      "Status": "Open",
+      "StartDate": "2026-10-26T09:00:00+03:00",
+      "DeadLine": "2026-10-30T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 4,
+      "ToolsUsed": "Firebase, C#",
+      "MaxScore": 20
+    },
+    "task010": {
+      "TaskName": "Write the user guide",
+      "TaskDescription": "Write a one page guide for the My Tasks screen.",
+      "Status": "Open",
+      "StartDate": "2026-10-27T09:00:00+03:00",
+      "DeadLine": "2026-11-01T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 4,
+      "ToolsUsed": "Word",
+      "MaxScore": 10
+    },
+    "task012": {
+      "TaskName": "Prepare the demo environment",
+      "TaskDescription": "Only the second student has this task (used to test filtering).",
+      "Status": "Open",
+      "StartDate": "2026-10-26T09:00:00+03:00",
+      "DeadLine": "2026-10-31T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 4,
+      "ToolsUsed": "IIS Express",
+      "MaxScore": 10
+    },
+    "task011": {
+      "TaskName": "Performance review",
+      "TaskDescription": "Measure the page load time and suggest two improvements.",
+      "Status": "Open",
+      "StartDate": "2026-11-02T09:00:00+03:00",
+      "DeadLine": "2026-11-06T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 5,
+      "ToolsUsed": "Chrome DevTools",
+      "MaxScore": 15
+    }
+  },
+  "TaskSubmissions": {
+    "sub001": {
+      "TaskId": "task001",
+      "StudentId": "student_test_001",
+      "Version": 1,
+      "Description": "Everything installed and the repo cloned.",
+      "Link": "",
+      "SubmittedAt": "2026-10-08T14:30:00+03:00",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Perfect setup.",
+      "Score": 9,
+      "EvaluatedAt": "2026-10-09T10:00:00+03:00"
+    },
+    "sub002": {
+      "TaskId": "task002",
+      "StudentId": "student_test_001",
+      "Version": 1,
+      "Description": "First version of the login page.",
+      "Link": "https://github.com/example/login",
+      "SubmittedAt": "2026-10-10T16:00:00+03:00",
+      "IsLate": false,
+      "Status": "RevisionRequested",
+      "Feedback": "Please add a loading state and show the error messages."
+    },
+    "sub003": {
+      "TaskId": "task002",
+      "StudentId": "student_test_001",
+      "Version": 2,
+      "Description": "Added the loading state and error messages.",
+      "Link": "https://github.com/example/login",
+      "SubmittedAt": "2026-10-12T11:15:00+03:00",
+      "IsLate": true,
+      "Status": "Evaluated",
+      "Feedback": "Clean code and good validation.",
+      "Score": 17,
+      "EvaluatedAt": "2026-10-13T09:30:00+03:00"
+    },
+    "sub004": {
+      "TaskId": "task003",
+      "StudentId": "student_test_001",
+      "Version": 1,
+      "Description": "First version of the schema.",
+      "Link": "",
+      "SubmittedAt": "2026-10-14T13:00:00+03:00",
+      "IsLate": false,
+      "Status": "RevisionRequested",
+      "Feedback": "Please add the TaskSubmissions table and show how it links to Tasks."
+    },
+    "sub005": {
+      "TaskId": "task004",
+      "StudentId": "student_test_001",
+      "Version": 1,
+      "Description": "All endpoints documented.",
+      "Link": "https://example.com/api-docs",
+      "SubmittedAt": "2026-10-16T15:45:00+03:00",
+      "IsLate": false,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub006": {
+      "TaskId": "task006",
+      "StudentId": "student_test_002",
+      "Version": 1,
+      "Description": "Tests for the first two services.",
+      "Link": "",
+      "SubmittedAt": "2026-10-20T12:00:00+03:00",
+      "IsLate": false,
+      "Status": "Submitted",
+      "Feedback": ""
+    }
+  }
+}

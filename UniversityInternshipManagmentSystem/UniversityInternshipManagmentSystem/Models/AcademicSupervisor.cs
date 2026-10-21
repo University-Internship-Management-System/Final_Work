@@ -16,7 +16,7 @@ namespace UniversityInternshipManagmentSystem.Models
 
         }
 
-        public AcademicSupervisor(string name, string role, string email, bool firstLogin,string phoneNumber, string profilePic,string universityEmail, string major) : base(name, role, email, firstLogin, phoneNumber, profilePic)
+        public AcademicSupervisor(string name, string email, bool firstLogin,string phoneNumber, string profilePic,string universityEmail, string major) : base(name, "AcademicSupervisor", email, firstLogin, phoneNumber, profilePic)
         {
             UniversityEmail = universityEmail;
             Major = major;

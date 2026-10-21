@@ -11,7 +11,12 @@ namespace UniversityInternshipManagmentSystem
         public static void RegisterRoutes(RouteCollection routes)
         {
             var settings = new FriendlyUrlSettings();
-            settings.AutoRedirectMode = RedirectMode.Permanent;
+            settings.AutoRedirectMode = RedirectMode.Off;
+
+            routes.MapPageRoute("RootLoginRoute", "Login", "~/login/Login.aspx");
+            routes.MapPageRoute("RootFirstLoginRoute", "FirstLogin", "~/login/FirstLogin.aspx");
+            routes.MapPageRoute("RootLogoutRoute", "Logout", "~/login/Logout.aspx");
+
             routes.EnableFriendlyUrls(settings);
         }
     }
