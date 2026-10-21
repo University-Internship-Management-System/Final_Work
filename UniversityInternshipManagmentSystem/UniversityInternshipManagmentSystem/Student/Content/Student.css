@@ -1,0 +1,49 @@
+﻿/* Common Student content styles. Shared/Dashboard.Master owns the layout. */
+#student-request-status[hidden] { display: none; }
+.student-dashboard {
+    --forest: var(--uims-dark);
+    --deep: var(--uims-primary);
+    --green: var(--uims-accent);
+    --ink: var(--uims-text);
+    --soft: var(--uims-mint);
+    --paper: var(--uims-white);
+    --line: var(--uims-border);
+    min-width: 0;
+    font-family: var(--uims-font);
+    color: var(--uims-text);
+    overflow-wrap: anywhere;
+}
+.student-dashboard * { box-sizing: border-box; }
+.student-dashboard a { color: inherit; text-decoration: none; }
+.student-dashboard a:focus-visible, .student-dashboard summary:focus-visible, .student-dashboard [tabindex]:focus-visible { outline: 3px solid var(--green); outline-offset: 4px; }
+.student-dashboard .sd-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+.student-dashboard .sd-muted { font-size: 13px; color: var(--uims-muted); }
+.student-dashboard h1 { margin: 7px 0 8px; font-size: clamp(25px, 3vw, 32px); font-weight: 700; letter-spacing: -1px; }
+.student-dashboard h2 { margin: 0; font-size: 24px; font-weight: 600; }
+.student-dashboard h3 { margin: 0 0 5px; font-size: 18px; font-weight: 600; }
+.student-dashboard p { margin: 0; }
+.student-dashboard .sd-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+.student-dashboard .sd-demo { padding: 7px 11px; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--deep); font-size: 13px; font-weight: 600; }
+.student-dashboard .sd-button { display: inline-flex; align-items: center; gap: 15px; padding: 12px 16px; border-radius: 8px; background: var(--soft); color: var(--deep); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.student-dashboard .sd-button:hover { background: var(--line); }
+.student-dashboard .sd-panel { background: var(--uims-white); height: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; scroll-margin-top: 20px; }
+.student-dashboard .sd-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 21px 22px; border-bottom: 1px solid var(--line); }
+.student-dashboard .sd-count { padding: 4px 9px; border: 1px solid var(--line); border-radius: 20px; font-size: 13px; white-space: nowrap; }
+.student-dashboard .sd-badge { display: inline-block; padding: 5px 8px; border-radius: 5px; background: var(--soft); color: var(--deep); font-size: 12px; font-weight: 650; white-space: nowrap; }
+.student-dashboard .sd-panel-body { padding: 22px; }
+.student-dashboard .progress { height: 8px; border-radius: 10px; background: var(--line); }
+.student-dashboard .progress-bar { background: var(--green); }
+.student-dashboard .sd-note { color: var(--deep); font-size: 13px; line-height: 1.7; }
+.student-dashboard .sd-mode-note { margin-bottom: 23px; padding: 12px 16px; background: var(--soft); border: 1px solid var(--line); border-radius: 8px; color: var(--deep); font-size: 12px; line-height: 1.8; }
+.student-dashboard .sd-document-link { display: block; margin-top: 8px; color: var(--deep); text-decoration: underline; font-size: 12px; }
+.student-dashboard .sd-message { display: block; padding: 14px; margin-bottom: 20px; border: 1px solid var(--green); border-radius: 8px; background: var(--soft); color: var(--deep); line-height: 1.7; }
+.student-dashboard .sd-skip { position: absolute; width: 1px; height: 1px; overflow: hidden; }
+.student-dashboard .sd-skip:focus { position: static; display: block; width: auto; height: auto; padding: 12px; }
+
+@media (max-width: 575.98px) {
+    .student-dashboard .sd-panel-head { flex-wrap: wrap; padding: 18px 16px; }
+    .student-dashboard .sd-panel-head h2 { font-size: 20px; }
+    .student-dashboard .sd-heading { align-items: flex-start; }
+    .student-dashboard .sd-heading .sd-demo { max-width: 100px; text-align: center; }
+    .student-dashboard .sd-badge { white-space: normal; }
+}
