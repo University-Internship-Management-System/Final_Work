@@ -16,10 +16,8 @@ namespace UniversityInternshipManagmentSystem.Models
         public List<string> SkillsList { get; set; }
             = new List<string>();
 
-        // Default Constructor
         public Student() { }
 
-        // Parameterized Constructor
         public Student(
             string name,
             string email,
