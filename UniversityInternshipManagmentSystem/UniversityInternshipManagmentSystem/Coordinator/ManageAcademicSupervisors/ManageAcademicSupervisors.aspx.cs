@@ -43,6 +43,15 @@ public partial class CoordinatorAcademicAccounts : Page
     }
     protected async void Page_Load(object sender, EventArgs e)
     {
+        if (Session["userId"] == null)
+        {
+            Response.Redirect("~/login/Login.aspx", false);
+            return;
+        }
+
+        AuthHelper.RequireAuth(this, AuthHelper.RoleCoordinator);
+        if (Response.IsRequestBeingRedirected) return;
+
         await LoadAccounts();
     }
     private void Tell(string message, bool error = false)
@@ -144,7 +153,7 @@ public partial class CoordinatorAcademicAccounts : Page
         if (records.Any(x => x.Key != id && (String.Equals(x.Value.Email, login, StringComparison.OrdinalIgnoreCase) || String.Equals(x.Value.UniversityEmail, uni, StringComparison.OrdinalIgnoreCase))))
         { Tell("A supervisor with this email already exists.", true); return; }
         if (existing == null && temporaryPassword.Text.Length < 12) { Tell("Use a temporary password of at least 12 characters.", true); return; }
-        var person = new AcademicSupervisor(name, "AcademicSupervisor", existing == null ? login : existing.Email,
+        var person = new AcademicSupervisor(name, existing == null ? login : existing.Email,
             existing == null || existing.FirstLogin, phoneValue, existing == null ? "" : existing.ProfilePicUrl, uni, major.SelectedValue);
         string createdToken = null;
         try

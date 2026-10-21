@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -70,7 +70,7 @@ namespace UniversityInternshipManagmentSystem.Config
                 case RoleAcademic:
                     return "~/Academic/Dashboard.aspx";
                 case RoleCoordinator:
-                    return "~/Coordinator/Dashboard.aspx";
+                    return "~/Coordinator/CoordinatorDashbord/CoordinatorDashbord.aspx";
                 default:
                     return "~/Default.aspx";
             }
