@@ -2,25 +2,40 @@
 <%@ Register Src="~/Shared/Navbar.ascx" TagPrefix="uims" TagName="Navbar" %>
 <%@ Register Src="~/Shared/Footer.ascx" TagPrefix="uims" TagName="Footer" %>
 
-<%-- Layout for PUBLIC pages (Home, About, Contact, Login): navbar on top + footer at the bottom --%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>University Internship Management System</title>
+    <title><%: Page.Title %> | Field Training System - The University of Jordan (KASIT)</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.2.3 CSS -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <!-- Custom UIMS Theme -->
     <link href="~/Shared/uims.css" rel="stylesheet" />
-    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+    <link href="~/Assets/css/uims-theme.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
 </head>
 <body class="uims-public d-flex flex-column min-vh-100">
     <form id="form1" runat="server" class="d-flex flex-column flex-grow-1">
+        <!-- Main Navigation Bar -->
         <uims:Navbar runat="server" />
 
+        <!-- Main Content -->
         <main class="flex-grow-1">
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
         </main>
 
+        <!-- Institutional Footer -->
         <uims:Footer runat="server" />
     </form>
 

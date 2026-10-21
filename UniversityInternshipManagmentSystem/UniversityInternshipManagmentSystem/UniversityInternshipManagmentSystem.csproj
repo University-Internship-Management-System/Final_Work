@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -120,6 +120,18 @@
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
+    <Content Include="Coordinator\AssignAcademicSupervisors\AssignAcademicSupervisors.aspx" />
+    <Content Include="Coordinator\AssignAcademicSupervisors\assign-supervisors.css" />
+    <Content Include="Coordinator\AssignAcademicSupervisors\assign-supervisors.js" />
+    <Content Include="Coordinator\ManageStudents\ManageStudents.aspx" />
+    <Content Include="Coordinator\ManageStudents\students.css" />
+    <Content Include="Coordinator\ManageStudents\students.js" />
+    <Content Include="Coordinator\ManageCompanySupervisors\ManageCompanySupervisors.aspx" />
+    <Content Include="Coordinator\ManageCompanySupervisors\company-supervisors.css" />
+    <Content Include="Coordinator\ManageCompanySupervisors\company-supervisors.js" />
+    <Content Include="Coordinator\ManageAcademicSupervisors\academic-supervisors.css" />
+    <Content Include="Coordinator\ManageAcademicSupervisors\academic-supervisors.js" />
+    <Content Include="Coordinator\ManageAcademicSupervisors\ManageAcademicSupervisors.aspx" />
     <Content Include="Global.asax" />
     <Content Include="MyProgress\MyProgress.aspx" />
     <Content Include="MyProgress\MyProgress.css" />
@@ -151,6 +163,7 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -185,10 +198,31 @@
     <Content Include="Shared\Sidebar.ascx" />
     <Content Include="Shared\uims.css" />
     <Content Include="Site.Master" />
+    <Content Include="Student\StudentTasksPage\StudentTasks.css" />
+    <Content Include="Student\StudentTasksPage\StudentTasksForm.aspx" />
+    <Content Include="Student\StudentTasksPage\WeekTasks.js" />
+    <Content Include="Student\StudentTasksPage\WeekTasksForm.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
     <Content Include="Site.Mobile.Master" />
+    <Content Include="Login.aspx" />
+    <Content Include="FirstLogin.aspx" />
+    <Content Include="Logout.aspx" />
+    <Content Include="login\Login.aspx" />
+    <Content Include="login\FirstLogin.aspx" />
+    <Content Include="login\Logout.aspx" />
+    <Content Include="login\css\login.css" />
+    <Content Include="login\javascript\login.js" />
+    <Content Include="login\images\uj-logo.png" />
+    <Content Include="login\images\uj-logo.svg" />
+    <Content Include="Student\Dashboard.aspx" />
+    <Content Include="Student\Dashboard\Dashboard.aspx" />
+    <Content Include="Student\Dashboard\css\dashboard.css" />
+    <Content Include="Student\Dashboard\javascript\dashboard.js" />
+    <Content Include="Company\Dashboard.aspx" />
+    <Content Include="Academic\Dashboard.aspx" />
+    <Content Include="Coordinator\Dashboard.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -201,6 +235,57 @@
     </Compile>
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Config\FirebaseDb.cs" />
+    <Compile Include="Config\TaskDb.cs" />
+    <Compile Include="Config\AuthHelper.cs" />
+    <Compile Include="login\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="login\FirstLogin.aspx.cs">
+      <DependentUpon>FirstLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login\FirstLogin.aspx.designer.cs">
+      <DependentUpon>FirstLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="login\Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login\Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\Dashboard\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\Dashboard\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Academic\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Academic\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Coordinator\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Coordinator\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
@@ -216,6 +301,13 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Coordinator\ManageCompanySupervisors\ManageCompanySupervisors.aspx.cs">       <DependentUpon>ManageCompanySupervisors.aspx</DependentUpon>       <SubType>ASPXCodeBehind</SubType>     </Compile>
+    <Compile Include="Coordinator\ManageStudents\ManageStudents.aspx.cs">       <DependentUpon>ManageStudents.aspx</DependentUpon>       <SubType>ASPXCodeBehind</SubType>     </Compile>
+    <Compile Include="Coordinator\AssignAcademicSupervisors\AssignAcademicSupervisors.aspx.cs">       <DependentUpon>AssignAcademicSupervisors.aspx</DependentUpon>       <SubType>ASPXCodeBehind</SubType>     </Compile>
+    <Compile Include="Coordinator\ManageAcademicSupervisors\ManageAcademicSupervisors.aspx.cs">
+      <DependentUpon>ManageAcademicSupervisors.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -223,6 +315,8 @@
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\CompanySupervisor.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\Tasks.cs" />
+    <Compile Include="Models\TaskSubmission.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="MyProgress\MyProgress.aspx.cs">
       <DependentUpon>MyProgress.aspx</DependentUpon>
@@ -246,6 +340,21 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="Student\StudentTasksPage\StudentTasksForm.aspx.cs">
+      <DependentUpon>StudentTasksForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\StudentTasksPage\StudentTasksForm.aspx.designer.cs">
+      <DependentUpon>StudentTasksForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\StudentTasksPage\TaskViews.cs" />
+    <Compile Include="Student\StudentTasksPage\WeekTasksForm.aspx.cs">
+      <DependentUpon>WeekTasksForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\StudentTasksPage\WeekTasksForm.aspx.designer.cs">
+      <DependentUpon>WeekTasksForm.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -259,7 +368,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Company\" />
     <Folder Include="Coordinator\" />
-    <Folder Include="Student\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -294,7 +402,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56805</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44360/</IISUrl>
+          <IISUrl>http://localhost:60107/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

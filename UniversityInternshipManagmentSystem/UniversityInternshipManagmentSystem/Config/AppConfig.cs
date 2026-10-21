@@ -12,5 +12,11 @@ namespace UniversityInternshipManagmentSystem.Config
 
         public static string SignInUrl =
             "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + ApiKey;
+
+        public static string PasswordResetUrl =
+            "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + ApiKey;
+
+        public static string UpdateAccountUrl =
+            "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + ApiKey;
     }
 }
