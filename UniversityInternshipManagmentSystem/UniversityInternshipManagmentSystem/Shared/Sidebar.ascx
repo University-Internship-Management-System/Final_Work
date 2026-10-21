@@ -37,13 +37,14 @@
                     "Account|~/Academic/Account.aspx"
                 };
             case "coordinator":
+            case "admin":
                 return new[] {
-                    "Dashboard|~/Coordinator/Dashboard.aspx",
-                    "Students|~/Coordinator/ManageStudents/ManageStudents.aspx",
-                    "Companies|~/Coordinator/ManageCompanySupervisors/ManageCompanySupervisors.aspx",
-                    "Academic Supervisors|~/Coordinator/ManageAcademicSupervisors/ManageAcademicSupervisors.aspx",
-                    "Assign Supervisors|~/Coordinator/AssignAcademicSupervisors/AssignAcademicSupervisors.aspx",
-                    "Monitor Progress|~/Coordinator/Monitor.aspx",
+                    "Dashboard|~/CoordinatorDashbord/CoordinatorDashbord.aspx",
+                    "Students|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=students",
+                    "Companies|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=companies",
+                    "Academic Supervisors|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=academic",
+                    "Assign Supervisors|~/Coordinator/Assign.aspx",
+                    "Monitor Progress|~/CoordinatorMonitor/CoordinatorMonitor.aspx",
                     "Completion Review|~/Coordinator/FinalCompletionReview.aspx",
                     "Contact Messages|~/Coordinator/Messages.aspx",
                     "Account|~/Coordinator/Account.aspx"
@@ -60,7 +61,8 @@
             case "student": return "Student";
             case "company": return "Company Supervisor";
             case "academic": return "Academic Supervisor";
-            case "coordinator": return "Coordinator";
+            case "coordinator":
+            case "admin": return "Coordinator";
             default: return "Guest";
         }
     }
