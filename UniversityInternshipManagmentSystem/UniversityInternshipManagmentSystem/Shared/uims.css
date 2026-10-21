@@ -187,3 +187,13 @@ h3, .card-title  { font-size: 18px; font-weight: 600; }                     /* C
 .uims-public .uims-footer { background: var(--uims-dark); color: #BFDDD0; border-top: 0; padding: 28px 0; }
 .uims-public .uims-footer a { color: #BFDDD0; }
 .uims-public .uims-footer a:hover { color: var(--uims-white); }
+
+/* =====================================================================
+   COMING SOON placeholder  (Shared/ComingSoon.ascx)
+   ===================================================================== */
+.uims-soon { max-width: 760px; }
+.uims-soon-card { padding: 28px; border-left: 5px solid var(--uims-warning); }
+.uims-soon-card h2 { font-size: 20px; margin: 14px 0 6px; }
+.uims-soon-list { margin: 8px 0 24px; padding-left: 20px; color: var(--uims-text); }
+.uims-soon-list li { margin: 4px 0; }
+.uims-soon-card .badge, .uims-soon-card .btn { align-self: flex-start; }

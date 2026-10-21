@@ -1,5 +1,4 @@
-﻿
-<%@ Page Title="My Progress" Language="C#"
+﻿<%@ Page Title="My Progress" Language="C#"
     MasterPageFile="~/Shared/Dashboard.Master"
     AutoEventWireup="true"
     Async="true"
@@ -11,8 +10,8 @@
     runat="server">
 
     <link runat="server"
-          href="MyProgress.css"
-          rel="stylesheet" />
+        href="MyProgress.css"
+        rel="stylesheet" />
 
 </asp:Content>
 
@@ -72,8 +71,8 @@
 
                     <div class="progress-stat-value">
                         <asp:Literal ID="litTotalTasks"
-                                     runat="server"
-                                     Text="0" />
+                            runat="server"
+                            Text="0" />
                     </div>
 
                     <div class="progress-stat-caption">
@@ -96,9 +95,9 @@
 
         <!-- Error Message -->
         <asp:Panel ID="pnlError"
-                   runat="server"
-                   Visible="false"
-                   CssClass="alert alert-danger mb-4">
+            runat="server"
+            Visible="false"
+            CssClass="alert alert-danger mb-4">
 
             <asp:Literal ID="litError" runat="server" />
 
@@ -124,12 +123,10 @@
                             <!-- Week Header -->
                             <div class="progress-week-header">
 
-                                <h3>
-                                    Week <%# Eval("WeekNumber") %>
+                                <h3>Week <%# Eval("WeekNumber") %>
                                 </h3>
 
-                                <span class="progress-hours-badge">
-                                    15 Hours
+                                <span class="progress-hours-badge">15 Hours
                                 </span>
 
                             </div>
@@ -162,14 +159,14 @@
 
                                 <!-- Progress Bar -->
                                 <div class="weekly-progress-track"
-                                     role="progressbar"
-                                     aria-label="Weekly submission progress"
-                                     aria-valuemin="0"
-                                     aria-valuemax="100"
-                                     aria-valuenow='<%# Eval("ProgressPercentage") %>'>
+                                    role="progressbar"
+                                    aria-label="Weekly submission progress"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-valuenow='<%# Eval("ProgressPercentage") %>'>
 
                                     <div class="weekly-progress-fill"
-                                         style='width: <%# Eval("ProgressPercentage") %>%;'>
+                                        style='width: <%# Eval("ProgressPercentage") %>%;'>
                                     </div>
 
                                 </div>
@@ -192,16 +189,15 @@
                                 <%# Convert.ToInt32(Eval("TaskCount")) > 0
                                     ? "View the tasks assigned to you for this week."
                                     : "No tasks assigned yet by your company supervisor." %>
-
                             </div>
 
-                            <!-- View Details -->
-                            <a class="btn btn-outline-primary progress-view-btn"
-                               href='<%# ResolveUrl("~/Student/Tasks.aspx?week=" + Eval("WeekNumber")) %>'>
 
-                                View Details &rarr;
+                            <!-- View Week Details -->
+                            <a class="btn btn-outline-primary progress-view-btn"
+                                href='<%# ResolveUrl("~/Student/StudentTasksPage/WeekTasksForm.aspx?week=" + Eval("WeekNumber")) %>'>View Details &rarr;
 
                             </a>
+
 
                         </div>
 

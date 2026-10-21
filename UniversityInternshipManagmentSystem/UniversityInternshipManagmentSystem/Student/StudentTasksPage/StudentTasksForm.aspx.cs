@@ -13,25 +13,14 @@ namespace UniversityInternshipManagmentSystem.Student.StudentTasksPage
     {
         protected async void Page_Load(object sender, EventArgs e)
         {
-#if DEBUG
-            // TEMPORARY: fake logged-in student until the auth system is ready. DELETE this block later.
-            // The id matches the student in FirebaseData/seed.json
+            // Not logged in -> go to the login page.
             if (Session["userId"] == null)
             {
-                Session["userId"] = "student_test_001";
-                Session["role"] = "Student";
-                Session["name"] = "Test Student";
-            }
-#endif
-
-            // Not logged in -> go away. TODO: send to the login page when it exists.
-            if (Session["userId"] == null)
-            {
-                Response.Redirect("~/Default.aspx", false);
+                Response.Redirect("~/login/Login.aspx", false);
                 return;
             }
 
-            string studentId = (string)Session["userId"];
+            string studentId = (string)(Session["dbRecordId"] ?? Session["userId"]);   // dbRecordId = the Students table key set by the login
 
             List<Tasks> tasks = await TaskDb.GetMyTasks(studentId);
             List<TaskSubmission> subs = await TaskDb.GetMySubmissions(studentId);

@@ -1,0 +1,60 @@
+{
+  "opp001": {
+    "CompanyId": "company_test_001",
+    "CompanyName": "Orange Jordan",
+    "Title": "Junior Web Developer Intern",
+    "Description": "Build and maintain internal web tools with the digital team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1797379140000
+  },
+  "opp002": {
+    "CompanyId": "company_test_001",
+    "CompanyName": "Orange Jordan",
+    "Title": "Data Analyst Intern",
+    "Description": "Clean datasets and build dashboards for the network team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Data Science"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1796169540000
+  },
+  "opp003": {
+    "CompanyId": "company_test_001",
+    "CompanyName": "Orange Jordan",
+    "Title": "QA Intern",
+    "Description": "Write test plans and run regression tests.",
+    "Location": "Irbid",
+    "Majors": [
+      "Computer Science"
+    ],
+    "Seats": 2,
+    "Status": "closed",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1790899140000
+  },
+  "opp004": {
+    "CompanyId": "company_test_001",
+    "CompanyName": "Orange Jordan",
+    "Title": "Network Engineering Intern",
+    "Description": "Help configure and monitor the access network.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1797811140000
+  }
+}

@@ -1,4 +1,4 @@
-<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="CoordinatorMonitor.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.CoordinatorMonitor" MasterPageFile="~/Shared/Dashboard.Master" %>
+﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="CoordinatorMonitor.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.CoordinatorMonitor" MasterPageFile="~/Shared/Dashboard.Master" %>
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link href="CoordinatorMonitor.css" rel="stylesheet" />
 </asp:Content>
@@ -19,7 +19,7 @@
                 <div class="detail-dialog p-4 p-md-5">
                     <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
                         <h2 id="detailTitle" class="section-title mb-0"><asp:Literal ID="litDetailTitle" runat="server" /></h2>
-                        <a id="closeDetail" runat="server" href="~/CoordinatorMonitor/CoordinatorMonitor.aspx" class="btn btn-outline-primary btn-sm">Close</a>
+                        <a id="closeDetail" runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx" class="btn btn-outline-primary btn-sm">Close</a>
                     </div>
                     <asp:Literal ID="litUserDetail" runat="server" />
                 </div>
@@ -80,5 +80,5 @@
         </div>
     </aside>
     <div id="studentDetailData" hidden><asp:Literal ID="litStudentDetails" runat="server" /></div>
-    <script src="<%= ResolveUrl("~/CoordinatorMonitor/CoordinatorMonitor.js") %>?v=2"></script>
+    <script src="<%= ResolveUrl("~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.js") %>?v=2"></script>
 </asp:Content>

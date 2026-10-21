@@ -1,4 +1,4 @@
-<%@ Control Language="C#" %>
+﻿<%@ Control Language="C#" %>
 <%@ Import Namespace="UniversityInternshipManagmentSystem.Config" %>
 
 <script runat="server">
@@ -13,41 +13,41 @@
             case "student":
                 return new[] {
                     "Dashboard|~/Student/Dashboard/Dashboard.aspx",
-                    "My Profile|~/Student/Profile.aspx",
-                    "Browse Opportunities|~/Student/Opportunities.aspx",
-                    "My Applications|~/Student/Applications.aspx",
+                    "My Profile|~/Student/StudentProfilePage/Profile.aspx",
+                    "Browse Opportunities|~/Student/Opportunities/Opportunities.aspx",
+                    "My Applications|~/Student/MyApplications/MyApplications.aspx",
                     "My Tasks|~/Student/StudentTasksPage/StudentTasksForm.aspx",
-                    "My Progress|~/Student/Progress.aspx"
+                    "My Progress|~/Student/MyProgress/MyProgress.aspx"
                 };
             case "company":
                 return new[] {
                     "Dashboard|~/Company/Dashboard.aspx",
-                    "Manage Opportunities|~/Company/Opportunities.aspx",
-                    "Applications|~/Company/Applications.aspx",
-                    "My Trainees|~/Company/Trainees.aspx",
-                    "Tasks|~/Company/Tasks.aspx",
-                    "Final Evaluation|~/Company/FinalEvaluation.aspx",
-                    "Account|~/Company/Account.aspx"
+                    "Manage Opportunities|~/Company/ManageOpportunities/ManageOpportunities.aspx",
+                    "Applications|~/Company/ApplicationsReview/ApplicationsReview.aspx",
+                    "My Trainees|~/Company/MyTrainees/MyTrainees.aspx",
+                    "Tasks|~/Company/ManageTasks/ManageTasks.aspx",
+                    "Final Evaluation|~/Company/FinalEvaluation/FinalEvaluation.aspx",
+                    "Account|~/Company/SupervisorAccount/SupervisorAccount.aspx"
                 };
             case "academic":
                 return new[] {
                     "Dashboard|~/Academic/Dashboard.aspx",
-                    "Student Progress|~/Academic/Progress.aspx",
-                    "Final Evaluation|~/Academic/FinalEvaluation.aspx",
-                    "Account|~/Academic/Account.aspx"
+                    "Student Progress|~/Academic/StudentProgress/StudentProgress.aspx",
+                    "Final Evaluation|~/Academic/FinalEvaluation/FinalEvaluation.aspx",
+                    "Account|~/Academic/SupervisorAccount/SupervisorAccount.aspx"
                 };
             case "coordinator":
             case "admin":
                 return new[] {
-                    "Dashboard|~/CoordinatorDashbord/CoordinatorDashbord.aspx",
-                    "Students|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=students",
-                    "Companies|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=companies",
-                    "Academic Supervisors|~/CoordinatorMonitor/CoordinatorMonitor.aspx?view=academic",
-                    "Assign Supervisors|~/Coordinator/Assign.aspx",
-                    "Monitor Progress|~/CoordinatorMonitor/CoordinatorMonitor.aspx",
-                    "Completion Review|~/Coordinator/FinalCompletionReview.aspx",
-                    "Contact Messages|~/Coordinator/Messages.aspx",
-                    "Account|~/Coordinator/Account.aspx"
+                    "Dashboard|~/Coordinator/CoordinatorDashbord/CoordinatorDashbord.aspx",
+                    "Students|~/Coordinator/ManageStudents/ManageStudents.aspx",
+                    "Companies|~/Coordinator/ManageCompanySupervisors/ManageCompanySupervisors.aspx",
+                    "Academic Supervisors|~/Coordinator/ManageAcademicSupervisors/ManageAcademicSupervisors.aspx",
+                    "Assign Supervisors|~/Coordinator/AssignAcademicSupervisors/AssignAcademicSupervisors.aspx",
+                    "Monitor Progress|~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx",
+                    "Completion Review|~/Coordinator/FinalCompletionReview/FinalCompletionReview.aspx",
+                    "Contact Messages|~/Coordinator/ContactMessages/ContactMessages.aspx",
+                    "Account|~/Coordinator/CoordinatorAccount/CoordinatorAccount.aspx"
                 };
             default:
                 return new string[0];
