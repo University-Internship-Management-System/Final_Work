@@ -38,10 +38,10 @@
             case "coordinator":
                 return new[] {
                     "Dashboard|~/Coordinator/Dashboard.aspx",
-                    "Students|~/Coordinator/Students.aspx",
-                    "Companies|~/Coordinator/Companies.aspx",
-                    "Academic Supervisors|~/Coordinator/AcademicSupervisors.aspx",
-                    "Assign Supervisors|~/Coordinator/Assign.aspx",
+                    "Students|~/Coordinator/ManageStudents/ManageStudents.aspx",
+                    "Companies|~/Coordinator/ManageCompanySupervisors/ManageCompanySupervisors.aspx",
+                    "Academic Supervisors|~/Coordinator/ManageAcademicSupervisors/ManageAcademicSupervisors.aspx",
+                    "Assign Supervisors|~/Coordinator/AssignAcademicSupervisors/AssignAcademicSupervisors.aspx",
                     "Monitor Progress|~/Coordinator/Monitor.aspx",
                     "Completion Review|~/Coordinator/FinalCompletionReview.aspx",
                     "Contact Messages|~/Coordinator/Messages.aspx",

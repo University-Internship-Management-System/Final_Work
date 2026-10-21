@@ -121,6 +121,18 @@
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
+    <Content Include="Coordinator\AssignAcademicSupervisors\AssignAcademicSupervisors.aspx" />
+    <Content Include="Coordinator\AssignAcademicSupervisors\assign-supervisors.css" />
+    <Content Include="Coordinator\AssignAcademicSupervisors\assign-supervisors.js" />
+    <Content Include="Coordinator\ManageStudents\ManageStudents.aspx" />
+    <Content Include="Coordinator\ManageStudents\students.css" />
+    <Content Include="Coordinator\ManageStudents\students.js" />
+    <Content Include="Coordinator\ManageCompanySupervisors\ManageCompanySupervisors.aspx" />
+    <Content Include="Coordinator\ManageCompanySupervisors\company-supervisors.css" />
+    <Content Include="Coordinator\ManageCompanySupervisors\company-supervisors.js" />
+    <Content Include="Coordinator\ManageAcademicSupervisors\academic-supervisors.css" />
+    <Content Include="Coordinator\ManageAcademicSupervisors\academic-supervisors.js" />
+    <Content Include="Coordinator\ManageAcademicSupervisors\ManageAcademicSupervisors.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -150,6 +162,7 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -214,6 +227,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Coordinator\ManageCompanySupervisors\ManageCompanySupervisors.aspx.cs">       <DependentUpon>ManageCompanySupervisors.aspx</DependentUpon>       <SubType>ASPXCodeBehind</SubType>     </Compile>
+    <Compile Include="Coordinator\ManageStudents\ManageStudents.aspx.cs">       <DependentUpon>ManageStudents.aspx</DependentUpon>       <SubType>ASPXCodeBehind</SubType>     </Compile>
+    <Compile Include="Coordinator\AssignAcademicSupervisors\AssignAcademicSupervisors.aspx.cs">       <DependentUpon>AssignAcademicSupervisors.aspx</DependentUpon>       <SubType>ASPXCodeBehind</SubType>     </Compile>
+    <Compile Include="Coordinator\ManageAcademicSupervisors\ManageAcademicSupervisors.aspx.cs">
+      <DependentUpon>ManageAcademicSupervisors.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
