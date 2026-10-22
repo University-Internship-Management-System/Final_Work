@@ -2,107 +2,131 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
+using Newtonsoft.Json;
 using UniversityInternshipManagmentSystem.Config;
+using UniversityInternshipManagmentSystem.Models;
+using StudentModel = UniversityInternshipManagmentSystem.Models.Student;
+using ApplicationModel = UniversityInternshipManagmentSystem.Models.Application;
 
 namespace UniversityInternshipManagmentSystem.Academic
 {
     public partial class Dashboard : Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            AuthHelper.RequireAuth(this, AuthHelper.RoleAcademic, AuthHelper.RoleCoordinator);
-            if (Response.IsRequestBeingRedirected) return;
+        protected Panel workspace, noticePanel, emptyPanel;
+        protected Literal notice, supervisorMajor, totalCount, confirmedCount, waitingCount;
+        protected TextBox studentSearch;
+        protected Repeater students;
+        private Dictionary<string, StudentModel> assigned;
+        private Dictionary<string, ApplicationModel> confirmed;
+        private Dictionary<string, CompanySupervisor> companies;
+        private AcademicSupervisor supervisor;
 
-            RegisterAsyncTask(new PageAsyncTask(LoadDashboardAsync));
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            ViewStateUserKey = Session.SessionID;
         }
 
-        private async Task LoadDashboardAsync()
+        protected async void Page_Load(object sender, EventArgs e)
         {
-            litAcademicName.Text = HttpUtility.HtmlEncode(AuthHelper.UserName ?? "Academic Supervisor");
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/login/Login.aspx", false);
+                return;
+            }
+            AuthHelper.RequireAuth(this, AuthHelper.RoleAcademic);
+            if (Response.IsRequestBeingRedirected) return;
+            if (String.IsNullOrWhiteSpace(AuthHelper.IdToken) || AuthHelper.IdToken == "mock-token")
+            {
+                ShowError("Sign in with a real academic supervisor account to view your students.");
+                return;
+            }
             try
             {
-                JObject supervisors = null;
-                string supervisorId = Convert.ToString(Session["dbRecordId"] ?? Session["userId"]);
-                JToken supervisor = null;
-
-                if (!String.IsNullOrWhiteSpace(supervisorId))
+                var supervisors = await ReadTable<AcademicSupervisor>("AcademicSupervisors");
+                string supervisorId = AuthHelper.UserId;
+                if (!supervisors.TryGetValue(supervisorId, out supervisor))
                 {
-                    string supervisorJson = await FirebaseDb.Get("AcademicSupervisors", supervisorId);
-                    if (supervisorJson != null && supervisorJson.Trim() != "null")
-                        supervisor = JObject.Parse(supervisorJson);
-                }
-
-                if (supervisor == null)
-                {
-                    supervisors = await ReadTable("AcademicSupervisors");
-                    string email = (AuthHelper.UserEmail ?? String.Empty).Trim();
-                    foreach (JProperty entry in supervisors.Properties())
+                    var matches = supervisors.Where(item => String.Equals(item.Value.Email, AuthHelper.UserEmail,
+                        StringComparison.OrdinalIgnoreCase) && !String.IsNullOrWhiteSpace(AuthHelper.UserEmail)).ToList();
+                    if (matches.Count != 1)
                     {
-                        if (EmailMatches(entry.Value, email))
-                        {
-                            supervisorId = entry.Name;
-                            supervisor = entry.Value;
-                            Session["dbRecordId"] = supervisorId;
-                            Session["dbTable"] = "AcademicSupervisors";
-                            break;
-                        }
+                        ShowError("Your academic supervisor profile could not be identified. Contact the coordinator.");
+                        return;
                     }
+                    supervisorId = matches[0].Key;
+                    supervisor = matches[0].Value;
                 }
-
-                if (supervisor == null || String.IsNullOrWhiteSpace(supervisorId))
-                    throw new InvalidOperationException("We couldn't match this login to an academic supervisor record.");
-
-                JObject students = await ReadTable("Students");
-                JObject tasks = await ReadTable("Tasks");
-                JObject submissions = await ReadTable("TaskSubmissions");
-                JObject evaluations = await ReadTable("FinalEvaluations");
-                JObject companies = await ReadTable("CompanySupervisors");
-
-                var assignedStudents = students.Properties()
-                    .Where(p => p.Value != null && String.Equals((string)p.Value["AcademicSupervisorId"], supervisorId, StringComparison.Ordinal))
-                    .OrderBy(p => (string)p.Value["Name"] ?? String.Empty, StringComparer.CurrentCultureIgnoreCase)
-                    .ToList();
-                var assignedStudentIds = new HashSet<string>(assignedStudents.Select(p => p.Name), StringComparer.Ordinal);
-
-                var assignedTasks = tasks.Properties()
-                    .Where(task => IsAssignedToAnyStudent(task.Value, assignedStudentIds))
-                    .ToList();
-                var assignedTaskIds = new HashSet<string>(assignedTasks.Select(t => t.Name), StringComparer.Ordinal);
-                var assignedPairs = new HashSet<string>(StringComparer.Ordinal);
-                foreach (JProperty task in assignedTasks)
-                {
-                    JArray studentIds = task.Value["StudentIds"] as JArray;
-                    if (studentIds == null) continue;
-                    foreach (JToken id in studentIds)
-                    {
-                        string studentId = (string)id;
-                        if (assignedStudentIds.Contains(studentId))
-                            assignedPairs.Add(studentId + "|" + task.Name);
-                    }
-                }
-                var latestSubmissions = GetLatestSubmissions(submissions, assignedStudentIds, assignedPairs);
-                int pendingSubmissions = latestSubmissions.Count(s => String.Equals((string)s["Status"], "Submitted", StringComparison.OrdinalIgnoreCase));
-                int sentEvaluations = assignedStudents.Count(student => IsSentEvaluation(evaluations[student.Name], (string)student.Value["CompanyId"]));
-
-                litStudentCount.Text = assignedStudents.Count.ToString(CultureInfo.InvariantCulture);
-                litTaskCount.Text = assignedTaskIds.Count.ToString(CultureInfo.InvariantCulture);
-                litSubmissionCount.Text = pendingSubmissions.ToString(CultureInfo.InvariantCulture);
-                litEvaluationCount.Text = sentEvaluations.ToString(CultureInfo.InvariantCulture);
-                litStudentRows.Text = BuildStudentRows(assignedStudents, evaluations, companies);
+                var allStudents = await ReadTable<StudentModel>("Students");
+                assigned = allStudents.Where(item => item.Value.AcademicSupervisorId == supervisorId && SameMajor(item.Value.Major))
+                    .ToDictionary(item => item.Key, item => item.Value);
+                var applications = await ReadTable<ApplicationModel>("Applications");
+                confirmed = applications.Values.Where(item => assigned.ContainsKey(item.StudentId ?? "")
+                    && item.Status == ApplicationStatus.Confirmed).GroupBy(item => item.StudentId)
+                    .ToDictionary(group => group.Key, group => group.OrderByDescending(item => item.ConfirmedAt).First());
+                companies = await ReadTable<CompanySupervisor>("CompanySupervisors");
+                litAcademicName.Text = Server.HtmlEncode(supervisor.Name);
+                supervisorMajor.Text = supervisor.Major;
+                totalCount.Text = assigned.Count.ToString();
+                confirmedCount.Text = confirmed.Count.ToString();
+                waitingCount.Text = (assigned.Count - confirmed.Count).ToString();
+                // Trigger C# search after typing pauses, without reloading the page.
+                studentSearch.Attributes["oninput"] = "clearTimeout(window.adSearchTimer);window.adSearchTimer=setTimeout(function(){__doPostBack(\""
+                    + studentSearch.UniqueID + "\",\"\");},300);";
+                workspace.Visible = true;
+                BindStudents();
             }
-            catch (Exception ex) when (ex is HttpRequestException || ex is JsonException || ex is InvalidOperationException)
+            catch
             {
-                pnlError.Visible = true;
-                litError.Text = HttpUtility.HtmlEncode("Could not load dashboard data from Firebase. " + ex.Message);
-                litStudentRows.Text = "<tr><td colspan=\"5\" class=\"ad-muted\">Dashboard data is unavailable.</td></tr>";
-                SetCountsToZero();
+                ShowError("Could not load the dashboard. Check your connection or sign in again.");
             }
+        }
+
+        private async Task<Dictionary<string, T>> ReadTable<T>(string table)
+        {
+            string json = await FirebaseDb.Get(table);
+            if (json == null) throw new HttpRequestException();
+            return JsonConvert.DeserializeObject<Dictionary<string, T>>(json) ?? new Dictionary<string, T>();
+        }
+
+        private bool SameMajor(string major)
+        {
+            return String.Equals((major ?? "").Trim(), (supervisor.Major ?? "").Trim(), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void BindStudents()
+        {
+            string query = studentSearch.Text.Trim();
+            var rows = assigned.OrderBy(item => item.Value.Name).Select(item =>
+            {
+                ApplicationModel placement;
+                confirmed.TryGetValue(item.Key, out placement);
+                CompanySupervisor company = null;
+                if (placement != null) companies.TryGetValue(placement.CompanyId ?? "", out company);
+                return new
+                {
+                    item.Value.Name, item.Value.UniEmail, item.Value.Major,
+                    Company = placement == null ? "Not confirmed" : company != null ? company.CompanyName : placement.CompanyName,
+                    Opportunity = placement == null ? "" : placement.OpportunityTitle,
+                    ProgressUrl = ResolveUrl("~/Academic/StudentProgress/StudentProgress.aspx")
+                        + "?studentId=" + Server.UrlEncode(item.Key)
+                };
+            }).Where(item => (query == "" || ((item.Name ?? "") + " " + (item.UniEmail ?? "") + " " + (item.Company ?? ""))
+                    .IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)).ToList();
+            students.DataSource = rows;
+            students.DataBind();
+            emptyPanel.Visible = rows.Count == 0;
+        }
+
+        private void ShowError(string text)
+        {
+            workspace.Visible = false;
+            noticePanel.Visible = true;
+            notice.Text = text;
         }
 
         private static async Task<JObject> ReadTable(string name)
