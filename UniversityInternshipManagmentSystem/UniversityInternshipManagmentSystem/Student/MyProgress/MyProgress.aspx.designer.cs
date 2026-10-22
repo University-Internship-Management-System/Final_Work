@@ -15,15 +15,6 @@ namespace UniversityInternshipManagmentSystem.Student
     {
 
         /// <summary>
-        /// litTotalTasks control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litTotalTasks;
-
-        /// <summary>
         /// pnlError control.
         /// </summary>
         /// <remarks>
@@ -40,6 +31,15 @@ namespace UniversityInternshipManagmentSystem.Student
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litError;
+
+        /// <summary>
+        /// litTotalTasks control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litTotalTasks;
 
         /// <summary>
         /// rptWeeks control.

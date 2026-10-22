@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +11,8 @@ namespace UniversityInternshipManagmentSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Response.Redirect("~/index.aspx", false);
+            Context.ApplicationInstance.CompleteRequest();
         }
     }
 }

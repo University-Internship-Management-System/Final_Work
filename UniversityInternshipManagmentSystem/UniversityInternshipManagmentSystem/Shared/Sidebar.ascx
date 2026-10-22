@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" %>
+<%@ Control Language="C#" %>
 <%@ Import Namespace="UniversityInternshipManagmentSystem.Config" %>
 
 <script runat="server">
@@ -96,13 +96,13 @@
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         AuthHelper.SignOut();
-        Response.Redirect("~/login/Login.aspx?msg=" + Server.UrlEncode("You have been signed out successfully."), false);
+        Response.Redirect("~/index.aspx", false);
         Context.ApplicationInstance.CompleteRequest();
     }
 </script>
 
-<a class="uims-side-brand" runat="server" href="~/Default.aspx">
-    <span class="uims-logo">UJ</span>
+<a class="uims-side-brand" runat="server" href="~/index.aspx">
+    <img class="uims-brand-image" runat="server" src="~/Assets/PublicHome/university-logo.png" alt="University of Jordan" />
     <strong>UIMS</strong>
 </a>
 <p class="uims-side-role"><asp:Literal ID="litRole" runat="server" /></p>

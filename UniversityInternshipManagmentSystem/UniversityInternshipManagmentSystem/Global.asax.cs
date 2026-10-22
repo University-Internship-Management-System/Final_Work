@@ -55,7 +55,8 @@ namespace UniversityInternshipManagmentSystem
             bool isProtectedArea = isStudentArea || isCompanyArea || isAcademicArea || isCoordinatorArea;
 
             bool isFirstLoginPage = path.IndexOf("FirstLogin", StringComparison.OrdinalIgnoreCase) >= 0;
-            bool isLoginPage = (path.IndexOf("Login", StringComparison.OrdinalIgnoreCase) >= 0) && !isFirstLoginPage;
+            bool isLoginPage = string.Equals(path, "~/login/Login.aspx", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(path, "~/login/Login", StringComparison.OrdinalIgnoreCase);
             bool isLogoutPage = path.IndexOf("Logout", StringComparison.OrdinalIgnoreCase) >= 0;
 
             // 1. Unauthenticated user trying to access protected role area -> redirect to Login
