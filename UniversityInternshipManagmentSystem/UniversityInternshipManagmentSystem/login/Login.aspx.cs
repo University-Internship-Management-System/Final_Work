@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
@@ -28,6 +28,25 @@ namespace UniversityInternshipManagmentSystem.login
         private const string TableCoordinators = "Coordinators";
 
         private const string FirstLoginUrl = "~/login/FirstLogin.aspx";
+
+        #endregion
+
+        #region Navigation Helpers
+
+        protected bool IsSignedIn
+        {
+            get { return AuthHelper.IsAuthenticated; }
+        }
+
+        protected string DashboardHref
+        {
+            get
+            {
+                return ResolveUrl(IsSignedIn
+                    ? AuthHelper.GetDashboardUrl(AuthHelper.UserRole)
+                    : "~/login/Login.aspx");
+            }
+        }
 
         #endregion
 
