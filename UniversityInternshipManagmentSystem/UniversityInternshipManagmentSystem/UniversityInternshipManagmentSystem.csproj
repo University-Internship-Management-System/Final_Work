@@ -275,6 +275,8 @@
     <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
     <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Academic\SupervisorAccount\SupervisorAccount.aspx" />
+    <Content Include="Academic\SupervisorAccount\css\supervisor-account.css" />
+    <Content Include="Academic\SupervisorAccount\javascript\supervisor-account.js" />
     <Content Include="Coordinator\FinalCompletionReview\FinalCompletionReview.aspx" />
     <Content Include="Coordinator\ContactMessages\ContactMessages.aspx" />
     <Content Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx" />
@@ -319,6 +321,13 @@
     </Compile>
     <Compile Include="Academic\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Academic\SupervisorAccount\SupervisorAccount.aspx.cs">
+      <DependentUpon>SupervisorAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Academic\SupervisorAccount\SupervisorAccount.aspx.designer.cs">
+      <DependentUpon>SupervisorAccount.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Company\Dashboard.aspx.cs">
