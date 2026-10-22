@@ -6,9 +6,11 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        bool customHome = string.Equals(Page.AppRelativeVirtualPath, "~/index.aspx", StringComparison.OrdinalIgnoreCase);
-        StandardPublicNavigation.Visible = !customHome;
-        StandardPublicFooter.Visible = !customHome;
+        string path = Page.AppRelativeVirtualPath ?? string.Empty;
+        bool hasCustomNav = string.Equals(path, "~/index.aspx", StringComparison.OrdinalIgnoreCase)
+                         || path.IndexOf("Login.aspx", StringComparison.OrdinalIgnoreCase) >= 0;
+        StandardPublicNavigation.Visible = !hasCustomNav;
+        StandardPublicFooter.Visible = !hasCustomNav;
     }
 </script>
 <!DOCTYPE html>
@@ -40,7 +42,7 @@
         <asp:PlaceHolder ID="StandardPublicNavigation" runat="server"><uims:Navbar runat="server" /></asp:PlaceHolder>
 
         <!-- Main Content -->
-        <main class="flex-grow-1">
+        <main class="flex-grow-1 d-flex flex-column">
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
         </main>
 
