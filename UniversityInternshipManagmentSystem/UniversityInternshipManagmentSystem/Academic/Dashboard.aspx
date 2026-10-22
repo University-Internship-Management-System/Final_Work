@@ -1,44 +1,18 @@
-<%@ Page Title="Academic Supervisor Dashboard - UIMS" Language="C#" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Academic.Dashboard" %>
-
-<asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
-</asp:Content>
-
-<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container-fluid py-3">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="page-title mb-1">Academic Supervisor Dashboard</h1>
-                <p class="text-muted mb-0">Welcome, Dr. <asp:Literal ID="litAcademicName" runat="server" /> to the Academic Supervision Portal.</p>
-            </div>
-            <div>
-                <span class="badge badge-approved px-3 py-2">Faculty Supervisor</span>
-            </div>
-        </div>
-
-        <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0">
-                    <div class="small-label mb-1">Supervised Students</div>
-                    <h3 class="card-title text-success mb-0">Active Trainees</h3>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0">
-                    <div class="small-label mb-1">Pending Progress Reports</div>
-                    <h3 class="card-title text-warning mb-0">Review Reports</h3>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0">
-                    <div class="small-label mb-1">Final Evaluations</div>
-                    <h3 class="card-title text-primary mb-0">Grading & Assessment</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="card p-4 shadow-sm">
-            <h2 class="section-title mb-3">Academic Supervision Overview</h2>
-            <p class="text-muted">You can monitor weekly student diaries, review corporate evaluations, conduct faculty visits, and submit final internship grades using the sidebar navigation.</p>
-        </div>
-    </div>
+<%@ Page Title="Academic Dashboard" Language="C#" Async="true" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Academic.Dashboard" %>
+<asp:Content ID="head" ContentPlaceHolderID="HeadContent" runat="server"><link href="Dashboard.css?v=20261022-2" rel="stylesheet" /></asp:Content>
+<asp:Content ID="body" ContentPlaceHolderID="MainContent" runat="server">
+    <asp:ScriptManager ID="dashboardScripts" runat="server" />
+    <header class="ad-heading"><div><p class="ad-eyebrow">ACADEMIC SUPERVISION</p><h1 class="page-title">Academic dashboard</h1><p class="text-muted">An overview of the students assigned to you.</p></div></header>
+    <asp:Panel ID="noticePanel" runat="server" Visible="false" CssClass="ad-error" role="alert"><asp:Literal ID="notice" Mode="Encode" runat="server" /></asp:Panel>
+    <asp:Panel ID="workspace" runat="server" Visible="false" DefaultButton="searchButton">
+        <div class="ad-welcome"><div><span class="ad-label">Academic supervisor</span><strong><asp:Literal ID="litAcademicName" runat="server" /></strong></div><div><span class="ad-label">Major</span><strong><asp:Literal ID="supervisorMajor" Mode="Encode" runat="server" /></strong></div></div>
+        <div class="ad-stats"><section class="card ad-stat"><div class="ad-stat-icon" aria-hidden="true"><i class="bi bi-people"></i></div><p>Assigned students</p><strong><asp:Literal ID="totalCount" Mode="Encode" runat="server" /></strong><small>Students under your supervision</small></section><section class="card ad-stat"><div class="ad-stat-icon" aria-hidden="true"><i class="bi bi-check2-circle"></i></div><p>Training confirmed</p><strong><asp:Literal ID="confirmedCount" Mode="Encode" runat="server" /></strong><small>Students who confirmed an internship</small></section><section class="card ad-stat"><div class="ad-stat-icon" aria-hidden="true"><i class="bi bi-hourglass-split"></i></div><p>Awaiting confirmation</p><strong><asp:Literal ID="waitingCount" Mode="Encode" runat="server" /></strong><small>No confirmed internship yet</small></section></div>
+        <section class="card ad-directory"><h2 class="section-title">My students</h2><p class="text-muted ad-description">Only students assigned to you by the coordinator appear here.</p>
+            <div class="ad-filters"><div><label for="studentSearch">Student or company</label><asp:TextBox ID="studentSearch" ClientIDMode="Static" runat="server" CssClass="form-control" MaxLength="120" placeholder="Search name, university email or company" /></div><asp:Button ID="searchButton" runat="server" Text="Search" CssClass="btn btn-outline-primary" /></div>
+            <asp:UpdatePanel ID="studentResults" runat="server" UpdateMode="Conditional"><ContentTemplate>
+            <table class="table ad-table"><thead><tr><th scope="col">Student</th><th scope="col">Major</th><th scope="col">Company / opportunity</th><th scope="col">Progress</th></tr></thead><tbody><asp:Repeater ID="students" runat="server"><ItemTemplate><tr><td><strong><%#: Eval("Name") %></strong><small><%#: Eval("UniEmail") %></small></td><td><%#: Eval("Major") %></td><td><strong><%#: Eval("Company") %></strong><small><%#: Eval("Opportunity") %></small></td><td><asp:HyperLink runat="server" NavigateUrl='<%# Eval("ProgressUrl") %>' CssClass="btn btn-outline-primary ad-progress" Text="Student progress" /></td></tr></ItemTemplate></asp:Repeater></tbody></table>
+            <asp:Panel ID="emptyPanel" runat="server" Visible="false" CssClass="ad-empty">No assigned students match this selection.</asp:Panel>
+            </ContentTemplate><Triggers><asp:AsyncPostBackTrigger ControlID="studentSearch" EventName="TextChanged" /><asp:AsyncPostBackTrigger ControlID="searchButton" EventName="Click" /></Triggers></asp:UpdatePanel>
+        </section>
+    </asp:Panel>
 </asp:Content>

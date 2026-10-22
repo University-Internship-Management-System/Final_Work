@@ -222,6 +222,8 @@ namespace UniversityInternshipManagmentSystem.Student.StudentTasksPage
                 return;
             }
 
+            Notify.WorkSubmitted((string)Session["name"], task.TaskName, version, task.CompanyId);
+
             pnlDetails.Visible = false;
             await LoadWeek();                       // reload so the card shows the new state
             lblMessage.Text = "Work submitted successfully";

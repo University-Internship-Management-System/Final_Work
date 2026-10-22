@@ -1,8 +1,43 @@
 {
+  "-P4YGNOFOZt3ey3A9m6r": {
+    "ApplicationDeadline": 1793480400000,
+    "CompanyId": "ZiObpSpX11ewgTuXYo4Ep3WG0h23",
+    "CompanyName": "jafar's solutions",
+    "CreatedAt": 1792666863739,
+    "Description": "test",
+    "Location": "amman jordan",
+    "Majors": [
+      "Cybersecurity",
+      "Artificial Intelligence"
+    ],
+    "Seats": 10,
+    "Status": "open",
+    "Title": "test"
+  },
+  "-P4YNpbcMF0iTZehHXWU": {
+    "ApplicationDeadline": 1792702800000,
+    "CompanyId": "ZiObpSpX11ewgTuXYo4Ep3WG0h23",
+    "CompanyName": "jafar's solutions",
+    "CreatedAt": 1792668818460,
+    "Description": "test2 test2",
+    "Location": "amman jordan",
+    "Majors": [
+      "Computer Science",
+      "Data Science"
+    ],
+    "Seats": 8,
+    "Status": "open",
+    "Title": "test2"
+  },
   "opp001": {
+    "ApplicationDeadline": 1797379140000,
     "CompanyId": "company_test_001",
     "CompanyName": "Orange Jordan",
-    "Title": "Junior Web Developer Intern",
+    "ConfirmedStudents": {
+      "student_test_001": true,
+      "student_test_002": true
+    },
+    "CreatedAt": 1792584000000,
     "Description": "Build and maintain internal web tools with the digital team.",
     "Location": "Amman",
     "Majors": [
@@ -11,13 +46,16 @@
     ],
     "Seats": 3,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1797379140000
+    "Title": "Junior Web Developer Intern"
   },
   "opp002": {
+    "ApplicationDeadline": 1796169540000,
     "CompanyId": "company_test_001",
     "CompanyName": "Orange Jordan",
-    "Title": "Data Analyst Intern",
+    "ConfirmedStudents": {
+      "lLFnP2WAKvTaB1Q0AnSPK0brMd23": true
+    },
+    "CreatedAt": 1792584000000,
     "Description": "Clean datasets and build dashboards for the network team.",
     "Location": "Amman",
     "Majors": [
@@ -26,13 +64,13 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1796169540000
+    "Title": "Data Analyst Intern"
   },
   "opp003": {
+    "ApplicationDeadline": 1790899140000,
     "CompanyId": "company_test_001",
     "CompanyName": "Orange Jordan",
-    "Title": "QA Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Write test plans and run regression tests.",
     "Location": "Irbid",
     "Majors": [
@@ -40,13 +78,13 @@
     ],
     "Seats": 2,
     "Status": "closed",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1790899140000
+    "Title": "QA Intern"
   },
   "opp004": {
+    "ApplicationDeadline": 1797811140000,
     "CompanyId": "company_test_001",
     "CompanyName": "Orange Jordan",
-    "Title": "Network Engineering Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Help configure and monitor the access network.",
     "Location": "Amman",
     "Majors": [
@@ -54,13 +92,17 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1797811140000
+    "Title": "Network Engineering Intern"
   },
   "opp005": {
+    "ApplicationDeadline": 1796947140000,
     "CompanyId": "company_test_002",
     "CompanyName": "Zain Jordan",
-    "Title": "Mobile App Developer Intern",
+    "ConfirmedStudents": {
+      "student_test_005": true,
+      "student_test_006": true
+    },
+    "CreatedAt": 1792584000000,
     "Description": "Help build the customer mobile app with Flutter and REST APIs.",
     "Location": "Amman",
     "Majors": [
@@ -69,13 +111,13 @@
     ],
     "Seats": 3,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1796947140000
+    "Title": "Mobile App Developer Intern"
   },
   "opp006": {
+    "ApplicationDeadline": 1796083140000,
     "CompanyId": "company_test_002",
     "CompanyName": "Zain Jordan",
-    "Title": "Cloud Support Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Monitor cloud services and handle first-line support tickets.",
     "Location": "Amman",
     "Majors": [
@@ -85,13 +127,13 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1796083140000
+    "Title": "Cloud Support Intern"
   },
   "opp007": {
+    "ApplicationDeadline": 1796515140000,
     "CompanyId": "company_test_003",
     "CompanyName": "Umniah",
-    "Title": "Backend Developer Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Work on billing APIs in C# and SQL with the platform team.",
     "Location": "Amman",
     "Majors": [
@@ -100,13 +142,13 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1796515140000
+    "Title": "Backend Developer Intern"
   },
   "opp008": {
+    "ApplicationDeadline": 1797638340000,
     "CompanyId": "company_test_003",
     "CompanyName": "Umniah",
-    "Title": "Cyber Security Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Assist the SOC team with log review and vulnerability scans.",
     "Location": "Amman",
     "Majors": [
@@ -116,13 +158,13 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1797638340000
+    "Title": "Cyber Security Intern"
   },
   "opp009": {
+    "ApplicationDeadline": 1790812740000,
     "CompanyId": "company_test_003",
     "CompanyName": "Umniah",
-    "Title": "UI/UX Design Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Design screens and prototypes for the self-service portal.",
     "Location": "Irbid",
     "Majors": [
@@ -131,13 +173,13 @@
     ],
     "Seats": 1,
     "Status": "closed",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1790812740000
+    "Title": "UI/UX Design Intern"
   },
   "opp010": {
+    "ApplicationDeadline": 1797119940000,
     "CompanyId": "company_test_004",
     "CompanyName": "Aramex",
-    "Title": "Logistics Software Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Improve shipment tracking tools used by the operations team.",
     "Location": "Amman",
     "Majors": [
@@ -147,13 +189,13 @@
     ],
     "Seats": 3,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1797119940000
+    "Title": "Logistics Software Intern"
   },
   "opp011": {
+    "ApplicationDeadline": 1797983940000,
     "CompanyId": "company_test_004",
     "CompanyName": "Aramex",
-    "Title": "Business Intelligence Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Build reports and dashboards from delivery data.",
     "Location": "Amman",
     "Majors": [
@@ -163,13 +205,13 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1797983940000
+    "Title": "Business Intelligence Intern"
   },
   "opp012": {
+    "ApplicationDeadline": 1796774340000,
     "CompanyId": "company_test_005",
     "CompanyName": "Arab Bank",
-    "Title": "Data Science Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Prepare data and test simple prediction models for risk reports.",
     "Location": "Amman",
     "Majors": [
@@ -178,13 +220,13 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1796774340000
+    "Title": "Data Science Intern"
   },
   "opp013": {
+    "ApplicationDeadline": 1798243140000,
     "CompanyId": "company_test_005",
     "CompanyName": "Arab Bank",
-    "Title": "IT Operations Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Support internal systems, backups and user accounts.",
     "Location": "Amman",
     "Majors": [
@@ -194,13 +236,13 @@
     ],
     "Seats": 4,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1798243140000
+    "Title": "IT Operations Intern"
   },
   "opp014": {
+    "ApplicationDeadline": 1791244740000,
     "CompanyId": "company_test_005",
     "CompanyName": "Arab Bank",
-    "Title": "Digital Banking QA Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Test the online banking app before each release.",
     "Location": "Amman",
     "Majors": [
@@ -209,13 +251,13 @@
     ],
     "Seats": 2,
     "Status": "closed",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1791244740000
+    "Title": "Digital Banking QA Intern"
   },
   "opp015": {
+    "ApplicationDeadline": 1799193540000,
     "CompanyId": "company_test_006",
     "CompanyName": "Jordan Phosphate",
-    "Title": "ERP Systems Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Help maintain and document the ERP system used across plants.",
     "Location": "Aqaba",
     "Majors": [
@@ -224,13 +266,13 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1799193540000
+    "Title": "ERP Systems Intern"
   },
   "opp016": {
+    "ApplicationDeadline": 1799625540000,
     "CompanyId": "company_test_006",
     "CompanyName": "Jordan Phosphate",
-    "Title": "Embedded Systems Intern",
+    "CreatedAt": 1792584000000,
     "Description": "Work on sensor monitoring devices and their firmware.",
     "Location": "Aqaba",
     "Majors": [
@@ -238,7 +280,689 @@
     ],
     "Seats": 2,
     "Status": "open",
-    "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1799625540000
+    "Title": "Embedded Systems Intern"
+  },
+  "opp019": {
+    "ApplicationDeadline": 1797638340000,
+    "CompanyId": "company_test_001",
+    "CompanyName": "Orange Jordan",
+    "CreatedAt": 1789819200000,
+    "Description": "Review alerts and run vulnerability scans.",
+    "Location": "Amman",
+    "Majors": [
+      "Cyber Security",
+      "Computer Science",
+      "Computer Engineering"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "Cyber Security Analyst Intern"
+  },
+  "opp020": {
+    "ApplicationDeadline": 1798243140000,
+    "CompanyId": "company_test_001",
+    "CompanyName": "Orange Jordan",
+    "CreatedAt": 1789560000000,
+    "Description": "Collect requirements and draw process diagrams.",
+    "Location": "Amman",
+    "Majors": [
+      "Information Systems",
+      "Software Engineering"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "Title": "Business Analyst Intern"
+  },
+  "opp021": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_002",
+    "CompanyName": "Zain Jordan",
+    "CreatedAt": 1788264000000,
+    "Description": "Review alerts and run vulnerability scans.",
+    "Location": "Amman",
+    "Majors": [
+      "Cyber Security",
+      "Computer Science",
+      "Computer Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "Title": "Cyber Security Analyst Intern"
+  },
+  "opp022": {
+    "ApplicationDeadline": 1796947140000,
+    "CompanyId": "company_test_002",
+    "CompanyName": "Zain Jordan",
+    "CreatedAt": 1788523200000,
+    "Description": "Monitor the network and handle first-line tickets.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Engineering",
+      "Information Systems"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "Title": "Network Support Intern"
+  },
+  "opp023": {
+    "ApplicationDeadline": 1797983940000,
+    "CompanyId": "company_test_003",
+    "CompanyName": "Umniah",
+    "CreatedAt": 1789560000000,
+    "Description": "Build and test REST services with the platform team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "Title": "Backend Developer Intern"
+  },
+  "opp024": {
+    "ApplicationDeadline": 1797206340000,
+    "CompanyId": "company_test_003",
+    "CompanyName": "Umniah",
+    "CreatedAt": 1788782400000,
+    "Description": "Monitor the network and handle first-line tickets.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Engineering",
+      "Information Systems"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "Network Support Intern"
+  },
+  "opp025": {
+    "ApplicationDeadline": 1798156740000,
+    "CompanyId": "company_test_004",
+    "CompanyName": "Aramex",
+    "CreatedAt": 1789300800000,
+    "Description": "Write automated tests for the web and mobile apps.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Cyber Security"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "QA Automation Intern"
+  },
+  "opp026": {
+    "ApplicationDeadline": 1798156740000,
+    "CompanyId": "company_test_004",
+    "CompanyName": "Aramex",
+    "CreatedAt": 1788436800000,
+    "Description": "Collect requirements and draw process diagrams.",
+    "Location": "Amman",
+    "Majors": [
+      "Information Systems",
+      "Software Engineering"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "Title": "Business Analyst Intern"
+  },
+  "opp027": {
+    "ApplicationDeadline": 1796947140000,
+    "CompanyId": "company_test_005",
+    "CompanyName": "Arab Bank",
+    "CreatedAt": 1789732800000,
+    "Description": "Write automated tests for the web and mobile apps.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Cyber Security"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "Title": "QA Automation Intern"
+  },
+  "opp028": {
+    "ApplicationDeadline": 1796515140000,
+    "CompanyId": "company_test_005",
+    "CompanyName": "Arab Bank",
+    "CreatedAt": 1789473600000,
+    "Description": "Build and test REST services with the platform team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "Backend Developer Intern"
+  },
+  "opp029": {
+    "ApplicationDeadline": 1798502340000,
+    "CompanyId": "company_test_006",
+    "CompanyName": "Jordan Phosphate",
+    "CreatedAt": 1788264000000,
+    "Description": "Collect requirements and draw process diagrams.",
+    "Location": "Aqaba",
+    "Majors": [
+      "Information Systems",
+      "Software Engineering"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "Business Analyst Intern"
+  },
+  "opp030": {
+    "ApplicationDeadline": 1797119940000,
+    "CompanyId": "company_test_006",
+    "CompanyName": "Jordan Phosphate",
+    "CreatedAt": 1789214400000,
+    "Description": "Review alerts and run vulnerability scans.",
+    "Location": "Aqaba",
+    "Majors": [
+      "Cyber Security",
+      "Computer Science",
+      "Computer Engineering"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "Title": "Cyber Security Analyst Intern"
+  },
+  "opp031": {
+    "ApplicationDeadline": 1797724740000,
+    "CompanyId": "zjpce3sukhgtLMppf63SkVZtsYI2",
+    "CompanyName": "islamic bank",
+    "CreatedAt": 1789300800000,
+    "Description": "Monitor the network and handle first-line tickets.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Engineering",
+      "Information Systems"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "Title": "Network Support Intern"
+  },
+  "opp032": {
+    "ApplicationDeadline": 1798502340000,
+    "CompanyId": "zjpce3sukhgtLMppf63SkVZtsYI2",
+    "CompanyName": "islamic bank",
+    "CreatedAt": 1789560000000,
+    "Description": "Collect requirements and draw process diagrams.",
+    "Location": "Amman",
+    "Majors": [
+      "Information Systems",
+      "Software Engineering"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "Title": "Business Analyst Intern"
+  },
+  "opp033": {
+    "ApplicationDeadline": 1797465540000,
+    "CompanyId": "company_test_008",
+    "CompanyName": "Estarta Solutions",
+    "CreatedAt": 1789905600000,
+    "Description": "Build and test REST services with the platform team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "Title": "Backend Developer Intern"
+  },
+  "opp034": {
+    "ApplicationDeadline": 1796860740000,
+    "CompanyId": "company_test_008",
+    "CompanyName": "Estarta Solutions",
+    "CreatedAt": 1789646400000,
+    "Description": "Monitor the network and handle first-line tickets.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Engineering",
+      "Information Systems"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "Network Support Intern"
+  },
+  "opp035": {
+    "ApplicationDeadline": 1797551940000,
+    "CompanyId": "company_test_009",
+    "CompanyName": "Bright Labs",
+    "CreatedAt": 1789646400000,
+    "Description": "Monitor the network and handle first-line tickets.",
+    "Location": "Irbid",
+    "Majors": [
+      "Computer Engineering",
+      "Information Systems"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "Network Support Intern"
+  },
+  "opp036": {
+    "ApplicationDeadline": 1796774340000,
+    "CompanyId": "company_test_009",
+    "CompanyName": "Bright Labs",
+    "CreatedAt": 1789819200000,
+    "Description": "Review alerts and run vulnerability scans.",
+    "Location": "Irbid",
+    "Majors": [
+      "Cyber Security",
+      "Computer Science",
+      "Computer Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "Title": "Cyber Security Analyst Intern"
+  },
+  "opp037": {
+    "ApplicationDeadline": 1797983940000,
+    "CompanyId": "company_test_010",
+    "CompanyName": "Petra Digital",
+    "CreatedAt": 1789646400000,
+    "Description": "Prepare data pipelines and check data quality.",
+    "Location": "Amman",
+    "Majors": [
+      "Data Science",
+      "Computer Science",
+      "Information Systems"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "Title": "Data Engineering Intern"
+  },
+  "opp038": {
+    "ApplicationDeadline": 1797292740000,
+    "CompanyId": "company_test_010",
+    "CompanyName": "Petra Digital",
+    "CreatedAt": 1789905600000,
+    "Description": "Build and test REST services with the platform team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "Title": "Backend Developer Intern"
+  },
+  "opp039": {
+    "ApplicationDeadline": 1798502340000,
+    "CompanyId": "company_test_011",
+    "CompanyName": "Levant Logistics",
+    "CreatedAt": 1788868800000,
+    "Description": "Monitor the network and handle first-line tickets.",
+    "Location": "Aqaba",
+    "Majors": [
+      "Computer Engineering",
+      "Information Systems"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "Network Support Intern"
+  },
+  "opp040": {
+    "ApplicationDeadline": 1797983940000,
+    "CompanyId": "company_test_011",
+    "CompanyName": "Levant Logistics",
+    "CreatedAt": 1789473600000,
+    "Description": "Prepare data pipelines and check data quality.",
+    "Location": "Aqaba",
+    "Majors": [
+      "Data Science",
+      "Computer Science",
+      "Information Systems"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "Title": "Data Engineering Intern"
+  },
+  "opp041": {
+    "ApplicationDeadline": 1791071940000,
+    "CompanyId": "company_test_003",
+    "CompanyName": "Umniah",
+    "CreatedAt": 1787659200000,
+    "Description": "Design screens for the self-service portal.",
+    "Location": "Amman",
+    "Majors": [
+      "Software Engineering",
+      "Information Systems"
+    ],
+    "Seats": 2,
+    "Status": "closed",
+    "Title": "UI/UX Design Intern (closed)"
+  },
+  "opp042": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_003",
+    "CompanyName": "Umniah",
+    "ConfirmedStudents": {
+      "student_test_007": true,
+      "student_test_008": true,
+      "student_test_009": true,
+      "student_test_010": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 6,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp043": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_004",
+    "CompanyName": "Aramex",
+    "ConfirmedStudents": {
+      "student_test_011": true,
+      "student_test_012": true,
+      "student_test_013": true,
+      "student_test_014": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp044": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_005",
+    "CompanyName": "Arab Bank",
+    "ConfirmedStudents": {
+      "student_test_015": true,
+      "student_test_016": true,
+      "student_test_017": true,
+      "student_test_018": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 6,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp045": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_006",
+    "CompanyName": "Jordan Phosphate",
+    "ConfirmedStudents": {
+      "student_test_019": true,
+      "student_test_020": true,
+      "student_test_021": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Aqaba",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 5,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp046": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_008",
+    "CompanyName": "Estarta Solutions",
+    "ConfirmedStudents": {
+      "student_test_022": true,
+      "student_test_023": true,
+      "student_test_024": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp047": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_009",
+    "CompanyName": "Bright Labs",
+    "ConfirmedStudents": {
+      "student_test_025": true,
+      "student_test_026": true,
+      "student_test_027": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Irbid",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 5,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp048": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_010",
+    "CompanyName": "Petra Digital",
+    "ConfirmedStudents": {
+      "student_test_028": true,
+      "student_test_029": true,
+      "student_test_030": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 5,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp049": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "company_test_011",
+    "CompanyName": "Levant Logistics",
+    "ConfirmedStudents": {
+      "student_test_031": true,
+      "student_test_032": true,
+      "student_test_033": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Aqaba",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 5,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp051": {
+    "ApplicationDeadline": 1797811140000,
+    "CompanyId": "zjpce3sukhgtLMppf63SkVZtsYI2",
+    "CompanyName": "islamic bank",
+    "ConfirmedStudents": {
+      "student_test_037": true,
+      "student_test_038": true,
+      "student_test_039": true
+    },
+    "CreatedAt": 1788609600000,
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 5,
+    "Status": "open",
+    "Title": "Summer Training Cohort 2026"
+  },
+  "opp052": {
+    "CompanyId": "EbzaQRhbhYWO8acjrEXxX6Qa0Y92",
+    "CompanyName": "lugain'stest",
+    "Title": "Summer Training Cohort 2026",
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "amman jordan",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 5,
+    "Status": "open",
+    "CreatedAt": 1788868800000,
+    "ApplicationDeadline": 1796601540000,
+    "ConfirmedStudents": {
+      "student_test_050": true,
+      "student_test_051": true,
+      "student_test_052": true
+    }
+  },
+  "opp053": {
+    "CompanyId": "EbzaQRhbhYWO8acjrEXxX6Qa0Y92",
+    "CompanyName": "lugain'stest",
+    "Title": "QA Automation Intern",
+    "Description": "Write automated tests for the web and mobile apps.",
+    "Location": "amman jordan",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Cyber Security"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1789300800000,
+    "ApplicationDeadline": 1797379140000
+  },
+  "opp054": {
+    "CompanyId": "EbzaQRhbhYWO8acjrEXxX6Qa0Y92",
+    "CompanyName": "lugain'stest",
+    "Title": "Data Engineering Intern",
+    "Description": "Prepare data pipelines and check data quality.",
+    "Location": "amman jordan",
+    "Majors": [
+      "Data Science",
+      "Computer Science",
+      "Information Systems"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "CreatedAt": 1788696000000,
+    "ApplicationDeadline": 1798502340000
+  },
+  "opp055": {
+    "CompanyId": "o5OYxljgbxdPciDOX7lLnXmxsQB3",
+    "CompanyName": "gggg",
+    "Title": "Summer Training Cohort 2026",
+    "Description": "Six weeks of guided training with the company team.",
+    "Location": "amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Data Science",
+      "Computer Engineering",
+      "Information Systems",
+      "Cyber Security"
+    ],
+    "Seats": 5,
+    "Status": "open",
+    "CreatedAt": 1789646400000,
+    "ApplicationDeadline": 1797897540000,
+    "ConfirmedStudents": {
+      "student_test_053": true,
+      "student_test_054": true,
+      "student_test_055": true
+    }
+  },
+  "opp056": {
+    "CompanyId": "o5OYxljgbxdPciDOX7lLnXmxsQB3",
+    "CompanyName": "gggg",
+    "Title": "Backend Developer Intern",
+    "Description": "Build and test REST services with the platform team.",
+    "Location": "amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1788696000000,
+    "ApplicationDeadline": 1797379140000
+  },
+  "opp057": {
+    "CompanyId": "o5OYxljgbxdPciDOX7lLnXmxsQB3",
+    "CompanyName": "gggg",
+    "Title": "Data Engineering Intern",
+    "Description": "Prepare data pipelines and check data quality.",
+    "Location": "amman",
+    "Majors": [
+      "Data Science",
+      "Computer Science",
+      "Information Systems"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "CreatedAt": 1788782400000,
+    "ApplicationDeadline": 1797897540000
   }
 }

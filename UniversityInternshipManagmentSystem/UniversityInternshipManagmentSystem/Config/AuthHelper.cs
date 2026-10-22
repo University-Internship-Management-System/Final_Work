@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 
@@ -26,6 +27,36 @@ namespace UniversityInternshipManagmentSystem.Config
         public static string UserName => HttpContext.Current?.Session?["name"] as string;
         public static string UserRole => (HttpContext.Current?.Session?["role"] as string)?.ToLowerInvariant();
         public static string IdToken => HttpContext.Current?.Session?["idToken"] as string;
+
+        // True when the Firebase sign-in token of this session has expired (it lasts 1 hour).
+        // After that every database call is refused, so the pages would look empty.
+        // The end time is written inside the token itself (the "exp" claim), so this works
+        // wherever the token was stored (login, first login, password change).
+        public static bool IsTokenExpired
+        {
+            get
+            {
+                string token = IdToken;
+                if (string.IsNullOrEmpty(token)) return false;
+
+                try
+                {
+                    string[] parts = token.Split('.');                     // header.payload.signature
+                    if (parts.Length != 3) return false;
+
+                    string payload = parts[1].Replace('-', '+').Replace('_', '/');
+                    payload = payload.PadRight(payload.Length + (4 - payload.Length % 4) % 4, '=');
+                    string json = Encoding.UTF8.GetString(Convert.FromBase64String(payload));
+
+                    long exp = (long)Newtonsoft.Json.Linq.JObject.Parse(json)["exp"];
+                    return DateTimeOffset.UtcNow.ToUnixTimeSeconds() >= exp - 30;     // 30 seconds before the end, to be safe
+                }
+                catch
+                {
+                    return false;      // a token we cannot read: do not sign the user out because of it
+                }
+            }
+        }
 
         public static bool IsFirstLogin
         {
@@ -66,7 +97,7 @@ namespace UniversityInternshipManagmentSystem.Config
                 case RoleStudent:
                     return "~/Student/StudentDashboardPage/Dashboard.aspx";
                 case RoleCompany:
-                    return "~/Company/Dashboard.aspx";
+                    return "~/Company/CompanyDashboard/Dashboard.aspx";
                 case RoleAcademic:
                     return "~/Academic/Dashboard.aspx";
                 case RoleCoordinator:

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Contact Us | UIMS" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" ValidateRequest="false" CodeBehind="Contact.aspx.cs" Inherits="UniversityInternshipManagmentSystem.ContactModule.ContactPage" %>
+<%@ Page Title="Contact Us | UIMS" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" ValidateRequest="false" CodeBehind="Contact.aspx.cs" Inherits="UniversityInternshipManagmentSystem.ContactModule.ContactPage" %>
 <asp:Content ID="ContactHead" ContentPlaceHolderID="HeadContent" runat="server">
     <%-- Under the team's legacy request validation, ContactValidation rejects markup explicitly
          and controls encode values, allowing field feedback instead of a framework error. --%>
@@ -10,14 +10,14 @@
             <div class="col-lg-4 contact-intro">
                 <span class="contact-eyebrow">UIMS &middot; University of Jordan</span>
                 <h1 id="contact-title" class="mt-3">Contact us</h1>
-                <p class="contact-lead">Have a question about the internship system? Send a message to help us understand what you need.</p>
+                <p class="contact-lead">Have a question about the internship system? Sign in with your UIMS account and send a message to help us understand what you need.</p>
                 <div class="contact-note"><h2>Before you send</h2><p>Include relevant details about your question. Please do not send passwords, identification documents, or other sensitive information.</p></div>
             </div>
             <div class="col-lg-8">
                 <div class="card contact-card p-4 p-md-5">
                     <h2>Send a message</h2>
                     <p class="text-muted mb-4">All fields are required.</p>
-                    <asp:Panel ID="Availability" runat="server" CssClass="alert alert-warning" role="status">Message sending is temporarily unavailable while secure submission is configured. Your message has not been sent.</asp:Panel>
+                    <asp:Panel ID="Availability" runat="server" CssClass="alert alert-warning" role="status"><asp:Literal ID="AvailabilityText" runat="server" Mode="Encode" /> <asp:HyperLink ID="SignIn" runat="server" Text="Sign in to send a message" CssClass="alert-link" /></asp:Panel>
                     <asp:Panel ID="Feedback" runat="server" Visible="false" role="status" aria-live="polite"><asp:Literal ID="FeedbackText" runat="server" Mode="Encode" /></asp:Panel>
                     <asp:HiddenField ID="Csrf" runat="server" />
                     <asp:HiddenField ID="Submission" runat="server" />
