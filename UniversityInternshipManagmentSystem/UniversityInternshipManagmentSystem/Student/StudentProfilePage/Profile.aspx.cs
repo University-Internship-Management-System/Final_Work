@@ -114,6 +114,13 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
             SaveMessage.CssClass = "sd-save-message " + (isError ? "sd-save-error" : "sd-save-success");
             SaveMessage.Attributes["role"] = isError ? "alert" : "status";
         }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            string query = Request.Url.Query ?? "";
+            Response.Redirect("~/login/FirstLogin.aspx" + query, false);
+            Context.ApplicationInstance.CompleteRequest();
+        }
     }
 }
 
