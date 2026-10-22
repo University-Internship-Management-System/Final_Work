@@ -1,0 +1,2325 @@
+{
+  "Students": {
+    "student_001": {
+      "Name": "Ahmad Ali",
+      "Role": "Student",
+      "Email": "student1@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000101",
+      "ProfilePicUrl": "",
+      "UniEmail": "student1@university.example.com",
+      "Major": "Computer Science",
+      "CompanyId": "company_001",
+      "AcademicSupervisorId": "academic_001",
+      "GPA": 3.65,
+      "CvUrl": "",
+      "PortfolioUrl": "",
+      "SkillsList": [
+        "C#",
+        "SQL",
+        "Problem Solving"
+      ]
+    },
+    "student_002": {
+      "Name": "Sara Mahmoud",
+      "Role": "Student",
+      "Email": "student2@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000102",
+      "ProfilePicUrl": "",
+      "UniEmail": "student2@university.example.com",
+      "Major": "Computer Science",
+      "CompanyId": "company_001",
+      "AcademicSupervisorId": "academic_001",
+      "GPA": 3.82,
+      "CvUrl": "https://example.com/demo/cv/student_2.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_2",
+      "SkillsList": [
+        "C#",
+        "SQL",
+        "Problem Solving"
+      ]
+    },
+    "student_003": {
+      "Name": "Yousef Hassan",
+      "Role": "Student",
+      "Email": "student3@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000103",
+      "ProfilePicUrl": "",
+      "UniEmail": "student3@university.example.com",
+      "Major": "Computer Science",
+      "CompanyId": "company_001",
+      "AcademicSupervisorId": "academic_001",
+      "GPA": 2.95,
+      "CvUrl": "https://example.com/demo/cv/student_3.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_3",
+      "SkillsList": [
+        "C#",
+        "SQL",
+        "Problem Solving"
+      ]
+    },
+    "student_004": {
+      "Name": "Lina Samir",
+      "Role": "Student",
+      "Email": "student4@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000104",
+      "ProfilePicUrl": "",
+      "UniEmail": "student4@university.example.com",
+      "Major": "Computer Science",
+      "CompanyId": "company_001",
+      "AcademicSupervisorId": "academic_001",
+      "GPA": 3.4,
+      "CvUrl": "https://example.com/demo/cv/student_4.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_4",
+      "SkillsList": [
+        "C#",
+        "SQL",
+        "Problem Solving"
+      ]
+    },
+    "student_005": {
+      "Name": "Zaid Omar",
+      "Role": "Student",
+      "Email": "student5@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000105",
+      "ProfilePicUrl": "",
+      "UniEmail": "student5@university.example.com",
+      "Major": "Software Engineering",
+      "CompanyId": "company_002",
+      "AcademicSupervisorId": "academic_002",
+      "GPA": 3.1,
+      "CvUrl": "https://example.com/demo/cv/student_5.pdf",
+      "PortfolioUrl": "",
+      "SkillsList": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
+    },
+    "student_006": {
+      "Name": "Noor Ibrahim",
+      "Role": "Student",
+      "Email": "student6@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000106",
+      "ProfilePicUrl": "",
+      "UniEmail": "student6@university.example.com",
+      "Major": "Software Engineering",
+      "CompanyId": "company_002",
+      "AcademicSupervisorId": "academic_002",
+      "GPA": 3.9,
+      "CvUrl": "https://example.com/demo/cv/student_6.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_6",
+      "SkillsList": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
+    },
+    "student_007": {
+      "Name": "Leen Adel",
+      "Role": "Student",
+      "Email": "student7@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000107",
+      "ProfilePicUrl": "",
+      "UniEmail": "student7@university.example.com",
+      "Major": "Software Engineering",
+      "CompanyId": "company_002",
+      "AcademicSupervisorId": "academic_002",
+      "GPA": 3.25,
+      "CvUrl": "https://example.com/demo/cv/student_7.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_7",
+      "SkillsList": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
+    },
+    "student_008": {
+      "Name": "Sami Tareq",
+      "Role": "Student",
+      "Email": "student8@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000108",
+      "ProfilePicUrl": "",
+      "UniEmail": "student8@university.example.com",
+      "Major": "Software Engineering",
+      "CompanyId": "company_002",
+      "AcademicSupervisorId": "academic_002",
+      "GPA": 2.8,
+      "CvUrl": "https://example.com/demo/cv/student_8.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_8",
+      "SkillsList": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Git"
+      ]
+    }
+  },
+  "Admins": {
+    "admin_001": {
+      "Name": "Rana Khalil",
+      "Role": "Admin",
+      "Email": "coordinator@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000001",
+      "ProfilePicUrl": ""
+    }
+  },
+  "AcademicSupervisors": {
+    "academic_001": {
+      "Name": "Omar Haddad",
+      "Role": "AcademicSupervisor",
+      "Email": "academic1@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000011",
+      "ProfilePicUrl": "",
+      "UniversityEmail": "academic1@university.example.com",
+      "Major": "Computer Science"
+    },
+    "academic_002": {
+      "Name": "Dina Nasser",
+      "Role": "AcademicSupervisor",
+      "Email": "academic2@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000012",
+      "ProfilePicUrl": "",
+      "UniversityEmail": "academic2@university.example.com",
+      "Major": "Software Engineering"
+    }
+  },
+  "CompanySupervisors": {
+    "company_001": {
+      "Name": "Khaled Mansour",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor1@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "+962700000021",
+      "ProfilePicUrl": "",
+      "CompanyName": "Demo Amman Software",
+      "CompEmail": "training1@company.example.com",
+      "Location": "Amman, Jordan"
+    },
+    "company_002": {
+      "Name": "Hala Saleh",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor2@example.com",
+      "FirstLogin": true,
+      "PhoneNumber": "+962700000022",
+      "ProfilePicUrl": "",
+      "CompanyName": "Demo Irbid Digital",
+      "CompEmail": "training2@company.example.com",
+      "Location": "Irbid, Jordan"
+    }
+  },
+  "Opportunities": {
+    "opportunity_company_001": {
+      "CompanyId": "company_001",
+      "CompanyName": "Demo Amman Software",
+      "Title": "Software Engineering Internship",
+      "Description": "Test opportunity for the completion and admin approval workflow.",
+      "Location": "Amman, Jordan",
+      "Majors": [
+        "Computer Science"
+      ],
+      "Seats": 4,
+      "Status": "closed",
+      "CreatedAt": 1769774400000,
+      "ApplicationDeadline": 1772280000000,
+      "ConfirmedStudents": {
+        "student_001": true,
+        "student_002": true,
+        "student_003": true,
+        "student_004": true
+      }
+    },
+    "opportunity_company_002": {
+      "CompanyId": "company_002",
+      "CompanyName": "Demo Irbid Digital",
+      "Title": "Web and Systems Internship",
+      "Description": "Test opportunity for the completion and admin approval workflow.",
+      "Location": "Irbid, Jordan",
+      "Majors": [
+        "Software Engineering"
+      ],
+      "Seats": 4,
+      "Status": "closed",
+      "CreatedAt": 1769774400000,
+      "ApplicationDeadline": 1772280000000,
+      "ConfirmedStudents": {
+        "student_005": true,
+        "student_006": true,
+        "student_007": true,
+        "student_008": true
+      }
+    }
+  },
+  "Applications": {
+    "application_student_001": {
+      "StudentId": "student_001",
+      "OpportunityId": "opportunity_company_001",
+      "CompanyId": "company_001",
+      "OpportunityTitle": "Software Engineering Internship",
+      "CompanyName": "Demo Amman Software",
+      "CvUrl": "",
+      "PortfolioUrl": "",
+      "CoverLetter": "Completed the assigned internship training and all weekly tasks.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1772280000000,
+      "ReviewedAt": 1772366400000,
+      "ConfirmedAt": 1772366400000
+    },
+    "application_student_002": {
+      "StudentId": "student_002",
+      "OpportunityId": "opportunity_company_001",
+      "CompanyId": "company_001",
+      "OpportunityTitle": "Software Engineering Internship",
+      "CompanyName": "Demo Amman Software",
+      "CvUrl": "https://example.com/demo/cv/student_2.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_2",
+      "CoverLetter": "Completed the assigned internship training and all weekly tasks.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1772280000000,
+      "ReviewedAt": 1772366400000,
+      "ConfirmedAt": 1772366400000
+    },
+    "application_student_003": {
+      "StudentId": "student_003",
+      "OpportunityId": "opportunity_company_001",
+      "CompanyId": "company_001",
+      "OpportunityTitle": "Software Engineering Internship",
+      "CompanyName": "Demo Amman Software",
+      "CvUrl": "https://example.com/demo/cv/student_3.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_3",
+      "CoverLetter": "Completed the assigned internship training and all weekly tasks.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1772280000000,
+      "ReviewedAt": 1772366400000,
+      "ConfirmedAt": 1772366400000
+    },
+    "application_student_004": {
+      "StudentId": "student_004",
+      "OpportunityId": "opportunity_company_001",
+      "CompanyId": "company_001",
+      "OpportunityTitle": "Software Engineering Internship",
+      "CompanyName": "Demo Amman Software",
+      "CvUrl": "https://example.com/demo/cv/student_4.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_4",
+      "CoverLetter": "Completed the assigned internship training and all weekly tasks.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1772280000000,
+      "ReviewedAt": 1772366400000,
+      "ConfirmedAt": 1772366400000
+    },
+    "application_student_005": {
+      "StudentId": "student_005",
+      "OpportunityId": "opportunity_company_002",
+      "CompanyId": "company_002",
+      "OpportunityTitle": "Web and Systems Internship",
+      "CompanyName": "Demo Irbid Digital",
+      "CvUrl": "https://example.com/demo/cv/student_5.pdf",
+      "PortfolioUrl": "",
+      "CoverLetter": "Completed the assigned internship training and all weekly tasks.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1772280000000,
+      "ReviewedAt": 1772366400000,
+      "ConfirmedAt": 1772366400000
+    },
+    "application_student_006": {
+      "StudentId": "student_006",
+      "OpportunityId": "opportunity_company_002",
+      "CompanyId": "company_002",
+      "OpportunityTitle": "Web and Systems Internship",
+      "CompanyName": "Demo Irbid Digital",
+      "CvUrl": "https://example.com/demo/cv/student_6.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_6",
+      "CoverLetter": "Completed the assigned internship training and all weekly tasks.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1772280000000,
+      "ReviewedAt": 1772366400000,
+      "ConfirmedAt": 1772366400000
+    },
+    "application_student_007": {
+      "StudentId": "student_007",
+      "OpportunityId": "opportunity_company_002",
+      "CompanyId": "company_002",
+      "OpportunityTitle": "Web and Systems Internship",
+      "CompanyName": "Demo Irbid Digital",
+      "CvUrl": "https://example.com/demo/cv/student_7.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_7",
+      "CoverLetter": "Completed the assigned internship training and all weekly tasks.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1772280000000,
+      "ReviewedAt": 1772366400000,
+      "ConfirmedAt": 1772366400000
+    },
+    "application_student_008": {
+      "StudentId": "student_008",
+      "OpportunityId": "opportunity_company_002",
+      "CompanyId": "company_002",
+      "OpportunityTitle": "Web and Systems Internship",
+      "CompanyName": "Demo Irbid Digital",
+      "CvUrl": "https://example.com/demo/cv/student_8.pdf",
+      "PortfolioUrl": "https://example.com/demo/portfolio/student_8",
+      "CoverLetter": "Completed the assigned internship training and all weekly tasks.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1772280000000,
+      "ReviewedAt": 1772366400000,
+      "ConfirmedAt": 1772366400000
+    }
+  },
+  "Tasks": {
+    "task_student_001_w1": {
+      "TaskName": "Week 1 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 1.",
+      "Status": "Open",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "DeadLine": "2026-03-08T00:00:00Z",
+      "StudentIds": [
+        "student_001"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_001": 15
+      }
+    },
+    "task_student_001_w2": {
+      "TaskName": "Week 2 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 2.",
+      "Status": "Open",
+      "StartDate": "2026-03-09T00:00:00Z",
+      "DeadLine": "2026-03-15T00:00:00Z",
+      "StudentIds": [
+        "student_001"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 2,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_001": 15
+      }
+    },
+    "task_student_001_w3": {
+      "TaskName": "Week 3 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 3.",
+      "Status": "Open",
+      "StartDate": "2026-03-16T00:00:00Z",
+      "DeadLine": "2026-03-22T00:00:00Z",
+      "StudentIds": [
+        "student_001"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_001": 15
+      }
+    },
+    "task_student_001_w4": {
+      "TaskName": "Week 4 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 4.",
+      "Status": "Open",
+      "StartDate": "2026-03-23T00:00:00Z",
+      "DeadLine": "2026-03-29T00:00:00Z",
+      "StudentIds": [
+        "student_001"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 4,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_001": 15
+      }
+    },
+    "task_student_001_w5": {
+      "TaskName": "Week 5 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 5.",
+      "Status": "Open",
+      "StartDate": "2026-03-30T00:00:00Z",
+      "DeadLine": "2026-04-05T00:00:00Z",
+      "StudentIds": [
+        "student_001"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 5,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_001": 15
+      }
+    },
+    "task_student_001_w6": {
+      "TaskName": "Week 6 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 6.",
+      "Status": "Open",
+      "StartDate": "2026-04-06T00:00:00Z",
+      "DeadLine": "2026-04-12T00:00:00Z",
+      "StudentIds": [
+        "student_001"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 6,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_001": 15
+      }
+    },
+    "task_student_002_w1": {
+      "TaskName": "Week 1 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 1.",
+      "Status": "Open",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "DeadLine": "2026-03-08T00:00:00Z",
+      "StudentIds": [
+        "student_002"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_002": 15
+      }
+    },
+    "task_student_002_w2": {
+      "TaskName": "Week 2 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 2.",
+      "Status": "Open",
+      "StartDate": "2026-03-09T00:00:00Z",
+      "DeadLine": "2026-03-15T00:00:00Z",
+      "StudentIds": [
+        "student_002"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 2,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_002": 15
+      }
+    },
+    "task_student_002_w3": {
+      "TaskName": "Week 3 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 3.",
+      "Status": "Open",
+      "StartDate": "2026-03-16T00:00:00Z",
+      "DeadLine": "2026-03-22T00:00:00Z",
+      "StudentIds": [
+        "student_002"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_002": 15
+      }
+    },
+    "task_student_002_w4": {
+      "TaskName": "Week 4 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 4.",
+      "Status": "Open",
+      "StartDate": "2026-03-23T00:00:00Z",
+      "DeadLine": "2026-03-29T00:00:00Z",
+      "StudentIds": [
+        "student_002"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 4,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_002": 15
+      }
+    },
+    "task_student_002_w5": {
+      "TaskName": "Week 5 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 5.",
+      "Status": "Open",
+      "StartDate": "2026-03-30T00:00:00Z",
+      "DeadLine": "2026-04-05T00:00:00Z",
+      "StudentIds": [
+        "student_002"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 5,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_002": 15
+      }
+    },
+    "task_student_002_w6": {
+      "TaskName": "Week 6 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 6.",
+      "Status": "Open",
+      "StartDate": "2026-04-06T00:00:00Z",
+      "DeadLine": "2026-04-12T00:00:00Z",
+      "StudentIds": [
+        "student_002"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 6,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_002": 15
+      }
+    },
+    "task_student_003_w1": {
+      "TaskName": "Week 1 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 1.",
+      "Status": "Open",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "DeadLine": "2026-03-08T00:00:00Z",
+      "StudentIds": [
+        "student_003"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_003": 15
+      }
+    },
+    "task_student_003_w2": {
+      "TaskName": "Week 2 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 2.",
+      "Status": "Open",
+      "StartDate": "2026-03-09T00:00:00Z",
+      "DeadLine": "2026-03-15T00:00:00Z",
+      "StudentIds": [
+        "student_003"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 2,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_003": 15
+      }
+    },
+    "task_student_003_w3": {
+      "TaskName": "Week 3 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 3.",
+      "Status": "Open",
+      "StartDate": "2026-03-16T00:00:00Z",
+      "DeadLine": "2026-03-22T00:00:00Z",
+      "StudentIds": [
+        "student_003"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_003": 15
+      }
+    },
+    "task_student_003_w4": {
+      "TaskName": "Week 4 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 4.",
+      "Status": "Open",
+      "StartDate": "2026-03-23T00:00:00Z",
+      "DeadLine": "2026-03-29T00:00:00Z",
+      "StudentIds": [
+        "student_003"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 4,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_003": 15
+      }
+    },
+    "task_student_003_w5": {
+      "TaskName": "Week 5 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 5.",
+      "Status": "Open",
+      "StartDate": "2026-03-30T00:00:00Z",
+      "DeadLine": "2026-04-05T00:00:00Z",
+      "StudentIds": [
+        "student_003"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 5,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_003": 15
+      }
+    },
+    "task_student_003_w6": {
+      "TaskName": "Week 6 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 6.",
+      "Status": "Open",
+      "StartDate": "2026-04-06T00:00:00Z",
+      "DeadLine": "2026-04-12T00:00:00Z",
+      "StudentIds": [
+        "student_003"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 6,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_003": 15
+      }
+    },
+    "task_student_004_w1": {
+      "TaskName": "Week 1 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 1.",
+      "Status": "Open",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "DeadLine": "2026-03-08T00:00:00Z",
+      "StudentIds": [
+        "student_004"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_004": 15
+      }
+    },
+    "task_student_004_w2": {
+      "TaskName": "Week 2 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 2.",
+      "Status": "Open",
+      "StartDate": "2026-03-09T00:00:00Z",
+      "DeadLine": "2026-03-15T00:00:00Z",
+      "StudentIds": [
+        "student_004"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 2,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_004": 15
+      }
+    },
+    "task_student_004_w3": {
+      "TaskName": "Week 3 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 3.",
+      "Status": "Open",
+      "StartDate": "2026-03-16T00:00:00Z",
+      "DeadLine": "2026-03-22T00:00:00Z",
+      "StudentIds": [
+        "student_004"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_004": 15
+      }
+    },
+    "task_student_004_w4": {
+      "TaskName": "Week 4 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 4.",
+      "Status": "Open",
+      "StartDate": "2026-03-23T00:00:00Z",
+      "DeadLine": "2026-03-29T00:00:00Z",
+      "StudentIds": [
+        "student_004"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 4,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_004": 15
+      }
+    },
+    "task_student_004_w5": {
+      "TaskName": "Week 5 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 5.",
+      "Status": "Open",
+      "StartDate": "2026-03-30T00:00:00Z",
+      "DeadLine": "2026-04-05T00:00:00Z",
+      "StudentIds": [
+        "student_004"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 5,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_004": 15
+      }
+    },
+    "task_student_004_w6": {
+      "TaskName": "Week 6 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 6.",
+      "Status": "Open",
+      "StartDate": "2026-04-06T00:00:00Z",
+      "DeadLine": "2026-04-12T00:00:00Z",
+      "StudentIds": [
+        "student_004"
+      ],
+      "CompanyId": "company_001",
+      "WeekNumber": 6,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_004": 15
+      }
+    },
+    "task_student_005_w1": {
+      "TaskName": "Week 1 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 1.",
+      "Status": "Open",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "DeadLine": "2026-03-08T00:00:00Z",
+      "StudentIds": [
+        "student_005"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_005": 15
+      }
+    },
+    "task_student_005_w2": {
+      "TaskName": "Week 2 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 2.",
+      "Status": "Open",
+      "StartDate": "2026-03-09T00:00:00Z",
+      "DeadLine": "2026-03-15T00:00:00Z",
+      "StudentIds": [
+        "student_005"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 2,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_005": 15
+      }
+    },
+    "task_student_005_w3": {
+      "TaskName": "Week 3 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 3.",
+      "Status": "Open",
+      "StartDate": "2026-03-16T00:00:00Z",
+      "DeadLine": "2026-03-22T00:00:00Z",
+      "StudentIds": [
+        "student_005"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_005": 15
+      }
+    },
+    "task_student_005_w4": {
+      "TaskName": "Week 4 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 4.",
+      "Status": "Open",
+      "StartDate": "2026-03-23T00:00:00Z",
+      "DeadLine": "2026-03-29T00:00:00Z",
+      "StudentIds": [
+        "student_005"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 4,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_005": 15
+      }
+    },
+    "task_student_005_w5": {
+      "TaskName": "Week 5 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 5.",
+      "Status": "Open",
+      "StartDate": "2026-03-30T00:00:00Z",
+      "DeadLine": "2026-04-05T00:00:00Z",
+      "StudentIds": [
+        "student_005"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 5,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_005": 15
+      }
+    },
+    "task_student_005_w6": {
+      "TaskName": "Week 6 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 6.",
+      "Status": "Open",
+      "StartDate": "2026-04-06T00:00:00Z",
+      "DeadLine": "2026-04-12T00:00:00Z",
+      "StudentIds": [
+        "student_005"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 6,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_005": 15
+      }
+    },
+    "task_student_006_w1": {
+      "TaskName": "Week 1 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 1.",
+      "Status": "Open",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "DeadLine": "2026-03-08T00:00:00Z",
+      "StudentIds": [
+        "student_006"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_006": 15
+      }
+    },
+    "task_student_006_w2": {
+      "TaskName": "Week 2 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 2.",
+      "Status": "Open",
+      "StartDate": "2026-03-09T00:00:00Z",
+      "DeadLine": "2026-03-15T00:00:00Z",
+      "StudentIds": [
+        "student_006"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 2,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_006": 15
+      }
+    },
+    "task_student_006_w3": {
+      "TaskName": "Week 3 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 3.",
+      "Status": "Open",
+      "StartDate": "2026-03-16T00:00:00Z",
+      "DeadLine": "2026-03-22T00:00:00Z",
+      "StudentIds": [
+        "student_006"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_006": 15
+      }
+    },
+    "task_student_006_w4": {
+      "TaskName": "Week 4 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 4.",
+      "Status": "Open",
+      "StartDate": "2026-03-23T00:00:00Z",
+      "DeadLine": "2026-03-29T00:00:00Z",
+      "StudentIds": [
+        "student_006"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 4,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_006": 15
+      }
+    },
+    "task_student_006_w5": {
+      "TaskName": "Week 5 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 5.",
+      "Status": "Open",
+      "StartDate": "2026-03-30T00:00:00Z",
+      "DeadLine": "2026-04-05T00:00:00Z",
+      "StudentIds": [
+        "student_006"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 5,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_006": 15
+      }
+    },
+    "task_student_006_w6": {
+      "TaskName": "Week 6 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 6.",
+      "Status": "Open",
+      "StartDate": "2026-04-06T00:00:00Z",
+      "DeadLine": "2026-04-12T00:00:00Z",
+      "StudentIds": [
+        "student_006"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 6,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_006": 15
+      }
+    },
+    "task_student_007_w1": {
+      "TaskName": "Week 1 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 1.",
+      "Status": "Open",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "DeadLine": "2026-03-08T00:00:00Z",
+      "StudentIds": [
+        "student_007"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_007": 15
+      }
+    },
+    "task_student_007_w2": {
+      "TaskName": "Week 2 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 2.",
+      "Status": "Open",
+      "StartDate": "2026-03-09T00:00:00Z",
+      "DeadLine": "2026-03-15T00:00:00Z",
+      "StudentIds": [
+        "student_007"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 2,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_007": 15
+      }
+    },
+    "task_student_007_w3": {
+      "TaskName": "Week 3 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 3.",
+      "Status": "Open",
+      "StartDate": "2026-03-16T00:00:00Z",
+      "DeadLine": "2026-03-22T00:00:00Z",
+      "StudentIds": [
+        "student_007"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_007": 15
+      }
+    },
+    "task_student_007_w4": {
+      "TaskName": "Week 4 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 4.",
+      "Status": "Open",
+      "StartDate": "2026-03-23T00:00:00Z",
+      "DeadLine": "2026-03-29T00:00:00Z",
+      "StudentIds": [
+        "student_007"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 4,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_007": 15
+      }
+    },
+    "task_student_007_w5": {
+      "TaskName": "Week 5 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 5.",
+      "Status": "Open",
+      "StartDate": "2026-03-30T00:00:00Z",
+      "DeadLine": "2026-04-05T00:00:00Z",
+      "StudentIds": [
+        "student_007"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 5,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_007": 15
+      }
+    },
+    "task_student_007_w6": {
+      "TaskName": "Week 6 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 6.",
+      "Status": "Open",
+      "StartDate": "2026-04-06T00:00:00Z",
+      "DeadLine": "2026-04-12T00:00:00Z",
+      "StudentIds": [
+        "student_007"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 6,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_007": 15
+      }
+    },
+    "task_student_008_w1": {
+      "TaskName": "Week 1 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 1.",
+      "Status": "Open",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "DeadLine": "2026-03-08T00:00:00Z",
+      "StudentIds": [
+        "student_008"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 1,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_008": 15
+      }
+    },
+    "task_student_008_w2": {
+      "TaskName": "Week 2 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 2.",
+      "Status": "Open",
+      "StartDate": "2026-03-09T00:00:00Z",
+      "DeadLine": "2026-03-15T00:00:00Z",
+      "StudentIds": [
+        "student_008"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 2,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_008": 15
+      }
+    },
+    "task_student_008_w3": {
+      "TaskName": "Week 3 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 3.",
+      "Status": "Open",
+      "StartDate": "2026-03-16T00:00:00Z",
+      "DeadLine": "2026-03-22T00:00:00Z",
+      "StudentIds": [
+        "student_008"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 3,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_008": 15
+      }
+    },
+    "task_student_008_w4": {
+      "TaskName": "Week 4 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 4.",
+      "Status": "Open",
+      "StartDate": "2026-03-23T00:00:00Z",
+      "DeadLine": "2026-03-29T00:00:00Z",
+      "StudentIds": [
+        "student_008"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 4,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_008": 15
+      }
+    },
+    "task_student_008_w5": {
+      "TaskName": "Week 5 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 5.",
+      "Status": "Open",
+      "StartDate": "2026-03-30T00:00:00Z",
+      "DeadLine": "2026-04-05T00:00:00Z",
+      "StudentIds": [
+        "student_008"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 5,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_008": 15
+      }
+    },
+    "task_student_008_w6": {
+      "TaskName": "Week 6 - Internship assignment",
+      "TaskDescription": "Completed practical training work for week 6.",
+      "Status": "Open",
+      "StartDate": "2026-04-06T00:00:00Z",
+      "DeadLine": "2026-04-12T00:00:00Z",
+      "StudentIds": [
+        "student_008"
+      ],
+      "CompanyId": "company_002",
+      "WeekNumber": 6,
+      "ToolsUsed": "Visual Studio, Git, SQL",
+      "MaxScore": 100,
+      "Hours": 15,
+      "StudentHours": {
+        "student_008": 15
+      }
+    }
+  },
+  "TaskSubmissions": {
+    "submission_student_001_w1": {
+      "TaskId": "task_student_001_w1",
+      "StudentId": "student_001",
+      "Version": 1,
+      "Description": "Completed and submitted the week 1 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_001/week-1",
+      "SubmittedAt": "2026-03-07T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 1 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 1 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 91,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_001_w2": {
+      "TaskId": "task_student_001_w2",
+      "StudentId": "student_001",
+      "Version": 1,
+      "Description": "Completed and submitted the week 2 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_001/week-2",
+      "SubmittedAt": "2026-03-14T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 2 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 2 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 92,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_001_w3": {
+      "TaskId": "task_student_001_w3",
+      "StudentId": "student_001",
+      "Version": 1,
+      "Description": "Completed and submitted the week 3 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_001/week-3",
+      "SubmittedAt": "2026-03-21T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 3 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 3 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 93,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_001_w4": {
+      "TaskId": "task_student_001_w4",
+      "StudentId": "student_001",
+      "Version": 1,
+      "Description": "Completed and submitted the week 4 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_001/week-4",
+      "SubmittedAt": "2026-03-28T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 4 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 4 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 94,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_001_w5": {
+      "TaskId": "task_student_001_w5",
+      "StudentId": "student_001",
+      "Version": 1,
+      "Description": "Completed and submitted the week 5 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_001/week-5",
+      "SubmittedAt": "2026-04-04T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 5 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 5 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 95,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_001_w6": {
+      "TaskId": "task_student_001_w6",
+      "StudentId": "student_001",
+      "Version": 1,
+      "Description": "Completed and submitted the week 6 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_001/week-6",
+      "SubmittedAt": "2026-04-11T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 6 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 6 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 96,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_002_w1": {
+      "TaskId": "task_student_002_w1",
+      "StudentId": "student_002",
+      "Version": 1,
+      "Description": "Completed and submitted the week 1 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_002/week-1",
+      "SubmittedAt": "2026-03-07T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 1 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 1 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 91,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_002_w2": {
+      "TaskId": "task_student_002_w2",
+      "StudentId": "student_002",
+      "Version": 1,
+      "Description": "Completed and submitted the week 2 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_002/week-2",
+      "SubmittedAt": "2026-03-14T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 2 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 2 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 92,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_002_w3": {
+      "TaskId": "task_student_002_w3",
+      "StudentId": "student_002",
+      "Version": 1,
+      "Description": "Completed and submitted the week 3 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_002/week-3",
+      "SubmittedAt": "2026-03-21T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 3 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 3 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 93,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_002_w4": {
+      "TaskId": "task_student_002_w4",
+      "StudentId": "student_002",
+      "Version": 1,
+      "Description": "Completed and submitted the week 4 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_002/week-4",
+      "SubmittedAt": "2026-03-28T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 4 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 4 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 94,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_002_w5": {
+      "TaskId": "task_student_002_w5",
+      "StudentId": "student_002",
+      "Version": 1,
+      "Description": "Completed and submitted the week 5 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_002/week-5",
+      "SubmittedAt": "2026-04-04T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 5 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 5 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 95,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_002_w6": {
+      "TaskId": "task_student_002_w6",
+      "StudentId": "student_002",
+      "Version": 1,
+      "Description": "Completed and submitted the week 6 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_002/week-6",
+      "SubmittedAt": "2026-04-11T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 6 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 6 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 96,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_003_w1": {
+      "TaskId": "task_student_003_w1",
+      "StudentId": "student_003",
+      "Version": 1,
+      "Description": "Completed and submitted the week 1 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_003/week-1",
+      "SubmittedAt": "2026-03-07T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 1 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 1 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 91,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_003_w2": {
+      "TaskId": "task_student_003_w2",
+      "StudentId": "student_003",
+      "Version": 1,
+      "Description": "Completed and submitted the week 2 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_003/week-2",
+      "SubmittedAt": "2026-03-14T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 2 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 2 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 92,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_003_w3": {
+      "TaskId": "task_student_003_w3",
+      "StudentId": "student_003",
+      "Version": 1,
+      "Description": "Completed and submitted the week 3 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_003/week-3",
+      "SubmittedAt": "2026-03-21T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 3 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 3 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 93,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_003_w4": {
+      "TaskId": "task_student_003_w4",
+      "StudentId": "student_003",
+      "Version": 1,
+      "Description": "Completed and submitted the week 4 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_003/week-4",
+      "SubmittedAt": "2026-03-28T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 4 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 4 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 94,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_003_w5": {
+      "TaskId": "task_student_003_w5",
+      "StudentId": "student_003",
+      "Version": 1,
+      "Description": "Completed and submitted the week 5 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_003/week-5",
+      "SubmittedAt": "2026-04-04T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 5 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 5 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 95,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_003_w6": {
+      "TaskId": "task_student_003_w6",
+      "StudentId": "student_003",
+      "Version": 1,
+      "Description": "Completed and submitted the week 6 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_003/week-6",
+      "SubmittedAt": "2026-04-11T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 6 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 6 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 96,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_004_w1": {
+      "TaskId": "task_student_004_w1",
+      "StudentId": "student_004",
+      "Version": 1,
+      "Description": "Completed and submitted the week 1 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_004/week-1",
+      "SubmittedAt": "2026-03-07T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 1 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 1 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 91,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_004_w2": {
+      "TaskId": "task_student_004_w2",
+      "StudentId": "student_004",
+      "Version": 1,
+      "Description": "Completed and submitted the week 2 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_004/week-2",
+      "SubmittedAt": "2026-03-14T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 2 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 2 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 92,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_004_w3": {
+      "TaskId": "task_student_004_w3",
+      "StudentId": "student_004",
+      "Version": 1,
+      "Description": "Completed and submitted the week 3 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_004/week-3",
+      "SubmittedAt": "2026-03-21T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 3 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 3 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 93,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_004_w4": {
+      "TaskId": "task_student_004_w4",
+      "StudentId": "student_004",
+      "Version": 1,
+      "Description": "Completed and submitted the week 4 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_004/week-4",
+      "SubmittedAt": "2026-03-28T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 4 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 4 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 94,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_004_w5": {
+      "TaskId": "task_student_004_w5",
+      "StudentId": "student_004",
+      "Version": 1,
+      "Description": "Completed and submitted the week 5 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_004/week-5",
+      "SubmittedAt": "2026-04-04T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 5 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 5 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 95,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_004_w6": {
+      "TaskId": "task_student_004_w6",
+      "StudentId": "student_004",
+      "Version": 1,
+      "Description": "Completed and submitted the week 6 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_004/week-6",
+      "SubmittedAt": "2026-04-11T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 6 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 6 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_001",
+      "Score": 96,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_005_w1": {
+      "TaskId": "task_student_005_w1",
+      "StudentId": "student_005",
+      "Version": 1,
+      "Description": "Completed and submitted the week 1 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_005/week-1",
+      "SubmittedAt": "2026-03-07T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 1 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 1 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 91,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_005_w2": {
+      "TaskId": "task_student_005_w2",
+      "StudentId": "student_005",
+      "Version": 1,
+      "Description": "Completed and submitted the week 2 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_005/week-2",
+      "SubmittedAt": "2026-03-14T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 2 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 2 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 92,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_005_w3": {
+      "TaskId": "task_student_005_w3",
+      "StudentId": "student_005",
+      "Version": 1,
+      "Description": "Completed and submitted the week 3 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_005/week-3",
+      "SubmittedAt": "2026-03-21T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 3 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 3 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 93,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_005_w4": {
+      "TaskId": "task_student_005_w4",
+      "StudentId": "student_005",
+      "Version": 1,
+      "Description": "Completed and submitted the week 4 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_005/week-4",
+      "SubmittedAt": "2026-03-28T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 4 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 4 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 94,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_005_w5": {
+      "TaskId": "task_student_005_w5",
+      "StudentId": "student_005",
+      "Version": 1,
+      "Description": "Completed and submitted the week 5 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_005/week-5",
+      "SubmittedAt": "2026-04-04T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 5 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 5 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 95,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_005_w6": {
+      "TaskId": "task_student_005_w6",
+      "StudentId": "student_005",
+      "Version": 1,
+      "Description": "Completed and submitted the week 6 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_005/week-6",
+      "SubmittedAt": "2026-04-11T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 6 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 6 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 96,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_006_w1": {
+      "TaskId": "task_student_006_w1",
+      "StudentId": "student_006",
+      "Version": 1,
+      "Description": "Completed and submitted the week 1 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_006/week-1",
+      "SubmittedAt": "2026-03-07T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 1 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 1 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 91,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_006_w2": {
+      "TaskId": "task_student_006_w2",
+      "StudentId": "student_006",
+      "Version": 1,
+      "Description": "Completed and submitted the week 2 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_006/week-2",
+      "SubmittedAt": "2026-03-14T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 2 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 2 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 92,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_006_w3": {
+      "TaskId": "task_student_006_w3",
+      "StudentId": "student_006",
+      "Version": 1,
+      "Description": "Completed and submitted the week 3 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_006/week-3",
+      "SubmittedAt": "2026-03-21T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 3 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 3 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 93,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_006_w4": {
+      "TaskId": "task_student_006_w4",
+      "StudentId": "student_006",
+      "Version": 1,
+      "Description": "Completed and submitted the week 4 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_006/week-4",
+      "SubmittedAt": "2026-03-28T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 4 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 4 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 94,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_006_w5": {
+      "TaskId": "task_student_006_w5",
+      "StudentId": "student_006",
+      "Version": 1,
+      "Description": "Completed and submitted the week 5 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_006/week-5",
+      "SubmittedAt": "2026-04-04T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 5 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 5 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 95,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_006_w6": {
+      "TaskId": "task_student_006_w6",
+      "StudentId": "student_006",
+      "Version": 1,
+      "Description": "Completed and submitted the week 6 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_006/week-6",
+      "SubmittedAt": "2026-04-11T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 6 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 6 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 96,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_007_w1": {
+      "TaskId": "task_student_007_w1",
+      "StudentId": "student_007",
+      "Version": 1,
+      "Description": "Completed and submitted the week 1 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_007/week-1",
+      "SubmittedAt": "2026-03-07T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 1 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 1 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 91,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_007_w2": {
+      "TaskId": "task_student_007_w2",
+      "StudentId": "student_007",
+      "Version": 1,
+      "Description": "Completed and submitted the week 2 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_007/week-2",
+      "SubmittedAt": "2026-03-14T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 2 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 2 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 92,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_007_w3": {
+      "TaskId": "task_student_007_w3",
+      "StudentId": "student_007",
+      "Version": 1,
+      "Description": "Completed and submitted the week 3 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_007/week-3",
+      "SubmittedAt": "2026-03-21T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 3 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 3 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 93,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_007_w4": {
+      "TaskId": "task_student_007_w4",
+      "StudentId": "student_007",
+      "Version": 1,
+      "Description": "Completed and submitted the week 4 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_007/week-4",
+      "SubmittedAt": "2026-03-28T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 4 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 4 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 94,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_007_w5": {
+      "TaskId": "task_student_007_w5",
+      "StudentId": "student_007",
+      "Version": 1,
+      "Description": "Completed and submitted the week 5 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_007/week-5",
+      "SubmittedAt": "2026-04-04T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 5 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 5 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 95,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_007_w6": {
+      "TaskId": "task_student_007_w6",
+      "StudentId": "student_007",
+      "Version": 1,
+      "Description": "Completed and submitted the week 6 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_007/week-6",
+      "SubmittedAt": "2026-04-11T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 6 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 6 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 96,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_008_w1": {
+      "TaskId": "task_student_008_w1",
+      "StudentId": "student_008",
+      "Version": 1,
+      "Description": "Completed and submitted the week 1 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_008/week-1",
+      "SubmittedAt": "2026-03-07T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 1 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 1 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 91,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_008_w2": {
+      "TaskId": "task_student_008_w2",
+      "StudentId": "student_008",
+      "Version": 1,
+      "Description": "Completed and submitted the week 2 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_008/week-2",
+      "SubmittedAt": "2026-03-14T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 2 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 2 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 92,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_008_w3": {
+      "TaskId": "task_student_008_w3",
+      "StudentId": "student_008",
+      "Version": 1,
+      "Description": "Completed and submitted the week 3 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_008/week-3",
+      "SubmittedAt": "2026-03-21T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 3 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 3 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 93,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_008_w4": {
+      "TaskId": "task_student_008_w4",
+      "StudentId": "student_008",
+      "Version": 1,
+      "Description": "Completed and submitted the week 4 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_008/week-4",
+      "SubmittedAt": "2026-03-28T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 4 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 4 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 94,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_008_w5": {
+      "TaskId": "task_student_008_w5",
+      "StudentId": "student_008",
+      "Version": 1,
+      "Description": "Completed and submitted the week 5 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_008/week-5",
+      "SubmittedAt": "2026-04-04T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 5 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 5 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 95,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    },
+    "submission_student_008_w6": {
+      "TaskId": "task_student_008_w6",
+      "StudentId": "student_008",
+      "Version": 1,
+      "Description": "Completed and submitted the week 6 internship assignment.",
+      "Link": "https://example.com/demo-submissions/student_008/week-6",
+      "SubmittedAt": "2026-04-11T00:00:00Z",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Company feedback: strong completion of week 6 tasks.",
+      "AcademicFeedback": "Academic feedback: learning objectives for week 6 were met.",
+      "AcademicFeedbackAt": "2026-04-13T12:00:00Z",
+      "AcademicFeedbackBy": "academic_002",
+      "Score": 96,
+      "EvaluatedAt": "2026-04-13T12:00:00Z"
+    }
+  },
+  "FinalEvaluations": {
+    "student_001": {
+      "CompanyId": "company_001",
+      "ApprovedWeeks": {
+        "w1": 15,
+        "w2": 15,
+        "w3": 15,
+        "w4": 15,
+        "w5": 15,
+        "w6": 15
+      },
+      "Ratings": {
+        "Responsibility": "Excellent",
+        "WorkingHours": "VeryGood",
+        "Accuracy": "Good",
+        "Teamwork": "Excellent",
+        "Adaptation": "VeryGood",
+        "LearningSpeed": "Excellent"
+      },
+      "Comments": "The trainee completed all six weeks and met the company training requirements.",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "EndDate": "2026-04-12T00:00:00Z",
+      "TotalHours": 90,
+      "Status": "Sent",
+      "IsPassCompany": true,
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_002": {
+      "CompanyId": "company_001",
+      "ApprovedWeeks": {
+        "w1": 15,
+        "w2": 15,
+        "w3": 15,
+        "w4": 15,
+        "w5": 15,
+        "w6": 15
+      },
+      "Ratings": {
+        "Responsibility": "Excellent",
+        "WorkingHours": "VeryGood",
+        "Accuracy": "Good",
+        "Teamwork": "Excellent",
+        "Adaptation": "VeryGood",
+        "LearningSpeed": "Excellent"
+      },
+      "Comments": "The trainee completed all six weeks and met the company training requirements.",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "EndDate": "2026-04-12T00:00:00Z",
+      "TotalHours": 90,
+      "Status": "Sent",
+      "IsPassCompany": true,
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_003": {
+      "CompanyId": "company_001",
+      "ApprovedWeeks": {
+        "w1": 15,
+        "w2": 15,
+        "w3": 15,
+        "w4": 15,
+        "w5": 15,
+        "w6": 15
+      },
+      "Ratings": {
+        "Responsibility": "Excellent",
+        "WorkingHours": "VeryGood",
+        "Accuracy": "Good",
+        "Teamwork": "Excellent",
+        "Adaptation": "VeryGood",
+        "LearningSpeed": "Excellent"
+      },
+      "Comments": "The trainee completed all six weeks and met the company training requirements.",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "EndDate": "2026-04-12T00:00:00Z",
+      "TotalHours": 90,
+      "Status": "Sent",
+      "IsPassCompany": true,
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_004": {
+      "CompanyId": "company_001",
+      "ApprovedWeeks": {
+        "w1": 15,
+        "w2": 15,
+        "w3": 15,
+        "w4": 15,
+        "w5": 15,
+        "w6": 15
+      },
+      "Ratings": {
+        "Responsibility": "Excellent",
+        "WorkingHours": "VeryGood",
+        "Accuracy": "Good",
+        "Teamwork": "Excellent",
+        "Adaptation": "VeryGood",
+        "LearningSpeed": "Excellent"
+      },
+      "Comments": "The trainee completed all six weeks and met the company training requirements.",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "EndDate": "2026-04-12T00:00:00Z",
+      "TotalHours": 90,
+      "Status": "Sent",
+      "IsPassCompany": true,
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_005": {
+      "CompanyId": "company_002",
+      "ApprovedWeeks": {
+        "w1": 15,
+        "w2": 15,
+        "w3": 15,
+        "w4": 15,
+        "w5": 15,
+        "w6": 15
+      },
+      "Ratings": {
+        "Responsibility": "Excellent",
+        "WorkingHours": "VeryGood",
+        "Accuracy": "Good",
+        "Teamwork": "Excellent",
+        "Adaptation": "VeryGood",
+        "LearningSpeed": "Excellent"
+      },
+      "Comments": "The trainee completed all six weeks and met the company training requirements.",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "EndDate": "2026-04-12T00:00:00Z",
+      "TotalHours": 90,
+      "Status": "Sent",
+      "IsPassCompany": true,
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_006": {
+      "CompanyId": "company_002",
+      "ApprovedWeeks": {
+        "w1": 15,
+        "w2": 15,
+        "w3": 15,
+        "w4": 15,
+        "w5": 15,
+        "w6": 15
+      },
+      "Ratings": {
+        "Responsibility": "Excellent",
+        "WorkingHours": "VeryGood",
+        "Accuracy": "Good",
+        "Teamwork": "Excellent",
+        "Adaptation": "VeryGood",
+        "LearningSpeed": "Excellent"
+      },
+      "Comments": "The trainee completed all six weeks and met the company training requirements.",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "EndDate": "2026-04-12T00:00:00Z",
+      "TotalHours": 90,
+      "Status": "Sent",
+      "IsPassCompany": true,
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_007": {
+      "CompanyId": "company_002",
+      "ApprovedWeeks": {
+        "w1": 15,
+        "w2": 15,
+        "w3": 15,
+        "w4": 15,
+        "w5": 15,
+        "w6": 15
+      },
+      "Ratings": {
+        "Responsibility": "Excellent",
+        "WorkingHours": "VeryGood",
+        "Accuracy": "Good",
+        "Teamwork": "Excellent",
+        "Adaptation": "VeryGood",
+        "LearningSpeed": "Excellent"
+      },
+      "Comments": "The trainee completed all six weeks and met the company training requirements.",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "EndDate": "2026-04-12T00:00:00Z",
+      "TotalHours": 90,
+      "Status": "Sent",
+      "IsPassCompany": true,
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_008": {
+      "CompanyId": "company_002",
+      "ApprovedWeeks": {
+        "w1": 15,
+        "w2": 15,
+        "w3": 15,
+        "w4": 15,
+        "w5": 15,
+        "w6": 15
+      },
+      "Ratings": {
+        "Responsibility": "Excellent",
+        "WorkingHours": "VeryGood",
+        "Accuracy": "Good",
+        "Teamwork": "Excellent",
+        "Adaptation": "VeryGood",
+        "LearningSpeed": "Excellent"
+      },
+      "Comments": "The trainee completed all six weeks and met the company training requirements.",
+      "StartDate": "2026-03-02T00:00:00Z",
+      "EndDate": "2026-04-12T00:00:00Z",
+      "TotalHours": 90,
+      "Status": "Sent",
+      "IsPassCompany": true,
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    }
+  },
+  "AcademicEvaluations": {
+    "student_001": {
+      "StudentId": "student_001",
+      "AcademicSupervisorId": "academic_001",
+      "CompanyId": "company_001",
+      "Comments": "Academic review complete. The trainee passed the internship requirements and is ready for coordinator approval.",
+      "IsPassAcademic": true,
+      "Status": "Sent",
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_002": {
+      "StudentId": "student_002",
+      "AcademicSupervisorId": "academic_001",
+      "CompanyId": "company_001",
+      "Comments": "Academic review complete. The trainee passed the internship requirements and is ready for coordinator approval.",
+      "IsPassAcademic": true,
+      "Status": "Sent",
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_003": {
+      "StudentId": "student_003",
+      "AcademicSupervisorId": "academic_001",
+      "CompanyId": "company_001",
+      "Comments": "Academic review complete. The trainee passed the internship requirements and is ready for coordinator approval.",
+      "IsPassAcademic": true,
+      "Status": "Sent",
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_004": {
+      "StudentId": "student_004",
+      "AcademicSupervisorId": "academic_001",
+      "CompanyId": "company_001",
+      "Comments": "Academic review complete. The trainee passed the internship requirements and is ready for coordinator approval.",
+      "IsPassAcademic": true,
+      "Status": "Sent",
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_005": {
+      "StudentId": "student_005",
+      "AcademicSupervisorId": "academic_002",
+      "CompanyId": "company_002",
+      "Comments": "Academic review complete. The trainee passed the internship requirements and is ready for coordinator approval.",
+      "IsPassAcademic": true,
+      "Status": "Sent",
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_006": {
+      "StudentId": "student_006",
+      "AcademicSupervisorId": "academic_002",
+      "CompanyId": "company_002",
+      "Comments": "Academic review complete. The trainee passed the internship requirements and is ready for coordinator approval.",
+      "IsPassAcademic": true,
+      "Status": "Sent",
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_007": {
+      "StudentId": "student_007",
+      "AcademicSupervisorId": "academic_002",
+      "CompanyId": "company_002",
+      "Comments": "Academic review complete. The trainee passed the internship requirements and is ready for coordinator approval.",
+      "IsPassAcademic": true,
+      "Status": "Sent",
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    },
+    "student_008": {
+      "StudentId": "student_008",
+      "AcademicSupervisorId": "academic_002",
+      "CompanyId": "company_002",
+      "Comments": "Academic review complete. The trainee passed the internship requirements and is ready for coordinator approval.",
+      "IsPassAcademic": true,
+      "Status": "Sent",
+      "UpdatedAt": "2026-04-13T12:00:00Z",
+      "SentAt": "2026-04-13T12:00:00Z"
+    }
+  },
+  "Certificate": {}
+}

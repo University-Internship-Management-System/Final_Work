@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Training report" Language="C#" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" CodeBehind="EvaluateTrainee.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Company.FinalEvaluationPage.EvaluateTraineeForm" Async="true" %>
+<%@ Page Title="Training report" Language="C#" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" CodeBehind="EvaluateTrainee.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Company.FinalEvaluationPage.EvaluateTraineeForm" Async="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
     <link href="../../Student/StudentTasksPage/StudentTasks.css" rel="stylesheet" />
@@ -168,8 +168,8 @@
 
                 <asp:Panel ID="pnlButtons" runat="server" CssClass="ev-buttons">
                     <asp:Button ID="btnSave" runat="server" Text="Save draft" CssClass="btn btn-outline-primary" OnClick="btnSave_Click" />
-                    <asp:Button ID="btnSend" runat="server" Text="Send to the academic supervisor" CssClass="btn btn-primary" OnClick="btnSend_Click"
-                        OnClientClick="return confirm('Send the evaluation to the academic supervisor? You cannot change it after that.');" />
+                    <asp:Button ID="btnSend" runat="server" Text="Pass and send to the academic supervisor" CssClass="btn btn-primary" OnClick="btnSend_Click"
+                        OnClientClick="return confirm('Pass the trainee and send the company evaluation to the academic supervisor? This cannot be changed after sending.');" />
                 </asp:Panel>
             </div>
         </div>
