@@ -2,3 +2,4 @@
 
 .ca-fields input[readonly]{background:var(--uims-bg);color:var(--uims-muted)}
 .ca-modal{background:var(--uims-white,white);color:var(--uims-text)}
+color-profile=red;
