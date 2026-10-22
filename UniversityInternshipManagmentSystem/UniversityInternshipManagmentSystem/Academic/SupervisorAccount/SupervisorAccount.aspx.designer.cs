@@ -11,6 +11,10 @@ namespace UniversityInternshipManagmentSystem.Academic.SupervisorAccount
 {
     public partial class SupervisorAccount
     {
+        protected global::System.Web.UI.WebControls.Panel pnlAccountStatus;
+        protected global::System.Web.UI.WebControls.Literal litAccountStatus;
+        protected global::System.Web.UI.WebControls.Panel pnlAccountContent;
+        protected global::System.Web.UI.WebControls.Literal litFirstLogin;
         /// <summary>
         /// pnlProfileSuccess control.
         /// </summary>

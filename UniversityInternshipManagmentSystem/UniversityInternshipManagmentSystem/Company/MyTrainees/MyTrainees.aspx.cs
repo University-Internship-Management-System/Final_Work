@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +33,7 @@ namespace UniversityInternshipManagmentSystem.Company.MyTraineesModule
                 var repository = new MyTraineesRepository();
                 var identity = await repository.VerifySupervisorAsync(new HttpContextWrapper(Context));
                 CompanyName.Text = HttpUtility.HtmlEncode(identity.CompanyName);
-                // Proposed server-side activation contract; absent/unapproved means NO trainee query.
-                var approval = Application["Company.MyTrainees.ReadApproval"] as MyTraineesReadApproval;
-                var result = await repository.GetConfirmedTraineesAsync(identity, approval);
+                var result = await repository.GetTraineesAsync(identity);
                 BindResults(result);
             }
             catch (UnauthorizedAccessException error) { ShowUnavailable("Company access required", error.Message, 403); }
@@ -65,8 +63,8 @@ namespace UniversityInternshipManagmentSystem.Company.MyTraineesModule
             Trainees.DataBind();
             ResultCount.Text = matches.Count.ToString(CultureInfo.InvariantCulture) + " matching trainees";
             EmptyState.Visible = matches.Count == 0;
-            EmptyHeading.Text = result.Count == 0 ? "No confirmed trainees yet" : "No matching trainees";
-            EmptyText.Text = result.Count == 0 ? "There are no trainees meeting the approved assignment and confirmation policy."
+            EmptyHeading.Text = result.Count == 0 ? "No accepted students or confirmed trainees" : "No matching trainees";
+            EmptyText.Text = result.Count == 0 ? "No accepted or confirmed applications with an eligible student relationship were found for your company."
                 : "No trainees match this name or major. Try another search.";
         }
 
