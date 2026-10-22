@@ -160,8 +160,14 @@
     <Content Include="bin\UniversityInternshipManagmentSystem.dll" />
     <Content Include="bin\UniversityInternshipManagmentSystem.pdb" />
     <Content Include="bin\WebGrease.dll" />
+    <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
+    <Content Include="Company\ApplicationsReview\ApplicationsReview.css" />
+    <Content Include="Company\ApplicationsReview\ApplicationsReview.js" />
     <Content Include="Company\CompanyDashboard\Dashboard.aspx" />
     <Content Include="Company\CompanyDashboard\Dashboard.css" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.css" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.js" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx" />
     <Content Include="Coordinator\FinalCompletionReview\FinalCompletionReview.aspx" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.css" />
@@ -274,14 +280,27 @@
     <Content Include="Shared\Navbar.ascx" />
     <Content Include="Shared\Public.Master" />
     <Content Include="Shared\ComingSoon.ascx" />
-    <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
     <Content Include="Company\MyTrainees\MyTrainees.aspx" />
+    <Compile Include="Company\ApplicationsReview\ApplicationsReview.aspx.cs">
+      <DependentUpon>ApplicationsReview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ApplicationsReview\ApplicationsReview.aspx.designer.cs">
+      <DependentUpon>ApplicationsReview.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Company\CompanyDashboard\Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Company\CompanyDashboard\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.cs">
+      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.designer.cs">
+      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
     </Compile>
     <Compile Include="Company\MyTrainees\MyTrainees.aspx.cs">
       <DependentUpon>MyTrainees.aspx</DependentUpon>
