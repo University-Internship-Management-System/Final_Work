@@ -276,6 +276,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
                     return;
                 }
                 Session["idToken"] = newToken;
+                await Notify.AfterSignIn("Students", VerifiedStudentId, Record.Name, "student", email, newToken);
                 PasswordSuccess.Text = "Your password was updated successfully.";
             }
             catch (ArgumentException ex) { ShowPasswordError(ex.Message); }

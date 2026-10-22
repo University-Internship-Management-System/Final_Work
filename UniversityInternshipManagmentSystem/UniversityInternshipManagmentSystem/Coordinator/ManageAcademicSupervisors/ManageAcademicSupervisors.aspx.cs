@@ -156,7 +156,7 @@ public partial class CoordinatorAcademicAccounts : Page
         var person = new AcademicSupervisor(name, existing == null ? login : existing.Email,
             existing == null || existing.FirstLogin, phoneValue, existing == null ? "" : existing.ProfilePicUrl, uni, major.SelectedValue);
         string createdToken = null;
-        string mailResult = null;
+        string verifyResult = null;
         try
         {
             if (id == null)
@@ -169,12 +169,13 @@ public partial class CoordinatorAcademicAccounts : Page
             using (var response = await FirebaseDb.Put("AcademicSupervisors", id, person))
                 if (!response.IsSuccessStatusCode)
                     throw new HttpRequestException("Firebase could not save the supervisor profile.");
-            if (createdToken != null) mailResult = await EmailSender.SendWelcome(name, "Academic Supervisor", login);
+            if (createdToken != null) verifyResult = await EmailVerification.RequireAndSend("AcademicSupervisors", id, createdToken);
+            if (createdToken != null) Notify.AccountCreated(name, "academic", login, temporaryPassword.Text);
             person.Id = id;
             records[id] = person;
             ResetEditor();
             BindDirectory();
-            Tell("Supervisor account saved to Firebase successfully." + EmailSender.MessageFor(mailResult));
+            Tell("Supervisor account saved to Firebase successfully." + EmailVerification.MessageFor(verifyResult));
         }
         catch (Exception)
         {

@@ -138,7 +138,9 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
                     Status = ApplicationStatus.Rejected,
                     RejectionReason = "Rejected by student."
                 });
-                return response.IsSuccessStatusCode ? null : "Could not reject the offer. Please try again.";
+                if (!response.IsSuccessStatusCode) return "Could not reject the offer. Please try again.";
+                Notify.OfferDeclined((string)Session["name"], offer.OpportunityTitle, offer.CompanyId);
+                return null;
             }
 
             if (command != "ConfirmApp") return "Unknown action.";
@@ -153,9 +155,12 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
             // A seat = one entry in ConfirmedStudents (SeatsLeft is calculated from it)
             if (opportunity.SeatsLeft <= 0) return "There are no seats left in this opportunity, so the offer cannot be confirmed.";
 
-            return await ConfirmOfferAsync(StudentId, offer, opportunity, myApplications)
-                ? null
-                : "Could not confirm the offer. Please try again.";
+            if (!await ConfirmOfferAsync(StudentId, offer, opportunity, myApplications))
+                return "Could not confirm the offer. Please try again.";
+
+            // Tell the student and the company (Config/Notify.cs does nothing when email is not set up)
+            Notify.OfferConfirmed(student.Name, student.Email, opportunity.Title, opportunity.CompanyName, opportunity.CompanyId);
+            return null;
         }
 
         // Saves the whole confirmation in ONE request to the database root, so Firebase stores all of it or none of it:

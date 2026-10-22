@@ -271,6 +271,12 @@ namespace UniversityInternshipManagmentSystem.Academic.FinalEvaluation
                 if (!isLatest) throw new InvalidOperationException("That submission is no longer the latest version. Reload the page and try again.");
                 if (String.Equals((string)_academicEvaluations[_studentId]?["Status"], AcademicEvaluation.Sent, StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("This academic evaluation has already been sent and is locked.");
                 bool saved = await TaskDb.SaveAcademicFeedback(submissionId, feedback, _academicId);
+                if (saved && feedback != "")
+                {
+                    string taskId = (string)_submissions[submissionId]?["TaskId"];
+                    string taskName = taskId == null ? "" : (string)_tasks[taskId]?["TaskName"];
+                    Notify.AcademicFeedback((string)_students[_studentId]["Name"], (string)_students[_studentId]["Email"], taskName, feedback);
+                }
                 ShowMessage(saved ? "Academic task feedback saved." : "Could not save the task feedback. Check Firebase rules and try again.", !saved);
                 await LoadPageAsync();
             }
@@ -309,6 +315,7 @@ namespace UniversityInternshipManagmentSystem.Academic.FinalEvaluation
                 };
                 HttpResponseMessage response = await FirebaseDb.Put("AcademicEvaluations", _studentId, evaluation);
                 if (!response.IsSuccessStatusCode) throw new HttpRequestException("Firebase refused to save the academic evaluation.");
+                if (send) Notify.AcademicEvaluationSent((string)student["Name"], (string)student["Email"]);
                 ShowMessage(send ? "Academic evaluation passed and sent to the coordinator." : "Academic evaluation draft saved.", false);
                 await LoadPageAsync();
             }
