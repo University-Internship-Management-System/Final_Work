@@ -195,6 +195,7 @@
     <Content Include="Assets\PublicHome\Home.js" />
     <Content Include="Assets\PublicHome\university-logo.png" />
     <Content Include="Assets\PublicHome\university-hero.jpg" />
+    <Content Include="Assets\PublicHome\clock-tower-photo.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Coordinator\AssignAcademicSupervisors\AssignAcademicSupervisors.aspx" />
     <Content Include="Coordinator\AssignAcademicSupervisors\assign-supervisors.css" />
@@ -345,6 +346,8 @@
     <Content Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx" />
     <Content Include="Shared\Sidebar.ascx" />
     <Content Include="Shared\uims.css" />
+    <Content Include="Content\uims.css" />
+    <Content Include="Scripts\uims.js" />
     <Content Include="Site.Master" />
     <Content Include="Student\ApplicationForm\ApplicationForm.aspx" />
     <Content Include="Student\ApplicationForm\ApplicationForm.css" />
@@ -705,3 +708,4 @@
   </ItemGroup>
   <ItemGroup />
 </Project>
+

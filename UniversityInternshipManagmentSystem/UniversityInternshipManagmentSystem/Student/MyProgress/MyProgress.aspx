@@ -1,4 +1,4 @@
-<%@ Page Title="My Progress" Language="C#"
+﻿<%@ Page Title="My Progress" Language="C#"
     MasterPageFile="~/Shared/Dashboard.Master"
     AutoEventWireup="true"
     Async="true"
@@ -198,12 +198,6 @@
                 { %>
 
             <div class="mp-certificate-file">
-
-                <div class="mp-certificate-thumbnail mp-certificate-preview" aria-hidden="true">
-                    <span>U<span>J</span></span>
-                    <strong>Certificate</strong>
-                    <small>OF COMPLETION</small>
-                </div>
 
                 <div class="mp-file-info">
                     <strong>Personalized completion certificate
