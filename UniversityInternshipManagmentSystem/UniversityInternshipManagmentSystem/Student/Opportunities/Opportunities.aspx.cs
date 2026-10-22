@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using UniversityInternshipManagmentSystem.Config;
 using UniversityInternshipManagmentSystem.Models;
+using UniversityInternshipManagmentSystem.Student.StudentProfilePage;
 
 namespace UniversityInternshipManagmentSystem.Student.Opportunities
 {
@@ -28,7 +30,7 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
             }
         }
 
-        private List<Opportunity> ParseOpportunities(string json, string studentMajor = null)
+        private List<Opportunity> ParseOpportunities(string json, string studentMajor)
         {
             var list = new List<Opportunity>();
 
@@ -47,14 +49,12 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                 foreach (var pair in dict)
                 {
                     var opp = pair.Value;
+                    if (opp == null) continue;
                     opp.Id = pair.Key;
 
-                    // إذا تم تمرير تخصص الطالب، نتحقق فقط أن تخصصه ضمن تخصصات الفرصة (Majors)
-                    bool matchesMajor = string.IsNullOrEmpty(studentMajor) ||
-                                        (opp.Majors != null && opp.Majors.Contains(studentMajor));
-
-                    // إضافة الفرصة للقائمة إذا تطابق التخصص (بغض النظر عن حالتها open أو closed)
-                    if (matchesMajor)
+                    // إضافة الفرصة للقائمة إذا كانت تقبل تخصص الطالب (بغض النظر عن حالتها open أو closed)
+                    // AcceptsMajor ignores capital letters and extra spaces; an empty major matches nothing
+                    if (opp.AcceptsMajor(studentMajor))
                     {
                         list.Add(opp);
                     }
@@ -69,17 +69,20 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
         {
             string studentId = (string)(Session["dbRecordId"] ?? Session["userId"]);   // dbRecordId = the Students table key set by the login
 
-            // جلب بيانات الطالب لمعرفة تخصصه (Major)
-            string studentJson = await FirebaseDb.Get("Students", studentId);
-            var student = JsonConvert.DeserializeObject<UniversityInternshipManagmentSystem.Models.Student>(studentJson);
-            string studentMajor = student?.Major ?? "";
-
-            string json = await FirebaseDb.Get("Opportunities");
-            List<Opportunity> all = ParseOpportunities(json, studentMajor);
-
-            // === تعبئة القائمة المنسدلة للشركات (بدون تكرار) ===
-            if (!IsPostBack || ddlCompany.Items.Count <= 1)
+            try
             {
+                // جلب بيانات الطالب لمعرفة تخصصه (Major)
+                var student = JsonConvert.DeserializeObject<Models.Student>(await ReadAsync("Students", studentId));
+                List<Application> myApplications = await LoadMyApplicationsAsync(studentId);
+
+                // A reason that stops every application (no profile, placed, no major, no CV) is shown once at the top
+                string blocked = WhyStudentCannotApply(student, myApplications);
+                if (blocked != null) ShowNotice(blocked);
+                if (student == null) return;
+
+                List<Opportunity> all = ParseOpportunities(await ReadAsync("Opportunities"), student.Major);
+
+                // === تعبئة القائمة المنسدلة للشركات (بدون تكرار) ===
                 ddlCompany.Items.Clear();
                 ddlCompany.Items.Add(new ListItem("All companies", ""));
 
@@ -93,15 +96,21 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                 {
                     ddlCompany.Items.Add(new ListItem(company, company));
                 }
-            }
 
-            RenderOpportunities(all);
+                RenderOpportunities(all, myApplications, blocked);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error loading opportunities: " + ex.Message);
+                ShowNotice("Could not load the opportunities. Please refresh the page, or sign in again if this keeps happening.");
+            }
         }
 
         // دالة مسؤولة عن بناء وعرض البطاقات (تم فصلها لتسهيل الاستخدام عند البحث والفلترة لاحقاً)
-        private void RenderOpportunities(List<Opportunity> opportunities)
+        // Every value from Firebase is HTML-encoded, so a name like McDonald's or a "<" in a description cannot break the page
+        private void RenderOpportunities(List<Opportunity> opportunities, List<Application> myApplications, string blocked)
         {
-            oppGrid.InnerHtml = ""; // تفريغ الحاوية قبل الإضافة
+            var html = new StringBuilder();
 
             foreach (var opp in opportunities)
             {
@@ -110,22 +119,29 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                 {
                     foreach (var major in opp.Majors)
                     {
-                        majorsHtml += $"<span class='badge bg-light text-dark me-1 mb-1 border'>{major}</span>";
+                        majorsHtml += $"<span class='badge bg-light text-dark me-1 mb-1 border'>{Encode(major)}</span>";
                     }
                 }
 
-                bool isClosedOrExpired = !opp.IsOpenForApplications;
+                // Already applied → its status. Closed → the real reason. Otherwise Apply,
+                // unless the student is blocked (the notice at the top of the page says why)
+                var mine = myApplications.FirstOrDefault(a => a.OpportunityId == opp.Id);
+                string closedReason = opp.WhyClosed();
 
                 string actionButtonOrBadge = "";
-                if (isClosedOrExpired)
+                if (mine != null)
                 {
-                    actionButtonOrBadge = "<span class='badge bg-danger'>Closed / Deadline Passed</span>";
+                    actionButtonOrBadge = $"<a href='../MyApplications/MyApplications.aspx' class='badge bg-secondary text-decoration-none'>Applied &middot; {Encode(mine.Status)}</a>";
                 }
-                else
+                else if (closedReason != null)
+                {
+                    actionButtonOrBadge = $"<span class='badge bg-danger'>{Encode(closedReason)}</span>";
+                }
+                else if (blocked == null)
                 {
                     actionButtonOrBadge = $@"
                     <div class='d-flex gap-2'>
-                        <a href='../ApplicationForm/ApplicationForm.aspx?opportunityId={opp.Id}' class='btn btn-sm btn-primary'>Apply</a>
+                        <a href='../ApplicationForm/ApplicationForm.aspx?opportunityId={HttpUtility.UrlEncode(opp.Id)}' class='btn btn-sm btn-primary'>Apply</a>
                     </div>";
                 }
 
@@ -133,21 +149,27 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                 if (opp.ApplicationDeadline > 0)
                 {
                     System.DateTimeOffset dateTimeOffset = System.DateTimeOffset.FromUnixTimeMilliseconds(opp.ApplicationDeadline);
-                    deadlineFormatted = dateTimeOffset.ToString("yyyy-MM-dd");
+                    deadlineFormatted = dateTimeOffset.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);   // always Gregorian, also in Arabic browsers
                 }
 
-                oppGrid.InnerHtml += $@"
-                <div class='col-md-6 opp-item' data-company='{opp.CompanyName?.ToLower()}'>
+                // The company filter compares this with the dropdown value, and the search box looks only in
+                // the title, company, description, location and majors (not in the labels or buttons)
+                string companyKey = Encode((opp.CompanyName ?? "").Trim().ToLowerInvariant());
+                string searchText = Encode(string.Join(" ", opp.Title, opp.CompanyName, opp.Description, opp.Location,
+                                                       string.Join(" ", opp.Majors ?? new List<string>())).ToLowerInvariant());
+
+                html.Append($@"
+                <div class='col-md-6 opp-item' data-company='{companyKey}' data-search='{searchText}'>
                     <div class='card opp-card h-100 p-3'>
                         <div class='card-body d-flex flex-column'>
-                            
+
                             <div class='mb-2'>
-                                <span class='opp-company d-block fw-bold'>{opp.CompanyName}</span>
-                                <small class='text-muted'><i class='bi bi-geo-alt'></i> {opp.Location}</small>
+                                <span class='opp-company d-block fw-bold'>{Encode(opp.CompanyName)}</span>
+                                <small class='text-muted'><i class='bi bi-geo-alt'></i> {Encode(opp.Location)}</small>
                             </div>
 
-                            <h5 class='card-title mt-1'>{opp.Title}</h5>
-                            <p class='opp-desc mb-3'>{opp.Description}</p>
+                            <h5 class='card-title mt-1'>{Encode(opp.Title)}</h5>
+                            <p class='opp-desc mb-3'>{Encode(opp.Description)}</p>
 
                             <div class='mb-3'>
                                 <small class='text-muted d-block mb-1 font-weight-bold'>Required Majors:</small>
@@ -165,23 +187,68 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
 
                         </div>
                     </div>
-                </div>";
+                </div>");
             }
 
+            oppGrid.InnerHtml = html.ToString();
             lblCount.Text = opportunities.Count + " opportunities";
             pnlEmpty.Visible = (opportunities.Count == 0);
         }
 
-        protected string BadgeClass(object status)
+        private void ShowNotice(string message)
         {
-            switch ((Convert.ToString(status) ?? "").ToLower())
+            lblNotice.Text = HttpUtility.HtmlEncode(message);
+            pnlNotice.Visible = true;
+        }
+
+        // HtmlEncode also encodes ' so the value is safe inside the single-quoted attributes above
+        private static string Encode(string value)
+        {
+            return HttpUtility.HtmlEncode(value ?? "");
+        }
+
+        // ===== The helpers below are the same in ApplicationForm.aspx.cs (and MyApplications.aspx.cs): change them together =====
+
+        // FirebaseDb.Get returns null when Firebase refuses the request (for example an expired sign-in)
+        private static async Task<string> ReadAsync(string table, string id = null)
+        {
+            string json = await FirebaseDb.Get(table, id);
+            if (json == null) throw new Exception("Firebase refused to read " + table + ".");
+            return json;
+        }
+
+        // All applications of this student, newest first
+        private static async Task<List<Application>> LoadMyApplicationsAsync(string studentId)
+        {
+            // Firebase returns the text "null" when the table is empty
+            var all = JsonConvert.DeserializeObject<Dictionary<string, Application>>(await ReadAsync("Applications"))
+                      ?? new Dictionary<string, Application>();
+
+            var mine = new List<Application>();
+            foreach (var pair in all)
             {
-                case "accepted":
-                case "confirmed": return "badge-approved";
-                case "rejected": return "badge-rejected";
-                case "pending": return "badge-pending";
-                default: return "badge-submitted";
+                if (pair.Value == null || pair.Value.StudentId != studentId) continue;
+                pair.Value.Id = pair.Key;          // the key is the id
+                mine.Add(pair.Value);
             }
+            return mine.OrderByDescending(a => a.AppliedAt).ToList();
+        }
+
+        // Placed = the coordinator assigned a company (same rule as the coordinator dashboard) or the student confirmed an offer
+        private static bool IsPlaced(Models.Student student, List<Application> myApplications)
+        {
+            return (student != null && !string.IsNullOrWhiteSpace(student.CompanyId))
+                || myApplications.Any(a => a.Status == ApplicationStatus.Confirmed);
+        }
+
+        // A reason that stops this student from applying to ANY opportunity, or null
+        private static string WhyStudentCannotApply(Models.Student student, List<Application> myApplications)
+        {
+            if (student == null) return "Your student profile could not be found. Please contact the coordinator.";
+            if (IsPlaced(student, myApplications)) return "You already have a confirmed training, so you cannot apply to other opportunities.";
+            if (string.IsNullOrWhiteSpace(student.Major)) return "Your profile has no major, so no opportunities can be matched. Please contact the coordinator.";
+            if (!ProfileValidation.IsSafeUrl(student.CvUrl)) return "Add a valid CV link (https://...) in My Profile before applying.";
+            return null;
         }
     }
 }

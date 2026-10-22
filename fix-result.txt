@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ===== UIMS fix-project   10/22/2026 00:46:28   DESKTOP-A5C4PEQ =====
 
 --- Checking Visual Studio and the web server
@@ -110,3 +111,40 @@ Fixed automatically:
 
 RESULT: everything is fine. Open UniversityInternshipManagmentSystem.sln in Visual Studio and run the site. (Use Start or Build, not Rebuild or Clean.)
 Report file: C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\fix-result.txt
+=======
+===== UIMS fix =====
+Date: Thu 10/22/2026  0:08:49.16
+Computer: DESKTOP-R9IQPRC
+Project folder: C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\
+
+===== 1. Restore Web.config / .csproj / packages.config =====
+dev
+Saved working directory and index state On dev: uims-fix-codedom backup
+Web.config compiler lines now:
+54:      <compiler language="c#;cs;csharp" extension=".cs" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" warningLevel="4" compilerOptions="/langversion:default /nowarn:1659;1699;1701" />
+55:      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" warningLevel="4" compilerOptions="/langversion:default /nowarn:41008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+" />
+
+===== 2. Delete packages, bin, obj =====
+
+===== 3. Restore + build =====
+MSBuild: C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe
+Solution: C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem.sln
+MSBuild exit code: 0
+  Restoring NuGet package Microsoft.AspNet.Web.Optimization.1.1.3.
+  Restoring NuGet package Microsoft.AspNet.FriendlyUrls.1.0.2.
+  Restoring NuGet package jQuery.3.7.0.
+  Restoring NuGet package Microsoft.AspNet.ScriptManager.WebForms.5.0.0.
+  Restoring NuGet package Microsoft.AspNet.ScriptManager.MSAjax.5.0.0.
+  Restoring NuGet package Microsoft.AspNet.FriendlyUrls.Core.1.0.2.
+  Restoring NuGet package Antlr.3.5.0.2.
+  Restoring NuGet package bootstrap.5.2.3.
+  Restoring NuGet package Modernizr.2.8.3.
+  Restoring NuGet package Microsoft.AspNet.Web.Optimization.WebForms.1.1.3.
+  Restoring NuGet package Microsoft.Web.Infrastructure.2.0.0.
+  Restoring NuGet package Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1.
+  Restoring NuGet package Newtonsoft.Json.13.0.4.
+  Restoring NuGet package WebGrease.1.6.0.
+
+===== 4. Result =====
+FAILED: the CodeDom dll is still missing from bin.
+>>>>>>> 184824d3ce711cb45314513b985a56eb8b2250cb

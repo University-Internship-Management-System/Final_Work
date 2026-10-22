@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -101,6 +101,62 @@
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
     <Content Include="Assets\images\uj-logo.svg" />
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Antlr3.Runtime.pdb" />
+    <Content Include="bin\Microsoft.AspNet.FriendlyUrls.dll" />
+    <Content Include="bin\Microsoft.AspNet.FriendlyUrls.xml" />
+    <Content Include="bin\Microsoft.AspNet.Web.Optimization.WebForms.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
+    <Content Include="bin\Microsoft.ScriptManager.MSAjax.dll" />
+    <Content Include="bin\Microsoft.ScriptManager.WebForms.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\csi.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll" />
+    <Content Include="bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll" />
+    <Content Include="bin\roslyn\Microsoft.Win32.Primitives.dll" />
+    <Content Include="bin\roslyn\System.AppContext.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Console.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.FileVersionInfo.dll" />
+    <Content Include="bin\roslyn\System.Diagnostics.StackTrace.dll" />
+    <Content Include="bin\roslyn\System.Globalization.Calendars.dll" />
+    <Content Include="bin\roslyn\System.IO.Compression.dll" />
+    <Content Include="bin\roslyn\System.IO.Compression.ZipFile.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.dll" />
+    <Content Include="bin\roslyn\System.IO.FileSystem.Primitives.dll" />
+    <Content Include="bin\roslyn\System.Net.Http.dll" />
+    <Content Include="bin\roslyn\System.Net.Sockets.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Algorithms.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Encoding.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.Primitives.dll" />
+    <Content Include="bin\roslyn\System.Security.Cryptography.X509Certificates.dll" />
+    <Content Include="bin\roslyn\System.Text.Encoding.CodePages.dll" />
+    <Content Include="bin\roslyn\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="bin\roslyn\System.ValueTuple.dll" />
+    <Content Include="bin\roslyn\System.Xml.ReaderWriter.dll" />
+    <Content Include="bin\roslyn\System.Xml.XmlDocument.dll" />
+    <Content Include="bin\roslyn\System.Xml.XPath.dll" />
+    <Content Include="bin\roslyn\System.Xml.XPath.XDocument.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Optimization.xml" />
+    <Content Include="bin\UniversityInternshipManagmentSystem.dll" />
+    <Content Include="bin\UniversityInternshipManagmentSystem.pdb" />
+    <Content Include="bin\WebGrease.dll" />
     <Content Include="Company\Dashboard.aspx" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.css" />
@@ -127,6 +183,13 @@
     <Content Include="Content\Site.css" />
     <Content Include="Coordinator\Dashboard.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="index.html" />
+    <Content Include="index.aspx" />
+    <Content Include="Assets\PublicHome\HomeRedirect.js" />
+    <Content Include="Assets\PublicHome\Home.css" />
+    <Content Include="Assets\PublicHome\Home.js" />
+    <Content Include="Assets\PublicHome\university-logo.png" />
+    <Content Include="Assets\PublicHome\university-hero.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Coordinator\AssignAcademicSupervisors\AssignAcademicSupervisors.aspx" />
     <Content Include="Coordinator\AssignAcademicSupervisors\assign-supervisors.css" />
@@ -151,6 +214,7 @@
     <Content Include="login\Login.aspx" />
     <Content Include="login\Logout.aspx" />
     <Content Include="Logout.aspx" />
+    <Content Include="Student\MyProgress\Files\download.png" />
     <Content Include="Student\MyProgress\MyProgress.aspx" />
     <Content Include="Student\MyProgress\MyProgress.css" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -160,6 +224,17 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Data\firebase-realtime-dummy-data.json" />
+    <Content Include="bin\roslyn\csc.exe.config" />
+    <Content Include="bin\roslyn\csc.rsp" />
+    <Content Include="bin\roslyn\csi.exe.config" />
+    <Content Include="bin\roslyn\csi.rsp" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.Managed.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\vbc.exe.config" />
+    <Content Include="bin\roslyn\vbc.rsp" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="bin\UniversityInternshipManagmentSystem.dll.config" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -195,11 +270,23 @@
     <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
     <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
     <Content Include="Company\MyTrainees\MyTrainees.aspx" />
+    <Compile Include="Company\MyTrainees\MyTrainees.aspx.cs">
+      <DependentUpon>MyTrainees.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\MyTrainees\MyTrainees.aspx.designer.cs">
+      <DependentUpon>MyTrainees.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
+    <Content Include="Company\MyTrainees\MyTrainees.css" />
+    <Content Include="Company\MyTrainees\MyTrainees.js" />
     <Content Include="Company\ManageTasks\ManageTasks.aspx" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
     <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Academic\SupervisorAccount\SupervisorAccount.aspx" />
+    <Content Include="Academic\SupervisorAccount\css\supervisor-account.css" />
+    <Content Include="Academic\SupervisorAccount\javascript\supervisor-account.js" />
     <Content Include="Coordinator\FinalCompletionReview\FinalCompletionReview.aspx" />
     <Content Include="Coordinator\ContactMessages\ContactMessages.aspx" />
     <Content Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx" />
@@ -211,19 +298,15 @@
     <Content Include="Student\ApplicationForm\ApplicationForm.js" />
     <Content Include="Student\Content\Student.css" />
     <Content Include="Student\Content\Student.js" />
-    <Content Include="Student\Dashboard.aspx" />
     <Content Include="Student\Dashboard\css\dashboard.css" />
-    <Content Include="Student\Dashboard\Dashboard.aspx" />
     <Content Include="Student\Dashboard\javascript\dashboard.js" />
     <Content Include="Student\Images\university-campus.jpg" />
     <Content Include="Student\MyApplications\MyApplications.aspx" />
     <Content Include="Student\MyApplications\MyApplications.css" />
     <Content Include="Student\MyApplications\MyApplications.js" />
-    <Content Include="Student\MyProfile.aspx" />
     <Content Include="Student\Opportunities\Opportunities.aspx" />
     <Content Include="Student\Opportunities\Opportunities.css" />
     <Content Include="Student\Opportunities\Opportunities.js" />
-    <Content Include="Student\Profile.aspx" />
     <Content Include="Student\StudentDashboardPage\Dashboard.aspx" />
     <Content Include="Student\StudentDashboardPage\Dashboard.css" />
     <Content Include="Student\StudentProfilePage\Profile.aspx" />
@@ -251,6 +334,13 @@
     </Compile>
     <Compile Include="Academic\StudentProgress\StudentProgress.aspx.designer.cs">
       <DependentUpon>StudentProgress.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Academic\SupervisorAccount\SupervisorAccount.aspx.cs">
+      <DependentUpon>SupervisorAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Academic\SupervisorAccount\SupervisorAccount.aspx.designer.cs">
+      <DependentUpon>SupervisorAccount.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Company\Dashboard.aspx.cs">
@@ -299,6 +389,10 @@
     </Compile>
     <Compile Include="Coordinator\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -351,6 +445,7 @@
     <Compile Include="Models\AcademicSupervisor.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\Certificate.cs" />
     <Compile Include="Models\CompanySupervisor.cs" />
     <Compile Include="Models\Opportunity.cs" />
     <Compile Include="Models\Student.cs" />
@@ -386,17 +481,6 @@
     <Compile Include="Student\ApplicationForm\ApplicationForm.aspx.designer.cs">
       <DependentUpon>ApplicationForm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Student\Dashboard\Dashboard.aspx.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Student\Dashboard\Dashboard.aspx.designer.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Student\Data\ProfileValidation.cs" />
-    <Compile Include="Student\Data\StudentDevelopmentSignIn.cs" />
-    <Compile Include="Student\Data\StudentModels.cs" />
-    <Compile Include="Student\Data\StudentRepository.cs" />
     <Compile Include="Student\MyApplications\MyApplications.aspx.cs">
       <DependentUpon>MyApplications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -451,6 +535,7 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -528,4 +613,24 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
+  <ItemGroup>
+    <Content Include="..\..\docs\student\PROFILE-WRITES.md" />
+    <Content Include="..\..\docs\student\SHARED-LAYOUT.md" />
+    <Content Include="..\..\docs\student\INTEGRATION.md" />
+    <Content Include="..\..\docs\student\FINALIZATION.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ContactUs\ContactPage\Contact.aspx" />
+    <Content Include="ContactUs\ContactPage\Contact.css" />
+    <Content Include="ContactUs\ContactPage\Contact.js" />
+    <Content Include="ContactUs\ContactPage\INTEGRATION.md" />
+    <Content Include="ContactUs\ContactPage\Verify-Contact.ps1" />
+    <Content Include="ContactUs\ContactPage\Test-ContactHttp.ps1" />
+    <Compile Include="ContactUs\ContactPage\Contact.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContactUs\ContactPage\Contact.aspx.designer.cs" />
+    <Compile Include="ContactUs\ContactPage\ContactService.cs" />
+  </ItemGroup>
+  <ItemGroup />
 </Project>

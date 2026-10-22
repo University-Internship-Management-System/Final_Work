@@ -27,19 +27,50 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
             {
                 string supervisorId = Convert.ToString(Session["dbRecordId"] ?? Session["userId"]);
                 if (String.IsNullOrWhiteSpace(supervisorId)) throw new InvalidOperationException();
+                JObject supervisors = await ReadTable("AcademicSupervisors");
                 JObject students = await ReadTable("Students");
                 JObject companies = await ReadTable("CompanySupervisors");
                 JObject tasks = await ReadTable("Tasks");
                 JObject submissions = await ReadTable("TaskSubmissions");
 
+                JToken supervisor = supervisors[supervisorId];
+                if (supervisor == null && !String.IsNullOrWhiteSpace(AuthHelper.UserEmail))
+                {
+                    // عند غياب رقم السجل في الجلسة نحدد سجل المشرف من بريده الجامعي أو بريد الحساب.
+                    foreach (JProperty entry in supervisors.Properties())
+                    {
+                        string email = (string)entry.Value["Email"];
+                        string universityEmail = (string)entry.Value["UniversityEmail"];
+                        if (!String.Equals(email?.Trim(), AuthHelper.UserEmail.Trim(), StringComparison.OrdinalIgnoreCase) &&
+                            !String.Equals(universityEmail?.Trim(), AuthHelper.UserEmail.Trim(), StringComparison.OrdinalIgnoreCase)) continue;
+                        supervisorId = entry.Name;
+                        supervisor = entry.Value;
+                        break;
+                    }
+                }
+                string supervisorMajor = ((string)supervisor?["Major"])?.Trim();
+                if (String.IsNullOrWhiteSpace(supervisorMajor))
+                {
+                    pnlStudent.Visible = false;
+                    lblMessage.Text = "The academic supervisor's major is not available.";
+                    lblMessage.Visible = true;
+                    return;
+                }
+
                 var assigned = new List<JProperty>();
                 foreach (JProperty student in students.Properties())
-                    if ((string)student.Value["AcademicSupervisorId"] == supervisorId) assigned.Add(student);
+                {
+                    string studentMajor = ((string)student.Value["Major"])?.Trim();
+                    // لا يظهر الطالب إلا إذا كان معيناً لهذا المشرف وكان تخصصه مطابقاً لتخصص المشرف.
+                    if (String.Equals((string)student.Value["AcademicSupervisorId"], supervisorId, StringComparison.Ordinal) &&
+                        String.Equals(studentMajor, supervisorMajor, StringComparison.OrdinalIgnoreCase))
+                        assigned.Add(student);
+                }
                 assigned.Sort((a, b) => String.Compare((string)a.Value["Name"], (string)b.Value["Name"], StringComparison.CurrentCultureIgnoreCase));
                 if (assigned.Count == 0)
                 {
                     pnlStudent.Visible = false;
-                    lblMessage.Text = "No students are currently assigned to this academic supervisor account.";
+                    lblMessage.Text = "No students with your major are currently assigned to this academic supervisor account.";
                     lblMessage.Visible = true;
                     return;
                 }

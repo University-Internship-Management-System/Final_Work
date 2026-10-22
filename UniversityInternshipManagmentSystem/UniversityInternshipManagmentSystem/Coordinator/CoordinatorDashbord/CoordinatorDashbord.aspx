@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="CoordinatorDashbord.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.CoordinatorDashbord" MasterPageFile="~/Shared/Dashboard.Master" %>
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
-    <link href="CoordinatorDashbord.css" rel="stylesheet" />
+    <link href="<%= ResolveUrl("~/Coordinator/CoordinatorDashbord/CoordinatorDashbord.css") %>?v=10" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="PageMain" ContentPlaceHolderID="MainContent" runat="server">
     <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
@@ -23,34 +23,25 @@
                     <div class="col-sm-6 col-xl"><div class="card admin-card p-3 h-100 d-flex flex-row align-items-center justify-content-between"><div><div class="admin-stat"><asp:Literal ID="litEvaluations" runat="server" /></div><div class="small-label">Evaluated submissions</div></div><span class="stat-icon gold" aria-hidden="true"><svg><use href="#i-check" /></svg></span></div></div>
                 </div>
                 <div class="row g-4 mt-2">
-                    <div class="col-xl-6"><section class="card admin-card p-4 h-100"><h2 class="section-title mb-3">Account management and allocation</h2>
-                        <a class="feature-row" runat="server" href="~/Coordinator/ManageStudents/ManageStudents.aspx"><strong><svg class="feature-icon"><use href="#i-student" /></svg> Manage students</strong><small>Review student profiles and placement information</small></a>
-                        <a class="feature-row" runat="server" href="~/Coordinator/ManageCompanySupervisors/ManageCompanySupervisors.aspx"><strong><svg class="feature-icon"><use href="#i-building" /></svg> Manage companies</strong><small>View company supervisors and organizations</small></a>
-                        <a class="feature-row" runat="server" href="~/Coordinator/ManageAcademicSupervisors/ManageAcademicSupervisors.aspx"><strong><svg class="feature-icon"><use href="#i-user" /></svg> Academic supervisors</strong><small>Review supervisor profiles and majors</small></a>
+                    <div class="col-12"><section class="card admin-card chart-card p-4 h-100" aria-labelledby="majorChartHeading">
+                        <div class="chart-heading"><span class="chart-icon" aria-hidden="true"><svg><use href="#i-student" /></svg></span><div><h2 id="majorChartHeading" class="section-title mb-1">Students by Major</h2><p class="chart-subtitle mb-0">Number of students enrolled in each major</p></div></div>
+                        <asp:Literal ID="litMajorChart" runat="server" />
                     </section></div>
-                    <div class="col-xl-6"><section class="card admin-card p-4 h-100"><h2 class="section-title mb-3">Monitoring and completion</h2>
-                        <a class="feature-row" runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx"><strong><svg class="feature-icon"><use href="#i-briefcase" /></svg> Placement monitoring</strong><small>Students, companies, tasks, hours and progress</small></a>
-                        <a class="feature-row" runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx"><strong><svg class="feature-icon"><use href="#i-check" /></svg> Task evaluations</strong><small>Review evaluated student submissions</small></a>
-                        <div class="feature-row"><strong><svg class="feature-icon"><use href="#i-check" /></svg> Final completion review</strong><small>Available when final review records are connected</small></div>
+                    <div class="col-12"><section class="card admin-card chart-card p-4 h-100" aria-labelledby="companyChartHeading">
+                        <div class="chart-heading"><span class="chart-icon company" aria-hidden="true"><svg><use href="#i-building" /></svg></span><div><h2 id="companyChartHeading" class="section-title mb-1">Placed Students by Company</h2><p class="chart-subtitle mb-0">Students with a company assignment</p></div></div>
+                        <div class="chart-list"><asp:Literal ID="litCompanyChart" runat="server" /></div>
                     </section></div>
                 </div>
-                <div class="row g-4 mt-1">
-                    <div class="col-xl-6"><section class="card admin-card preview-card p-4 h-100" aria-labelledby="studentsPreviewHeading">
-                        <div class="d-flex justify-content-between align-items-center mb-3"><h2 id="studentsPreviewHeading" class="section-title mb-0">Students</h2><a runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx" class="btn btn-outline-primary btn-sm">View all</a></div>
-                        <div class="table-responsive"><table class="table preview-table align-middle mb-0"><thead><tr><th>Name</th><th>Major</th><th>Placement</th></tr></thead><tbody><asp:Literal ID="litStudentPreview" runat="server" /></tbody></table></div>
-                    </section></div>
-                    <div class="col-xl-6"><section class="card admin-card preview-card p-4 h-100" aria-labelledby="evaluationsPreviewHeading">
-                        <h2 id="evaluationsPreviewHeading" class="section-title mb-3">Task evaluations</h2>
-                        <div class="table-responsive"><table class="table preview-table align-middle mb-0"><thead><tr><th>Student</th><th>Task</th><th>Score</th></tr></thead><tbody><asp:Literal ID="litEvaluationPreview" runat="server" /></tbody></table></div>
-                    </section></div>
-                    <div class="col-xl-6"><section class="card admin-card preview-card p-4 h-100" aria-labelledby="companiesPreviewHeading">
-                        <h2 id="companiesPreviewHeading" class="section-title mb-3">Companies</h2>
-                        <div class="table-responsive"><table class="table preview-table align-middle mb-0"><thead><tr><th>Company</th><th>Supervisor</th><th>Location</th></tr></thead><tbody><asp:Literal ID="litCompanyPreview" runat="server" /></tbody></table></div>
-                    </section></div>
-                    <div class="col-xl-6"><section class="card admin-card preview-card p-4 h-100" aria-labelledby="opportunitiesPreviewHeading">
-                        <h2 id="opportunitiesPreviewHeading" class="section-title mb-3">Opportunities</h2>
-                        <div class="table-responsive"><table class="table preview-table align-middle mb-0"><thead><tr><th>Opportunity</th><th>Company</th><th>Status</th></tr></thead><tbody><asp:Literal ID="litOpportunityPreview" runat="server" /></tbody></table></div>
-                    </section></div>
-                </div>
+                <section class="card admin-card opportunity-section p-4 mt-4" aria-labelledby="opportunityStatsHeading">
+                    <div class="chart-heading"><span class="chart-icon company" aria-hidden="true"><svg><use href="#i-briefcase" /></svg></span><div><h2 id="opportunityStatsHeading" class="section-title mb-1">Internship Opportunities</h2><p class="chart-subtitle mb-0">Live opportunity counts and the companies that posted them</p></div></div>
+                    <div class="opportunity-layout">
+                        <div class="opportunity-stats">
+                            <div class="opportunity-stat"><strong><asp:Literal ID="litTotalOpportunities" runat="server" /></strong><span>Total opportunities</span></div>
+                            <div class="opportunity-stat"><strong><asp:Literal ID="litOpenOpportunities" runat="server" /></strong><span>Open opportunities</span></div>
+                            <div class="opportunity-stat"><strong><asp:Literal ID="litClosedOpportunities" runat="server" /></strong><span>Closed opportunities</span></div>
+                        </div>
+                        <div class="opportunity-companies"><h3>Opportunities by Company</h3><p class="chart-subtitle">The columns show each company's opportunity count; the circle shows its share.</p><asp:Literal ID="litOpportunityCompanies" runat="server" /></div>
+                    </div>
+                </section>
             </asp:Panel>
 </asp:Content>

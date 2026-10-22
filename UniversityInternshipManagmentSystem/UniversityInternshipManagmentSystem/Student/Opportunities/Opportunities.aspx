@@ -32,10 +32,15 @@
                     <div class="uims-page-head">
                         <div>
                             <h1 class="page-title mb-1">Explore Opportunities</h1>
-                            <p class="text-muted mb-0">Internships that match your college and major.</p>
+                            <p class="text-muted mb-0">Internships that match your major.</p>
                         </div>
-                        <asp:Label ID="lblCount" runat="server" CssClass="small-label" />
+                        <asp:Label ID="lblCount" runat="server" ClientIDMode="Static" CssClass="small-label" />
                     </div>
+
+                    <%-- Why the student cannot apply, or why the list could not be loaded --%>
+                    <asp:Panel ID="pnlNotice" runat="server" Visible="false" CssClass="alert alert-warning">
+                        <asp:Label ID="lblNotice" runat="server" />
+                    </asp:Panel>
 
                     <%-- Search / filter --%>
                     <div class="card mb-4">

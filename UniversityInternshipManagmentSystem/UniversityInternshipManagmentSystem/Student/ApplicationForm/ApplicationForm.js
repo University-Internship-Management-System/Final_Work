@@ -3,29 +3,23 @@ document.addEventListener('DOMContentLoaded', function() {
     'use strict';
 
     var btnSubmit = document.getElementById('btnSubmitApp');
-    var txtCvUrl = document.getElementById('txtCvUrl');
     var txtCoverLetter = document.getElementById('txtCoverLetter');
     var successModalEl = document.getElementById('successModal');
 
-    if (!btnSubmit || !successModalEl) return;
+    // The server sets this flag only after the application was really saved.
+    // Checked before looking at the button: after saving, the form and its button are hidden.
+    if (successModalEl && window.applicationSaved) {
+        new bootstrap.Modal(successModalEl).show();
+    }
 
-    var modal = new bootstrap.Modal(successModalEl);
-
-    // The server sets this flag only after the application was really saved
-    if (window.applicationSaved) modal.show();
+    // No button = the server hid the form (the student cannot apply, or already applied)
+    if (!btnSubmit) return;
 
     btnSubmit.addEventListener('click', function(e) {
         e.preventDefault();
 
-        // 1. Simple Client-Side Validation
-        var cvVal = txtCvUrl ? txtCvUrl.value.trim() : '';
+        // 1. Simple Client-Side Validation (the server checks everything again)
         var coverVal = txtCoverLetter ? txtCoverLetter.value.trim() : '';
-
-        if (!cvVal) {
-            alert('Please provide your CV URL.');
-            txtCvUrl.focus();
-            return;
-        }
 
         if (!coverVal) {
             alert('Please fill out the motivation question (Cover Letter).');
@@ -33,7 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // 2. Save it: press the hidden server button (runs btnSubmit_Click, which writes to Firebase)
+        // 2. Save it once: block a second click, then press the hidden server button
+        //    (runs btnSubmit_Click, which writes to Firebase)
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Submitting...';
         document.getElementById('btnSubmit').click();
     });
 });
