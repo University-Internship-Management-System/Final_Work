@@ -101,6 +101,9 @@
     <Content Include="Assets\images\uj-logo.png" />
     <Content Include="Assets\images\uj-logo.svg" />
     <Content Include="Company\Dashboard.aspx" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.css" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.js" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.css" />
     <Content Include="Coordinator\CoordinatorMonitor\CoordinatorMonitor.aspx" />
@@ -191,7 +194,6 @@
     <Content Include="Shared\Navbar.ascx" />
     <Content Include="Shared\Public.Master" />
     <Content Include="Shared\ComingSoon.ascx" />
-    <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
     <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
     <Content Include="Company\MyTrainees\MyTrainees.aspx" />
     <Content Include="Company\ManageTasks\ManageTasks.aspx" />
@@ -252,6 +254,13 @@
     </Compile>
     <Compile Include="Company\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.cs">
+      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.designer.cs">
+      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\AuthHelper.cs" />
     <Compile Include="Config\TaskDb.cs" />
