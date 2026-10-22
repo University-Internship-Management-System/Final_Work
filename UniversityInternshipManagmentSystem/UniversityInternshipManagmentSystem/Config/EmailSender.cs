@@ -5,13 +5,14 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Hosting;
 
 namespace UniversityInternshipManagmentSystem.Config
 {
-    // Sends the emails that our own code sends (the welcome email and the password reset email).
+    // Sends the emails that our own code sends. The messages themselves are in Notify.cs.
+    // (Firebase sends its own "reset your password" and "confirm your email" emails.)
     // The SMTP settings live in secrets.config (not on GitHub). See secrets.config.example.
     public static class EmailSender
     {
@@ -26,45 +27,56 @@ namespace UniversityInternshipManagmentSystem.Config
             get { return Setting("SmtpHost") != "" && Setting("SmtpUser") != "" && Setting("SmtpPassword") != ""; }
         }
 
-        // Sends the welcome email to a new account. Returns "sent", "failed", or "off" (SMTP not set up).
-        // It never throws, so a mail problem can not break the creation of the account.
-        public static async Task<string> SendWelcome(string name, string role, string email)
+        // Sends one email made from EmailTemplates/<template>.html and .txt. Returns true when it was sent.
+        // It never throws: a mail problem must not break what the person was doing (saving a task, signing in...).
+        public static async Task<bool> TrySend(string to, string subject, string template, Dictionary<string, string> values)
         {
-            if (!IsConfigured) return "off";
+            if (!IsConfigured)
+            {
+                Log("SKIPPED (SMTP is not set up in secrets.config) | " + subject);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(to))
+            {
+                Log("SKIPPED (this person has no email address) | " + subject);
+                return false;
+            }
+            var timer = System.Diagnostics.Stopwatch.StartNew();
             try
             {
-                string loginUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)
-                    + VirtualPathUtility.ToAbsolute("~/login/Login.aspx");
-                var values = new Dictionary<string, string>
-                {
-                    { "NAME", name }, { "ROLE", role }, { "EMAIL", email }, { "LOGIN_URL", loginUrl }
-                };
-                await Send(email, "Welcome to UIMS", "welcome", values);
-                return "sent";
+                await Send(to, subject, template, values);
+                Log("SENT | " + to + " | " + subject + " | " + timer.ElapsedMilliseconds + " ms");
+                return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "failed";
+                Log("FAILED | " + to + " | " + subject + " | " + (ex.InnerException ?? ex).Message + " | " + timer.ElapsedMilliseconds + " ms");
+                return false;
             }
         }
 
-        // Sends the password reset email with the reset link. Throws when the mail can not be sent.
+        // One line in App_Data/email-log.txt (never contains a password). Open it to see why an email did not arrive.
+        public static void Log(string line)
+        {
+            try
+            {
+                File.AppendAllText(HostingEnvironment.MapPath("~/App_Data/email-log.txt"),
+                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " | " + line + Environment.NewLine);
+            }
+            catch (Exception)
+            {
+                // the log must never break anything
+            }
+        }
+
+        // Sends the password reset email with our design (needs the service account key, see FirebaseAdmin.cs).
+        // Throws when the mail can not be sent.
         public static Task SendPasswordReset(string email, string link)
         {
             var values = new Dictionary<string, string> { { "EMAIL", email }, { "LINK", link } };
             return Send(email, "Reset your UIMS password", "password-reset", values);
         }
 
-        // The sentence the coordinator pages add to the "saved" message.
-        public static string MessageFor(string result)
-        {
-            if (result == "sent") return " A welcome email was sent.";
-            if (result == "failed") return " The welcome email could not be sent. Check the SMTP settings.";
-            if (result == "off") return " No welcome email was sent because email is not set up (secrets.config).";
-            return "";
-        }
-
-        // Reads EmailTemplates/<template>.html and .txt, replaces {{KEY}} with the values, and sends both versions.
         static async Task Send(string to, string subject, string template, Dictionary<string, string> values)
         {
             string html = Fill(ReadTemplate(template + ".html"), values, true);
@@ -88,6 +100,7 @@ namespace UniversityInternshipManagmentSystem.Config
 
                 using (var client = new SmtpClient(Setting("SmtpHost"), port))
                 {
+                    client.Timeout = 20000;   // 20 seconds, not the default 100 seconds
                     client.EnableSsl = !String.Equals(Setting("SmtpSsl"), "false", StringComparison.OrdinalIgnoreCase);
                     client.Credentials = new NetworkCredential(Setting("SmtpUser"), Setting("SmtpPassword"));
                     await client.SendMailAsync(message);
@@ -100,10 +113,22 @@ namespace UniversityInternshipManagmentSystem.Config
             return File.ReadAllText(HostingEnvironment.MapPath("~/EmailTemplates/" + fileName));
         }
 
+        // Replaces {{KEY}} with the values. In the html version the values are HTML-encoded.
+        // The part between <!--NOTE--> and <!--/NOTE--> is removed when the value NOTE is empty.
         static string Fill(string template, Dictionary<string, string> values, bool isHtml)
         {
+            string note;
+            if (!values.TryGetValue("NOTE", out note) || string.IsNullOrWhiteSpace(note))
+                template = Regex.Replace(template, "<!--NOTE-->.*?<!--/NOTE-->", "", RegexOptions.Singleline);
+            else
+                template = template.Replace("<!--NOTE-->", "").Replace("<!--/NOTE-->", "");
+
             foreach (var item in values)
-                template = template.Replace("{{" + item.Key + "}}", isHtml ? WebUtility.HtmlEncode(item.Value) : item.Value);
+            {
+                string value = item.Value ?? "";
+                if (isHtml) value = WebUtility.HtmlEncode(value).Replace("\r\n", "<br>").Replace("\n", "<br>");
+                template = template.Replace("{{" + item.Key + "}}", value);
+            }
             return template;
         }
     }

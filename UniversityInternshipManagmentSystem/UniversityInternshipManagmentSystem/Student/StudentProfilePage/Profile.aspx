@@ -31,10 +31,10 @@
             <div class="sd-profile-actions" aria-label="Profile actions">
                 <asp:Button ID="EditButton" runat="server" CssClass="sd-save-button" Text="Edit Profile" OnClick="EditButton_Click" CausesValidation="false" />
                 <asp:Button ID="ValidateButton" runat="server" CssClass="sd-save-button" Text="Validate Changes" OnClick="ValidateButton_Click" CausesValidation="false" />
-                <asp:Button ID="SaveButton" runat="server" CssClass="sd-save-button" Text="Save Changes" OnClick="SaveButton_Click" Enabled="false" aria-describedby="save-policy" />
+                <asp:Button ID="SaveButton" runat="server" CssClass="sd-save-button" Text="Save Changes" OnClick="SaveButton_Click" aria-describedby="save-policy" />
                 <asp:Button ID="CancelButton" runat="server" CssClass="btn btn-outline-primary sd-cancel-button" Text="Cancel" OnClick="CancelButton_Click" CausesValidation="false" />
             </div>
-            <p id="save-policy" class="sd-mode-note">Saving to Firebase is disabled until the team approves a profile write policy and matching Security Rules. Edit and Validate Changes let you check a draft; nothing is saved. Cancel discards the draft.</p>
+            <p id="save-policy" class="sd-mode-note">Edit Profile lets you change your phone, skills and links. Validate Changes checks your draft without saving. Save Changes stores it. Cancel discards the draft.</p>
             <div class="row g-4">
                 <div class="col-lg-6">
                     <section class="sd-panel" aria-labelledby="personal-title">
@@ -156,7 +156,7 @@
                 status.textContent = button.value === 'Validate Changes' ? 'Validating your draft; nothing will be saved…'
                     : button.value === 'Edit Profile' ? 'Loading your verified profile for editing…'
                     : button.value === 'Cancel' ? 'Discarding changes and reloading your profile…'
-                    : 'Saving is disabled pending team approval.';
+                    : 'Saving your profile changes…';
                 root.setAttribute('aria-busy', 'true');
             });
         });

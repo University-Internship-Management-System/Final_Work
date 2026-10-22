@@ -170,6 +170,17 @@ namespace UniversityInternshipManagmentSystem.login
                 // Retrieve Profile metadata from Firebase Realtime Database
                 var userProfile = await FetchUserProfileAsync(localId, returnedEmail, idToken);
 
+                // A new account must confirm its email first (Config/EmailVerification.cs). Nothing is signed in until then.
+                if (await EmailVerification.IsBlocked(userProfile.Table, userProfile.RecordId, idToken))
+                {
+                    await EmailVerification.Send(idToken);   // a fresh link, because the first one may be lost
+                    DisplayError("Please confirm your email first. We sent a new confirmation link to " + HttpUtility.HtmlEncode(returnedEmail) + ". Open it, then sign in again.");
+                    return;
+                }
+
+                // Welcome email (once) and "password changed" email. Does nothing when SMTP is not set up (Config/Notify.cs).
+                await Notify.AfterSignIn(userProfile.Table, userProfile.RecordId, userProfile.Name, userProfile.Role, returnedEmail, idToken);
+
                 if (!string.IsNullOrEmpty(userProfile.RecordId))
                 {
                     Session["dbRecordId"] = userProfile.RecordId;

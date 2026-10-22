@@ -308,6 +308,8 @@ namespace UniversityInternshipManagmentSystem.Company.FinalEvaluationPage
                 return;
             }
 
+            if (send) Notify.CompanyEvaluationSent(_studentId, _student.Name, _student.Email, (string)Session["name"]);
+
             await LoadData();                                         // reload so the page shows the saved state
             BindPage();
             FillForm();

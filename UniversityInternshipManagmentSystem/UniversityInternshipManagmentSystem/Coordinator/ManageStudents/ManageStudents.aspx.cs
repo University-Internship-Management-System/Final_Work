@@ -68,7 +68,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 workspace.Visible = addStudent.Visible = true;
                 BindStudents();
                 if (!IsPostBack && Request.QueryString["saved"] == "1")
-                    ShowMessage("Student saved to Firebase successfully." + EmailSender.MessageFor(Request.QueryString["mail"]));
+                    ShowMessage("Student saved to Firebase successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]));
             }
             catch
             {
@@ -196,7 +196,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             if (id == null && temporaryPassword.Text.Length < 12) { ShowMessage("Use a temporary password of at least 12 characters.", true); return; }
             string newAccountToken = null;
-            string mailResult = null;
+            string verifyResult = null;
             try
             {
                 if (id == null)
@@ -208,7 +208,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     var student = new StudentModel(name, email, true, phone, "", uniEmail, major, "", supervisorId, grade, "", "", new List<string>());
                     using (var response = await FirebaseDb.Put("Students", id, student))
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
-                    mailResult = await EmailSender.SendWelcome(name, "Student", email);
+                    verifyResult = await EmailVerification.RequireAndSend("Students", id, newAccountToken);
+                    Notify.AccountCreated(name, "student", email, temporaryPassword.Text);
                 }
                 else
                 {
@@ -227,7 +228,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 ShowMessage("Could not save the student. Check email availability, the password policy and database permissions.", true);
                 return;
             }
-            Response.Redirect(Request.AppRelativeCurrentExecutionFilePath + "?saved=1" + (mailResult == null ? "" : "&mail=" + mailResult), false);
+            Response.Redirect(Request.AppRelativeCurrentExecutionFilePath + "?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult), false);
             Context.ApplicationInstance.CompleteRequest();
         }
 

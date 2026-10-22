@@ -310,13 +310,6 @@
       <DependentUpon>MyTrainees.aspx</DependentUpon>
     </Compile>
     <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
-    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.cs">
-      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.designer.cs">
-      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Company\FinalEvaluation\FinalEvaluation.aspx.cs">
       <DependentUpon>FinalEvaluation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -351,9 +344,6 @@
     <Content Include="Company\ManageTasks\ManageTasks.css" />
     <Content Include="Company\ManageTasks\ManageTasks.js" />
     <Content Include="Company\ManageTasks\ReviewTask.aspx" />
-    <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
-    <Content Include="Company\ManageOpportunities\ManageOpportunities.css" />
-    <Content Include="Company\ManageOpportunities\ManageOpportunities.js" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.css" />
     <Content Include="Company\FinalEvaluation\EvaluateTrainee.aspx" />
@@ -393,11 +383,10 @@
     <Content Include="Student\Tests\Verify-StudentPages.cjs" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
-    <Content Include="EmailTemplates\welcome.html" />
-    <Content Include="EmailTemplates\welcome.txt" />
+    <Content Include="EmailTemplates\notice.html" />
+    <Content Include="EmailTemplates\notice.txt" />
     <Content Include="EmailTemplates\password-reset.html" />
     <Content Include="EmailTemplates\password-reset.txt" />
-    <None Include="secrets.config.example" />
     <None Include="secrets.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -464,6 +453,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Config\EmailSender.cs" />
+    <Compile Include="Config\Notify.cs" />
+    <Compile Include="Config\EmailVerification.cs" />
     <Compile Include="Config\FirebaseAdmin.cs" />
     <Compile Include="Config\FirebaseDb.cs" />
     <Compile Include="Contact.aspx.cs">
@@ -735,4 +726,3 @@
   </ItemGroup>
   <ItemGroup />
 </Project>
-
