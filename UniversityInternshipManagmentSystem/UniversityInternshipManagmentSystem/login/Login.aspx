@@ -57,32 +57,6 @@
 
             <hr class="my-4 text-muted" />
 
-            <!-- Quick Demo Accounts (For Presentation & Evaluation Demo) -->
-            <div class="demo-box">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="fw-bold small text-dark">
-                        <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Quick Demo Accounts:
-                    </span>
-                    <span class="demo-instruction">Click to Autofill</span>
-                </div>
-                <div class="d-flex flex-wrap gap-1">
-                    <button type="button" class="btn btn-sm btn-outline-success demo-pill" data-demo-email="student@ju.edu.jo" data-demo-password="password123">
-                        <i class="bi bi-mortarboard me-1"></i> Student (Ahmad)
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-warning demo-pill" data-demo-email="student.new@ju.edu.jo" data-demo-password="TempPassword123!">
-                        <i class="bi bi-shield-exclamation me-1"></i> New Student (Change Pwd)
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-primary demo-pill" data-demo-email="company@umniah.com" data-demo-password="password123">
-                        <i class="bi bi-building me-1"></i> Company Supervisor
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-info demo-pill" data-demo-email="academic@ju.edu.jo" data-demo-password="password123">
-                        <i class="bi bi-person-workspace me-1"></i> Academic Supervisor
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-danger demo-pill" data-demo-email="coordinator@ju.edu.jo" data-demo-password="password123">
-                        <i class="bi bi-shield-lock me-1"></i> Coordinator
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 

@@ -12,8 +12,8 @@
       "CompanyId": "company_test_001",
       "AcademicSupervisorId": "academic_test_001",
       "GPA": 3.4,
-      "CvUrl": "",
-      "PortfolioUrl": "",
+      "CvUrl": "https://example.com/cv/test-student.pdf",
+      "PortfolioUrl": "https://github.com/test-student",
       "SkillsList": [
         "C#",
         "JavaScript",
@@ -32,11 +32,31 @@
       "CompanyId": "company_test_001",
       "AcademicSupervisorId": "academic_test_001",
       "GPA": 3.1,
-      "CvUrl": "",
-      "PortfolioUrl": "",
+      "CvUrl": "https://example.com/cv/second-student.pdf",
+      "PortfolioUrl": "https://github.com/second-student",
       "SkillsList": [
         "Java",
         "HTML"
+      ]
+    },
+    "lLFnP2WAKvTaB1Q0AnSPK0brMd23": {
+      "Name": "wadea",
+      "Role": "Student",
+      "Email": "wadea@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000003",
+      "ProfilePicUrl": "",
+      "UniEmail": "wadea@ju.edu.jo",
+      "Major": "Computer Science",
+      "CompanyId": "company_test_001",
+      "AcademicSupervisorId": "z4ihiWQDGPMdESGPUIVUae18i3B3",
+      "GPA": 3.5,
+      "CvUrl": "https://example.com/cv/wadea.pdf",
+      "PortfolioUrl": "https://github.com/wadea",
+      "SkillsList": [
+        "C#",
+        "ASP.NET",
+        "SQL"
       ]
     }
   },
@@ -51,6 +71,61 @@
       "CompanyName": "Orange Jordan",
       "CompEmail": "info@orange.example",
       "Location": "Amman"
+    },
+    "company_test_002": {
+      "Name": "Sara Haddad",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@zain.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000011",
+      "ProfilePicUrl": "",
+      "CompanyName": "Zain Jordan",
+      "CompEmail": "info@zain.example",
+      "Location": "Amman"
+    },
+    "company_test_003": {
+      "Name": "Omar Khalil",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@umniah.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000012",
+      "ProfilePicUrl": "",
+      "CompanyName": "Umniah",
+      "CompEmail": "info@umniah.example",
+      "Location": "Amman"
+    },
+    "company_test_004": {
+      "Name": "Lina Nasser",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@aramex.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000013",
+      "ProfilePicUrl": "",
+      "CompanyName": "Aramex",
+      "CompEmail": "info@aramex.example",
+      "Location": "Amman"
+    },
+    "company_test_005": {
+      "Name": "Khaled Mansour",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@arabbank.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000014",
+      "ProfilePicUrl": "",
+      "CompanyName": "Arab Bank",
+      "CompEmail": "info@arabbank.example",
+      "Location": "Amman"
+    },
+    "company_test_006": {
+      "Name": "Rana Odeh",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@jpmc.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000015",
+      "ProfilePicUrl": "",
+      "CompanyName": "Jordan Phosphate",
+      "CompEmail": "info@jpmc.example",
+      "Location": "Aqaba"
     }
   },
   "AcademicSupervisors": {
@@ -62,6 +137,16 @@
       "PhoneNumber": "0790000020",
       "ProfilePicUrl": "",
       "UniversityEmail": "academic@ju.edu.jo",
+      "Major": "Computer Science"
+    },
+    "z4ihiWQDGPMdESGPUIVUae18i3B3": {
+      "Name": "Ahmad Saifan",
+      "Role": "AcademicSupervisor",
+      "Email": "ahmad@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000021",
+      "ProfilePicUrl": "",
+      "UniversityEmail": "ahmad@ju.edu.jo",
       "Major": "Computer Science"
     }
   },
@@ -84,7 +169,8 @@
       "DeadLine": "2026-10-09T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 1,
@@ -99,7 +185,8 @@
       "DeadLine": "2026-10-11T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 1,
@@ -114,7 +201,8 @@
       "DeadLine": "2026-10-15T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 2,
@@ -129,7 +217,8 @@
       "DeadLine": "2026-10-17T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 2,
@@ -144,7 +233,8 @@
       "DeadLine": "2026-10-18T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 2,
@@ -159,7 +249,8 @@
       "DeadLine": "2026-10-23T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 3,
@@ -174,7 +265,8 @@
       "DeadLine": "2026-10-24T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 3,
@@ -189,7 +281,8 @@
       "DeadLine": "2026-10-25T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 3,
@@ -203,7 +296,8 @@
       "StartDate": "2026-10-18T09:00:00+03:00",
       "DeadLine": "2026-10-22T23:59:00+03:00",
       "StudentIds": [
-        "student_test_001"
+        "student_test_001",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 3,
@@ -218,7 +312,8 @@
       "DeadLine": "2026-10-30T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 4,
@@ -233,7 +328,8 @@
       "DeadLine": "2026-11-01T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 4,
@@ -247,7 +343,8 @@
       "StartDate": "2026-10-26T09:00:00+03:00",
       "DeadLine": "2026-10-31T23:59:00+03:00",
       "StudentIds": [
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 4,
@@ -262,7 +359,8 @@
       "DeadLine": "2026-11-06T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 5,
@@ -340,6 +438,250 @@
       "IsLate": false,
       "Status": "Submitted",
       "Feedback": ""
+    }
+  },
+  "Opportunities": {
+    "opp001": {
+      "CompanyId": "company_test_001",
+      "CompanyName": "Orange Jordan",
+      "Title": "Junior Web Developer Intern",
+      "Description": "Build and maintain internal web tools with the digital team.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering"
+      ],
+      "Seats": 3,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797379140000
+    },
+    "opp002": {
+      "CompanyId": "company_test_001",
+      "CompanyName": "Orange Jordan",
+      "Title": "Data Analyst Intern",
+      "Description": "Clean datasets and build dashboards for the network team.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Data Science"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796169540000
+    },
+    "opp003": {
+      "CompanyId": "company_test_001",
+      "CompanyName": "Orange Jordan",
+      "Title": "QA Intern",
+      "Description": "Write test plans and run regression tests.",
+      "Location": "Irbid",
+      "Majors": [
+        "Computer Science"
+      ],
+      "Seats": 2,
+      "Status": "closed",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1790899140000
+    },
+    "opp004": {
+      "CompanyId": "company_test_001",
+      "CompanyName": "Orange Jordan",
+      "Title": "Network Engineering Intern",
+      "Description": "Help configure and monitor the access network.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Engineering"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797811140000
+    },
+    "opp005": {
+      "CompanyId": "company_test_002",
+      "CompanyName": "Zain Jordan",
+      "Title": "Mobile App Developer Intern",
+      "Description": "Help build the customer mobile app with Flutter and REST APIs.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering"
+      ],
+      "Seats": 3,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796947140000
+    },
+    "opp006": {
+      "CompanyId": "company_test_002",
+      "CompanyName": "Zain Jordan",
+      "Title": "Cloud Support Intern",
+      "Description": "Monitor cloud services and handle first-line support tickets.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Computer Engineering",
+        "Information Systems"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796083140000
+    },
+    "opp007": {
+      "CompanyId": "company_test_003",
+      "CompanyName": "Umniah",
+      "Title": "Backend Developer Intern",
+      "Description": "Work on billing APIs in C# and SQL with the platform team.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796515140000
+    },
+    "opp008": {
+      "CompanyId": "company_test_003",
+      "CompanyName": "Umniah",
+      "Title": "Cyber Security Intern",
+      "Description": "Assist the SOC team with log review and vulnerability scans.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Cyber Security",
+        "Computer Engineering"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797638340000
+    },
+    "opp009": {
+      "CompanyId": "company_test_003",
+      "CompanyName": "Umniah",
+      "Title": "UI/UX Design Intern",
+      "Description": "Design screens and prototypes for the self-service portal.",
+      "Location": "Irbid",
+      "Majors": [
+        "Software Engineering",
+        "Information Systems"
+      ],
+      "Seats": 1,
+      "Status": "closed",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1790812740000
+    },
+    "opp010": {
+      "CompanyId": "company_test_004",
+      "CompanyName": "Aramex",
+      "Title": "Logistics Software Intern",
+      "Description": "Improve shipment tracking tools used by the operations team.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering",
+        "Information Systems"
+      ],
+      "Seats": 3,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797119940000
+    },
+    "opp011": {
+      "CompanyId": "company_test_004",
+      "CompanyName": "Aramex",
+      "Title": "Business Intelligence Intern",
+      "Description": "Build reports and dashboards from delivery data.",
+      "Location": "Amman",
+      "Majors": [
+        "Data Science",
+        "Information Systems",
+        "Computer Science"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797983940000
+    },
+    "opp012": {
+      "CompanyId": "company_test_005",
+      "CompanyName": "Arab Bank",
+      "Title": "Data Science Intern",
+      "Description": "Prepare data and test simple prediction models for risk reports.",
+      "Location": "Amman",
+      "Majors": [
+        "Data Science",
+        "Computer Science"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796774340000
+    },
+    "opp013": {
+      "CompanyId": "company_test_005",
+      "CompanyName": "Arab Bank",
+      "Title": "IT Operations Intern",
+      "Description": "Support internal systems, backups and user accounts.",
+      "Location": "Amman",
+      "Majors": [
+        "Information Systems",
+        "Computer Engineering",
+        "Computer Science"
+      ],
+      "Seats": 4,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1798243140000
+    },
+    "opp014": {
+      "CompanyId": "company_test_005",
+      "CompanyName": "Arab Bank",
+      "Title": "Digital Banking QA Intern",
+      "Description": "Test the online banking app before each release.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering"
+      ],
+      "Seats": 2,
+      "Status": "closed",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1791244740000
+    },
+    "opp015": {
+      "CompanyId": "company_test_006",
+      "CompanyName": "Jordan Phosphate",
+      "Title": "ERP Systems Intern",
+      "Description": "Help maintain and document the ERP system used across plants.",
+      "Location": "Aqaba",
+      "Majors": [
+        "Information Systems",
+        "Computer Science"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1799193540000
+    },
+    "opp016": {
+      "CompanyId": "company_test_006",
+      "CompanyName": "Jordan Phosphate",
+      "Title": "Embedded Systems Intern",
+      "Description": "Work on sensor monitoring devices and their firmware.",
+      "Location": "Aqaba",
+      "Majors": [
+        "Computer Engineering"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1799625540000
     }
   }
 }

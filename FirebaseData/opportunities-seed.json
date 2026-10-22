@@ -56,5 +56,189 @@
     "Status": "open",
     "CreatedAt": 1792584000000,
     "ApplicationDeadline": 1797811140000
+  },
+  "opp005": {
+    "CompanyId": "company_test_002",
+    "CompanyName": "Zain Jordan",
+    "Title": "Mobile App Developer Intern",
+    "Description": "Help build the customer mobile app with Flutter and REST APIs.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1796947140000
+  },
+  "opp006": {
+    "CompanyId": "company_test_002",
+    "CompanyName": "Zain Jordan",
+    "Title": "Cloud Support Intern",
+    "Description": "Monitor cloud services and handle first-line support tickets.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Computer Engineering",
+      "Information Systems"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1796083140000
+  },
+  "opp007": {
+    "CompanyId": "company_test_003",
+    "CompanyName": "Umniah",
+    "Title": "Backend Developer Intern",
+    "Description": "Work on billing APIs in C# and SQL with the platform team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1796515140000
+  },
+  "opp008": {
+    "CompanyId": "company_test_003",
+    "CompanyName": "Umniah",
+    "Title": "Cyber Security Intern",
+    "Description": "Assist the SOC team with log review and vulnerability scans.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Cyber Security",
+      "Computer Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1797638340000
+  },
+  "opp009": {
+    "CompanyId": "company_test_003",
+    "CompanyName": "Umniah",
+    "Title": "UI/UX Design Intern",
+    "Description": "Design screens and prototypes for the self-service portal.",
+    "Location": "Irbid",
+    "Majors": [
+      "Software Engineering",
+      "Information Systems"
+    ],
+    "Seats": 1,
+    "Status": "closed",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1790812740000
+  },
+  "opp010": {
+    "CompanyId": "company_test_004",
+    "CompanyName": "Aramex",
+    "Title": "Logistics Software Intern",
+    "Description": "Improve shipment tracking tools used by the operations team.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering",
+      "Information Systems"
+    ],
+    "Seats": 3,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1797119940000
+  },
+  "opp011": {
+    "CompanyId": "company_test_004",
+    "CompanyName": "Aramex",
+    "Title": "Business Intelligence Intern",
+    "Description": "Build reports and dashboards from delivery data.",
+    "Location": "Amman",
+    "Majors": [
+      "Data Science",
+      "Information Systems",
+      "Computer Science"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1797983940000
+  },
+  "opp012": {
+    "CompanyId": "company_test_005",
+    "CompanyName": "Arab Bank",
+    "Title": "Data Science Intern",
+    "Description": "Prepare data and test simple prediction models for risk reports.",
+    "Location": "Amman",
+    "Majors": [
+      "Data Science",
+      "Computer Science"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1796774340000
+  },
+  "opp013": {
+    "CompanyId": "company_test_005",
+    "CompanyName": "Arab Bank",
+    "Title": "IT Operations Intern",
+    "Description": "Support internal systems, backups and user accounts.",
+    "Location": "Amman",
+    "Majors": [
+      "Information Systems",
+      "Computer Engineering",
+      "Computer Science"
+    ],
+    "Seats": 4,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1798243140000
+  },
+  "opp014": {
+    "CompanyId": "company_test_005",
+    "CompanyName": "Arab Bank",
+    "Title": "Digital Banking QA Intern",
+    "Description": "Test the online banking app before each release.",
+    "Location": "Amman",
+    "Majors": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "Seats": 2,
+    "Status": "closed",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1791244740000
+  },
+  "opp015": {
+    "CompanyId": "company_test_006",
+    "CompanyName": "Jordan Phosphate",
+    "Title": "ERP Systems Intern",
+    "Description": "Help maintain and document the ERP system used across plants.",
+    "Location": "Aqaba",
+    "Majors": [
+      "Information Systems",
+      "Computer Science"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1799193540000
+  },
+  "opp016": {
+    "CompanyId": "company_test_006",
+    "CompanyName": "Jordan Phosphate",
+    "Title": "Embedded Systems Intern",
+    "Description": "Work on sensor monitoring devices and their firmware.",
+    "Location": "Aqaba",
+    "Majors": [
+      "Computer Engineering"
+    ],
+    "Seats": 2,
+    "Status": "open",
+    "CreatedAt": 1792584000000,
+    "ApplicationDeadline": 1799625540000
   }
 }
