@@ -34,8 +34,15 @@
                         <div>
                             <h1 class="page-title mb-1">Internship Application Form</h1>
                             <p class="text-muted mb-0">Review your profile details and submit your application for this opportunity.</p>
+                            <asp:Label ID="lblOpportunity" runat="server" CssClass="d-block mt-2" />
                         </div>
                     </div>
+
+                    <%-- Why the student cannot apply, a server check that failed, or the "submitted" note --%>
+                    <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="alert alert-warning">
+                        <asp:Label ID="lblMessage" runat="server" />
+                        <a href="../Opportunities/Opportunities.aspx" class="btn btn-sm btn-outline-secondary">Back to Opportunities</a>
+                    </asp:Panel>
 
                     <!-- Application Form Card -->
                     <div class="card app-form-card">
@@ -76,6 +83,8 @@
                                 </div>
                             </div>
 
+                            <%-- Hidden when the student cannot apply, and after the application is saved --%>
+                            <asp:Panel ID="pnlApply" runat="server">
                             <hr class="my-4" />
 
                             <!-- Dynamic Links & Motivation -->
@@ -84,14 +93,14 @@
                             <div class="row g-3">
                                 <!-- 6. CV URL -->
                                 <div class="col-md-6">
-                                    <label class="form-label small-label" for="txtCvUrl">CV URL <span class="text-danger">*</span></label>
-                                    <asp:TextBox ID="txtCvUrl" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true"  placeholder="https://example.com/my-cv.pdf" Required="true" />
+                                    <label class="form-label small-label" for="txtCvUrl">CV URL (from your profile)</label>
+                                    <asp:TextBox ID="txtCvUrl" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" />
                                 </div>
 
                                 <!-- 7. Portfolio URL -->
                                 <div class="col-md-6">
-                                    <label class="form-label small-label" for="txtPortfolioUrl">Portfolio URL (Optional)</label>
-                                    <asp:TextBox ID="txtPortfolioUrl" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" placeholder="https://github.com/my-username" />
+                                    <label class="form-label small-label" for="txtPortfolioUrl">Portfolio URL (from your profile, optional)</label>
+                                    <asp:TextBox ID="txtPortfolioUrl" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" />
                                 </div>
 
                                 <!-- 8. Cover Letter (Motivation) -->
@@ -108,6 +117,7 @@
                                 <%-- Hidden server button: the Confirm button above clicks it after the checks pass, and it saves the application --%>
                                 <asp:Button ID="btnSubmit" runat="server" ClientIDMode="Static" OnClick="btnSubmit_Click" Text="Submit" style="display:none" />
                             </div>
+                            </asp:Panel>
 
                         </div>
                     </div>

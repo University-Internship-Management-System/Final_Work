@@ -57,7 +57,7 @@ namespace UniversityInternshipManagmentSystem.Models
         [JsonIgnore]
         public bool IsOpenForApplications
         {
-            get { return Status == OpportunityStatus.Open && !IsDeadlinePassed && SeatsLeft > 0; }
+            get { return WhyClosed() == null; }
         }
 
         [JsonIgnore]
@@ -69,6 +69,22 @@ namespace UniversityInternshipManagmentSystem.Models
                 int left = Seats - taken;
                 return left < 0 ? 0 : left;
             }
+        }
+
+        // Why this opportunity does not take applications right now, or null when it does
+        public string WhyClosed()
+        {
+            if (!string.Equals(Status, OpportunityStatus.Open, StringComparison.OrdinalIgnoreCase)) return "This opportunity is closed.";
+            if (IsDeadlinePassed) return "The application deadline has passed.";
+            if (SeatsLeft <= 0) return "There are no seats left.";
+            return null;
+        }
+
+        // True when this opportunity lists the major (ignores capital letters and extra spaces)
+        public bool AcceptsMajor(string major)
+        {
+            if (string.IsNullOrWhiteSpace(major) || Majors == null) return false;
+            return Majors.Any(m => m != null && string.Equals(m.Trim(), major.Trim(), StringComparison.OrdinalIgnoreCase));
         }
     }
 
