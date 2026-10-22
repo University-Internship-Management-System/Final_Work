@@ -292,3 +292,399 @@
     font-size: 12px;
     color: var(--uims-muted, #65756E);
 }
+
+/* Training journey */
+
+.mp-journey {
+    margin-bottom: 24px;
+    padding: 30px;
+    border-radius: 18px;
+    color: var(--uims-white);
+    background: linear-gradient( 115deg, var(--uims-dark), var(--uims-primary) );
+}
+
+.mp-journey-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.mp-eyebrow {
+    margin: 0 0 10px;
+    color: var(--uims-mint);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+}
+
+.mp-journey h2 {
+    margin: 0;
+    color: var(--uims-white);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.mp-state {
+    flex: none;
+    padding: 7px 12px;
+    border: 1px solid var(--uims-accent);
+    border-radius: 30px;
+    color: var(--uims-mint);
+    font-size: 12px;
+}
+
+.mp-timeline-scroll {
+    overflow-x: auto;
+    margin-top: 34px;
+    padding: 6px 4px 20px;
+    scrollbar-width: thin;
+}
+
+.mp-timeline {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    min-width: 600px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .mp-timeline::before {
+        position: absolute;
+        z-index: -1;
+        top: 21px;
+        right: 8.333%;
+        left: 8.333%;
+        height: 2px;
+        background: var(--uims-accent);
+        content: "";
+    }
+
+.mp-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: var(--uims-mint);
+}
+
+.mp-week-node {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 14px;
+    border: 1px solid var(--uims-accent);
+    border-radius: 50%;
+    background: var(--uims-dark);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.mp-step strong {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.mp-step small {
+    margin-top: 5px;
+    font-size: 11px;
+    opacity: .8;
+}
+
+.mp-step-done .mp-week-node {
+    color: var(--uims-primary);
+    background: var(--uims-mint);
+    border-color: var(--uims-mint);
+}
+
+.mp-step-current .mp-week-node {
+    color: var(--uims-primary);
+    background: var(--uims-white);
+    border-color: var(--uims-white);
+    outline: 4px solid var(--uims-accent);
+}
+
+.mp-step-current strong,
+.mp-step-current small {
+    color: var(--uims-white);
+    font-weight: 600;
+    opacity: 1;
+}
+
+.mp-journey-note {
+    margin: 10px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--uims-accent);
+    color: var(--uims-mint);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* Passed state: trophy on the right, no week timeline */
+
+.mp-success-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 8px 8px 8px 0;
+}
+
+.mp-success-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+    .mp-success-copy h2 {
+        margin-bottom: 14px;
+        font-size: clamp(26px, 3vw, 34px);
+        font-weight: 700;
+    }
+
+    .mp-success-copy > p:last-child {
+        max-width: 540px;
+        margin: 0;
+        color: var(--uims-mint);
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+.mp-trophy {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 135px;
+    height: 135px;
+    border: 1px solid var(--uims-accent);
+    border-radius: 50%;
+    background: var(--uims-dark);
+}
+
+    .mp-trophy > svg {
+        width: 100px;
+        height: 100px;
+    }
+
+.mp-trophy-cup {
+    fill: var(--uims-mint);
+}
+
+.mp-trophy-line {
+    fill: none;
+    stroke: var(--uims-mint);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mp-trophy-star {
+    fill: var(--uims-accent);
+}
+
+/* Certificate file */
+
+.mp-certificate-card {
+    overflow: hidden;
+    margin-bottom: 30px;
+    border: 1px solid var(--uims-border);
+    border-radius: 16px;
+    background: var(--uims-white);
+}
+
+.mp-certificate-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 24px;
+    background: var(--uims-mint);
+}
+
+.mp-certificate-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--uims-accent);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.mp-certificate-heading h3 {
+    margin: 0 0 8px;
+    color: var(--uims-primary);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.mp-certificate-heading p {
+    margin: 0;
+    color: var(--uims-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.mp-passed-badge {
+    padding: 6px 12px;
+    border: 1px solid var(--uims-accent);
+    border-radius: 30px;
+    color: var(--uims-primary);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mp-certificate-file {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px;
+}
+
+.mp-pdf-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 54px;
+    height: 65px;
+    border: 1px solid var(--uims-border);
+    border-radius: 8px;
+    color: var(--uims-primary);
+    background: var(--uims-bg);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.mp-file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+    .mp-file-info strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--uims-primary);
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .mp-file-info span {
+        color: var(--uims-muted);
+        font-size: 12px;
+    }
+
+.mp-download-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 11px 18px;
+    white-space: nowrap;
+}
+
+    .mp-download-button svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+.mp-certificate-waiting {
+    margin: 0;
+    padding: 24px;
+    color: var(--uims-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+@media (max-width: 767px) {
+    .mp-journey {
+        padding: 24px 20px;
+    }
+
+    .mp-journey-header {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .mp-success-header {
+        gap: 18px;
+    }
+
+    .mp-success-copy h2 {
+        font-size: 26px;
+    }
+
+    .mp-success-copy > p:last-child {
+        font-size: 14px;
+    }
+
+    .mp-trophy {
+        width: 80px;
+        height: 80px;
+    }
+
+        .mp-trophy > svg {
+            width: 65px;
+            height: 65px;
+        }
+
+    .mp-certificate-heading,
+    .mp-certificate-file {
+        padding: 20px;
+    }
+
+    .mp-certificate-file {
+        flex-wrap: wrap;
+    }
+
+    .mp-file-info {
+        flex-basis: calc(100% - 80px);
+    }
+
+    .mp-download-button {
+        width: 100%;
+    }
+}
+
+.mp-certificate-thumbnail {
+    width: 108px;
+    height: 78px;
+    flex: none;
+    object-fit: contain;
+    border: 1px solid var(--uims-border);
+    border-radius: 6px;
+    background: var(--uims-bg);
+}
+
+.mp-certificate-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: none;
+}
+
+    .mp-certificate-actions .btn {
+        white-space: nowrap;
+    }
+
+@media (max-width: 767px) {
+    .mp-certificate-thumbnail {
+        width: 80px;
+        height: 60px;
+    }
+
+    .mp-certificate-actions {
+        width: 100%;
+    }
+
+        .mp-certificate-actions .btn {
+            flex: 1;
+            width: auto;
+        }
+}

@@ -2,6 +2,15 @@
 <%@ Register Src="~/Shared/Navbar.ascx" TagPrefix="uims" TagName="Navbar" %>
 <%@ Register Src="~/Shared/Footer.ascx" TagPrefix="uims" TagName="Footer" %>
 
+<script runat="server">
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        bool customHome = string.Equals(Page.AppRelativeVirtualPath, "~/index.aspx", StringComparison.OrdinalIgnoreCase);
+        StandardPublicNavigation.Visible = !customHome;
+        StandardPublicFooter.Visible = !customHome;
+    }
+</script>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head runat="server">
@@ -28,7 +37,7 @@
 <body class="uims-public d-flex flex-column min-vh-100">
     <form id="form1" runat="server" class="d-flex flex-column flex-grow-1">
         <!-- Main Navigation Bar -->
-        <uims:Navbar runat="server" />
+        <asp:PlaceHolder ID="StandardPublicNavigation" runat="server"><uims:Navbar runat="server" /></asp:PlaceHolder>
 
         <!-- Main Content -->
         <main class="flex-grow-1">
@@ -36,7 +45,7 @@
         </main>
 
         <!-- Institutional Footer -->
-        <uims:Footer runat="server" />
+        <asp:PlaceHolder ID="StandardPublicFooter" runat="server"><uims:Footer runat="server" /></asp:PlaceHolder>
     </form>
 
     <script src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
