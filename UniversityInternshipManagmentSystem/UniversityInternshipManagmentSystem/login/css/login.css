@@ -20,11 +20,182 @@
 }
 
 /* ==========================================================================
+<<<<<<< HEAD
    Page: the content grows to fill the screen, the card sits in the middle
    ========================================================================== */
 body.uims-auth {
     background: var(--auth-green-deep);
     font-family: 'Plus Jakarta Sans', 'Inter', system-ui, 'Segoe UI', sans-serif;
+=======
+   Viewport & Zero-Scroll Layout Constraints
+   ========================================================================== */
+html, body {
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+}
+
+@media (min-height: 560px) {
+    body {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        overflow-y: hidden !important;
+    }
+    #form1 {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+    main {
+        flex: 1 1 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+    }
+}
+
+/* ==========================================================================
+   Home Page Topbar Navigation (Login Page Customization)
+   ========================================================================== */
+.topbar {
+    height: 68px !important;
+    background: linear-gradient(115deg, #043629, #07523e) !important;
+    color: #ffffff !important;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    box-shadow: 0 3px 15px rgba(0, 27, 21, 0.15);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    flex-shrink: 0;
+}
+
+.topbar .nav {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.topbar .container,
+.footer .container {
+    width: min(1180px, calc(100% - 44px));
+    max-width: 1180px;
+    margin: auto;
+}
+
+.topbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-right: auto;
+    margin-left: 0;
+    text-decoration: none !important;
+    color: #ffffff !important;
+}
+
+.topbar .brand-logo {
+    width: 48px !important;
+    height: 54px !important;
+    max-width: 48px !important;
+    max-height: 54px !important;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.topbar .brand-title {
+    display: block;
+    font-weight: 900;
+    font-size: 17px;
+    line-height: 1.3;
+    white-space: nowrap;
+    color: #ffffff !important;
+}
+
+.topbar .brand-sub {
+    display: block;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 10px;
+    opacity: .88;
+    letter-spacing: .1px;
+    color: #ffffff !important;
+}
+
+.topbar .navlinks {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-left: auto;
+    margin-right: 0;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.topbar .navlinks a {
+    font-size: 13px;
+    font-weight: 700;
+    opacity: .89;
+    position: relative;
+    white-space: nowrap;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    transition: opacity 0.2s ease;
+}
+
+.topbar .navlinks a:hover,
+.topbar .navlinks a.active {
+    opacity: 1;
+    color: #ffffff !important;
+}
+
+.topbar .navlinks a.active:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: -10px;
+    height: 2px;
+    background: #ffffff;
+}
+
+.topbar .menu-toggle {
+    display: none;
+    margin-left: auto;
+    margin-right: 0;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    background: transparent;
+    border-radius: 7px;
+    font-size: 22px;
+    width: 38px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   Compact Login Card & Layout (Zero Scroll Optimization)
+   ========================================================================== */
+.login-card {
+    max-width: 440px !important;
+    margin: auto !important;
+    padding: 1.5rem 2rem !important;
+    border: 1px solid var(--uj-border-color) !important;
+    border-top: 5px solid var(--uj-green) !important;
+    border-radius: var(--uj-radius);
+    box-shadow: var(--uj-shadow-md);
+    background: #ffffff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
 }
 
 body.uims-auth main {
@@ -42,6 +213,7 @@ body.uims-auth main {
     padding: 48px 16px;
 }
 
+<<<<<<< HEAD
 /* ==========================================================================
    Background: deep green, soft glowing light, a dotted grid, and slow floating shapes
    ========================================================================== */
@@ -146,6 +318,12 @@ body.uims-auth main {
     border-radius: 50%;
     background: #fff;
     box-shadow: 0 10px 26px rgba(7, 82, 62, 0.22), 0 0 0 5px var(--auth-mint);
+=======
+.login-logo {
+    max-height: 55px !important;
+    height: 55px !important;
+    width: auto;
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
     object-fit: contain;
     margin-bottom: 18px;
 }
@@ -271,12 +449,59 @@ body.uims-auth main {
 /* ==========================================================================
    Buttons (also used by the "Reset Password" popup)
    ========================================================================== */
+<<<<<<< HEAD
 .btn-uj-primary {
     display: inline-block;
     color: #fff;
     font-weight: 700;
     letter-spacing: 0.01em;
     border: 0;
+=======
+.demo-box {
+    background-color: #fbfcfb;
+    border: 1px solid #e2e8e3;
+    border-radius: 12px;
+    padding: 0.9rem;
+}
+
+.demo-instruction {
+    font-size: 0.72rem;
+    color: #6c757d;
+}
+
+.demo-pill {
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    padding: 0.35rem 0.65rem;
+}
+
+.demo-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--uj-shadow-sm);
+}
+
+.autofill-highlight {
+    animation: flashGreen 0.9s ease-out;
+}
+
+@keyframes flashGreen {
+    0% {
+        background-color: var(--uj-green-soft);
+        border-color: var(--uj-green);
+    }
+    100% {
+        background-color: #ffffff;
+    }
+}
+
+/* ==========================================================================
+   Modal Dialog
+   ========================================================================== */
+.modal-content.modal-forgot-card {
+    border: none;
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
     border-radius: 14px;
     padding: 14px 20px;
     background: linear-gradient(135deg, var(--auth-green) 0%, var(--auth-accent) 100%);
@@ -346,6 +571,7 @@ body.uims-auth main {
 .pw-match.bad  { color: #DC2626; }
 
 /* ==========================================================================
+<<<<<<< HEAD
    "Reset Password" popup
    ========================================================================== */
 .modal-content.modal-forgot-card {
@@ -392,8 +618,73 @@ body.uims-auth .uims-footer a:hover { color: #fff; text-decoration: underline; }
 
 /* ==========================================================================
    Small screens, and people who prefer no motion
+=======
+   Single-Line Institutional Footer
    ========================================================================== */
+.footer {
+    background: #04382d !important;
+    color: #adcbbe !important;
+    padding: 10px 0 !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.copyright {
+    border-top: none !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    color: #adcbbe !important;
+    text-align: center;
+    font-size: 11.5px;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
+   ========================================================================== */
+@media (max-width: 750px) {
+    .topbar {
+        height: 64px !important;
+    }
+    .topbar .nav {
+        gap: 8px;
+    }
+    .topbar .brand-logo {
+        width: 38px !important;
+        height: 44px !important;
+    }
+    .topbar .brand-title {
+        font-size: 13px;
+    }
+    .topbar .brand-sub {
+        font-size: 7.5px;
+    }
+    .topbar .menu-toggle {
+        display: flex;
+    }
+    .topbar .navlinks {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 64px;
+        padding: 15px 20px;
+        background: #04382d;
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        z-index: 1050;
+    }
+    .topbar .navlinks.open {
+        display: flex;
+    }
+}
+
 @media (max-width: 576px) {
+<<<<<<< HEAD
     .auth-wrap { padding: 28px 14px; align-items: flex-start; }
     .auth-card { padding: 30px 22px 24px; border-radius: 22px; }
     .auth-card::before { left: 22px; right: 22px; }
@@ -404,4 +695,11 @@ body.uims-auth .uims-footer a:hover { color: #fff; text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) {
     .auth-blob, .auth-card { animation: none; }
     .btn-uj-primary, .auth-card .input-group, .pw-meter span { transition: none; }
+=======
+    .login-card,
+    .first-login-card {
+        margin: 15px auto;
+        padding: 1.25rem 1.5rem !important;
+    }
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
 }
