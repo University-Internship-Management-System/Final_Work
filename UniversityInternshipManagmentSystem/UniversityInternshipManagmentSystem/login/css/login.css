@@ -1,25 +1,32 @@
 /**
  * University Internship Management System (UIMS)
  * King Abdullah II School of Information Technology - The University of Jordan
- * Login & Security Setup - Modular Stylesheet
+ * Sign-in and first-login pages. These two pages have no navigation bar: only a full-screen background, a card and the footer.
+ * (Shared/Public.Master adds the class "uims-auth" to the body on these pages.)
  */
 
 :root {
-    --uj-green: #006633;
-    --uj-green-dark: #004d26;
-    --uj-green-light: #008744;
-    --uj-green-soft: #eaf5ee;
-    --uj-gold: #c59b27;
-    --uj-gold-dark: #9a781b;
-    --uj-gold-soft: #fcf8e8;
-    --uj-border-color: rgba(0, 0, 0, 0.08);
-    --uj-radius: 16px;
-    --uj-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
-    --uj-shadow-md: 0 10px 30px rgba(0, 102, 51, 0.08);
-    --uj-shadow-hover: 0 14px 35px rgba(0, 102, 51, 0.14);
+    --auth-green: #07523E;
+    --auth-green-dark: #04382D;
+    --auth-green-deep: #032b22;
+    --auth-accent: #178568;
+    --auth-mint: #EAF4EF;
+    --auth-gold: #C59B27;
+    --auth-gold-soft: #FCF6E0;
+    --auth-text: #183B31;
+    --auth-muted: #65756E;
+    --auth-field: #F3F7F5;
+    --auth-border: #DCE7E2;
 }
 
 /* ==========================================================================
+<<<<<<< HEAD
+   Page: the content grows to fill the screen, the card sits in the middle
+   ========================================================================== */
+body.uims-auth {
+    background: var(--auth-green-deep);
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, 'Segoe UI', sans-serif;
+=======
    Viewport & Zero-Scroll Layout Constraints
    ========================================================================== */
 html, body {
@@ -188,98 +195,268 @@ html, body {
     box-shadow: var(--uj-shadow-md);
     background: #ffffff;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
 }
 
-.login-card:hover {
-    box-shadow: var(--uj-shadow-hover);
+body.uims-auth main {
+    display: flex;
+    position: relative;
 }
 
-.first-login-card {
-    max-width: 520px;
-    margin: 40px auto;
-    border: 1px solid var(--uj-border-color) !important;
-    border-top: 5px solid var(--uj-gold) !important;
-    border-radius: var(--uj-radius);
-    box-shadow: var(--uj-shadow-md);
-    background: #ffffff;
+.auth-wrap {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px;
 }
 
+<<<<<<< HEAD
+/* ==========================================================================
+   Background: deep green, soft glowing light, a dotted grid, and slow floating shapes
+   ========================================================================== */
+.auth-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(1100px 700px at 88% -8%, rgba(197, 155, 39, 0.30), transparent 62%),
+        radial-gradient(900px 700px at -8% 108%, rgba(23, 133, 104, 0.60), transparent 62%),
+        linear-gradient(135deg, var(--auth-green-deep) 0%, var(--auth-green-dark) 38%, var(--auth-green) 72%, #0b6b52 100%);
+}
+
+/* dotted grid, fading out towards the edges */
+.auth-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1.3px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 10%, transparent 72%);
+    mask-image: radial-gradient(ellipse at center, #000 10%, transparent 72%);
+}
+
+/* a faint light sweep from the top */
+.auth-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 38%);
+}
+
+.auth-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    animation: auth-drift 24s ease-in-out infinite alternate;
+}
+.auth-blob.b1 { width: 540px; height: 540px; background: #178568; opacity: 0.55; top: -160px; left: -120px; }
+.auth-blob.b2 { width: 480px; height: 480px; background: #C59B27; opacity: 0.26; bottom: -170px; right: -110px; animation-duration: 30s; }
+.auth-blob.b3 { width: 380px; height: 380px; background: #2FA37F; opacity: 0.28; top: 42%; left: 58%; animation-duration: 36s; }
+
+/* thin rings, like a radar / network */
+.auth-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.auth-ring.r1 { width: 640px; height: 640px; top: -260px; right: -220px; }
+.auth-ring.r2 { width: 900px; height: 900px; top: -400px; right: -360px; border-color: rgba(255, 255, 255, 0.06); }
+.auth-ring.r3 { width: 520px; height: 520px; bottom: -240px; left: -200px; }
+.auth-ring.r4 { width: 780px; height: 780px; bottom: -380px; left: -340px; border-color: rgba(255, 255, 255, 0.05); }
+
+@keyframes auth-drift {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to   { transform: translate3d(60px, 40px, 0) scale(1.12); }
+}
+
+/* ==========================================================================
+   Card
+   ========================================================================== */
+.auth-card {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    padding: 38px 36px 30px;
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 26px;
+    box-shadow:
+        0 40px 90px rgba(0, 0, 0, 0.38),
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    animation: auth-rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* a thin color line at the very top of the card */
+.auth-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 36px; right: 36px;
+    height: 4px;
+    border-radius: 0 0 6px 6px;
+    background: linear-gradient(90deg, var(--auth-accent), var(--auth-green), var(--auth-gold));
+}
+
+.auth-card.wide { max-width: 480px; }
+
+@keyframes auth-rise {
+    from { opacity: 0; transform: translateY(26px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.auth-brand {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.auth-logo {
+    width: 78px;
+    height: 78px;
+    padding: 10px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 10px 26px rgba(7, 82, 62, 0.22), 0 0 0 5px var(--auth-mint);
+=======
 .login-logo {
     max-height: 55px !important;
     height: 55px !important;
     width: auto;
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
     object-fit: contain;
-    display: inline-block;
+    margin-bottom: 18px;
 }
 
-.stat-icon {
-    width: 65px;
-    height: 65px;
+.auth-icon {
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--uj-gold-soft);
-    color: var(--uj-gold);
+    color: #fff;
+    font-size: 2rem;
+    background: linear-gradient(135deg, #D9B24A, var(--auth-gold));
+    box-shadow: 0 12px 28px rgba(197, 155, 39, 0.4), 0 0 0 5px var(--auth-gold-soft);
+    margin-bottom: 18px;
+}
+
+.auth-eyebrow {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--auth-accent);
+    background: var(--auth-mint);
+    padding: 5px 12px;
+    border-radius: 99px;
+    margin-bottom: 12px;
+}
+
+.auth-title {
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--auth-green-dark);
+    margin: 0 0 6px;
+}
+
+.auth-sub {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--auth-muted);
+    margin: 0;
 }
 
 /* ==========================================================================
-   Form Controls & Input Groups
+   Fields
    ========================================================================== */
-.login-card .form-control:focus,
-.first-login-card .form-control:focus {
-    border-color: var(--uj-green);
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 51, 0.15);
+.auth-card .form-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--auth-text);
+    margin-bottom: 6px;
 }
 
-.login-card .input-group-text,
-.first-login-card .input-group-text {
-    background-color: #f8f9fa;
-    color: #495057;
-    border-color: #ced4da;
+.auth-card .input-group {
+    flex-wrap: nowrap;
+    background: var(--auth-field);
+    border: 1.5px solid var(--auth-border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
+
+.auth-card .input-group:focus-within {
+    background: #fff;
+    border-color: var(--auth-accent);
+    box-shadow: 0 0 0 4px rgba(23, 133, 104, 0.15);
+}
+
+.auth-card .input-group .input-group-text,
+.auth-card .input-group .form-control,
+.auth-card .input-group .btn-toggle-password {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.auth-card .input-group .input-group-text {
+    color: var(--auth-accent);
+    padding-left: 16px;
+    padding-right: 4px;
+    font-size: 1.05rem;
+}
+
+.auth-card .input-group .form-control {
+    padding: 13px 12px;
+    font-size: 0.95rem;
+    color: var(--auth-text);
+}
+
+.auth-card .input-group .form-control::placeholder { color: #9AAAA3; }
 
 .btn-toggle-password {
-    border-color: #ced4da;
-    color: #6c757d;
-    background-color: #ffffff;
-    transition: all 0.2s ease;
+    color: var(--auth-muted);
+    padding: 0 16px;
+    transition: color 0.2s ease;
 }
-
 .btn-toggle-password:hover,
-.btn-toggle-password:focus {
-    background-color: #f0f4f1;
-    color: var(--uj-green);
-    border-color: var(--uj-green);
-}
+.btn-toggle-password:focus { color: var(--auth-green); }
 
 .password-hint {
-    font-size: 0.75rem;
-    color: #6c757d;
-    margin-top: 0.25rem;
     display: block;
+    font-size: 0.76rem;
+    color: var(--auth-muted);
+    margin-top: 6px;
 }
 
 .btn-forgot-password {
     background: none;
     border: none;
     padding: 0;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--uj-green);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--auth-accent);
     cursor: pointer;
-    text-decoration: none;
     transition: color 0.2s ease;
 }
-
-.btn-forgot-password:hover {
-    color: var(--uj-green-dark);
-    text-decoration: underline;
-}
+.btn-forgot-password:hover { color: var(--auth-green-dark); text-decoration: underline; }
 
 /* ==========================================================================
-   Demo Accounts Section
+   Buttons (also used by the "Reset Password" popup)
    ========================================================================== */
+<<<<<<< HEAD
+.btn-uj-primary {
+    display: inline-block;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    border: 0;
+=======
 .demo-box {
     background-color: #fbfcfb;
     border: 1px solid #e2e8e3;
@@ -324,16 +501,124 @@ html, body {
    ========================================================================== */
 .modal-content.modal-forgot-card {
     border: none;
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
     border-radius: 14px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--auth-green) 0%, var(--auth-accent) 100%);
+    box-shadow: 0 12px 26px rgba(7, 82, 62, 0.34);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 }
+.btn-uj-primary:hover,
+.btn-uj-primary:focus {
+    color: #fff;
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow: 0 16px 32px rgba(7, 82, 62, 0.42);
+}
+.btn-uj-primary:active { transform: translateY(0); }
 
-.modal-header.bg-uj-green {
-    background-color: var(--uj-green) !important;
+.auth-secure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 20px;
+    font-size: 0.76rem;
+    color: var(--auth-muted);
 }
+.auth-secure i { color: var(--auth-accent); }
+
+.auth-link {
+    color: var(--auth-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+.auth-link:hover { color: var(--auth-green); text-decoration: underline; }
 
 /* ==========================================================================
+   Messages
+   ========================================================================== */
+.auth-card .alert {
+    border: 0;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+.auth-card .alert-danger  { background: #FDECEC; color: #9B1C1C; }
+.auth-card .alert-success { background: #E6F5EC; color: #146C3A; }
+
+/* ==========================================================================
+   First login: password strength and match
+   ========================================================================== */
+.pw-meter {
+    height: 6px;
+    border-radius: 6px;
+    background: #E4ECE8;
+    margin-top: 10px;
+    overflow: hidden;
+}
+.pw-meter span {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 6px;
+    background: #DC2626;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+.pw-meter-text { font-size: 0.76rem; font-weight: 600; margin-top: 6px; color: var(--auth-muted); }
+.pw-match      { font-size: 0.76rem; font-weight: 600; margin-top: 6px; min-height: 1.1em; }
+.pw-match.ok   { color: #16A34A; }
+.pw-match.bad  { color: #DC2626; }
+
+/* ==========================================================================
+<<<<<<< HEAD
+   "Reset Password" popup
+   ========================================================================== */
+.modal-content.modal-forgot-card {
+    border: 0;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+}
+.modal-header.bg-uj-green {
+    background: linear-gradient(135deg, var(--auth-green), var(--auth-accent)) !important;
+    border: 0;
+    padding: 18px 24px;
+}
+.modal-header.bg-uj-green .modal-title { color: #fff !important; }
+.modal-header.bg-uj-green .btn-close { filter: invert(1) grayscale(100%) brightness(200%); opacity: 0.9; }
+.modal-forgot-card .form-control {
+    border: 1.5px solid var(--auth-border);
+    border-radius: 12px;
+    background: var(--auth-field);
+    padding: 12px 14px;
+}
+.modal-forgot-card .form-control:focus {
+    background: #fff;
+    border-color: var(--auth-accent);
+    box-shadow: 0 0 0 4px rgba(23, 133, 104, 0.15);
+}
+.modal-forgot-card .modal-footer { background: #F7FAF8 !important; border: 0; padding: 14px 24px 20px; }
+.modal-forgot-card .btn-secondary { border-radius: 12px; background: #fff; color: var(--auth-muted); border: 1.5px solid var(--auth-border); }
+
+/* ==========================================================================
+   Footer on these pages: dark glass over the background
+   ========================================================================== */
+body.uims-auth .uims-footer {
+    position: relative;
+    z-index: 2;
+    background: rgba(2, 28, 22, 0.6);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(226, 240, 233, 0.82);
+}
+body.uims-auth .uims-footer a { color: rgba(226, 240, 233, 0.9); text-decoration: none; }
+body.uims-auth .uims-footer a:hover { color: #fff; text-decoration: underline; }
+
+/* ==========================================================================
+   Small screens, and people who prefer no motion
+=======
    Single-Line Institutional Footer
    ========================================================================== */
 .footer {
@@ -357,6 +642,7 @@ html, body {
 
 /* ==========================================================================
    Responsive Adaptations
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
    ========================================================================== */
 @media (max-width: 750px) {
     .topbar {
@@ -398,9 +684,22 @@ html, body {
 }
 
 @media (max-width: 576px) {
+<<<<<<< HEAD
+    .auth-wrap { padding: 28px 14px; align-items: flex-start; }
+    .auth-card { padding: 30px 22px 24px; border-radius: 22px; }
+    .auth-card::before { left: 22px; right: 22px; }
+    .auth-title { font-size: 1.45rem; }
+    .auth-ring.r2, .auth-ring.r4 { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .auth-blob, .auth-card { animation: none; }
+    .btn-uj-primary, .auth-card .input-group, .pw-meter span { transition: none; }
+=======
     .login-card,
     .first-login-card {
         margin: 15px auto;
         padding: 1.25rem 1.5rem !important;
     }
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
 }

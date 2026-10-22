@@ -249,6 +249,22 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="MainContent" runat="server">
+<<<<<<< HEAD
+    <%-- Full-screen background (see login.css). The navigation bar is hidden on this page by Shared/Public.Master. --%>
+    <div class="auth-bg" aria-hidden="true">
+        <span class="auth-blob b1"></span><span class="auth-blob b2"></span><span class="auth-blob b3"></span>
+        <span class="auth-ring r1"></span><span class="auth-ring r2"></span><span class="auth-ring r3"></span><span class="auth-ring r4"></span>
+    </div>
+
+    <div class="auth-wrap">
+        <div class="auth-card">
+            <!-- Brand & Title -->
+            <div class="auth-brand">
+                <img src="<%= ResolveUrl("~/login/images/uj-logo.png") %>" alt="University of Jordan Logo" class="auth-logo" />
+                <div><span class="auth-eyebrow">Field Training System</span></div>
+                <h1 class="auth-title">Welcome back</h1>
+                <p class="auth-sub">Sign in to the University Internship Management System.<br />King Abdullah II School of Information Technology (KASIT)</p>
+=======
     <!-- Topbar Navigation pulled from Home Page (without Login button) -->
     <header class="topbar">
         <div class="container nav">
@@ -279,6 +295,7 @@
                 <img src="<%= ResolveUrl("~/login/images/uj-logo.png") %>" alt="University of Jordan Logo" class="login-logo mb-2" height="55" style="max-height: 55px; width: auto;" />
                 <h5 class="fw-bold text-uj-green mb-1">Unified Login Portal</h5>
                 <p class="text-muted small mb-0" style="font-size: 0.78rem;">King Abdullah II School of Information Technology (KASIT)</p>
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
             </div>
 
             <!-- Error Notification Panel -->
@@ -294,8 +311,13 @@
             </asp:Panel>
 
             <!-- Email Address Field -->
+<<<<<<< HEAD
+            <div class="mb-3">
+                <label class="form-label" for="txtEmail">University email address</label>
+=======
             <div class="mb-2">
                 <label class="form-label fw-semibold small mb-1">University Email Address <span class="text-danger">*</span></label>
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
                 <div class="input-group">
                     <span class="input-group-text py-1 px-2"><i class="bi bi-envelope"></i></span>
                     <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="form-control" placeholder="name@ju.edu.jo" required="required" ClientIDMode="Static" />
@@ -305,8 +327,13 @@
             <!-- Password Field with Show/Hide Toggle -->
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
+<<<<<<< HEAD
+                    <label class="form-label mb-0" for="txtPassword">Password</label>
+                    <button type="button" class="btn-forgot-password" id="btnOpenForgotModal">Forgot password?</button>
+=======
                     <label class="form-label fw-semibold small mb-0">Password <span class="text-danger">*</span></label>
                     <button type="button" class="btn-forgot-password" id="btnOpenForgotModal">Forgot Password?</button>
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
                 </div>
                 <div class="input-group">
                     <span class="input-group-text py-1 px-2"><i class="bi bi-lock"></i></span>
@@ -318,9 +345,17 @@
             </div>
 
             <!-- Submit Button -->
+<<<<<<< HEAD
+            <div class="d-grid mt-4">
+                <asp:Button ID="btnLogin" runat="server" Text="Sign In" CssClass="btn btn-uj-primary btn-lg" OnClick="btnLogin_Click" />
+            </div>
+
+            <div class="auth-secure"><i class="bi bi-shield-check"></i> Secure sign-in with Firebase Authentication</div>
+=======
             <div class="d-grid gap-2 mt-2">
                 <asp:Button ID="btnLogin" runat="server" Text="Sign In" CssClass="btn btn-uj-primary" OnClick="btnLogin_Click" />
             </div>
+>>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
         </div>
     </div>
 
