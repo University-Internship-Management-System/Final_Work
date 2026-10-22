@@ -1,0 +1,19 @@
+--- a/UniversityInternshipManagmentSystem/UniversityInternshipManagmentSystem/UniversityInternshipManagmentSystem.csproj
++++ b/UniversityInternshipManagmentSystem/UniversityInternshipManagmentSystem/UniversityInternshipManagmentSystem.csproj
+@@ -194,6 +194,16 @@
+     <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
+     <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
+     <Content Include="Company\MyTrainees\MyTrainees.aspx" />
++    <Compile Include="Company\MyTrainees\MyTrainees.aspx.cs">
++      <DependentUpon>MyTrainees.aspx</DependentUpon>
++      <SubType>ASPXCodeBehind</SubType>
++    </Compile>
++    <Compile Include="Company\MyTrainees\MyTrainees.aspx.designer.cs">
++      <DependentUpon>MyTrainees.aspx</DependentUpon>
++    </Compile>
++    <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
++    <Content Include="Company\MyTrainees\MyTrainees.css" />
++    <Content Include="Company\MyTrainees\MyTrainees.js" />
+     <Content Include="Company\ManageTasks\ManageTasks.aspx" />
+     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
+     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />

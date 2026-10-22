@@ -1,0 +1,720 @@
+﻿
+/* My Progress - Page Styles */
+
+.my-progress-page {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+    /* Page Header */
+
+    .my-progress-page .progress-page-header {
+        margin-bottom: 30px;
+    }
+
+        .my-progress-page .progress-page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--uims-primary, #07523E);
+            margin-bottom: 8px;
+        }
+
+        .my-progress-page .progress-page-header p {
+            font-size: 15px;
+            color: var(--uims-muted, #65756E);
+        }
+
+    /* Statistics Cards */
+
+    .my-progress-page .progress-stat-card {
+        background: #FFFFFF;
+        border: 1px solid var(--uims-border, #E2E8E5);
+        border-radius: 16px;
+        padding: 25px;
+        height: 100%;
+        box-shadow: 0 4px 18px rgba(7, 82, 62, 0.06);
+    }
+
+    .my-progress-page .progress-stat-label {
+        font-size: 14px;
+        color: var(--uims-muted, #65756E);
+        margin-bottom: 12px;
+    }
+
+    .my-progress-page .progress-stat-value {
+        font-size: 36px;
+        font-weight: 700;
+        color: var(--uims-primary, #07523E);
+        margin-bottom: 8px;
+    }
+
+    .my-progress-page .progress-stat-caption {
+        font-size: 13px;
+        color: var(--uims-muted, #65756E);
+    }
+
+    /* Internship Overview */
+
+    .my-progress-page .progress-info-box {
+        background: var(--uims-mint, #EAF4EF);
+        border: 1px solid #D4E7DB;
+        border-radius: 16px;
+        padding: 26px 30px;
+        margin: 32px 0;
+    }
+
+        .my-progress-page .progress-info-box h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--uims-primary, #07523E);
+            margin-bottom: 12px;
+        }
+
+        .my-progress-page .progress-info-box p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--uims-text, #183B31);
+            margin-bottom: 0;
+        }
+
+    /* Weekly Section */
+
+    .my-progress-page .progress-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 35px 0 22px;
+    }
+
+        .my-progress-page .progress-section-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .my-progress-page .progress-section-header span {
+            background: var(--uims-mint, #EAF4EF);
+            color: var(--uims-primary, #07523E);
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+    /* Week Cards */
+
+    .my-progress-page .progress-week-card {
+        background: #FFFFFF;
+        border: 1px solid var(--uims-border, #E2E8E5);
+        border-radius: 16px;
+        padding: 25px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .my-progress-page .progress-week-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 28px rgba(7, 82, 62, 0.08);
+        }
+
+
+/* Week Header */
+
+.my-progress-page .progress-week-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+    .my-progress-page .progress-week-header h3 {
+        color: var(--uims-primary, #07523E);
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+.my-progress-page .progress-hours-badge {
+    background: var(--uims-mint, #EAF4EF);
+    color: var(--uims-primary, #07523E);
+    padding: 7px 13px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Task Count */
+
+.my-progress-page .progress-task-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .my-progress-page .progress-task-count strong {
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--uims-primary, #07523E);
+    }
+
+    .my-progress-page .progress-task-count span {
+        font-size: 14px;
+        color: var(--uims-muted, #65756E);
+    }
+
+/* Divider */
+
+.my-progress-page .progress-divider {
+    border-top: 1px solid var(--uims-border, #E2E8E5);
+    margin: 20px 0;
+}
+
+/* Task Description */
+
+.my-progress-page .progress-week-description {
+    color: var(--uims-muted, #65756E);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    min-height: 48px;
+}
+
+/* ===============================
+   VIEW DETAILS BUTTON
+   =============================== */
+
+.my-progress-page .progress-view-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: auto;
+    padding: 12px 18px;
+    background: var(--uims-white, #FFFFFF);
+    border: 1px solid var(--uims-primary, #07523E);
+    border-radius: 10px;
+    color: var(--uims-primary, #07523E);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+    .my-progress-page .progress-view-btn:hover {
+        background: var(--uims-primary, #07523E);
+        color: #FFFFFF;
+        border-color: var(--uims-primary, #07523E);
+        text-decoration: none;
+    }
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 991px) {
+    .my-progress-page .progress-stat-card,
+    .my-progress-page .progress-week-card {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 767px) {
+    .my-progress-page .progress-page-header h1 {
+        font-size: 27px;
+    }
+
+    .my-progress-page .progress-stat-value {
+        font-size: 30px;
+    }
+
+    .my-progress-page .progress-info-box {
+        padding: 20px;
+    }
+
+    .my-progress-page .progress-section-header {
+        flex-wrap: wrap;
+    }
+
+        .my-progress-page .progress-section-header h2 {
+            font-size: 21px;
+        }
+}
+
+/* ====================================
+   WEEKLY SUBMISSION PROGRESS
+   ==================================== */
+
+.my-progress-page .weekly-progress-box {
+    margin-bottom: 18px;
+}
+
+.my-progress-page .weekly-progress-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+    .my-progress-page .weekly-progress-heading span {
+        color: var(--uims-text, #183B31);
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .my-progress-page .weekly-progress-heading strong {
+        color: var(--uims-primary, #07523E);
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+.my-progress-page .weekly-progress-track {
+    width: 100%;
+    height: 10px;
+    background: var(--uims-mint, #EAF4EF);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.my-progress-page .weekly-progress-fill {
+    height: 100%;
+    background: var(--uims-accent, #178568);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+.my-progress-page .weekly-progress-caption {
+    margin-top: 9px;
+    margin-bottom: 0;
+    font-size: 12px;
+    color: var(--uims-muted, #65756E);
+}
+
+/* Training journey */
+
+.mp-journey {
+    margin-bottom: 24px;
+    padding: 30px;
+    border-radius: 18px;
+    color: var(--uims-white);
+    background: linear-gradient( 115deg, var(--uims-dark), var(--uims-primary) );
+}
+
+.mp-journey-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.mp-eyebrow {
+    margin: 0 0 10px;
+    color: var(--uims-mint);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+}
+
+.mp-journey h2 {
+    margin: 0;
+    color: var(--uims-white);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.mp-state {
+    flex: none;
+    padding: 7px 12px;
+    border: 1px solid var(--uims-accent);
+    border-radius: 30px;
+    color: var(--uims-mint);
+    font-size: 12px;
+}
+
+.mp-timeline-scroll {
+    overflow-x: auto;
+    margin-top: 34px;
+    padding: 6px 4px 20px;
+    scrollbar-width: thin;
+}
+
+.mp-timeline {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    min-width: 600px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .mp-timeline::before {
+        position: absolute;
+        z-index: -1;
+        top: 21px;
+        right: 8.333%;
+        left: 8.333%;
+        height: 2px;
+        background: var(--uims-accent);
+        content: "";
+    }
+
+.mp-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: var(--uims-mint);
+}
+
+.mp-week-node {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 14px;
+    border: 1px solid var(--uims-accent);
+    border-radius: 50%;
+    background: var(--uims-dark);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.mp-step strong {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.mp-step small {
+    margin-top: 5px;
+    font-size: 11px;
+    opacity: .8;
+}
+
+.mp-step-done .mp-week-node {
+    color: var(--uims-primary);
+    background: var(--uims-mint);
+    border-color: var(--uims-mint);
+}
+
+.mp-step-current .mp-week-node {
+    color: var(--uims-primary);
+    background: var(--uims-white);
+    border-color: var(--uims-white);
+    outline: 4px solid var(--uims-accent);
+}
+
+.mp-step-current strong,
+.mp-step-current small {
+    color: var(--uims-white);
+    font-weight: 600;
+    opacity: 1;
+}
+
+.mp-journey-note {
+    margin: 10px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--uims-accent);
+    color: var(--uims-mint);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* Passed state: trophy on the right, no week timeline */
+
+.mp-success-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 8px 8px 8px 0;
+}
+
+.mp-success-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+    .mp-success-copy h2 {
+        margin-bottom: 14px;
+        font-size: clamp(26px, 3vw, 34px);
+        font-weight: 700;
+    }
+
+    .mp-success-copy > p:last-child {
+        max-width: 540px;
+        margin: 0;
+        color: var(--uims-mint);
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+.mp-trophy {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 135px;
+    height: 135px;
+    border: 1px solid var(--uims-accent);
+    border-radius: 50%;
+    background: var(--uims-dark);
+}
+
+    .mp-trophy > svg {
+        width: 100px;
+        height: 100px;
+    }
+
+.mp-trophy-cup {
+    fill: var(--uims-mint);
+}
+
+.mp-trophy-line {
+    fill: none;
+    stroke: var(--uims-mint);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mp-trophy-star {
+    fill: var(--uims-accent);
+}
+
+/* Certificate file */
+
+.mp-certificate-card {
+    overflow: hidden;
+    margin-bottom: 30px;
+    border: 1px solid var(--uims-border);
+    border-radius: 16px;
+    background: var(--uims-white);
+}
+
+.mp-certificate-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 24px;
+    background: var(--uims-mint);
+}
+
+.mp-certificate-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--uims-accent);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.mp-certificate-heading h3 {
+    margin: 0 0 8px;
+    color: var(--uims-primary);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.mp-certificate-heading p {
+    margin: 0;
+    color: var(--uims-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.mp-passed-badge {
+    padding: 6px 12px;
+    border: 1px solid var(--uims-accent);
+    border-radius: 30px;
+    color: var(--uims-primary);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mp-certificate-file {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px;
+}
+
+.mp-pdf-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 54px;
+    height: 65px;
+    border: 1px solid var(--uims-border);
+    border-radius: 8px;
+    color: var(--uims-primary);
+    background: var(--uims-bg);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.mp-file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+    .mp-file-info strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--uims-primary);
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .mp-file-info span {
+        color: var(--uims-muted);
+        font-size: 12px;
+    }
+
+.mp-download-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 11px 18px;
+    white-space: nowrap;
+}
+
+    .mp-download-button svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+.mp-certificate-waiting {
+    margin: 0;
+    padding: 24px;
+    color: var(--uims-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+@media (max-width: 767px) {
+    .mp-journey {
+        padding: 24px 20px;
+    }
+
+    .mp-journey-header {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .mp-success-header {
+        gap: 18px;
+    }
+
+    .mp-success-copy h2 {
+        font-size: 26px;
+    }
+
+    .mp-success-copy > p:last-child {
+        font-size: 14px;
+    }
+
+    .mp-trophy {
+        width: 80px;
+        height: 80px;
+    }
+
+        .mp-trophy > svg {
+            width: 65px;
+            height: 65px;
+        }
+
+    .mp-certificate-heading,
+    .mp-certificate-file {
+        padding: 20px;
+    }
+
+    .mp-certificate-file {
+        flex-wrap: wrap;
+    }
+
+    .mp-file-info {
+        flex-basis: calc(100% - 80px);
+    }
+
+    .mp-download-button {
+        width: 100%;
+    }
+}
+
+.mp-certificate-thumbnail {
+    width: 108px;
+    height: 78px;
+    flex: none;
+    object-fit: contain;
+    border: 1px solid var(--uims-border);
+    border-radius: 6px;
+    background: var(--uims-bg);
+}
+
+.mp-certificate-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--uims-primary);
+    box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 5px var(--uims-accent);
+}
+
+.mp-certificate-preview > span {
+    font-family: Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.mp-certificate-preview > span span {
+    color: var(--uims-accent);
+}
+
+.mp-certificate-preview strong {
+    font-family: Georgia, serif;
+    font-size: 8px;
+}
+
+.mp-certificate-preview small {
+    font-size: 5px;
+    letter-spacing: 1px;
+}
+
+.mp-certificate-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: none;
+}
+
+    .mp-certificate-actions .btn {
+        white-space: nowrap;
+    }
+
+@media (max-width: 767px) {
+    .mp-certificate-thumbnail {
+        width: 80px;
+        height: 60px;
+    }
+
+    .mp-certificate-actions {
+        width: 100%;
+    }
+
+        .mp-certificate-actions .btn {
+            flex: 1;
+            width: auto;
+        }
+}

@@ -1,0 +1,56 @@
+﻿/* Profile and local sign-in content only; uses Shared/uims.css variables. */
+.student-dashboard .sd-profile-banner { display: flex; align-items: center; gap: 22px; padding: 28px; border-radius: 12px; background: var(--soft); margin-bottom: 24px; }
+.student-dashboard .sd-profile-banner h2 { font-size: 23px; margin-bottom: 6px; }
+.student-dashboard .sd-profile-avatar { display: grid; place-items: center; flex-shrink: 0; width: 76px; height: 76px; background: var(--deep); color: var(--paper); border-radius: 22px; font-size: 30px; }
+.student-dashboard .sd-details { margin: 0; overflow-wrap: anywhere; }
+.student-dashboard .sd-details dt { font-size: 13px; color: var(--deep); font-weight: 500; margin-bottom: 6px; }
+.student-dashboard .sd-details dd { font-size: 14px; font-weight: 600; border-bottom: 1px solid var(--line); padding-bottom: 17px; margin-bottom: 17px; }
+.student-dashboard .sd-details dd:last-child { border-bottom: 0; margin-bottom: 0; }
+.student-dashboard .form-label { font-size: 12px; font-weight: 650; }
+.student-dashboard .form-control { max-width: none; background: var(--paper); color: var(--ink); border: 1px solid var(--line); font-size: 14px; padding: 11px 13px; }
+.student-dashboard .form-control[readonly] { background: var(--soft); color: var(--deep); }
+.student-dashboard .form-control:focus { border-color: var(--green); outline: 2px solid var(--green); outline-offset: 2px; box-shadow: none; }
+.student-dashboard textarea.form-control { resize: vertical; }
+.student-dashboard .sd-save-button { max-width: none; padding: 12px 20px; border: 1px solid var(--deep); border-radius: 8px; background: var(--deep); color: var(--paper); font-size: 13px; font-weight: 600; }
+.student-dashboard .sd-save-button:hover { background: var(--forest); }
+.student-dashboard .sd-save-button:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+@media (max-width: 575.98px) {
+    .student-dashboard .sd-profile-banner { padding: 22px 16px; gap: 14px; }
+    .student-dashboard .sd-profile-avatar { width: 54px; height: 54px; border-radius: 16px; font-size: 24px; }
+    .student-dashboard .sd-profile-banner h2 { font-size: 20px; }
+}
+.student-dashboard .sd-save-message:not(:empty) { display: block; margin-bottom: 20px; padding: 14px; border: 1px solid var(--uims-border); border-radius: 8px; background: var(--uims-mint); color: var(--uims-primary); }
+.student-dashboard .sd-save-error:not(:empty) { border-color: var(--uims-danger); }
+.student-dashboard .sd-save-success:not(:empty) { border-color: var(--uims-success); }
+
+/* Page-specific sections; the shared shell and navigation remain unchanged. */
+.student-profile .sd-profile-identity { flex: 1; min-width: 0; }
+.student-profile .sd-avatar-shell { position: relative; flex: 0 0 76px; width: 76px; height: 76px; }
+.student-profile .sd-profile-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; background: var(--soft); }
+.student-profile .sd-profile-photo[hidden] { display: none; }
+.student-profile .sd-profile-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.student-profile .sd-save-button:disabled { opacity: .55; cursor: not-allowed; }
+.student-profile .sd-field-error { display: block; color: var(--uims-danger); font-size: 13px; line-height: 1.6; margin-top: 5px; }
+.student-profile .sd-field-error:empty { display: none; }
+.student-profile .form-control[aria-invalid="true"] { border-color: var(--uims-danger); }
+.student-profile .sd-training-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 24px; margin: 0 0 20px; }
+.student-profile .sd-training-grid dt { color: var(--uims-muted); font-size: 13px; font-weight: 500; }
+.student-profile .sd-training-grid dd { margin: 5px 0 0; font-size: 14px; font-weight: 600; }
+.student-profile .sd-panel-head h2 { font-size: clamp(19px, 2vw, 22px); }
+@media (max-width: 767.98px) {
+    .student-profile .sd-training-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 575.98px) {
+    .student-profile .sd-profile-banner { flex-wrap: wrap; }
+    .student-profile .sd-avatar-shell { flex-basis: 54px; width: 54px; height: 54px; }
+    .student-profile .sd-profile-photo { border-radius: 16px; }
+    .student-profile .sd-training-grid { grid-template-columns: 1fr; }
+    .student-profile .sd-profile-actions > input { flex: 1 1 45%; }
+}
+.student-dashboard .sd-security-body { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.student-dashboard .sd-security-body p { color: var(--uims-muted); }
+.student-dashboard .sd-security-body .sd-save-message:not(:empty) { margin: 12px 0 0; }
+.student-dashboard .sd-security-panel .bi { color: var(--uims-primary); margin-right: 8px; }
+.student-dashboard #resetPasswordModal .modal-content { border-radius: 12px; border: 1px solid var(--uims-border); }
+.student-dashboard #resetPasswordModal .modal-title { color: var(--uims-dark); font-weight: 700; }
+@media (max-width: 575.98px) { .student-dashboard .sd-security-body .btn { width: 100%; } }

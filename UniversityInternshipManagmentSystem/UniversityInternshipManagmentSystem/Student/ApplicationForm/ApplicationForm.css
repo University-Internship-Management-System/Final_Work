@@ -1,0 +1,40 @@
+﻿/* Application Form Page Styles */
+
+.app-form-card {
+    border: 1px solid var(--uims-border, #e5e7eb);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.form-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--uims-primary, #07523e);
+}
+
+/* Modal Custom Styling */
+.modal-icon {
+    width: 64px;
+    height: 64px;
+    background-color: var(--uims-mint, #e6f4f0);
+    color: var(--uims-primary, #07523e);
+    font-size: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Highlight ReadOnly inputs */
+.form-control[readonly] {
+    background-color: #f8fafc;
+    color: #64748b;
+    cursor: not-allowed;
+}

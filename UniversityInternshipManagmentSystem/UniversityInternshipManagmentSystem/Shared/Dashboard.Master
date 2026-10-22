@@ -4,13 +4,24 @@
 
 <%-- Layout for the ROLE pages (Student, Company, Academic, Coordinator): sidebar on the left + footer --%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UIMS</title>
+    <title><%: Page.Title %> | Field Training System - UIMS</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <!-- UIMS Unified Design System -->
     <link href="~/Shared/uims.css" rel="stylesheet" />
+
     <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 <body>
@@ -27,7 +38,9 @@
                 <div class="uims-topbar">
                     <button type="button" class="uims-menu-btn" aria-label="Open menu"
                         onclick="document.body.classList.add('uims-side-open')">&#9776;</button>
-                    <span>UIMS</span>
+                    <a class="uims-home-brand" href="<%= ResolveUrl("~/index.aspx") %>" aria-label="University of Jordan home">
+                        <img src="<%= ResolveUrl("~/Assets/PublicHome/university-logo.png") %>" width="28" height="34" alt="University of Jordan" /><span>UIMS</span>
+                    </a>
                 </div>
 
                 <main class="uims-content">

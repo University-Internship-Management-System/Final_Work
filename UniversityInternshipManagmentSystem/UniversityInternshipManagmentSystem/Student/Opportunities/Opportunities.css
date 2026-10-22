@@ -1,0 +1,88 @@
+﻿/* Student / Explore Opportunities page.
+   Uses the colors from Shared/uims.css (var(--uims-...)), so change colors there, not here. */
+
+.uims-page-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+
+/* تحسين مظهر التخصصات */
+.opp-card .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 8px;
+}
+
+.opp-card {
+    transition: box-shadow .15s, transform .15s;
+}
+
+    .opp-card:hover {
+        box-shadow: 0 8px 22px rgba(7, 82, 62, .10);
+        transform: translateY(-2px);
+    }
+
+.opp-company {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--uims-accent);
+}
+
+.opp-meta {
+    font-size: 13px;
+    color: var(--uims-muted);
+}
+
+.opp-desc {
+    color: var(--uims-text);
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.opp-tag {
+    display: inline-block;
+    background: var(--uims-mint);
+    color: var(--uims-primary);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 99px;
+    padding: .3em .8em;
+}
+
+.opp-empty {
+    text-align: center;
+    padding: 56px 16px;
+    color: var(--uims-muted);
+}
+
+    .opp-empty .icon {
+        font-size: 40px;
+    }
+
+/* Cards hidden by the live filter (opportunities.js) */
+.opp-hidden {
+    display: none !important;
+}
+
+/* Message shown by opportunities.js when the live filter matches nothing */
+.opp-nomatch {
+    text-align: center;
+    padding: 40px 16px;
+    color: var(--uims-muted);
+}
+
+/* Small screens: stack the page title and the counter */
+@media (max-width: 575px) {
+    .uims-page-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

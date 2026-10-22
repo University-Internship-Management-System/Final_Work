@@ -1,9 +1,10 @@
 <%@ Control Language="C#" %>
+<%@ Import Namespace="UniversityInternshipManagmentSystem.Config" %>
 
 <script runat="server">
     // =====================================================================
-    //  EDIT THE MENUS HERE.   Format:  "Link text|~/Folder/Page.aspx"
-    //  The role comes from Session["role"]  ("student", "company", "academic", "coordinator")
+    //  Role Menus (100% English):  "Link text|~/Folder/Page.aspx"
+    //  Role retrieved from Session["role"] ("student", "company", "academic", "coordinator")
     // =====================================================================
     string[] GetMenu(string role)
     {
@@ -11,41 +12,42 @@
         {
             case "student":
                 return new[] {
-                    "Dashboard|~/Student/Dashboard.aspx",
-                    "My Profile|~/Student/Profile.aspx",
-                    "Explore Opportunities|~/Student/Opportunities.aspx",
-                    "My Applications|~/Student/Applications.aspx",
-                    "My Tasks|~/Student/Tasks.aspx",
-                    "My Progress|~/Student/Progress.aspx"
+                    "Dashboard|~/Student/StudentDashboardPage/Dashboard.aspx",
+                    "My Profile|~/Student/StudentProfilePage/Profile.aspx",
+                    "Browse Opportunities|~/Student/Opportunities/Opportunities.aspx",
+                    "My Applications|~/Student/MyApplications/MyApplications.aspx",
+                    "My Tasks|~/Student/StudentTasksPage/StudentTasksForm.aspx",
+                    "My Progress|~/Student/MyProgress/MyProgress.aspx"
                 };
             case "company":
                 return new[] {
-                    "Dashboard|~/Company/Dashboard.aspx",
-                    "Manage Opportunities|~/Company/Opportunities.aspx",
-                    "Applications|~/Company/Applications.aspx",
-                    "My Trainees|~/Company/Trainees.aspx",
-                    "Tasks|~/Company/Tasks.aspx",
-                    "Final Evaluation|~/Company/FinalEvaluation.aspx",
-                    "Account|~/Company/Account.aspx"
+                    "Dashboard|~/Company/CompanyDashboard/Dashboard.aspx",
+                    "Manage Opportunities|~/Company/ManageOpportunities/ManageOpportunities.aspx",
+                    "Applications|~/Company/ApplicationsReview/ApplicationsReview.aspx",
+                    "My Trainees|~/Company/MyTrainees/MyTrainees.aspx",
+                    "Tasks|~/Company/ManageTasks/ManageTasks.aspx",
+                    "Final Evaluation|~/Company/FinalEvaluation/FinalEvaluation.aspx",
+                    "Account|~/Company/SupervisorAccount/SupervisorAccount.aspx"
                 };
             case "academic":
                 return new[] {
                     "Dashboard|~/Academic/Dashboard.aspx",
-                    "Student Progress|~/Academic/Progress.aspx",
-                    "Final Evaluation|~/Academic/FinalEvaluation.aspx",
-                    "Account|~/Academic/Account.aspx"
+                    "Student Progress|~/Academic/StudentProgress/StudentProgress.aspx",
+                    "Final Evaluation|~/Academic/FinalEvaluation/FinalEvaluation.aspx",
+                    "Account|~/Academic/SupervisorAccount/SupervisorAccount.aspx"
                 };
             case "coordinator":
+            case "admin":
                 return new[] {
-                    "Dashboard|~/Coordinator/Dashboard.aspx",
-                    "Students|~/Coordinator/Students.aspx",
-                    "Companies|~/Coordinator/Companies.aspx",
-                    "Academic Supervisors|~/Coordinator/AcademicSupervisors.aspx",
-                    "Assign Supervisors|~/Coordinator/Assign.aspx",
-                    "Monitor Progress|~/Coordinator/Monitor.aspx",
-                    "Completion Review|~/Coordinator/FinalCompletionReview.aspx",
-                    "Contact Messages|~/Coordinator/Messages.aspx",
-                    "Account|~/Coordinator/Account.aspx"
+                    "Dashboard|~/Coordinator/CoordinatorDashbord/CoordinatorDashbord.aspx",
+                    "Students|~/Coordinator/ManageStudents/ManageStudents.aspx",
+                    "Companies|~/Coordinator/ManageCompanySupervisors/ManageCompanySupervisors.aspx",
+                    "Academic Supervisors|~/Coordinator/ManageAcademicSupervisors/ManageAcademicSupervisors.aspx",
+                    "Assign Supervisors|~/Coordinator/AssignAcademicSupervisors/AssignAcademicSupervisors.aspx",
+                    "Monitor Progress|~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx",
+                    "Completion Review|~/Coordinator/FinalCompletionReview/FinalCompletionReview.aspx",
+                    "Contact Messages|~/Coordinator/ContactMessages/ContactMessages.aspx",
+                    "Account|~/Coordinator/CoordinatorAccount/CoordinatorAccount.aspx"
                 };
             default:
                 return new string[0];
@@ -59,7 +61,8 @@
             case "student": return "Student";
             case "company": return "Company Supervisor";
             case "academic": return "Academic Supervisor";
-            case "coordinator": return "Coordinator";
+            case "coordinator":
+            case "admin": return "Coordinator";
             default: return "Guest";
         }
     }
@@ -67,13 +70,20 @@
     protected void Page_Load(object sender, EventArgs e)
     {
         string role = ((Session["role"] as string) ?? "").ToLower();
-        string currentPage = Request.AppRelativeCurrentExecutionFilePath;
+        string currentPage = Request.AppRelativeCurrentExecutionFilePath ?? "";
 
         var html = new System.Text.StringBuilder();
         foreach (string item in GetMenu(role))
         {
+            // Active on the exact page, on any page inside the same page folder
+            // (so "My Tasks" stays highlighted on the week pages too),
+            // or on any Dashboard page for the Dashboard link.
             string[] parts = item.Split('|');
-            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase);
+            string folder = parts[1].Substring(0, parts[1].LastIndexOf('/'));
+            bool active = currentPage.Equals(parts[1], StringComparison.OrdinalIgnoreCase)
+                          || (folder.Split('/').Length > 2 && currentPage.StartsWith(folder + "/", StringComparison.OrdinalIgnoreCase))
+                          || (parts[1].IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0
+                              && currentPage.IndexOf("Dashboard", StringComparison.OrdinalIgnoreCase) >= 0);
             html.Append("<a class=\"uims-side-link" + (active ? " active" : "") + "\" href=\"" + ResolveUrl(parts[1]) + "\">"
                         + Server.HtmlEncode(parts[0]) + "</a>");
         }
@@ -85,13 +95,14 @@
 
     protected void btnLogout_Click(object sender, EventArgs e)
     {
-        Session.Clear();
-        Response.Redirect("~/Default.aspx");
+        AuthHelper.SignOut();
+        Response.Redirect("~/index.aspx", false);
+        Context.ApplicationInstance.CompleteRequest();
     }
 </script>
 
-<a class="uims-side-brand" runat="server" href="~/Default.aspx">
-    <span class="uims-logo">UJ</span>
+<a class="uims-side-brand" runat="server" href="~/index.aspx">
+    <img class="uims-brand-image" runat="server" src="~/Assets/PublicHome/university-logo.png" width="42" height="50" alt="University of Jordan" />
     <strong>UIMS</strong>
 </a>
 <p class="uims-side-role"><asp:Literal ID="litRole" runat="server" /></p>
@@ -102,5 +113,5 @@
 
 <div class="uims-side-user">
     <div class="name"><asp:Literal ID="litName" runat="server" /></div>
-    <asp:LinkButton ID="btnLogout" runat="server" CssClass="uims-side-logout" CausesValidation="false" OnClick="btnLogout_Click">Log out</asp:LinkButton>
+    <asp:LinkButton ID="btnLogout" runat="server" CssClass="uims-side-logout" CausesValidation="false" OnClick="btnLogout_Click">Sign Out</asp:LinkButton>
 </div>

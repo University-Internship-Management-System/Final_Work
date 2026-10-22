@@ -1,0 +1,194 @@
+/* My Tasks page. Colors come from Shared/uims.css (the --uims-* variables). */
+
+.st-page { max-width: 1100px; }
+.st-header { margin-bottom: 24px; }
+
+/* ---------- Summary cards ---------- */
+.st-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+.st-stat {
+    background: var(--uims-white);
+    border: 1px solid var(--uims-border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--stat-color, var(--uims-accent));
+}
+.st-stat-number { font-size: 28px; font-weight: 700; line-height: 1.1; color: var(--uims-text); }
+.st-stat-label { font-size: 13px; font-weight: 500; color: var(--uims-muted); margin-top: 4px; }
+
+/* ---------- Toolbar ---------- */
+.st-toolbar {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    align-items: center; justify-content: space-between;
+    margin-bottom: 18px;
+}
+.st-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.st-chip {
+    border: 1px solid var(--uims-border);
+    background: var(--uims-white);
+    color: var(--uims-text);
+    border-radius: 99px;
+    padding: 6px 14px;
+    font-size: 13px; font-weight: 500;
+}
+.st-chip:hover { border-color: var(--uims-accent); }
+.st-chip.active { background: var(--uims-primary); border-color: var(--uims-primary); color: var(--uims-white); }
+.st-search { max-width: 260px; }
+
+/* ---------- Task cards ---------- */
+.st-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+.st-card {
+    display: flex; flex-direction: column; gap: 10px;
+    background: var(--uims-white);
+    border: 1px solid var(--uims-border);
+    border-radius: 14px;
+    padding: 18px;
+    transition: box-shadow .15s, border-color .15s;
+}
+.st-card:hover { border-color: var(--uims-accent); box-shadow: 0 6px 20px rgba(7, 82, 62, .08); }
+.st-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.st-week {
+    font-size: 12px; font-weight: 600;
+    color: var(--uims-primary); background: var(--uims-mint);
+    border-radius: 99px; padding: 3px 10px;
+}
+.st-card-title { font-size: 18px; font-weight: 600; margin: 0; color: var(--uims-text); }
+.st-card-desc {
+    margin: 0; font-size: 14px; color: var(--uims-muted);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.st-card-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--uims-muted); }
+.st-card-meta strong { color: var(--uims-text); font-weight: 600; }
+.st-due-soon { color: #B45309; font-weight: 600; }
+.st-due-late { color: var(--uims-danger); font-weight: 600; }
+.st-card-actions { margin-top: auto; display: flex; gap: 8px; padding-top: 6px; }
+
+.st-badge-closed { background: #E5E7EB; color: #4B5563; }
+
+/* ---------- Empty state ---------- */
+.st-empty {
+    text-align: center; padding: 48px 16px;
+    background: var(--uims-white); border: 1px dashed var(--uims-border); border-radius: 14px;
+}
+.st-empty-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+
+/* ---------- Modal ---------- */
+.st-modal[hidden] { display: none; }
+.st-modal { position: fixed; inset: 0; z-index: 1100; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.st-modal-backdrop { position: absolute; inset: 0; background: rgba(4, 56, 45, .55); }
+.st-modal-dialog {
+    position: relative;
+    width: 100%; max-width: 680px; max-height: calc(100vh - 32px); overflow-y: auto;
+    background: var(--uims-white); border-radius: 16px; padding: 28px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .25);
+}
+.st-modal-close {
+    position: absolute; top: 12px; right: 14px;
+    border: 0; background: transparent; font-size: 28px; line-height: 1; color: var(--uims-muted);
+}
+.st-modal-close:hover { color: var(--uims-text); }
+.st-modal h2 { font-size: 22px; font-weight: 700; margin: 8px 0 4px; padding-right: 28px; }
+
+.st-meta-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; margin: 16px 0;
+    background: var(--uims-bg); border-radius: 12px; padding: 14px;
+}
+.st-meta-label { font-size: 12px; font-weight: 500; color: var(--uims-muted); }
+.st-meta-value { font-size: 14px; font-weight: 600; }
+
+.st-section-title { font-size: 14px; font-weight: 600; margin: 20px 0 8px; text-transform: uppercase; letter-spacing: .4px; color: var(--uims-muted); }
+
+.st-feedback {
+    background: var(--uims-mint); border-left: 4px solid var(--uims-accent);
+    border-radius: 10px; padding: 12px 14px; font-size: 14px;
+}
+.st-feedback.revision { background: #FEF3C7; border-left-color: var(--uims-warning); }
+.st-score { font-weight: 700; color: var(--uims-primary); }
+
+.st-history { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.st-history li { border: 1px solid var(--uims-border); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.st-history-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 4px; }
+.st-late { color: var(--uims-danger); font-size: 12px; font-weight: 600; }
+
+.st-form label { font-size: 13px; font-weight: 500; margin-bottom: 4px; display: block; }
+.st-form .form-control { margin-bottom: 12px; }
+.st-error { color: var(--uims-danger); font-size: 13px; min-height: 18px; margin: -4px 0 10px; }
+
+/* ---------- Toast ---------- */
+.st-toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px);
+    background: var(--uims-dark); color: var(--uims-white);
+    padding: 10px 18px; border-radius: 99px; font-size: 14px; font-weight: 500;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 1200;
+}
+.st-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 575px) {
+    .st-search { max-width: none; width: 100%; }
+    .st-modal-dialog { padding: 20px 16px; }
+}
+
+/* =====================================================================
+   WEEKS OVERVIEW (My Tasks) + WEEK PAGE
+   ===================================================================== */
+.st-weeks {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+.st-week-card {
+    display: flex; flex-direction: column; gap: 8px;
+    background: var(--uims-white);
+    border: 1px solid var(--uims-border);
+    border-radius: 14px;
+    padding: 18px;
+    color: var(--uims-text);
+    text-decoration: none;
+    transition: box-shadow .15s, border-color .15s, transform .15s;
+}
+.st-week-card:hover { border-color: var(--uims-accent); box-shadow: 0 6px 20px rgba(7, 82, 62, .10); transform: translateY(-2px); color: var(--uims-text); }
+.st-week-card.current { border: 2px solid var(--uims-accent); padding: 17px; }
+.st-week-num { font-size: 20px; font-weight: 700; color: var(--uims-primary); }
+.st-week-dates { font-size: 13px; color: var(--uims-muted); }
+.st-week-count { font-size: 14px; color: var(--uims-muted); }
+.st-week-count strong { font-size: 22px; color: var(--uims-text); }
+.st-progress { height: 8px; background: var(--uims-mint); border-radius: 99px; overflow: hidden; }
+.st-progress i { display: block; height: 100%; background: var(--uims-accent); border-radius: 99px; }
+.st-week-foot { font-size: 13px; color: var(--uims-muted); }
+.st-week-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 24px; }
+.st-mini-chip { font-size: 12px; font-weight: 500; background: var(--uims-bg); border: 1px solid var(--uims-border); border-radius: 99px; padding: 2px 9px; }
+.st-week-open { margin-top: auto; font-size: 13px; font-weight: 600; color: var(--uims-accent); }
+
+.st-breadcrumb { font-size: 14px; margin-bottom: 14px; color: var(--uims-muted); display: flex; gap: 8px; }
+.st-breadcrumb a { text-decoration: none; font-weight: 500; }
+.st-week-header { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-end; }
+.st-week-header .badge { font-size: 13px; vertical-align: middle; margin-left: 8px; }
+.st-week-nav { display: flex; gap: 8px; }
+.st-week-nav [hidden] { display: none; }
+
+/* =====================================================================
+   SERVER-CONTROL VERSION (filter box, popup link, flash message)
+   ===================================================================== */
+.st-select { max-width: 220px; }
+.st-search-box { display: flex; gap: 8px; }
+.st-search-box .form-control { max-width: 240px; }
+.st-modal-close { text-decoration: none; cursor: pointer; }
+.st-history a { word-break: break-all; margin-left: 4px; }
+.st-flash {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: var(--uims-dark); color: var(--uims-white);
+    padding: 10px 18px; border-radius: 99px; font-size: 14px; font-weight: 500; z-index: 1200;
+    animation: stFlash 3.5s ease forwards;
+}
+@keyframes stFlash { 0% { opacity: 0; } 10% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+@media (max-width: 575px) { .st-search-box { width: 100%; } .st-search-box .form-control { max-width: none; flex: 1; } }
