@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -150,6 +151,7 @@ namespace UniversityInternshipManagmentSystem.login
                     returnSecureToken = true
                 };
 
+                var timer = System.Diagnostics.Stopwatch.StartNew();   // only for the timing line in App_Data/email-log.txt
                 var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
                 var response = await HttpClient.PostAsync(AppConfig.SignInUrl, content);
                 string responseJson = await response.Content.ReadAsStringAsync();
@@ -167,8 +169,11 @@ namespace UniversityInternshipManagmentSystem.login
                 string idToken = authObj["idToken"]?.ToString();
                 string returnedEmail = authObj["email"]?.ToString() ?? email;
 
+                long passwordMs = timer.ElapsedMilliseconds;
+
                 // Retrieve Profile metadata from Firebase Realtime Database
                 var userProfile = await FetchUserProfileAsync(localId, returnedEmail, idToken);
+                long profileMs = timer.ElapsedMilliseconds - passwordMs;
 
                 // A new account must confirm its email first (Config/EmailVerification.cs). Nothing is signed in until then.
                 if (await EmailVerification.IsBlocked(userProfile.Table, userProfile.RecordId, idToken))
@@ -178,8 +183,12 @@ namespace UniversityInternshipManagmentSystem.login
                     return;
                 }
 
+                // If a sign-in feels slow, this line shows which step took the time
+                EmailSender.Log("sign-in timing of " + returnedEmail + ": password check " + passwordMs + " ms, profile " + profileMs
+                    + " ms, confirmation check " + (timer.ElapsedMilliseconds - passwordMs - profileMs) + " ms, total " + timer.ElapsedMilliseconds + " ms");
+
                 // Welcome email (once) and "password changed" email. Does nothing when SMTP is not set up (Config/Notify.cs).
-                await Notify.AfterSignIn(userProfile.Table, userProfile.RecordId, userProfile.Name, userProfile.Role, returnedEmail, idToken);
+                Notify.AfterSignIn(userProfile.Table, userProfile.RecordId, userProfile.Name, userProfile.Role, returnedEmail, idToken);
 
                 if (!string.IsNullOrEmpty(userProfile.RecordId))
                 {
@@ -226,45 +235,37 @@ namespace UniversityInternshipManagmentSystem.login
             string[] databaseTables = new[] { TableUsers, TableStudents, TableAcademic, TableCompany, TableAdmins, TableCoordinators };
             string normalizedEmail = (email ?? string.Empty).Trim().ToLowerInvariant();
 
-            // 1. Direct lookup by Firebase Auth UID in each table
-            foreach (string table in databaseTables)
+            // 1. Direct lookup by Firebase Auth UID in each table.
+            //    All the tables are asked at the same time (one wait instead of six); the first table in the list that has the record wins.
+            var byUid = await Task.WhenAll(databaseTables.Select(table => TryReadAsync(table, uid, idToken)));
+            for (int i = 0; i < databaseTables.Length; i++)
             {
-                try
+                var obj = byUid[i] as JObject;
+                // A record with no Name and no Role is only a leftover FirstLogin flag, not a real profile
+                if (obj != null && obj.HasValues && (obj["Name"] != null || obj["Role"] != null || obj["name"] != null || obj["role"] != null))
                 {
-                    string json = await FirebaseDb.Get(table, uid, idToken);
-                    if (!string.IsNullOrEmpty(json) && json.Trim() != "null")
-                    {
-                        var obj = JObject.Parse(json);
-                        // A record with no Name and no Role is only a leftover FirstLogin flag, not a real profile
-                        if (obj.HasValues && (obj["Name"] != null || obj["Role"] != null || obj["name"] != null || obj["role"] != null))
-                        {
-                            string name = obj["Name"]?.ToString() ?? obj["name"]?.ToString() ?? "";
-                            string rawRole = obj["Role"]?.ToString() ?? obj["role"]?.ToString() ?? "";
-                            string role = ResolveRoleFromTable(table, rawRole);
-                            bool firstLogin = ParseFirstLoginFlag(obj);
+                    string name = obj["Name"]?.ToString() ?? obj["name"]?.ToString() ?? "";
+                    string rawRole = obj["Role"]?.ToString() ?? obj["role"]?.ToString() ?? "";
+                    string role = ResolveRoleFromTable(databaseTables[i], rawRole);
+                    bool firstLogin = ParseFirstLoginFlag(obj);
 
-                            return (name, role, firstLogin, uid, table);
-                        }
-                    }
-                }
-                catch
-                {
-                    // Continue searching subsequent tables
+                    return (name, role, firstLogin, uid, databaseTables[i]);
                 }
             }
 
-            // 2. Scan tables to match record by email fields (e.g. student_001, company_001)
-            foreach (string table in databaseTables)
+            // 2. Scan tables to match record by email fields (e.g. student_001, company_001), also all tables at the same time
+            var tables = await Task.WhenAll(databaseTables.Select(table => TryReadAsync(table, null, idToken)));
+            for (int t = 0; t < databaseTables.Length; t++)
             {
+                string table = databaseTables[t];
                 try
                 {
-                    string tableJson = await FirebaseDb.Get(table, null, idToken);
-                    if (string.IsNullOrEmpty(tableJson) || tableJson.Trim() == "null")
+                    var tableObj = tables[t] as JObject;
+                    if (tableObj == null)
                     {
                         continue;
                     }
 
-                    var tableObj = JObject.Parse(tableJson);
                     foreach (var prop in tableObj.Properties())
                     {
                         if (prop.Value is JObject item)
@@ -293,6 +294,21 @@ namespace UniversityInternshipManagmentSystem.login
 
             // Default fallback if no profile record found
             return (string.Empty, AuthHelper.RoleStudent, false, null, null);
+        }
+
+        // One record (or a whole table when id is null) as JSON; null when it is missing or can not be read
+        private static async Task<JToken> TryReadAsync(string table, string id, string idToken)
+        {
+            try
+            {
+                string json = await FirebaseDb.Get(table, id, idToken);
+                if (string.IsNullOrEmpty(json) || json.Trim() == "null") return null;
+                return JToken.Parse(json);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static bool ParseFirstLoginFlag(JObject obj)

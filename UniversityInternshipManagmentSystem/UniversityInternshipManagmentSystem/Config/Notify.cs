@@ -51,9 +51,16 @@ namespace UniversityInternshipManagmentSystem.Config
         // 1. Welcome email, once, for an account that had to confirm its email (it is sent at the first sign-in after the confirmation).
         // 2. "Your password was changed" email, when the password is newer than the last one we told the person about.
         //    This also covers the Firebase reset page, which our website never sees.
-        public static async Task AfterSignIn(string table, string recordId, string name, string role, string email, string idToken)
+        public static void AfterSignIn(string table, string recordId, string name, string role, string email, string idToken)
         {
             if (!EmailSender.IsConfigured || string.IsNullOrEmpty(table) || string.IsNullOrEmpty(recordId)) return;
+            var site = Here(idToken);
+            // In the background: the person must not wait for these checks (they need several calls to Firebase)
+            HostingEnvironment.QueueBackgroundWorkItem(token => CheckAfterSignIn(site, table, recordId, name, role, email, idToken));
+        }
+
+        static async Task CheckAfterSignIn(Site site, string table, string recordId, string name, string role, string email, string idToken)
+        {
             try
             {
                 string json = await FirebaseDb.Get(table, recordId, idToken);
@@ -78,7 +85,6 @@ namespace UniversityInternshipManagmentSystem.Config
                 if (changes.HasValues) await FirebaseDb.Patch(table, recordId, changes, idToken);
 
                 // The "done" flag is saved only after the email was really sent. If the mail server fails, the next sign-in tries again.
-                var site = Here(idToken);
                 if (sendWelcome)
                     Later(async () => await Mail(email, "Welcome to UIMS", "EMAIL CONFIRMED", "Welcome to UIMS", name,
                         "Your email is confirmed and your UIMS account is ready. You are signed up as a " + RoleLabel(role) + ".",
