@@ -144,6 +144,35 @@ namespace UniversityInternshipManagmentSystem.Config
             return response.IsSuccessStatusCode;
         }
 
+        // ---------------------------------------------------------------------
+        // Final evaluation (Company/FinalEvaluation pages). Table: "FinalEvaluations", the key is the student id.
+        // ---------------------------------------------------------------------
+
+        // The records of this company's trainees: studentId -> record
+        public static async Task<Dictionary<string, FinalEvaluation>> GetFinalEvaluations(string companyId)
+        {
+            string json = await FirebaseDb.Get("FinalEvaluations");
+
+            Dictionary<string, FinalEvaluation> all = JsonConvert.DeserializeObject<Dictionary<string, FinalEvaluation>>(json)
+                                                      ?? new Dictionary<string, FinalEvaluation>();
+
+            Dictionary<string, FinalEvaluation> mine = new Dictionary<string, FinalEvaluation>();
+            foreach (var item in all)
+            {
+                item.Value.StudentId = item.Key;
+                if (item.Value.CompanyId == companyId)
+                    mine[item.Key] = item.Value;
+            }
+            return mine;
+        }
+
+        // Saves the whole record of one trainee (it replaces the old one)
+        public static async Task<bool> SaveFinalEvaluation(string studentId, FinalEvaluation evaluation)
+        {
+            HttpResponseMessage response = await FirebaseDb.Put("FinalEvaluations", studentId, evaluation);
+            return response.IsSuccessStatusCode;
+        }
+
         // Open or close a task (only the Status field changes)
         public static async Task<bool> SetTaskStatus(string taskId, TaskState status)
         {

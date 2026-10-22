@@ -117,11 +117,14 @@ namespace UniversityInternshipManagmentSystem.Student
                     if (Database().Host.EndsWith(".firebasedatabase.app", StringComparison.OrdinalIgnoreCase) && !host.EndsWith(suffix, StringComparison.Ordinal)) throw new FormatException();
                     var project = host.EndsWith(suffix, StringComparison.Ordinal) ? host.Substring(0, host.Length - suffix.Length) : host;
                     var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    // A computer clock that is a few seconds behind Google's would reject a token that was JUST issued
+                    // (the page failed after login and worked after a refresh), so "issued in the future" gets 5 minutes of room.
+                    const long skew = 300;
                     long validSince;
                     if ((string)claims["sub"] != uid || (string)claims["aud"] != project || (string)claims["iss"] != "https://securetoken.google.com/" + project
                         || claims["exp"]?.Type != JTokenType.Integer || claims["iat"]?.Type != JTokenType.Integer || claims["auth_time"]?.Type != JTokenType.Integer
-                        || (long)claims["exp"] <= now || (long)claims["iat"] > now || (long)claims["iat"] < 0 || (long)claims["exp"] <= (long)claims["iat"]
-                        || (long)claims["auth_time"] > now || (long)claims["auth_time"] < 0
+                        || (long)claims["exp"] <= now || (long)claims["iat"] > now + skew || (long)claims["iat"] < 0 || (long)claims["exp"] <= (long)claims["iat"]
+                        || (long)claims["auth_time"] > now + skew || (long)claims["auth_time"] < 0
                         || (long.TryParse((string)users[0]["validSince"], out validSince) && (long)claims["auth_time"] < validSince)) throw new FormatException();
                 }
                 catch (Exception error) when (error is FormatException || error is JsonException || error is InvalidCastException || error is ArgumentException)
