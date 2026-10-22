@@ -76,5 +76,12 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button CancelButton;
+
+        protected global::System.Web.UI.WebControls.Label PasswordSuccess;
+        protected global::System.Web.UI.WebControls.Label PasswordError;
+        protected global::System.Web.UI.WebControls.TextBox CurrentPasswordInput;
+        protected global::System.Web.UI.WebControls.TextBox NewPasswordInput;
+        protected global::System.Web.UI.WebControls.TextBox ConfirmPasswordInput;
+        protected global::System.Web.UI.WebControls.Button ResetPasswordButton;
     }
 }

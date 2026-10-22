@@ -97,6 +97,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Academic\Dashboard.aspx" />
+    <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
     <Content Include="Assets\images\uj-logo.svg" />
@@ -322,7 +323,6 @@
     <Content Include="Company\FinalEvaluation\FinalEvaluation.css" />
     <Content Include="Company\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
-    <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
     <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Academic\SupervisorAccount\SupervisorAccount.aspx" />
     <Content Include="Academic\SupervisorAccount\css\supervisor-account.css" />
@@ -367,6 +367,13 @@
     </Compile>
     <Compile Include="Academic\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Academic\StudentProgress\StudentProgress.aspx.cs">
+      <DependentUpon>StudentProgress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Academic\StudentProgress\StudentProgress.aspx.designer.cs">
+      <DependentUpon>StudentProgress.aspx</DependentUpon>
     </Compile>
     <Compile Include="Academic\SupervisorAccount\SupervisorAccount.aspx.cs">
       <DependentUpon>SupervisorAccount.aspx</DependentUpon>

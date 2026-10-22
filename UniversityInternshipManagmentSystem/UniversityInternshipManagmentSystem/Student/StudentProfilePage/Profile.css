@@ -22,3 +22,10 @@
 .student-dashboard .sd-save-message:not(:empty) { display: block; margin-bottom: 20px; padding: 14px; border: 1px solid var(--uims-border); border-radius: 8px; background: var(--uims-mint); color: var(--uims-primary); }
 .student-dashboard .sd-save-error:not(:empty) { border-color: var(--uims-danger); }
 .student-dashboard .sd-save-success:not(:empty) { border-color: var(--uims-success); }
+.student-dashboard .sd-security-body { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.student-dashboard .sd-security-body p { color: var(--uims-muted); }
+.student-dashboard .sd-security-body .sd-save-message:not(:empty) { margin: 12px 0 0; }
+.student-dashboard .sd-security-panel .bi { color: var(--uims-primary); margin-right: 8px; }
+.student-dashboard #resetPasswordModal .modal-content { border-radius: 12px; border: 1px solid var(--uims-border); }
+.student-dashboard #resetPasswordModal .modal-title { color: var(--uims-dark); font-weight: 700; }
+@media (max-width: 575.98px) { .student-dashboard .sd-security-body .btn { width: 100%; } }

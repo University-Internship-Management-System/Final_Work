@@ -26,21 +26,16 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
         private async Task LoadMonitorAsync()
         {
-            if (!Request.IsLocal)
-            {
-                lblError.Text = "Live data preview is available only from this computer.";
-                lblError.Visible = true;
-                return;
-            }
-
             try
             {
-                JObject students = JsonConvert.DeserializeObject<JObject>(await FirebaseDb.Get("Students")) ?? new JObject();
-                JObject supervisors = JsonConvert.DeserializeObject<JObject>(await FirebaseDb.Get("AcademicSupervisors")) ?? new JObject();
-                JObject companies = JsonConvert.DeserializeObject<JObject>(await FirebaseDb.Get("CompanySupervisors")) ?? new JObject();
+                JObject students = await ReadTable("Students");
+                JObject supervisors = await ReadTable("AcademicSupervisors");
+                JObject companies = await ReadTable("CompanySupervisors");
+                JObject tasks = await ReadTable("Tasks");
+                JObject submissions = await ReadTable("TaskSubmissions");
 
                 litStudentRows.Text = BuildStudentRows(students, supervisors, companies);
-                litStudentDetails.Text = BuildStudentDrawerData(students, supervisors, companies);
+                litStudentDetails.Text = BuildStudentDrawerData(students, supervisors, companies, tasks, submissions);
                 litMajorOptions.Text = BuildMajorOptions(students);
                 litAcademicRows.Text = BuildAcademicRows(supervisors);
                 litCompanyRows.Text = BuildCompanyRows(companies);
@@ -67,6 +62,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 lblError.Text = "Firebase returned data in an unexpected format.";
                 lblError.Visible = true;
             }
+        }
+
+        private static async Task<JObject> ReadTable(string name)
+        {
+            string json = await FirebaseDb.Get(name);
+            if (json == null) throw new HttpRequestException();
+            return JsonConvert.DeserializeObject<JObject>(json) ?? new JObject();
         }
 
         private void ShowSupervisorDetail(JObject supervisors, string id, bool isAcademic)
@@ -135,7 +137,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             return rows;
         }
 
-        private static string BuildStudentDrawerData(JObject students, JObject academic, JObject company)
+        private static string BuildStudentDrawerData(JObject students, JObject academic, JObject company, JObject tasks, JObject submissions)
         {
             StringBuilder html = new StringBuilder();
             foreach (JProperty item in students.Properties())
@@ -206,16 +208,65 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 AddDetail(html, "Academic evaluation", "Not recorded");
                 AddDetail(html, "Final status", "Not tracked");
                 html.Append("</div></div></section>");
-                html.Append("<section data-detail-section=\"tasks\"><div class=\"drawer-section\"><h3>Tasks</h3><p class=\"drawer-empty\">No tasks assigned.</p></div></section>");
+                html.Append("<section data-detail-section=\"tasks\"><div class=\"drawer-section\"><h3>Tasks</h3>");
+                int taskCount = 0;
+                foreach (JProperty taskEntry in tasks.Properties())
+                {
+                    JToken task = taskEntry.Value;
+                    JArray studentIds = task?["StudentIds"] as JArray;
+                    if (studentIds == null || !ContainsStudent(studentIds, item.Name)) continue;
+                    taskCount++;
+                    JToken latest = LatestSubmission(submissions, item.Name, taskEntry.Name);
+                    html.Append("<div class=\"mb-3\"><strong>" + Encode((string)task["TaskName"]) + "</strong>");
+                    html.Append("<div class=\"text-muted small\">Week " + Encode((string)task["WeekNumber"]) +
+                        " · " + Encode(latest == null ? "Not submitted" : (string)latest["Status"]) + "</div></div>");
+                }
+                if (taskCount == 0) html.Append("<p class=\"drawer-empty\">No tasks assigned.</p>");
+                html.Append("</div></section>");
                 html.Append("<section data-detail-section=\"hours\"><div class=\"drawer-section\"><h3>Training hours</h3><div class=\"row student-detail\">");
                 AddDetail(html, "Approved hours", "Not recorded");
                 AddDetail(html, "Pending hours", "Not recorded");
                 AddDetail(html, "Required hours", "Not recorded");
                 html.Append("</div><p class=\"drawer-empty\">Progress will appear when training hours are recorded.</p></div></section>");
-                html.Append("<section data-detail-section=\"evaluations\"><div class=\"drawer-section\"><h3>Company evaluation</h3><p class=\"drawer-empty\">Not recorded.</p></div>");
-                html.Append("<div class=\"drawer-section\"><h3>Academic evaluation</h3><p class=\"drawer-empty\">Not recorded.</p></div></section></div>");
+                html.Append("<section data-detail-section=\"evaluations\"><div class=\"drawer-section\"><h3>Task evaluations</h3>");
+                int evaluationCount = 0;
+                foreach (JProperty taskEntry in tasks.Properties())
+                {
+                    JArray studentIds = taskEntry.Value?["StudentIds"] as JArray;
+                    if (studentIds == null || !ContainsStudent(studentIds, item.Name)) continue;
+                    JToken latest = LatestSubmission(submissions, item.Name, taskEntry.Name);
+                    if (latest == null || (string)latest["Status"] != "Evaluated" || latest["Score"] == null) continue;
+                    evaluationCount++;
+                    html.Append("<div class=\"mb-3\"><strong>" + Encode((string)taskEntry.Value["TaskName"]) + "</strong><div>" +
+                        Encode((string)latest["Score"]) + " / " + Encode((string)taskEntry.Value["MaxScore"]) + "</div>");
+                    if (!string.IsNullOrWhiteSpace((string)latest["Feedback"]))
+                        html.Append("<div class=\"text-muted small\">" + Encode((string)latest["Feedback"]) + "</div>");
+                    html.Append("</div>");
+                }
+                if (evaluationCount == 0) html.Append("<p class=\"drawer-empty\">No evaluated task submissions.</p>");
+                html.Append("</div><div class=\"drawer-section\"><h3>Final evaluations</h3><p class=\"drawer-empty\">Final evaluations are not connected to this page yet.</p></div></section></div>");
             }
             return html.ToString();
+        }
+
+        private static bool ContainsStudent(JArray studentIds, string studentId)
+        {
+            foreach (JToken id in studentIds)
+                if (string.Equals((string)id, studentId, StringComparison.Ordinal)) return true;
+            return false;
+        }
+
+        private static JToken LatestSubmission(JObject submissions, string studentId, string taskId)
+        {
+            JToken latest = null;
+            foreach (JProperty entry in submissions.Properties())
+            {
+                JToken submission = entry.Value;
+                if ((string)submission?["StudentId"] != studentId || (string)submission["TaskId"] != taskId) continue;
+                if (latest == null || (int?)submission["Version"] > (int?)latest["Version"])
+                    latest = submission;
+            }
+            return latest;
         }
 
         private static string BuildMajorOptions(JObject students)
