@@ -97,6 +97,9 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Academic\Dashboard.aspx" />
+    <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
+    <Content Include="Academic\FinalEvaluation\Trainees.aspx" />
+    <Content Include="Academic\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
@@ -160,6 +163,7 @@
     <Content Include="Company\CompanyDashboard\Dashboard.aspx" />
     <Content Include="Company\CompanyDashboard\Dashboard.css" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx" />
+    <Content Include="Coordinator\FinalCompletionReview\FinalCompletionReview.aspx" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.css" />
     <Content Include="Coordinator\CoordinatorMonitor\CoordinatorMonitor.aspx" />
     <Content Include="Coordinator\CoordinatorMonitor\CoordinatorMonitor.css" />
@@ -191,6 +195,7 @@
     <Content Include="Assets\PublicHome\Home.js" />
     <Content Include="Assets\PublicHome\university-logo.png" />
     <Content Include="Assets\PublicHome\university-hero.jpg" />
+    <Content Include="Assets\PublicHome\clock-tower-photo.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Coordinator\AssignAcademicSupervisors\AssignAcademicSupervisors.aspx" />
     <Content Include="Coordinator\AssignAcademicSupervisors\assign-supervisors.css" />
@@ -217,6 +222,7 @@
     <Content Include="Logout.aspx" />
     <Content Include="Student\MyProgress\Files\download.png" />
     <Content Include="Student\MyProgress\MyProgress.aspx" />
+    <Content Include="Student\MyProgress\Certificate.aspx" />
     <Content Include="Student\MyProgress\MyProgress.css" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -285,6 +291,13 @@
       <DependentUpon>MyTrainees.aspx</DependentUpon>
     </Compile>
     <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
+    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.cs">
+      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.designer.cs">
+      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Company\FinalEvaluation\FinalEvaluation.aspx.cs">
       <DependentUpon>FinalEvaluation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -319,19 +332,22 @@
     <Content Include="Company\ManageTasks\ManageTasks.css" />
     <Content Include="Company\ManageTasks\ManageTasks.js" />
     <Content Include="Company\ManageTasks\ReviewTask.aspx" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.css" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.js" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.css" />
     <Content Include="Company\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
-    <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Academic\SupervisorAccount\SupervisorAccount.aspx" />
     <Content Include="Academic\SupervisorAccount\css\supervisor-account.css" />
     <Content Include="Academic\SupervisorAccount\javascript\supervisor-account.js" />
-    <Content Include="Coordinator\FinalCompletionReview\FinalCompletionReview.aspx" />
     <Content Include="Coordinator\ContactMessages\ContactMessages.aspx" />
     <Content Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx" />
     <Content Include="Shared\Sidebar.ascx" />
     <Content Include="Shared\uims.css" />
+    <Content Include="Content\uims.css" />
+    <Content Include="Scripts\uims.js" />
     <Content Include="Site.Master" />
     <Content Include="Student\ApplicationForm\ApplicationForm.aspx" />
     <Content Include="Student\ApplicationForm\ApplicationForm.css" />
@@ -361,6 +377,13 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Academic\FinalEvaluation\FinalEvaluation.aspx.cs">
+      <DependentUpon>FinalEvaluation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Academic\FinalEvaluation\FinalEvaluation.aspx.designer.cs">
+      <DependentUpon>FinalEvaluation.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Academic\Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -391,6 +414,13 @@
     </Compile>
     <Compile Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx.designer.cs">
       <DependentUpon>CoordinatorDashbord.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Coordinator\FinalCompletionReview\FinalCompletionReview.aspx.cs">
+      <DependentUpon>FinalCompletionReview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Coordinator\FinalCompletionReview\FinalCompletionReview.aspx.designer.cs">
+      <DependentUpon>FinalCompletionReview.aspx</DependentUpon>
     </Compile>
     <Compile Include="Coordinator\CoordinatorMonitor\CoordinatorMonitor.aspx.cs">
       <DependentUpon>CoordinatorMonitor.aspx</DependentUpon>
@@ -475,6 +505,7 @@
     <Compile Include="login\Logout.aspx.designer.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\AcademicEvaluation.cs" />
     <Compile Include="Models\AcademicSupervisor.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Application.cs" />
@@ -489,6 +520,13 @@
     <Compile Include="Student\MyProgress\MyProgress.aspx.cs">
       <DependentUpon>MyProgress.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\MyProgress\Certificate.aspx.cs">
+      <DependentUpon>Certificate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\MyProgress\Certificate.aspx.designer.cs">
+      <DependentUpon>Certificate.aspx</DependentUpon>
     </Compile>
     <Compile Include="Student\MyProgress\MyProgress.aspx.designer.cs">
       <DependentUpon>MyProgress.aspx</DependentUpon>
@@ -670,3 +708,4 @@
   </ItemGroup>
   <ItemGroup />
 </Project>
+

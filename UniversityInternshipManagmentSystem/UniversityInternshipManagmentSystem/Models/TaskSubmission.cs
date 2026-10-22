@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -22,6 +22,9 @@ namespace UniversityInternshipManagmentSystem.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public SubmissionState Status { get; set; }
         public string Feedback { get; set; }
+        public string AcademicFeedback { get; set; }
+        public DateTime? AcademicFeedbackAt { get; set; }
+        public string AcademicFeedbackBy { get; set; }
         public double? Score { get; set; }
         public DateTime? EvaluatedAt { get; set; }
 

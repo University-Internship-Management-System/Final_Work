@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -12,6 +12,7 @@ namespace UniversityInternshipManagmentSystem.Models
     {
         public const string Draft = "Draft";      // the company supervisor is still working on it
         public const string Sent = "Sent";        // sent to the academic supervisor: it cannot be changed any more
+        public const string AcademicDraft = "Draft";
 
         // The 6 skills of the form: key -> text
         public static readonly string[][] Skills = new[]
@@ -56,9 +57,20 @@ namespace UniversityInternshipManagmentSystem.Models
 
         public string Status { get; set; } = Draft;
 
+        // Set when the company supervisor approves the completed internship and sends it to the academic supervisor.
+        public bool IsPassCompany { get; set; }
+
         public DateTime? UpdatedAt { get; set; }
 
         public DateTime? SentAt { get; set; }
+
+        // Academic review is stored on the same FinalEvaluations/{studentId} record.
+        public string AcademicSupervisorId { get; set; }
+        public string AcademicComments { get; set; }
+        public bool IsPassAcademic { get; set; }
+        public string AcademicEvaluationStatus { get; set; } = AcademicDraft;
+        public DateTime? AcademicUpdatedAt { get; set; }
+        public DateTime? AcademicSentAt { get; set; }
 
         // 5 points for Excellent ... 1 point for Weak
         public static int Points(string levelKey)
@@ -84,3 +96,5 @@ namespace UniversityInternshipManagmentSystem.Models
         }
     }
 }
+
+
