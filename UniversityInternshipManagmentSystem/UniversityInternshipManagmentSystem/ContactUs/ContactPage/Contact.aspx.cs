@@ -12,7 +12,7 @@ namespace UniversityInternshipManagmentSystem.ContactModule
         protected override void OnInit(EventArgs e)
         {
             ViewStateUserKey = Session.SessionID;
-            repository = new ContactRepository(Application["ContactModule.BackendAuthorization"] as IContactBackendAuthorization);
+            repository = ContactRepository.ForSignedInUser(new HttpSessionStateWrapper(Session));
             base.OnInit(e);
         }
         protected void Page_Load(object sender, EventArgs e)
@@ -29,6 +29,11 @@ namespace UniversityInternshipManagmentSystem.ContactModule
             }
             Availability.Visible = !repository.IsAvailable;
             Send.Enabled = repository.IsAvailable;
+            SignIn.Visible = repository.SignInRequired;
+            SignIn.NavigateUrl = "~/login/Login.aspx?ReturnUrl=" + HttpUtility.UrlEncode("~/ContactUs/ContactPage/Contact.aspx");
+            AvailabilityText.Text = repository.SignInRequired
+                ? "Sign in with your UIMS account to send a message. You do not need an administrator account. Your message has not been sent."
+                : "The team Firebase connection is unavailable. Your message has not been sent.";
         }
         protected void Send_Click(object sender, EventArgs e)
         {
@@ -51,7 +56,7 @@ namespace UniversityInternshipManagmentSystem.ContactModule
             SetError(errors, "Subject", SubjectError, Subject);
             SetError(errors, "Message", MessageError, Message);
             if (errors.Count != 0) { Show("Please correct the highlighted fields. Your message has not been sent.", false); return; }
-            if (!repository.IsAvailable) { Show("Secure message sending is not configured. Your message has not been sent.", false); return; }
+            if (!repository.IsAvailable) { Show(repository.SignInRequired ? "Sign in with your UIMS account before sending. Your message has not been sent." : "The team Firebase connection is unavailable. Your message has not been sent.", false); return; }
             var last = Session[Prefix + "LastAttempt"] as DateTime?;
             if (last.HasValue && DateTime.UtcNow - last.Value < TimeSpan.FromSeconds(60))
             { Show("Please wait one minute before sending another message.", false); return; }
@@ -65,6 +70,11 @@ namespace UniversityInternshipManagmentSystem.ContactModule
                 FullName.Text = Email.Text = Subject.Text = Message.Text = "";
                 Send.Enabled = false;
                 Show("Your message was saved successfully. Thank you for contacting UIMS.", true);
+            }
+            catch (ContactSubmissionException error)
+            {
+                Send.Enabled = false;
+                Show(error.Message + " Your entries are preserved. Reload the form before retrying.", false);
             }
             catch (Exception)
             {

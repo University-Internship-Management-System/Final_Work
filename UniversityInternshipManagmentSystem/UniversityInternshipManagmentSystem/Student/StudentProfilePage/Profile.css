@@ -1,4 +1,4 @@
-/* Profile and local sign-in content only; uses Shared/uims.css variables. */
+﻿/* Profile and local sign-in content only; uses Shared/uims.css variables. */
 .student-dashboard .sd-profile-banner { display: flex; align-items: center; gap: 22px; padding: 28px; border-radius: 12px; background: var(--soft); margin-bottom: 24px; }
 .student-dashboard .sd-profile-banner h2 { font-size: 23px; margin-bottom: 6px; }
 .student-dashboard .sd-profile-avatar { display: grid; place-items: center; flex-shrink: 0; width: 76px; height: 76px; background: var(--deep); color: var(--paper); border-radius: 22px; font-size: 30px; }
@@ -47,3 +47,10 @@
     .student-profile .sd-training-grid { grid-template-columns: 1fr; }
     .student-profile .sd-profile-actions > input { flex: 1 1 45%; }
 }
+.student-dashboard .sd-security-body { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.student-dashboard .sd-security-body p { color: var(--uims-muted); }
+.student-dashboard .sd-security-body .sd-save-message:not(:empty) { margin: 12px 0 0; }
+.student-dashboard .sd-security-panel .bi { color: var(--uims-primary); margin-right: 8px; }
+.student-dashboard #resetPasswordModal .modal-content { border-radius: 12px; border: 1px solid var(--uims-border); }
+.student-dashboard #resetPasswordModal .modal-title { color: var(--uims-dark); font-weight: 700; }
+@media (max-width: 575.98px) { .student-dashboard .sd-security-body .btn { width: 100%; } }

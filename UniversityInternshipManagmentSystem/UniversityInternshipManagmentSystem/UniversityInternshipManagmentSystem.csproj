@@ -97,6 +97,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Academic\Dashboard.aspx" />
+    <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
     <Content Include="Assets\images\uj-logo.svg" />
@@ -156,7 +157,8 @@
     <Content Include="bin\UniversityInternshipManagmentSystem.dll" />
     <Content Include="bin\UniversityInternshipManagmentSystem.pdb" />
     <Content Include="bin\WebGrease.dll" />
-    <Content Include="Company\Dashboard.aspx" />
+    <Content Include="Company\CompanyDashboard\Dashboard.aspx" />
+    <Content Include="Company\CompanyDashboard\Dashboard.css" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.css" />
     <Content Include="Coordinator\CoordinatorMonitor\CoordinatorMonitor.aspx" />
@@ -266,9 +268,15 @@
     <Content Include="Shared\Navbar.ascx" />
     <Content Include="Shared\Public.Master" />
     <Content Include="Shared\ComingSoon.ascx" />
-    <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
     <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
     <Content Include="Company\MyTrainees\MyTrainees.aspx" />
+    <Compile Include="Company\CompanyDashboard\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\CompanyDashboard\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Company\MyTrainees\MyTrainees.aspx.cs">
       <DependentUpon>MyTrainees.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -277,12 +285,44 @@
       <DependentUpon>MyTrainees.aspx</DependentUpon>
     </Compile>
     <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
+    <Compile Include="Company\FinalEvaluation\FinalEvaluation.aspx.cs">
+      <DependentUpon>FinalEvaluation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\FinalEvaluation\FinalEvaluation.aspx.designer.cs">
+      <DependentUpon>FinalEvaluation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\FinalEvaluation\EvaluateTrainee.aspx.cs">
+      <DependentUpon>EvaluateTrainee.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\FinalEvaluation\EvaluateTrainee.aspx.designer.cs">
+      <DependentUpon>EvaluateTrainee.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\ManageTasks\ManageTasks.aspx.cs">
+      <DependentUpon>ManageTasks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ManageTasks\ManageTasks.aspx.designer.cs">
+      <DependentUpon>ManageTasks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\ManageTasks\ReviewTask.aspx.cs">
+      <DependentUpon>ReviewTask.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ManageTasks\ReviewTask.aspx.designer.cs">
+      <DependentUpon>ReviewTask.aspx</DependentUpon>
+    </Compile>
     <Content Include="Company\MyTrainees\MyTrainees.css" />
     <Content Include="Company\MyTrainees\MyTrainees.js" />
     <Content Include="Company\ManageTasks\ManageTasks.aspx" />
+    <Content Include="Company\ManageTasks\ManageTasks.css" />
+    <Content Include="Company\ManageTasks\ManageTasks.js" />
+    <Content Include="Company\ManageTasks\ReviewTask.aspx" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
+    <Content Include="Company\FinalEvaluation\FinalEvaluation.css" />
+    <Content Include="Company\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
-    <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
     <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Academic\SupervisorAccount\SupervisorAccount.aspx" />
     <Content Include="Academic\SupervisorAccount\css\supervisor-account.css" />
@@ -328,6 +368,13 @@
     <Compile Include="Academic\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Academic\StudentProgress\StudentProgress.aspx.cs">
+      <DependentUpon>StudentProgress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Academic\StudentProgress\StudentProgress.aspx.designer.cs">
+      <DependentUpon>StudentProgress.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Academic\SupervisorAccount\SupervisorAccount.aspx.cs">
       <DependentUpon>SupervisorAccount.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -336,13 +383,6 @@
       <DependentUpon>SupervisorAccount.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="Company\Dashboard.aspx.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Company\Dashboard.aspx.designer.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Config\AuthHelper.cs" />
     <Compile Include="Config\TaskDb.cs" />
     <Compile Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx.cs">
@@ -438,6 +478,7 @@
     <Compile Include="Models\AcademicSupervisor.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\FinalEvaluation.cs" />
     <Compile Include="Models\Certificate.cs" />
     <Compile Include="Models\CompanySupervisor.cs" />
     <Compile Include="Models\Opportunity.cs" />
@@ -528,7 +569,9 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Company\Da\" />
+  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

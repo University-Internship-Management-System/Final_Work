@@ -1,5 +1,7 @@
 namespace UniversityInternshipManagmentSystem.ContactModule { public partial class ContactPage {
 protected global::System.Web.UI.WebControls.Panel Availability;
+protected global::System.Web.UI.WebControls.Literal AvailabilityText;
+protected global::System.Web.UI.WebControls.HyperLink SignIn;
 protected global::System.Web.UI.WebControls.Panel Feedback;
 protected global::System.Web.UI.WebControls.Literal FeedbackText;
 protected global::System.Web.UI.WebControls.HiddenField Csrf;

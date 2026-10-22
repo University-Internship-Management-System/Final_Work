@@ -111,3 +111,20 @@ function initAutoDismissAlerts() {
         }, 6000);
     });
 }
+
+// Keep normal Web Forms button submission intact; never disable the posted button.
+document.addEventListener('DOMContentLoaded', function () {
+    const csrf = document.querySelector('input[name="AcademicAccountCsrf"]');
+    if (!csrf || !csrf.form) return;
+    csrf.form.addEventListener('submit', function (event) {
+        const button = event.submitter;
+        if (!button || !/btnSaveDetails|btnSavePassword|btnCancelDetails/.test(button.id)) return;
+        const status = document.getElementById('account-submit-status');
+        if (status) {
+            status.hidden = false;
+            status.textContent = /btnSavePassword/.test(button.id) ? 'Verifying your account and updating your password…'
+                : /btnCancelDetails/.test(button.id) ? 'Reloading your saved account…' : 'Saving and verifying your account details…';
+        }
+        button.setAttribute('aria-busy', 'true');
+    });
+});

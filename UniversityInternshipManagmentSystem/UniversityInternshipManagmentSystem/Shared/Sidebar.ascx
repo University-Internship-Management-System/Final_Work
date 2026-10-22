@@ -21,7 +21,7 @@
                 };
             case "company":
                 return new[] {
-                    "Dashboard|~/Company/Dashboard.aspx",
+                    "Dashboard|~/Company/CompanyDashboard/Dashboard.aspx",
                     "Manage Opportunities|~/Company/ManageOpportunities/ManageOpportunities.aspx",
                     "Applications|~/Company/ApplicationsReview/ApplicationsReview.aspx",
                     "My Trainees|~/Company/MyTrainees/MyTrainees.aspx",

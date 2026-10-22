@@ -31,10 +31,10 @@
             <div class="sd-profile-actions" aria-label="Profile actions">
                 <asp:Button ID="EditButton" runat="server" CssClass="sd-save-button" Text="Edit Profile" OnClick="EditButton_Click" CausesValidation="false" />
                 <asp:Button ID="ValidateButton" runat="server" CssClass="sd-save-button" Text="Validate Changes" OnClick="ValidateButton_Click" CausesValidation="false" />
-                <asp:Button ID="SaveButton" runat="server" CssClass="sd-save-button" Text="Save Changes" OnClick="SaveButton_Click" Enabled="false" aria-describedby="save-policy" />
+                <asp:Button ID="SaveButton" runat="server" CssClass="sd-save-button" Text="Save Changes" OnClick="SaveButton_Click" CausesValidation="false" aria-describedby="save-policy" />
                 <asp:Button ID="CancelButton" runat="server" CssClass="btn btn-outline-primary sd-cancel-button" Text="Cancel" OnClick="CancelButton_Click" CausesValidation="false" />
             </div>
-            <p id="save-policy" class="sd-mode-note">Saving to Firebase is disabled until the team approves a profile write policy and matching Security Rules. Edit and Validate Changes let you check a draft; nothing is saved. Cancel discards the draft.</p>
+            <p id="save-policy" class="sd-mode-note">Edit your phone, skills and professional links, then choose Save Changes. Firebase permissions are enforced. Validate Changes checks without saving; Cancel discards unsaved changes.</p>
             <div class="row g-4">
                 <div class="col-lg-6">
                     <section class="sd-panel" aria-labelledby="personal-title">
@@ -68,11 +68,13 @@
                             <dl class="sd-training-grid">
                                 <div><dt>Company</dt><dd><%: CompanyText %></dd></div>
                                 <div><dt>Academic supervisor</dt><dd><%: SupervisorText %></dd></div>
-                                <div><dt>Placement status</dt><dd>Not available</dd></div>
+                                <div><dt>Placement status</dt><dd><%: PlacementText %></dd></div>
+                                <div><dt>Internship opportunity</dt><dd><%: OpportunityText %></dd></div>
+                                <div><dt>Confirmation date</dt><dd><%: ConfirmationText %></dd></div>
                                 <div><dt>Required training hours</dt><dd>Not available</dd></div>
                                 <div><dt>Approved training hours</dt><dd>Not available</dd></div>
                             </dl>
-                            <p class="sd-note">Only assignment presence from your student record is shown. Placement details and training hours need an approved, authoritative source.</p>
+                            <p class="sd-note"><%: TrainingNote %></p>
                         </div>
                     </section>
                 </div>
@@ -94,7 +96,7 @@
                             <div class="mb-4">
                                 <asp:Label runat="server" AssociatedControlID="CvInput" CssClass="form-label" Text="CV link" />
                                 <asp:TextBox ID="CvInput" runat="server" EnableViewState="false" CssClass="form-control" MaxLength="2048" aria-describedby="cv-help CvError" />
-                                <span id="cv-help" class="sd-note">Optional web link, up to 2048 characters. Direct file upload is not configured.</span>
+                                <span id="cv-help" class="sd-note">Optional web link, up to 2048 characters. Use a shareable link to your CV; direct file upload is not configured.</span>
                                 <asp:Label ID="CvError" runat="server" ClientIDMode="Static" CssClass="sd-field-error" />
                                 <% if (SafeCvUrl != null) { %><a class="sd-document-link" href="<%: SafeCvUrl %>" target="_blank" rel="noopener noreferrer">Open saved CV &#8599;</a><% } else { %><p class="sd-note">No valid saved CV link provided.</p><% } %>
                             </div>
@@ -108,6 +110,33 @@
                 </div>
             </div>
             <p class="mt-3"><a class="sd-document-link" href="<%= ResolveUrl("~/Student/StudentDashboardPage/Dashboard.aspx") %>">Open Student Dashboard</a></p>
+            <section class="sd-panel sd-security-panel mt-4" aria-labelledby="security-title">
+                <div class="sd-panel-head"><h2 id="security-title"><i class="bi bi-shield-lock" aria-hidden="true"></i> Account Security</h2></div>
+                <div class="sd-panel-body sd-security-body">
+                    <div><p class="mb-1">Keep your account secure by updating your password when needed.</p>
+                        <asp:Label ID="PasswordSuccess" runat="server" CssClass="sd-save-message sd-save-success" role="status" aria-live="polite" /></div>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">Reset Password</button>
+                </div>
+            </section>
+            <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+                    <div class="modal-header"><h2 class="modal-title fs-5" id="resetPasswordTitle">Reset Password</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                    <div class="modal-body">
+                        <p class="sd-note">Enter your current password, then choose a new password.</p>
+                        <asp:Label ID="PasswordError" runat="server" CssClass="sd-save-message sd-save-error" role="alert" />
+                        <div class="mb-3"><asp:Label runat="server" AssociatedControlID="CurrentPasswordInput" CssClass="form-label" Text="Current password" />
+                            <asp:TextBox ID="CurrentPasswordInput" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="current-password" /></div>
+                        <div class="mb-3"><asp:Label runat="server" AssociatedControlID="NewPasswordInput" CssClass="form-label" Text="New password" />
+                            <asp:TextBox ID="NewPasswordInput" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="new-password" />
+                            <small class="sd-note">Use at least 6 characters.</small></div>
+                        <div><asp:Label runat="server" AssociatedControlID="ConfirmPasswordInput" CssClass="form-label" Text="Confirm new password" />
+                            <asp:TextBox ID="ConfirmPasswordInput" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="new-password" /></div>
+                    </div>
+                    <div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <asp:Button ID="ResetPasswordButton" runat="server" CssClass="sd-save-button" Text="Update Password" OnClick="ResetPasswordButton_Click" CausesValidation="false" /></div>
+                </div></div>
+            </div>
             <% } %>
         </div>
     </div>
@@ -128,7 +157,8 @@
                 status.textContent = button.value === 'Validate Changes' ? 'Validating your draft; nothing will be saved…'
                     : button.value === 'Edit Profile' ? 'Loading your verified profile for editing…'
                     : button.value === 'Cancel' ? 'Discarding changes and reloading your profile…'
-                    : 'Saving is disabled pending team approval.';
+                    : button.value === 'Update Password' ? 'Verifying your account and updating your password…'
+                    : button.value === 'Save Changes' ? 'Saving and verifying your profile in Firebase…' : 'Processing your request…';
                 root.setAttribute('aria-busy', 'true');
             });
         });
