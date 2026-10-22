@@ -513,6 +513,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Folder Include="Academic\" />
+    <Folder Include="Company\" />
+    <Folder Include="Coordinator\" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
     <Content Include="Content\bootstrap.rtl.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
@@ -588,4 +593,26 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
+  <ItemGroup>
+    <Content Include="..\..\docs\student\PROFILE-WRITES.md" />
+    <Content Include="..\..\docs\student\SHARED-LAYOUT.md" />
+    <Content Include="..\..\docs\student\INTEGRATION.md" />
+    <Content Include="..\..\docs\student\FINALIZATION.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ContactUs\ContactPage\Contact.aspx" />
+    <Content Include="ContactUs\ContactPage\Contact.css" />
+    <Content Include="ContactUs\ContactPage\Contact.js" />
+    <Content Include="ContactUs\ContactPage\INTEGRATION.md" />
+    <Content Include="ContactUs\ContactPage\Verify-Contact.ps1" />
+    <Content Include="ContactUs\ContactPage\Test-ContactHttp.ps1" />
+    <Compile Include="ContactUs\ContactPage\Contact.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ContactUs\ContactPage\Contact.aspx.designer.cs" />
+    <Compile Include="ContactUs\ContactPage\ContactService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
 </Project>
