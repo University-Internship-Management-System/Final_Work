@@ -194,6 +194,16 @@
     <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
     <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
     <Content Include="Company\MyTrainees\MyTrainees.aspx" />
+    <Compile Include="Company\MyTrainees\MyTrainees.aspx.cs">
+      <DependentUpon>MyTrainees.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\MyTrainees\MyTrainees.aspx.designer.cs">
+      <DependentUpon>MyTrainees.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
+    <Content Include="Company\MyTrainees\MyTrainees.css" />
+    <Content Include="Company\MyTrainees\MyTrainees.js" />
     <Content Include="Company\ManageTasks\ManageTasks.aspx" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
@@ -211,19 +221,15 @@
     <Content Include="Student\ApplicationForm\ApplicationForm.js" />
     <Content Include="Student\Content\Student.css" />
     <Content Include="Student\Content\Student.js" />
-    <Content Include="Student\Dashboard.aspx" />
     <Content Include="Student\Dashboard\css\dashboard.css" />
-    <Content Include="Student\Dashboard\Dashboard.aspx" />
     <Content Include="Student\Dashboard\javascript\dashboard.js" />
     <Content Include="Student\Images\university-campus.jpg" />
     <Content Include="Student\MyApplications\MyApplications.aspx" />
     <Content Include="Student\MyApplications\MyApplications.css" />
     <Content Include="Student\MyApplications\MyApplications.js" />
-    <Content Include="Student\MyProfile.aspx" />
     <Content Include="Student\Opportunities\Opportunities.aspx" />
     <Content Include="Student\Opportunities\Opportunities.css" />
     <Content Include="Student\Opportunities\Opportunities.js" />
-    <Content Include="Student\Profile.aspx" />
     <Content Include="Student\StudentDashboardPage\Dashboard.aspx" />
     <Content Include="Student\StudentDashboardPage\Dashboard.css" />
     <Content Include="Student\StudentProfilePage\Profile.aspx" />
@@ -379,17 +385,6 @@
     <Compile Include="Student\ApplicationForm\ApplicationForm.aspx.designer.cs">
       <DependentUpon>ApplicationForm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Student\Dashboard\Dashboard.aspx.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Student\Dashboard\Dashboard.aspx.designer.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Student\Data\ProfileValidation.cs" />
-    <Compile Include="Student\Data\StudentDevelopmentSignIn.cs" />
-    <Compile Include="Student\Data\StudentModels.cs" />
-    <Compile Include="Student\Data\StudentRepository.cs" />
     <Compile Include="Student\MyApplications\MyApplications.aspx.cs">
       <DependentUpon>MyApplications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -445,11 +440,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Academic\" />
-    <Folder Include="Company\" />
-    <Folder Include="Coordinator\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
     <Content Include="Content\bootstrap.rtl.css.map" />
@@ -545,7 +536,5 @@
     <Compile Include="ContactUs\ContactPage\Contact.aspx.designer.cs" />
     <Compile Include="ContactUs\ContactPage\ContactService.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

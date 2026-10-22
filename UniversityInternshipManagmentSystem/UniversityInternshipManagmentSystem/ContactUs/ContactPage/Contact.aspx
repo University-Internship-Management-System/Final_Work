@@ -1,5 +1,7 @@
-<%@ Page Title="Contact Us | UIMS" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" CodeBehind="Contact.aspx.cs" Inherits="UniversityInternshipManagmentSystem.ContactModule.ContactPage" %>
+﻿<%@ Page Title="Contact Us | UIMS" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" ValidateRequest="false" CodeBehind="Contact.aspx.cs" Inherits="UniversityInternshipManagmentSystem.ContactModule.ContactPage" %>
 <asp:Content ID="ContactHead" ContentPlaceHolderID="HeadContent" runat="server">
+    <%-- Under the team's legacy request validation, ContactValidation rejects markup explicitly
+         and controls encode values, allowing field feedback instead of a framework error. --%>
     <link rel="stylesheet" href="<%= ResolveUrl("~/ContactUs/ContactPage/Contact.css") %>" />
 </asp:Content>
 <asp:Content ID="ContactBody" ContentPlaceHolderID="MainContent" runat="server">

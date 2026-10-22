@@ -12,7 +12,7 @@
         {
             case "student":
                 return new[] {
-                    "Dashboard|~/Student/Dashboard/Dashboard.aspx",
+                    "Dashboard|~/Student/StudentDashboardPage/Dashboard.aspx",
                     "My Profile|~/Student/StudentProfilePage/Profile.aspx",
                     "Browse Opportunities|~/Student/Opportunities/Opportunities.aspx",
                     "My Applications|~/Student/MyApplications/MyApplications.aspx",

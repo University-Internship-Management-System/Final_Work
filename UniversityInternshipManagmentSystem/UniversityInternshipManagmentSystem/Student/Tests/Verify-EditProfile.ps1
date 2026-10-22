@@ -1,9 +1,11 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 $assembly=Join-Path $root 'bin/UniversityInternshipManagmentSystem.dll'
 $json=Join-Path $root 'bin/Newtonsoft.Json.dll'
 [void][Reflection.Assembly]::LoadFrom($json)
 [void][Reflection.Assembly]::LoadFrom($assembly)
+[xml]$teamConfig = Get-Content (Join-Path $root 'Web.config')
+[UniversityInternshipManagmentSystem.Config.AppConfig]::DbUrl = ($teamConfig.configuration.appSettings.add | Where-Object { $_.key -eq 'DbUrl' }).value
 Add-Type -ReferencedAssemblies @($assembly,$json,'System.Core','System.Web','System.Net.Http') -TypeDefinition @'
 using System;
 using System.Collections.Generic;
@@ -38,7 +40,8 @@ public static class EditProfileChecks
     {
         var constructor=typeof(FirebaseStudentRepository).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null,
             new[] { typeof(StudentAccess), typeof(HttpClient) }, null);
-        return (FirebaseStudentRepository)constructor.Invoke(new object[] { access, new HttpClient(transport) });
+        try { return (FirebaseStudentRepository)constructor.Invoke(new object[] { access, new HttpClient(transport) }); }
+        catch (TargetInvocationException error) { throw error.InnerException; }
     }
     public static string Run()
     {
@@ -79,8 +82,8 @@ public static class EditProfileChecks
             fake=new FakeFirebase(); fake.Record["AuthUid"]="another-user"; repo=Repository(Access(),fake);
             Reject(()=>repo.UpdateProfileAsync(patch).GetAwaiter().GetResult(),"Foreign record write allowed");
             Check(!fake.Methods.Contains("PATCH"),"AuthUid mismatch blocks PATCH");
-            fake=new FakeFirebase(); var access=Access(); access.FirebaseUid=null; repo=Repository(access,fake);
-            Reject(()=>repo.UpdateProfileAsync(patch).GetAwaiter().GetResult(),"Missing verified UID allowed");
+            fake=new FakeFirebase(); var access=Access(); access.FirebaseUid=null;
+            Reject(()=>Repository(access,fake),"Missing verified UID allowed at construction");
             Check(fake.Calls==0,"Missing UID fails before network");
             fake=new FakeFirebase(); access=Access(); access.EditableFields=new HashSet<string>(); repo=Repository(access,fake);
             access.EditableFields.Add("PhoneNumber");
@@ -109,7 +112,7 @@ public static class EditProfileChecks
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,CancellationToken cancellation)
         {
             Calls++; Methods.Add(request.Method.Method);
-            if(request.RequestUri.Scheme!="https" || request.RequestUri.Host!="uims-student-2026-default-rtdb.firebaseio.com"
+            if(request.RequestUri.Scheme!="https" || request.RequestUri.Host!=new Uri(FirebaseStudentRepository.DatabaseUrl).Host
                 || request.RequestUri.AbsolutePath!="/Students/student_001.json" || request.RequestUri.Query!="?auth=offline-token")
                 throw new Exception("Wrong repository resource or token binding");
             if(request.Method.Method=="PATCH")
