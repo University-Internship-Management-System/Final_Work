@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UniversityInternshipManagmentSystem.Config;
 using StudentRecord = UniversityInternshipManagmentSystem.Models.Student;
 
 namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
@@ -168,6 +173,13 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
             SaveMessage.Text = HttpUtility.HtmlEncode(message);
             SaveMessage.CssClass = "sd-save-message " + (isError ? "sd-save-error" : "sd-save-info");
             SaveMessage.Attributes["role"] = isError ? "alert" : "status";
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            string query = Request.Url.Query ?? "";
+            Response.Redirect("~/login/FirstLogin.aspx" + query, false);
+            Context.ApplicationInstance.CompleteRequest();
         }
     }
 

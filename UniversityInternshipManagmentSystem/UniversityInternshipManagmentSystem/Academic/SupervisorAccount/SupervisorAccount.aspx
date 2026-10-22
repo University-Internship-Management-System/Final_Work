@@ -16,7 +16,7 @@
             </div>
             <div class="d-flex align-items-center gap-2">
                 <span class="badge badge-approved py-2 px-3">
-                    <i class="bi bi-shield-check me-1"></i> Faculty Supervisor
+                    <i class="bi bi-shield-check me-1"></i>Faculty Supervisor
                 </span>
             </div>
         </div>
@@ -24,22 +24,26 @@
         <!-- Global Alert Notifications -->
         <asp:Panel ID="pnlProfileSuccess" runat="server" Visible="false" CssClass="uims-alert uims-alert-success">
             <i class="bi bi-check-circle-fill uims-alert-icon"></i>
-            <div><asp:Literal ID="litProfileSuccess" runat="server" /></div>
+            <div>
+                <asp:Literal ID="litProfileSuccess" runat="server" /></div>
         </asp:Panel>
 
         <asp:Panel ID="pnlProfileError" runat="server" Visible="false" CssClass="uims-alert uims-alert-danger">
             <i class="bi bi-exclamation-triangle-fill uims-alert-icon"></i>
-            <div><asp:Literal ID="litProfileError" runat="server" /></div>
+            <div>
+                <asp:Literal ID="litProfileError" runat="server" /></div>
         </asp:Panel>
 
         <asp:Panel ID="pnlPasswordSuccess" runat="server" Visible="false" CssClass="uims-alert uims-alert-success">
             <i class="bi bi-check-circle-fill uims-alert-icon"></i>
-            <div><asp:Literal ID="litPasswordSuccess" runat="server" /></div>
+            <div>
+                <asp:Literal ID="litPasswordSuccess" runat="server" /></div>
         </asp:Panel>
 
         <asp:Panel ID="pnlPasswordError" runat="server" Visible="false" CssClass="uims-alert uims-alert-danger">
             <i class="bi bi-exclamation-triangle-fill uims-alert-icon"></i>
-            <div><asp:Literal ID="litPasswordError" runat="server" /></div>
+            <div>
+                <asp:Literal ID="litPasswordError" runat="server" /></div>
         </asp:Panel>
 
         <asp:Panel ID="pnlAccountStatus" runat="server" CssClass="notice-box mb-4" role="status" aria-live="polite">
@@ -77,7 +81,7 @@
 
                     <div class="d-flex justify-content-center gap-2 mb-3">
                         <span class="badge badge-submitted">
-                            <i class="bi bi-building me-1"></i> KASIT - JU
+                            <i class="bi bi-building me-1"></i>KASIT - JU
                         </span>
                     </div>
 
@@ -264,8 +268,8 @@
                         <div class="security-checklist mt-3">
                             <div class="security-checklist-title">Password Security Requirements</div>
                             <ul class="security-checklist-items">
-                                <li id="ruleLength"><i class="bi bi-circle text-muted"></i> At least 6 characters long</li>
-                                <li id="ruleMatch"><i class="bi bi-circle text-muted"></i> New password and confirmation match</li>
+                                <li id="ruleLength"><i class="bi bi-circle text-muted"></i>At least 6 characters long</li>
+                                <li id="ruleMatch"><i class="bi bi-circle text-muted"></i>New password and confirmation match</li>
                             </ul>
                         </div>
 

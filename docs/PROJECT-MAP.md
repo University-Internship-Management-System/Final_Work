@@ -25,6 +25,8 @@ Never work directly on `dev` or `main`.
 | `Student/MyProgress/` | My Progress | abd3348 |
 | `Coordinator/ManageStudents/`, `ManageCompanySupervisors/`, `ManageAcademicSupervisors/`, `AssignAcademicSupervisors/` | Account management and supervisor assignment | Marwa |
 | `Coordinator/CoordinatorDashbord/`, `CoordinatorMonitor/` | Coordinator dashboard and monitor | Omar |
+| `Company/FinalEvaluation/` | Final Evaluation list + one trainee page: the weekly training report (the supervisor signs each week) and the evaluation form (6 skills, 5 levels, then Send). Data: `FinalEvaluations/<student id>` (`Models/FinalEvaluation.cs`). Follows the university form SUJ-KASIT-03-01-02 | Wadea |
+| `Company/ManageTasks/` | Tasks (create, edit, open/close) and Review task (score or ask for changes). Every task has `Hours` (its default weight) and an optional `StudentHours` map (studentId -> hours) for the trainees who need a different number; one trainee can have at most 15 hours of open tasks per week. Uses `Config/TaskDb.cs` | Wadea |
 | `Company/`, `Academic/` | A placeholder `Dashboard.aspx` plus "Coming soon" pages (see section 4) | nobody yet |
 | `Assets/` | Shared css, logo | Alaa |
 | `docs/` (outside the web project) | Notes and reports | |
@@ -32,6 +34,7 @@ Never work directly on `dev` or `main`.
 
 ## 3. Rules (keep it simple)
 - **One login.** Use `AuthHelper` and the guard in `Global.asax.cs`. Do not write your own sign-in or session check. Pages inside `Student/`, `Company/`, `Academic/` and `Coordinator/` are protected automatically.
+- **Session expiry.** The Firebase sign-in token lasts 1 hour. The guard in `Global.asax.cs` (rule 0) reads the end time from the token (`AuthHelper.IsTokenExpired`), signs the user out and sends them to `login/Login.aspx?expired=1` with the message "Your session expired. Please sign in again." and the page they came from. You do not need to handle it in your pages.
 - **Session keys:** `userId`, `role` (`student`, `company`, `academic`, `coordinator`), `name`, `email`, `idToken`, `firstLogin`.
 - **Which id to use for database records:** `userId` is the Firebase *account* id. The record key in the `Students` / `CompanySupervisors` / ... tables is `Session["dbRecordId"]`. Use `Session["dbRecordId"] ?? Session["userId"]` whenever you look up or save something that belongs to a person (tasks, submissions, applications). Otherwise people whose record key is not their account id see no data.
 - **Layouts.** Role pages use `~/Shared/Dashboard.Master`. Public pages use `~/Shared/Public.Master`.
@@ -50,8 +53,6 @@ Each page below **already exists as a "Coming soon" placeholder** and is linked 
 | Company | Manage Opportunities | `Company/ManageOpportunities/ManageOpportunities.aspx` |
 | Company | Applications | `Company/ApplicationsReview/ApplicationsReview.aspx` |
 | Company | My Trainees | `Company/MyTrainees/MyTrainees.aspx` |
-| Company | Tasks | `Company/ManageTasks/ManageTasks.aspx` |
-| Company | Final Evaluation | `Company/FinalEvaluation/FinalEvaluation.aspx` |
 | Company | Account | `Company/SupervisorAccount/SupervisorAccount.aspx` |
 | Academic | Student Progress | `Academic/StudentProgress/StudentProgress.aspx` |
 | Academic | Final Evaluation | `Academic/FinalEvaluation/FinalEvaluation.aspx` |
@@ -62,6 +63,7 @@ Each page below **already exists as a "Coming soon" placeholder** and is linked 
 | Student | My Applications | `Student/MyApplications/MyApplications.aspx` |
 
 ## 5. Known issues and open decisions
+- **Keep the PC clock synced** (Windows Settings, Time & language, Date & time, Sync now). A clock that is a few seconds behind Google's used to make the student pages and My Trainees fail right after login and work after a refresh. They now allow 5 minutes of difference, but a very wrong clock can still cause trouble.
 - **Two student dashboards:** `Student/Dashboard/` (Alaa, what login uses) and `Student/StudentDashboardPage/` (Lujain). Decide which one stays.
 - **Lujain's Dashboard and Profile read a different Firebase project** (`uims-student-2026`, through `Student/Data/`). They need to use the team database and `AuthHelper`.
 - **Demo accounts with passwords written in the code:** `login/Login.aspx.cs` and the quick-login buttons in `login/Login.aspx`. Remove before the demo.

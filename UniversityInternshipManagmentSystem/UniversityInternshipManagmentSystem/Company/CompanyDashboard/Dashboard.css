@@ -1,0 +1,316 @@
+﻿
+/* ==========================================
+   COMPANY DASHBOARD
+   UIMS Design System
+   ========================================== */
+
+.company-dashboard {
+    max-width: 1350px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+    /* Header */
+
+    .company-dashboard .cd-header {
+        margin-bottom: 30px;
+    }
+
+    .company-dashboard .cd-eyebrow {
+        color: var(--uims-accent, #178568);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .company-dashboard .cd-header h1 {
+        color: var(--uims-primary, #07523E);
+        font-size: 32px;
+        font-weight: 700;
+        margin: 8px 0;
+    }
+
+    .company-dashboard .cd-header p {
+        font-size: 15px;
+        color: var(--uims-muted, #65756E);
+        margin: 0;
+    }
+
+    /* Statistics Cards */
+
+    .company-dashboard .cd-stat-card {
+        background: var(--uims-white, #FFFFFF);
+        border: 1px solid var(--uims-border, #E2E8E5);
+        border-radius: 16px;
+        padding: 24px;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 18px rgba(7, 82, 62, 0.04);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+        .company-dashboard .cd-stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--uims-accent, #178568);
+        }
+
+        .company-dashboard .cd-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(7, 82, 62, 0.09);
+        }
+
+    .company-dashboard .cd-stat-label {
+        color: var(--uims-muted, #65756E);
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 12px;
+    }
+
+    .company-dashboard .cd-stat-value {
+        color: var(--uims-primary, #07523E);
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    .company-dashboard .cd-stat-footer {
+        color: var(--uims-muted, #65756E);
+        font-size: 12px;
+    }
+
+    /* Panels */
+
+    .company-dashboard .cd-panel {
+        background: var(--uims-white, #FFFFFF);
+        border: 1px solid var(--uims-border, #E2E8E5);
+        border-radius: 16px;
+        padding: 24px;
+        height: 100%;
+        box-shadow: 0 3px 14px rgba(7, 82, 62, 0.03);
+    }
+
+    .company-dashboard .cd-panel-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+        .company-dashboard .cd-panel-heading h2 {
+            color: var(--uims-text, #183B31);
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 6px;
+        }
+
+        .company-dashboard .cd-panel-heading p {
+            font-size: 13px;
+            color: var(--uims-muted, #65756E);
+            margin: 0;
+        }
+
+    /* Students */
+
+    .company-dashboard .cd-student-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .company-dashboard .cd-student-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--uims-border, #E2E8E5);
+    }
+
+        .company-dashboard .cd-student-item:last-child {
+            border-bottom: none;
+        }
+
+    .company-dashboard .cd-avatar {
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: var(--uims-mint, #EAF4EF);
+        color: var(--uims-primary, #07523E);
+        font-weight: 700;
+        font-size: 17px;
+    }
+
+    .company-dashboard .cd-student-details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+        min-width: 0;
+    }
+
+        .company-dashboard .cd-student-details strong {
+            color: var(--uims-text, #183B31);
+            font-size: 14px;
+        }
+
+        .company-dashboard .cd-student-details span,
+        .company-dashboard .cd-student-details small {
+            color: var(--uims-muted, #65756E);
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+    .company-dashboard .cd-student-task-count {
+        background: var(--uims-mint, #EAF4EF);
+        color: var(--uims-primary, #07523E);
+        border-radius: 20px;
+        padding: 7px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    /* Submission Status Overview */
+
+    .company-dashboard .cd-status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 17px 0;
+        border-bottom: 1px solid var(--uims-border, #E2E8E5);
+    }
+
+        .company-dashboard .cd-status-row:last-child {
+            border-bottom: none;
+        }
+
+        .company-dashboard .cd-status-row span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--uims-text, #183B31);
+            font-size: 14px;
+        }
+
+        .company-dashboard .cd-status-row strong {
+            font-size: 20px;
+            color: var(--uims-primary, #07523E);
+        }
+
+    .company-dashboard .cd-status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .company-dashboard .cd-blue {
+        background: var(--uims-info, #2563EB);
+    }
+
+    .company-dashboard .cd-orange {
+        background: var(--uims-warning, #F59E0B);
+    }
+
+    .company-dashboard .cd-green {
+        background: var(--uims-success, #16A34A);
+    }
+
+    /* Recent Submissions */
+
+    .company-dashboard .cd-recent-panel {
+        margin-top: 24px;
+        height: auto;
+    }
+
+    .company-dashboard .cd-table {
+        width: 100%;
+        vertical-align: middle;
+        margin-bottom: 0;
+    }
+
+        .company-dashboard .cd-table th {
+            background: var(--uims-bg, #F8FAF9);
+            color: var(--uims-muted, #65756E);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 14px;
+            white-space: nowrap;
+        }
+
+        .company-dashboard .cd-table td {
+            color: var(--uims-text, #183B31);
+            font-size: 13px;
+            padding: 16px 14px;
+            border-bottom: 1px solid var(--uims-border, #E2E8E5);
+        }
+
+    .company-dashboard .cd-status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .company-dashboard .cd-badge-submitted {
+        background: #DBEAFE;
+        color: #1D4ED8;
+    }
+
+    .company-dashboard .cd-badge-revision {
+        background: #FEF3C7;
+        color: #B45309;
+    }
+
+    .company-dashboard .cd-badge-evaluated {
+        background: #DCFCE7;
+        color: #15803D;
+    }
+
+    /* Empty State */
+
+    .company-dashboard .cd-empty {
+        text-align: center;
+        background: var(--uims-bg, #F8FAF9);
+        border-radius: 12px;
+        padding: 30px 20px;
+        color: var(--uims-muted, #65756E);
+        font-size: 14px;
+    }
+
+/* Responsive */
+
+@media (max-width: 767px) {
+
+    .company-dashboard .cd-header h1 {
+        font-size: 26px;
+    }
+
+    .company-dashboard .cd-stat-value {
+        font-size: 30px;
+    }
+
+    .company-dashboard .cd-panel {
+        padding: 18px;
+    }
+
+    .company-dashboard .cd-student-item {
+        flex-wrap: wrap;
+    }
+
+    .company-dashboard .cd-student-task-count {
+        margin-left: 58px;
+    }
+}

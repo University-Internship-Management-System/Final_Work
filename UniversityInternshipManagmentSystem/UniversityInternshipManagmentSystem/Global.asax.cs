@@ -59,6 +59,16 @@ namespace UniversityInternshipManagmentSystem
                 || string.Equals(path, "~/login/Login", StringComparison.OrdinalIgnoreCase);
             bool isLogoutPage = path.IndexOf("Logout", StringComparison.OrdinalIgnoreCase) >= 0;
 
+            // 0. The Firebase token lasts 1 hour. When it has expired every database call fails and the pages look empty,
+            //    so sign the user out and send them to the login page with a message (they come back to this page after signing in).
+            if (isProtectedArea && isAuth && AuthHelper.IsTokenExpired)
+            {
+                AuthHelper.SignOut();
+                context.Response.Redirect("~/login/Login.aspx?expired=1&ReturnUrl=" + HttpUtility.UrlEncode(context.Request.RawUrl), false);
+                context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
             // 1. Unauthenticated user trying to access protected role area -> redirect to Login
             if (isProtectedArea && !isAuth)
             {

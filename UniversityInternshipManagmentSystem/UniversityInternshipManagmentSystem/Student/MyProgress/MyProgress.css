@@ -662,6 +662,36 @@
     background: var(--uims-bg);
 }
 
+.mp-certificate-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--uims-primary);
+    box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 5px var(--uims-accent);
+}
+
+.mp-certificate-preview > span {
+    font-family: Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.mp-certificate-preview > span span {
+    color: var(--uims-accent);
+}
+
+.mp-certificate-preview strong {
+    font-family: Georgia, serif;
+    font-size: 8px;
+}
+
+.mp-certificate-preview small {
+    font-size: 5px;
+    letter-spacing: 1px;
+}
+
 .mp-certificate-actions {
     display: flex;
     align-items: center;
