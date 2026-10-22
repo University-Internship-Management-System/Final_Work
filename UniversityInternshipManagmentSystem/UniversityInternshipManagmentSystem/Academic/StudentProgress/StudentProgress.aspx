@@ -14,7 +14,9 @@
 .sp-badge{display:inline-block;padding:5px 9px;border-radius:7px;font-weight:700;white-space:nowrap}
 .sp-pending{background:#fff4d6;color:#795800}.sp-revision{background:#fff0e9;color:#9a3d18}.sp-done{background:#e7f5ec;color:#07523e}.sp-muted{background:#edf0f2;color:#52616b}
 .sp-empty{color:var(--uims-muted);text-align:center;padding:25px!important}.sp-progress{height:11px;background:#e5e9eb;border-radius:20px;overflow:hidden}.sp-progress span{display:block;height:100%;background:var(--uims-primary)}
-.sp-note{background:#f8faf9;border-radius:9px;padding:14px}.sp-demo{font-size:.78rem;color:var(--uims-muted);font-weight:500}
+.sp-note{background:#f8faf9;border-radius:9px;padding:14px}
+.sp-dialog{width:min(92vw,620px);max-height:85vh;margin:auto;border:1px solid #dfe6ea;border-radius:15px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.25);color:var(--uims-dark)}
+.sp-dialog::backdrop{background:rgba(8,30,27,.55)}.sp-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 @media(max-width:850px){.sp-grid{grid-template-columns:1fr}.sp-card{padding:18px}}
 </style>
 </asp:Content>
@@ -53,8 +55,14 @@
         </div>
         <section class="sp-card sp-section" aria-labelledby="tasksHeading">
             <h2 id="tasksHeading" class="sp-title"><span class="sp-icon" aria-hidden="true">☷</span> Student Tasks and Company Feedback <small class="sp-help">(<span id="taskCount"></span>)</small></h2>
-            <div class="table-responsive"><table class="sp-table"><thead><tr><th>Task</th><th>Hours</th><th>Deadline</th><th>Submission status</th><th>Score</th><th>Company supervisor feedback</th></tr></thead><tbody id="taskRows"></tbody></table></div>
+            <div class="table-responsive"><table class="sp-table"><thead><tr><th>Task</th><th>Hours</th><th>Deadline</th><th>Submission status</th><th>Score</th><th>Company supervisor feedback</th><th>Academic feedback</th></tr></thead><tbody id="taskRows"></tbody></table></div>
         </section>
+        <dialog id="taskFeedbackEditor" class="sp-dialog" aria-labelledby="taskFeedbackHeading">
+            <div class="sp-dialog-head"><h2 id="taskFeedbackHeading" class="sp-title"><span class="sp-icon" aria-hidden="true">▤</span> Feedback for <span id="feedbackTaskName"></span></h2><button id="closeTaskFeedback" type="button" class="btn-close" aria-label="Close feedback window"></button></div>
+            <asp:HiddenField ID="hidSubmissionId" runat="server" />
+            <asp:TextBox ID="txtTaskFeedback" runat="server" TextMode="MultiLine" Rows="3" MaxLength="2000" CssClass="form-control" aria-label="Academic feedback for this task" placeholder="Write feedback for the student's latest submission" />
+            <div class="d-flex align-items-center gap-3 mt-3"><asp:Button ID="btnSaveTaskFeedback" runat="server" Text="Save Task Feedback" CssClass="btn btn-primary" OnClick="btnSaveTaskFeedback_Click" /><asp:Label ID="lblTaskFeedbackStatus" runat="server" role="status" /></div>
+        </dialog>
         <section class="sp-card sp-section" aria-labelledby="notesHeading">
             <h2 id="notesHeading" class="sp-title"><span class="sp-icon" aria-hidden="true">▤</span> Academic Supervisor Notes</h2>
             <asp:HiddenField ID="hidSelectedStudent" runat="server" />
@@ -124,10 +132,12 @@
 
     document.getElementById('taskCount').textContent = data.Tasks.length;
     var rows = document.getElementById('taskRows');
+    var feedbackDialog = document.getElementById('taskFeedbackEditor');
+    document.getElementById('closeTaskFeedback').addEventListener('click', function () { feedbackDialog.close(); });
     if (data.Tasks.length === 0) {
         var empty = document.createElement('tr');
         var message = cell(empty, 'No tasks are currently assigned to this student.');
-        message.colSpan = 6;
+        message.colSpan = 7;
         message.className = 'sp-empty';
         rows.appendChild(empty);
     }
@@ -154,8 +164,29 @@
         if (status.toLowerCase() === 'evaluated') score = task.Score == null ? 'Not available' : task.Score + ' / ' + (task.MaxScore || 'Not available');
         cell(row, score);
         cell(row, task.Feedback || 'Not available');
+        var academicCell = cell(row, task.AcademicFeedback || 'No academic feedback yet.');
+        if (task.SubmissionId && !data.FeedbackLocked) {
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'btn btn-outline-primary btn-sm d-block mt-2';
+            button.textContent = task.AcademicFeedback ? 'Edit feedback' : 'Add feedback';
+            button.addEventListener('click', function () {
+                document.getElementById('<%= hidSubmissionId.ClientID %>').value = task.SubmissionId;
+                document.getElementById('<%= txtTaskFeedback.ClientID %>').value = task.AcademicFeedback || '';
+                document.getElementById('feedbackTaskName').textContent = task.Name || 'task';
+                feedbackDialog.showModal();
+            });
+            academicCell.appendChild(button);
+        }
         rows.appendChild(row);
     });
+    if (document.getElementById('<%= lblTaskFeedbackStatus.ClientID %>').textContent.trim()) {
+        var savedSubmissionId = document.getElementById('<%= hidSubmissionId.ClientID %>').value;
+        data.Tasks.forEach(function (task) {
+            if (task.SubmissionId === savedSubmissionId) document.getElementById('feedbackTaskName').textContent = task.Name || 'task';
+        });
+        feedbackDialog.showModal();
+    }
 }());
 </script>
 </asp:Content>

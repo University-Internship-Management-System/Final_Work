@@ -34,6 +34,14 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
 
         protected global::System.Web.UI.WebControls.Literal litProgressData;
 
+        protected global::System.Web.UI.WebControls.HiddenField hidSubmissionId;
+
+        protected global::System.Web.UI.WebControls.TextBox txtTaskFeedback;
+
+        protected global::System.Web.UI.WebControls.Button btnSaveTaskFeedback;
+
+        protected global::System.Web.UI.WebControls.Label lblTaskFeedbackStatus;
+
         protected global::System.Web.UI.WebControls.HiddenField hidSelectedStudent;
 
         protected global::System.Web.UI.WebControls.TextBox txtAcademicNote;
