@@ -284,6 +284,20 @@
       <DependentUpon>MyTrainees.aspx</DependentUpon>
     </Compile>
     <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
+    <Compile Include="Company\FinalEvaluation\FinalEvaluation.aspx.cs">
+      <DependentUpon>FinalEvaluation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\FinalEvaluation\FinalEvaluation.aspx.designer.cs">
+      <DependentUpon>FinalEvaluation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\FinalEvaluation\EvaluateTrainee.aspx.cs">
+      <DependentUpon>EvaluateTrainee.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\FinalEvaluation\EvaluateTrainee.aspx.designer.cs">
+      <DependentUpon>EvaluateTrainee.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Company\ManageTasks\ManageTasks.aspx.cs">
       <DependentUpon>ManageTasks.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -305,6 +319,8 @@
     <Content Include="Company\ManageTasks\ManageTasks.js" />
     <Content Include="Company\ManageTasks\ReviewTask.aspx" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
+    <Content Include="Company\FinalEvaluation\FinalEvaluation.css" />
+    <Content Include="Company\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
     <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
     <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
@@ -455,6 +471,7 @@
     <Compile Include="Models\AcademicSupervisor.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\FinalEvaluation.cs" />
     <Compile Include="Models\Certificate.cs" />
     <Compile Include="Models\CompanySupervisor.cs" />
     <Compile Include="Models\Opportunity.cs" />

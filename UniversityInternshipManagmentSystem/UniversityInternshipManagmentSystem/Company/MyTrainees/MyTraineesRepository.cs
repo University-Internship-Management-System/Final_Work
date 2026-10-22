@@ -156,14 +156,17 @@ namespace UniversityInternshipManagmentSystem.Company.MyTraineesModule
                 var header = JObject.Parse(Decode(parts[0]));
                 var claims = JObject.Parse(Decode(parts[1]), new JsonLoadSettings { DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error });
                 var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                // A computer clock that is a few seconds behind Google's would reject a token that was JUST issued,
+                // so "issued in the future" gets 5 minutes of room.
+                const long skew = 300;
                 long validSince;
                 if ((string)header["alg"] != "RS256" || (string)claims["sub"] != uid
                     || (string)claims["aud"] != project || (string)claims["iss"] != "https://securetoken.google.com/" + project
                     || claims["exp"] == null || claims["exp"].Type != JTokenType.Integer
                     || claims["iat"] == null || claims["iat"].Type != JTokenType.Integer
                     || claims["auth_time"] == null || claims["auth_time"].Type != JTokenType.Integer
-                    || (long)claims["exp"] <= now || (long)claims["iat"] > now || (long)claims["iat"] < 0
-                    || (long)claims["exp"] <= (long)claims["iat"] || (long)claims["auth_time"] > now || (long)claims["auth_time"] < 0
+                    || (long)claims["exp"] <= now || (long)claims["iat"] > now + skew || (long)claims["iat"] < 0
+                    || (long)claims["exp"] <= (long)claims["iat"] || (long)claims["auth_time"] > now + skew || (long)claims["auth_time"] < 0
                     || (long.TryParse((string)account["validSince"], out validSince) && (long)claims["auth_time"] < validSince))
                     throw new FormatException();
                 return DateTimeOffset.FromUnixTimeSeconds((long)claims["exp"]);
