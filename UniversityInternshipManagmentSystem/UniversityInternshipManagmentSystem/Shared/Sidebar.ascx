@@ -102,7 +102,7 @@
 </script>
 
 <a class="uims-side-brand" runat="server" href="~/index.aspx">
-    <img class="uims-brand-image" runat="server" src="~/Assets/PublicHome/university-logo.png" alt="University of Jordan" />
+    <img class="uims-brand-image" runat="server" src="~/Assets/PublicHome/university-logo.png" width="42" height="50" alt="University of Jordan" />
     <strong>UIMS</strong>
 </a>
 <p class="uims-side-role"><asp:Literal ID="litRole" runat="server" /></p>
