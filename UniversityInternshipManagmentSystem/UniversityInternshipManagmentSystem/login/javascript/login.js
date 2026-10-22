@@ -1,4 +1,4 @@
-﻿/**
+/**
  * University Internship Management System (UIMS)
  * King Abdullah II School of Information Technology - The University of Jordan
  * Login & Authentication Module JavaScript
@@ -14,11 +14,7 @@
         initPasswordToggles();
         initDemoAutofill();
         initForgotModal();
-<<<<<<< HEAD
         initPasswordMeter();
-=======
-        initTopbarNav();
->>>>>>> 74f40996fe90a8b391fadde64cedaeedf53b0d38
     });
 
     /**
@@ -177,32 +173,6 @@
         if (modalEl && typeof bootstrap !== "undefined") {
             var modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
             modalInstance.show();
-        }
-    }
-
-    /**
-     * Initializes responsive navigation toggler for the topbar and updates copyright year.
-     */
-    function initTopbarNav() {
-        var menu = document.getElementById("menuToggle");
-        var links = document.getElementById("navlinks");
-        if (menu && links) {
-            menu.addEventListener("click", function () {
-                var open = links.classList.toggle("open");
-                menu.setAttribute("aria-expanded", String(open));
-                menu.textContent = open ? "✕" : "☰";
-            });
-            links.querySelectorAll("a").forEach(function (a) {
-                a.addEventListener("click", function () {
-                    links.classList.remove("open");
-                    menu.setAttribute("aria-expanded", "false");
-                    menu.textContent = "☰";
-                });
-            });
-        }
-        var yearEl = document.getElementById("year");
-        if (yearEl) {
-            yearEl.textContent = new Date().getFullYear();
         }
     }
 

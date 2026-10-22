@@ -45,6 +45,8 @@ never throws. People are found in the database: `Students`, `CompanySupervisors`
 
 **An email did not arrive?** Open `App_Data/email-log.txt` (next to `Web.config`). Every try is one line: `SENT`, `FAILED` (with the reason, for example a wrong App password) or `SKIPPED` (SMTP not set up, or the person has no email address). The welcome email is only for accounts created after the email confirmation feature, so use a **new** account to test it.
 
+**Sign-in feels slow?** `App_Data/email-log.txt` also gets one `sign-in timing` line per sign-in: how many milliseconds the password check, the profile lookup and the confirmation check took. Send that line to whoever debugs it. (The first sign-in after the site starts is always slower: .NET is warming up.)
+
 To add another email: add a method to `Notify.cs` (copy a short one such as `TaskNews`) and call it from the page (no `await`).
 
 ### SMTP settings (already done for the whole team)
