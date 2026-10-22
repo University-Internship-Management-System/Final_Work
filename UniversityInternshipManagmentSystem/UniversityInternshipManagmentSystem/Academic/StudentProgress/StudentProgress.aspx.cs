@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.UI;
 using UniversityInternshipManagmentSystem.Config;
 
@@ -14,12 +12,23 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
 {
     public partial class StudentProgress : Page
     {
+        private const int RequiredTrainingHours = 90;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            AuthHelper.RequireAuth(this, AuthHelper.RoleAcademic);
-            if (Response.IsRequestBeingRedirected) return;
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/login/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
             RegisterAsyncTask(new PageAsyncTask(LoadProgressAsync));
         }
+            //AuthHelper.RequireAuth(this, AuthHelper.RoleAcademic);
+            //if (Response.IsRequestBeingRedirected) return;
+            //RegisterAsyncTask(new PageAsyncTask(LoadProgressAsync));
+        
 
         private async Task LoadProgressAsync()
         {
@@ -32,144 +41,268 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
                 JObject companies = await ReadTable("CompanySupervisors");
                 JObject tasks = await ReadTable("Tasks");
                 JObject submissions = await ReadTable("TaskSubmissions");
+                JObject evaluations = await ReadTable("FinalEvaluations");
 
-                JToken supervisor = supervisors[supervisorId];
-                if (supervisor == null && !String.IsNullOrWhiteSpace(AuthHelper.UserEmail))
-                {
-                    // عند غياب رقم السجل في الجلسة نحدد سجل المشرف من بريده الجامعي أو بريد الحساب.
-                    foreach (JProperty entry in supervisors.Properties())
-                    {
-                        string email = (string)entry.Value["Email"];
-                        string universityEmail = (string)entry.Value["UniversityEmail"];
-                        if (!String.Equals(email?.Trim(), AuthHelper.UserEmail.Trim(), StringComparison.OrdinalIgnoreCase) &&
-                            !String.Equals(universityEmail?.Trim(), AuthHelper.UserEmail.Trim(), StringComparison.OrdinalIgnoreCase)) continue;
-                        supervisorId = entry.Name;
-                        supervisor = entry.Value;
-                        break;
-                    }
-                }
-                string supervisorMajor = ((string)supervisor?["Major"])?.Trim();
+                JToken supervisor = ResolveSupervisor(supervisors, ref supervisorId);
+                string supervisorMajor = supervisor == null ? null : (string)supervisor["Major"];
                 if (String.IsNullOrWhiteSpace(supervisorMajor))
                 {
-                    pnlStudent.Visible = false;
-                    lblMessage.Text = "The academic supervisor's major is not available.";
-                    lblMessage.Visible = true;
+                    ShowMessage("The academic supervisor's major is not available.");
                     return;
                 }
+                supervisorMajor = supervisorMajor.Trim();
 
-                var assigned = new List<JProperty>();
+                var assignedStudents = new List<JProperty>();
                 foreach (JProperty student in students.Properties())
                 {
-                    string studentMajor = ((string)student.Value["Major"])?.Trim();
+                    string studentMajor = (string)student.Value["Major"];
+                    if (studentMajor == null) continue;
                     // لا يظهر الطالب إلا إذا كان معيناً لهذا المشرف وكان تخصصه مطابقاً لتخصص المشرف.
-                    if (String.Equals((string)student.Value["AcademicSupervisorId"], supervisorId, StringComparison.Ordinal) &&
-                        String.Equals(studentMajor, supervisorMajor, StringComparison.OrdinalIgnoreCase))
-                        assigned.Add(student);
+                    if ((string)student.Value["AcademicSupervisorId"] == supervisorId &&
+                        String.Equals(studentMajor.Trim(), supervisorMajor, StringComparison.OrdinalIgnoreCase))
+                        assignedStudents.Add(student);
                 }
-                assigned.Sort((a, b) => String.Compare((string)a.Value["Name"], (string)b.Value["Name"], StringComparison.CurrentCultureIgnoreCase));
-                if (assigned.Count == 0)
+                assignedStudents.Sort((a, b) => String.Compare((string)a.Value["Name"], (string)b.Value["Name"], StringComparison.CurrentCultureIgnoreCase));
+                if (assignedStudents.Count == 0)
                 {
-                    pnlStudent.Visible = false;
-                    lblMessage.Text = "No students with your major are currently assigned to this academic supervisor account.";
-                    lblMessage.Visible = true;
+                    ShowMessage("No students with your major are currently assigned to this academic supervisor account.");
                     return;
                 }
 
                 string requestedId = Request.QueryString["student"];
-                JProperty selected = assigned.Find(item => item.Name == requestedId) ?? assigned[0];
-                var options = new StringBuilder();
-                foreach (JProperty student in assigned)
+                JProperty selected = assignedStudents[0];
+                foreach (JProperty student in assignedStudents)
                 {
-                    options.Append("<option value=\"").Append(HttpUtility.HtmlAttributeEncode(student.Name)).Append("\"");
-                    if (student.Name == selected.Name) options.Append(" selected");
-                    options.Append(">").Append(Show((string)student.Value["Name"])).Append(" — ")
-                        .Append(Show((string)student.Value["Major"])).Append("</option>");
+                    if (student.Name == requestedId) selected = student;
                 }
-                litStudentOptions.Text = options.ToString();
-
+                hidSelectedStudent.Value = selected.Name;
                 JToken record = selected.Value;
-                litStudentName.Text = Show((string)record["Name"]);
-                litStudentEmail.Text = Show((string)record["UniEmail"]);
-                litStudentMajor.Text = Show((string)record["Major"]);
-                litStudentPhone.Text = Show((string)record["PhoneNumber"]);
                 string companyId = (string)record["CompanyId"];
-                JToken company = String.IsNullOrWhiteSpace(companyId) ? null : companies[companyId];
-                litCompanyName.Text = Show(company == null ? null : (string)company["CompanyName"]);
-                litSupervisorName.Text = Show(company == null ? null : (string)company["Name"]);
-                litSupervisorContact.Text = Show(company == null ? null : (string)company["PhoneNumber"]);
+                JToken company = null;
+                if (!String.IsNullOrWhiteSpace(companyId)) company = companies[companyId];
 
-                var latest = new Dictionary<string, JToken>();
+                JToken evaluation = evaluations[selected.Name];
+                if (evaluation != null && (string)evaluation["CompanyId"] != companyId) evaluation = null;
+                int approvedHours = 0;
+                JObject approvedWeeks = null;
+                if (evaluation != null) approvedWeeks = evaluation["ApprovedWeeks"] as JObject;
+                if (approvedWeeks != null)
+                {
+                    // الساعات المعتمدة تأتي من الأسابيع التي وقّعها مشرف الشركة.
+                    foreach (JProperty week in approvedWeeks.Properties())
+                    {
+                        int hours;
+                        if (Int32.TryParse((string)week.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out hours) && hours > 0)
+                            approvedHours += hours;
+                    }
+                }
+
+                var latestSubmissions = new Dictionary<string, JToken>();
                 foreach (JProperty entry in submissions.Properties())
                 {
-                    JToken sub = entry.Value;
-                    if (sub == null || (string)sub["StudentId"] != selected.Name) continue;
-                    string taskId = (string)sub["TaskId"];
+                    JToken submission = entry.Value;
+                    if (submission == null || (string)submission["StudentId"] != selected.Name) continue;
+                    string taskId = (string)submission["TaskId"];
                     if (String.IsNullOrEmpty(taskId)) continue;
                     JToken previous;
-                    if (!latest.TryGetValue(taskId, out previous) || (int?)sub["Version"] > (int?)previous["Version"] ||
-                        ((int?)sub["Version"] == (int?)previous["Version"] &&
-                         String.Compare((string)sub["SubmittedAt"], (string)previous["SubmittedAt"], StringComparison.Ordinal) > 0))
-                        latest[taskId] = sub;
+                    if (!latestSubmissions.TryGetValue(taskId, out previous) ||
+                        (int?)submission["Version"] > (int?)previous["Version"] ||
+                        ((int?)submission["Version"] == (int?)previous["Version"] &&
+                         String.Compare((string)submission["SubmittedAt"], (string)previous["SubmittedAt"], StringComparison.Ordinal) > 0))
+                        latestSubmissions[taskId] = submission;
                 }
 
                 var studentTasks = new List<JProperty>();
                 foreach (JProperty task in tasks.Properties())
                 {
-                    JArray ids = task.Value == null ? null : task.Value["StudentIds"] as JArray;
+                    if (task.Value == null || task.Value.Type == JTokenType.Null) continue;
+                    // المهمة المغلقة تبقى ظاهرة إذا كان للطالب تسليم سابق فيها.
+                    if (String.Equals((string)task.Value["Status"], "Closed", StringComparison.OrdinalIgnoreCase) &&
+                        !latestSubmissions.ContainsKey(task.Name)) continue;
+                    JArray ids = task.Value["StudentIds"] as JArray;
                     if (ids == null) continue;
                     foreach (JToken id in ids)
-                        if ((string)id == selected.Name) { studentTasks.Add(task); break; }
+                    {
+                        if ((string)id != selected.Name) continue;
+                        studentTasks.Add(task);
+                        break;
+                    }
                 }
                 studentTasks.Sort((a, b) => String.Compare((string)a.Value["DeadLine"], (string)b.Value["DeadLine"], StringComparison.Ordinal));
-                litTaskCount.Text = studentTasks.Count.ToString(CultureInfo.InvariantCulture);
-                var rows = new StringBuilder();
+
+                int submittedTasks = 0;
+                int assignedHours = 0;
+                int evaluatedHours = 0;
+                var taskData = new List<object>();
                 foreach (JProperty task in studentTasks)
                 {
-                    JToken sub;
-                    latest.TryGetValue(task.Name, out sub);
-                    string state = sub == null ? "" : (string)sub["Status"];
-                    string score = state == "Evaluated" && sub["Score"] != null
-                        ? Show((string)sub["Score"]) + " / " + Show((string)task.Value["MaxScore"])
-                        : state == "Submitted" ? "Pending review" : "—";
-                    rows.Append("<tr><td><strong>").Append(Show((string)task.Value["TaskName"]))
-                        .Append("</strong></td><td>").Append(Show(FormatDate((string)task.Value["DeadLine"])))
-                        .Append("</td><td><span class=\"sp-badge ").Append(StatusClass(state)).Append("\">")
-                        .Append(StatusText(state)).Append("</span></td><td>").Append(score)
-                        .Append("</td><td>").Append(Show(sub == null ? null : (string)sub["Feedback"]))
-                        .Append("</td></tr>");
+                    int hours = TaskHours(task.Value, selected.Name);
+                    assignedHours += hours;
+                    JToken submission = null;
+                    latestSubmissions.TryGetValue(task.Name, out submission);
+                    string status = submission == null ? null : (string)submission["Status"];
+                    if (String.Equals(status, "Submitted", StringComparison.OrdinalIgnoreCase) ||
+                        String.Equals(status, "Evaluated", StringComparison.OrdinalIgnoreCase)) submittedTasks++;
+                    if (String.Equals(status, "Evaluated", StringComparison.OrdinalIgnoreCase)) evaluatedHours += hours;
+                    taskData.Add(new
+                    {
+                        Name = (string)task.Value["TaskName"],
+                        Hours = hours,
+                        Deadline = (string)task.Value["DeadLine"],
+                        Status = status,
+                        Score = submission == null ? null : (string)submission["Score"],
+                        MaxScore = (string)task.Value["MaxScore"],
+                        Feedback = submission == null ? null : (string)submission["Feedback"]
+                    });
                 }
-                litTaskRows.Text = rows.Length == 0
-                    ? "<tr><td colspan=\"5\" class=\"sp-empty\">No tasks are currently assigned to this student.</td></tr>"
-                    : rows.ToString();
+
+                var studentsForPicker = new List<object>();
+                foreach (JProperty student in assignedStudents)
+                    studentsForPicker.Add(new { Id = student.Name, Name = (string)student.Value["Name"], Major = (string)student.Value["Major"] });
+                string companyStatus = "Not started";
+                if (evaluation != null) companyStatus = "In progress at company";
+                if (evaluation != null && String.Equals((string)evaluation["Status"], "Sent", StringComparison.OrdinalIgnoreCase))
+                    companyStatus = "Sent to academic supervisor";
+                litProgressData.Text = JsonConvert.SerializeObject(new
+                {
+                    Students = studentsForPicker,
+                    SelectedId = selected.Name,
+                    Name = (string)record["Name"],
+                    UniversityEmail = (string)record["UniEmail"],
+                    Major = (string)record["Major"],
+                    Phone = (string)record["PhoneNumber"],
+                    CompanyName = company == null ? null : (string)company["CompanyName"],
+                    SupervisorName = company == null ? null : (string)company["Name"],
+                    SupervisorPhone = company == null ? null : (string)company["PhoneNumber"],
+                    ApprovedHours = approvedHours,
+                    AssignedHours = assignedHours,
+                    EvaluatedHours = evaluatedHours,
+                    RequiredHours = RequiredTrainingHours,
+                    SubmittedTasks = submittedTasks,
+                    Tasks = taskData,
+                    CompanyStatus = companyStatus
+                }, new JsonSerializerSettings { StringEscapeHandling = StringEscapeHandling.EscapeHtml });
+
+                string noteJson = await FirebaseDb.Get("AcademicStudentNotes", selected.Name);
+                if (noteJson == null)
+                {
+                    litNoteUpdated.Text = "Notes could not be loaded from Firebase.";
+                    btnSaveNote.Enabled = false;
+                }
+                else
+                {
+                    JObject notes = JsonConvert.DeserializeObject<JObject>(noteJson) ?? new JObject();
+                    JToken note = notes[supervisorId];
+                    if (!IsPostBack) txtAcademicNote.Text = note == null ? "" : (string)note["Text"];
+                    litNoteUpdated.Text = note == null ? "No academic note saved for this student yet." : NoteUpdatedText((string)note["UpdatedAt"]);
+                }
             }
             catch (Exception ex) when (ex is HttpRequestException || ex is JsonException || ex is InvalidOperationException)
             {
-                pnlStudent.Visible = false;
-                lblMessage.Text = "Could not load progress data from Firebase. Check the connection and permissions, then try again.";
-                lblMessage.Visible = true;
+                ShowMessage("Could not load progress data from Firebase. Check the connection and permissions, then try again.");
             }
+        }
+
+        private void ShowMessage(string message)
+        {
+            pnlStudent.Visible = false;
+            lblMessage.Text = message;
+            lblMessage.Visible = true;
         }
 
         private static async Task<JObject> ReadTable(string name)
         {
             string json = await FirebaseDb.Get(name);
             if (json == null) throw new HttpRequestException();
-            return JsonConvert.DeserializeObject<JObject>(json) ?? new JObject();
+            JObject table = JsonConvert.DeserializeObject<JObject>(json);
+            if (table == null) table = new JObject();
+            return table;
         }
-        private static string Show(string value) { return HttpUtility.HtmlEncode(String.IsNullOrWhiteSpace(value) ? "Not available" : value); }
-        private static string FormatDate(string value)
+
+        private static JToken ResolveSupervisor(JObject supervisors, ref string supervisorId)
         {
-            DateTimeOffset date;
-            return DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out date)
-                ? date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : value;
+            JToken supervisor = supervisors[supervisorId];
+            if (supervisor != null || String.IsNullOrWhiteSpace(AuthHelper.UserEmail)) return supervisor;
+            // عند غياب رقم السجل في الجلسة نبحث عن المشرف باستخدام بريده.
+            foreach (JProperty entry in supervisors.Properties())
+            {
+                string email = (string)entry.Value["Email"];
+                string universityEmail = (string)entry.Value["UniversityEmail"];
+                if (!String.Equals(email?.Trim(), AuthHelper.UserEmail.Trim(), StringComparison.OrdinalIgnoreCase) &&
+                    !String.Equals(universityEmail?.Trim(), AuthHelper.UserEmail.Trim(), StringComparison.OrdinalIgnoreCase)) continue;
+                supervisorId = entry.Name;
+                return entry.Value;
+            }
+            return null;
         }
-        private static string StatusText(string value)
+
+        protected async void btnSaveNote_Click(object sender, EventArgs e)
         {
-            switch (value) { case "Submitted": return "Pending review"; case "RevisionRequested": return "Revision requested"; case "Evaluated": return "Evaluated"; case "": return "Not submitted"; default: return Show(value); }
+            if (!AuthHelper.IsAuthenticated || AuthHelper.UserRole != AuthHelper.RoleAcademic)
+            {
+                lblNoteStatus.Text = "Only an academic supervisor can save notes.";
+                return;
+            }
+            string studentId = hidSelectedStudent.Value;
+            string noteText = (txtAcademicNote.Text ?? "").Trim();
+            if (String.IsNullOrWhiteSpace(studentId) || noteText.Length == 0 || noteText.Length > 2000)
+            {
+                lblNoteStatus.Text = "Enter a note of up to 2,000 characters.";
+                return;
+            }
+            try
+            {
+                string supervisorId = Convert.ToString(Session["dbRecordId"] ?? Session["userId"]);
+                JObject supervisors = await ReadTable("AcademicSupervisors");
+                JToken supervisor = ResolveSupervisor(supervisors, ref supervisorId);
+                JObject students = await ReadTable("Students");
+                JToken student = students[studentId];
+                string supervisorMajor = ((string)supervisor?["Major"])?.Trim();
+                string studentMajor = ((string)student?["Major"])?.Trim();
+                // نتحقق مرة ثانية وقت الحفظ حتى لا تُكتب ملاحظة لطالب خارج قائمة المشرف.
+                if (student == null || String.IsNullOrWhiteSpace(supervisorMajor) ||
+                    !String.Equals((string)student["AcademicSupervisorId"], supervisorId, StringComparison.Ordinal) ||
+                    !String.Equals(studentMajor, supervisorMajor, StringComparison.OrdinalIgnoreCase))
+                {
+                    lblNoteStatus.Text = "You cannot save a note for this student.";
+                    return;
+                }
+                string updatedAt = DateTimeOffset.UtcNow.ToString("o", CultureInfo.InvariantCulture);
+                using (HttpResponseMessage response = await FirebaseDb.Put("AcademicStudentNotes/" + studentId, supervisorId,
+                    new { StudentId = studentId, SupervisorId = supervisorId, Text = noteText, UpdatedAt = updatedAt }))
+                {
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        lblNoteStatus.Text = "The note could not be saved. Check Firebase write permissions.";
+                        return;
+                    }
+                }
+                lblNoteStatus.Text = "Note saved.";
+                litNoteUpdated.Text = NoteUpdatedText(updatedAt);
+            }
+            catch (Exception ex) when (ex is HttpRequestException || ex is JsonException || ex is InvalidOperationException)
+            {
+                lblNoteStatus.Text = "The note could not be saved. Try again.";
+            }
         }
-        private static string StatusClass(string value)
+
+        private static string NoteUpdatedText(string value)
         {
-            switch (value) { case "Submitted": return "sp-pending"; case "RevisionRequested": return "sp-revision"; case "Evaluated": return "sp-done"; default: return "sp-muted"; }
+            DateTimeOffset updated;
+            if (!DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out updated))
+                return "Note saved in Firebase.";
+            return "Last saved: " + updated.UtcDateTime.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture) + " UTC";
+        }
+
+        private static int TaskHours(JToken task, string studentId)
+        {
+            JObject studentHours = task["StudentHours"] as JObject;
+            JToken value = null;
+            if (studentHours != null) value = studentHours[studentId];
+            if (value == null) value = task["Hours"];
+            int hours;
+            if (!Int32.TryParse((string)value, NumberStyles.Integer, CultureInfo.InvariantCulture, out hours)) return 0;
+            return Math.Max(0, hours);
         }
     }
 }

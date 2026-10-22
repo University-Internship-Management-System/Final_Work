@@ -10,9 +10,12 @@ body { background: #f6f8fa; }
         .monitor-table td { padding: 14px 12px; vertical-align: middle; }
         .status-badge { display: inline-block; padding: 5px 9px; border-radius: 7px; background: #fff4d6; color: #8d6200; font-weight: 700; font-size: .76rem; white-space: nowrap; }
         .hours-track { width: 96px; height: 7px; background: #e2e8e5; border-radius: 99px; margin-top: 7px; }
+        .hours-track span { display: block; height: 100%; border-radius: inherit; background: #07523e; }
+        .hours-track-wide { width: 100%; height: 10px; }
         .student-detail dt { color: #65756E; font-size: .85rem; font-weight: 500; }
         .student-detail dd { color: #183B31; margin-bottom: 1rem; overflow-wrap: anywhere; }
         .detail-overlay { position: fixed; inset: 0; z-index: 1050; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(15, 23, 42, .24); }
+        .detail-overlay[hidden] { display: none !important; }
         .detail-dialog { width: min(820px, 100%); max-height: min(85vh, 900px); overflow-y: auto; background: #fff; border-radius: 16px; box-shadow: 0 24px 70px rgba(4, 56, 45, .25); }
         .monitor-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0; }
         .monitor-tab { border: 1px solid #E2E8E5; background: #fff; color: #183B31; border-radius: 10px; padding: 10px 16px; font-weight: 600; }
