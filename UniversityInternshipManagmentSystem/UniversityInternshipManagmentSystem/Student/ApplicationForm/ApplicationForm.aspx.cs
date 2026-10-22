@@ -10,7 +10,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using UniversityInternshipManagmentSystem.Config;
 using UniversityInternshipManagmentSystem.Models;
-using UniversityInternshipManagmentSystem.Student.Data;
+using UniversityInternshipManagmentSystem.Student.StudentProfilePage;
 
 namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
 {
