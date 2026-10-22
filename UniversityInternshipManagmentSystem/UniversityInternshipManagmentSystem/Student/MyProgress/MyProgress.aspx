@@ -1,4 +1,4 @@
-﻿<%@ Page Title="My Progress" Language="C#"
+<%@ Page Title="My Progress" Language="C#"
     MasterPageFile="~/Shared/Dashboard.Master"
     AutoEventWireup="true"
     Async="true"
@@ -199,16 +199,17 @@
 
             <div class="mp-certificate-file">
 
-                <img
-                    class="mp-certificate-thumbnail"
-                    src="Files/Internship-Completion-Sample.png"
-                    alt="Preview of the completion certificate" />
+                <div class="mp-certificate-thumbnail mp-certificate-preview" aria-hidden="true">
+                    <span>U<span>J</span></span>
+                    <strong>Certificate</strong>
+                    <small>OF COMPLETION</small>
+                </div>
 
                 <div class="mp-file-info">
-                    <strong>Internship completion certificate
+                    <strong>Personalized completion certificate
                     </strong>
 
-                    <span>University of Jordan &middot; PDF document
+                    <span>Includes your approved training information
                     </span>
                 </div>
 
@@ -217,19 +218,20 @@
                     <a class="btn btn-outline-primary"
                         href="<%: GetCertificateDownloadUrl() %>"
                         target="_blank"
-                        rel="noopener">View / Print
+                        rel="noopener">View certificate
                     </a>
 
                     <a class="btn btn-primary mp-download-button"
-                        href="<%: GetCertificateDownloadUrl() %>"
-                        download="Internship-Completion.pdf">
+                        href="<%: GetCertificateDownloadUrl() %>?print=1"
+                        target="_blank"
+                        rel="noopener">
 
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M12 3v12m-4-4 4 4 4-4
                          M5 16v5h14v-5" />
                         </svg>
 
-                        Download PDF
+                        Save as PDF
                     </a>
 
                 </div>
@@ -446,3 +448,4 @@
     </div>
 
 </asp:Content>
+

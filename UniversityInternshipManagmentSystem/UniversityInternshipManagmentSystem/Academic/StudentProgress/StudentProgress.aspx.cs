@@ -48,29 +48,18 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
                         break;
                     }
                 }
-                string supervisorMajor = ((string)supervisor?["Major"])?.Trim();
-                if (String.IsNullOrWhiteSpace(supervisorMajor))
-                {
-                    pnlStudent.Visible = false;
-                    lblMessage.Text = "The academic supervisor's major is not available.";
-                    lblMessage.Visible = true;
-                    return;
-                }
-
                 var assigned = new List<JProperty>();
                 foreach (JProperty student in students.Properties())
                 {
-                    string studentMajor = ((string)student.Value["Major"])?.Trim();
-                    // لا يظهر الطالب إلا إذا كان معيناً لهذا المشرف وكان تخصصه مطابقاً لتخصص المشرف.
-                    if (String.Equals((string)student.Value["AcademicSupervisorId"], supervisorId, StringComparison.Ordinal) &&
-                        String.Equals(studentMajor, supervisorMajor, StringComparison.OrdinalIgnoreCase))
+                    // The stored supervisor assignment is authoritative; existing student majors may differ.
+                    if (String.Equals((string)student.Value["AcademicSupervisorId"], supervisorId, StringComparison.Ordinal))
                         assigned.Add(student);
                 }
                 assigned.Sort((a, b) => String.Compare((string)a.Value["Name"], (string)b.Value["Name"], StringComparison.CurrentCultureIgnoreCase));
                 if (assigned.Count == 0)
                 {
                     pnlStudent.Visible = false;
-                    lblMessage.Text = "No students with your major are currently assigned to this academic supervisor account.";
+                    lblMessage.Text = "No students are currently assigned to this academic supervisor account.";
                     lblMessage.Visible = true;
                     return;
                 }

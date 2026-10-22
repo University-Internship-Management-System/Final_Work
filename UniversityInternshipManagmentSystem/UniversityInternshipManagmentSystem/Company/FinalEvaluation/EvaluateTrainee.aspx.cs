@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -298,6 +298,7 @@ namespace UniversityInternshipManagmentSystem.Company.FinalEvaluationPage
             record.TotalHours = record.ApprovedWeeks.Values.Sum();
             record.UpdatedAt = DateTime.Now;
             record.Status = send ? FinalEvaluation.Sent : FinalEvaluation.Draft;
+            if (send) record.IsPassCompany = true;
             if (send) record.SentAt = DateTime.Now;
 
             bool saved = await TaskDb.SaveFinalEvaluation(_studentId, record);
