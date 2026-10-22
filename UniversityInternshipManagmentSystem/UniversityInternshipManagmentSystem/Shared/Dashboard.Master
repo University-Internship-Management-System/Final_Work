@@ -38,7 +38,9 @@
                 <div class="uims-topbar">
                     <button type="button" class="uims-menu-btn" aria-label="Open menu"
                         onclick="document.body.classList.add('uims-side-open')">&#9776;</button>
-                    <span>UIMS</span>
+                    <a class="uims-home-brand" href="<%= ResolveUrl("~/index.aspx") %>" aria-label="University of Jordan home">
+                        <img src="<%= ResolveUrl("~/Assets/PublicHome/university-logo.png") %>" width="28" height="34" alt="University of Jordan" /><span>UIMS</span>
+                    </a>
                 </div>
 
                 <main class="uims-content">

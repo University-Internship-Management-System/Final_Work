@@ -25,6 +25,7 @@ Never work directly on `dev` or `main`.
 | `Student/MyProgress/` | My Progress | abd3348 |
 | `Coordinator/ManageStudents/`, `ManageCompanySupervisors/`, `ManageAcademicSupervisors/`, `AssignAcademicSupervisors/` | Account management and supervisor assignment | Marwa |
 | `Coordinator/CoordinatorDashbord/`, `CoordinatorMonitor/` | Coordinator dashboard and monitor | Omar |
+| `Company/ManageTasks/` | Tasks (create, edit, open/close) and Review task (score or ask for changes). Every task has `Hours` (its default weight) and an optional `StudentHours` map (studentId -> hours) for the trainees who need a different number; one trainee can have at most 15 hours of open tasks per week. Uses `Config/TaskDb.cs` | Wadea |
 | `Company/`, `Academic/` | A placeholder `Dashboard.aspx` plus "Coming soon" pages (see section 4) | nobody yet |
 | `Assets/` | Shared css, logo | Alaa |
 | `docs/` (outside the web project) | Notes and reports | |
@@ -50,7 +51,6 @@ Each page below **already exists as a "Coming soon" placeholder** and is linked 
 | Company | Manage Opportunities | `Company/ManageOpportunities/ManageOpportunities.aspx` |
 | Company | Applications | `Company/ApplicationsReview/ApplicationsReview.aspx` |
 | Company | My Trainees | `Company/MyTrainees/MyTrainees.aspx` |
-| Company | Tasks | `Company/ManageTasks/ManageTasks.aspx` |
 | Company | Final Evaluation | `Company/FinalEvaluation/FinalEvaluation.aspx` |
 | Company | Account | `Company/SupervisorAccount/SupervisorAccount.aspx` |
 | Academic | Student Progress | `Academic/StudentProgress/StudentProgress.aspx` |

@@ -12,8 +12,8 @@
       "CompanyId": "company_test_001",
       "AcademicSupervisorId": "academic_test_001",
       "GPA": 3.4,
-      "CvUrl": "",
-      "PortfolioUrl": "",
+      "CvUrl": "https://example.com/cv/test-student.pdf",
+      "PortfolioUrl": "https://github.com/test-student",
       "SkillsList": [
         "C#",
         "JavaScript",
@@ -32,11 +32,107 @@
       "CompanyId": "company_test_001",
       "AcademicSupervisorId": "academic_test_001",
       "GPA": 3.1,
-      "CvUrl": "",
-      "PortfolioUrl": "",
+      "CvUrl": "https://example.com/cv/second-student.pdf",
+      "PortfolioUrl": "https://github.com/second-student",
       "SkillsList": [
         "Java",
         "HTML"
+      ]
+    },
+    "lLFnP2WAKvTaB1Q0AnSPK0brMd23": {
+      "Name": "wadea",
+      "Role": "Student",
+      "Email": "wadea@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000003",
+      "ProfilePicUrl": "",
+      "UniEmail": "wadea@ju.edu.jo",
+      "Major": "Computer Science",
+      "CompanyId": "company_test_001",
+      "AcademicSupervisorId": "z4ihiWQDGPMdESGPUIVUae18i3B3",
+      "GPA": 3.5,
+      "CvUrl": "https://example.com/cv/wadea.pdf",
+      "PortfolioUrl": "https://github.com/wadea",
+      "SkillsList": [
+        "C#",
+        "ASP.NET",
+        "SQL"
+      ]
+    },
+    "student_test_003": {
+      "Name": "Third Student",
+      "Role": "Student",
+      "Email": "student3@test.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000004",
+      "ProfilePicUrl": "",
+      "UniEmail": "student3@ju.edu.jo",
+      "Major": "Computer Science",
+      "CompanyId": "",
+      "AcademicSupervisorId": "academic_test_001",
+      "GPA": 3.6,
+      "CvUrl": "https://example.com/cv/third-student.pdf",
+      "PortfolioUrl": "https://github.com/third-student",
+      "SkillsList": [
+        "Python",
+        "SQL"
+      ]
+    },
+    "student_test_004": {
+      "Name": "Fourth Student",
+      "Role": "Student",
+      "Email": "student4@test.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000005",
+      "ProfilePicUrl": "",
+      "UniEmail": "student4@ju.edu.jo",
+      "Major": "Data Science",
+      "CompanyId": "",
+      "AcademicSupervisorId": "academic_test_002",
+      "GPA": 3.3,
+      "CvUrl": "https://example.com/cv/fourth-student.pdf",
+      "PortfolioUrl": "https://github.com/fourth-student",
+      "SkillsList": [
+        "R",
+        "Excel"
+      ]
+    },
+    "student_test_005": {
+      "Name": "Fifth Student",
+      "Role": "Student",
+      "Email": "student5@test.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000005",
+      "ProfilePicUrl": "",
+      "UniEmail": "student5@ju.edu.jo",
+      "Major": "Computer Science",
+      "CompanyId": "company_test_002",
+      "AcademicSupervisorId": "academic_test_002",
+      "GPA": 3.4,
+      "CvUrl": "https://example.com/cv/student-test-005.pdf",
+      "PortfolioUrl": "https://github.com/student-test-005",
+      "SkillsList": [
+        "Dart",
+        "Flutter"
+      ]
+    },
+    "student_test_006": {
+      "Name": "Sixth Student",
+      "Role": "Student",
+      "Email": "student6@test.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000006",
+      "ProfilePicUrl": "",
+      "UniEmail": "student6@ju.edu.jo",
+      "Major": "Software Engineering",
+      "CompanyId": "company_test_002",
+      "AcademicSupervisorId": "academic_test_002",
+      "GPA": 3.4,
+      "CvUrl": "https://example.com/cv/student-test-006.pdf",
+      "PortfolioUrl": "https://github.com/student-test-006",
+      "SkillsList": [
+        "Java",
+        "Git"
       ]
     }
   },
@@ -51,6 +147,72 @@
       "CompanyName": "Orange Jordan",
       "CompEmail": "info@orange.example",
       "Location": "Amman"
+    },
+    "company_test_002": {
+      "Name": "Sara Haddad",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@zain.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000011",
+      "ProfilePicUrl": "",
+      "CompanyName": "Zain Jordan",
+      "CompEmail": "info@zain.example",
+      "Location": "Amman"
+    },
+    "company_test_003": {
+      "Name": "Omar Khalil",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@umniah.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000012",
+      "ProfilePicUrl": "",
+      "CompanyName": "Umniah",
+      "CompEmail": "info@umniah.example",
+      "Location": "Amman"
+    },
+    "company_test_004": {
+      "Name": "Lina Nasser",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@aramex.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000013",
+      "ProfilePicUrl": "",
+      "CompanyName": "Aramex",
+      "CompEmail": "info@aramex.example",
+      "Location": "Amman"
+    },
+    "company_test_005": {
+      "Name": "Khaled Mansour",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@arabbank.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000014",
+      "ProfilePicUrl": "",
+      "CompanyName": "Arab Bank",
+      "CompEmail": "info@arabbank.example",
+      "Location": "Amman"
+    },
+    "company_test_006": {
+      "Name": "Rana Odeh",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@jpmc.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000015",
+      "ProfilePicUrl": "",
+      "CompanyName": "Jordan Phosphate",
+      "CompEmail": "info@jpmc.example",
+      "Location": "Aqaba"
+    },
+    "company_test_007": {
+      "Name": "Mona Saleh",
+      "Role": "CompanySupervisor",
+      "Email": "supervisor@islamicbank.example",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000016",
+      "ProfilePicUrl": "",
+      "CompanyName": "Islamic Bank",
+      "CompEmail": "info@islamicbank.example",
+      "Location": "Amman"
     }
   },
   "AcademicSupervisors": {
@@ -62,7 +224,33 @@
       "PhoneNumber": "0790000020",
       "ProfilePicUrl": "",
       "UniversityEmail": "academic@ju.edu.jo",
-      "Major": "Computer Science"
+      "Major": "Computer Science",
+      "OfficeLocation": "IT Faculty, 3rd floor",
+      "OfficeNumber": "304"
+    },
+    "z4ihiWQDGPMdESGPUIVUae18i3B3": {
+      "Name": "Ahmad Saifan",
+      "Role": "AcademicSupervisor",
+      "Email": "ahmad@example.com",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000021",
+      "ProfilePicUrl": "",
+      "UniversityEmail": "ahmad@ju.edu.jo",
+      "Major": "Computer Science",
+      "OfficeLocation": "IT Faculty, 3rd floor",
+      "OfficeNumber": "305"
+    },
+    "academic_test_002": {
+      "Name": "Second Academic Supervisor",
+      "Role": "AcademicSupervisor",
+      "Email": "academic2@ju.edu.jo",
+      "FirstLogin": false,
+      "PhoneNumber": "0790000022",
+      "ProfilePicUrl": "",
+      "UniversityEmail": "academic2@ju.edu.jo",
+      "Major": "Computer Information Systems",
+      "OfficeLocation": "IT Faculty, 2nd floor",
+      "OfficeNumber": "212"
     }
   },
   "Admins": {
@@ -75,6 +263,383 @@
       "ProfilePicUrl": ""
     }
   },
+  "Opportunities": {
+    "opp001": {
+      "CompanyId": "company_test_001",
+      "CompanyName": "Orange Jordan",
+      "Title": "Junior Web Developer Intern",
+      "Description": "Build and maintain internal web tools with the digital team.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering"
+      ],
+      "Seats": 3,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797379140000,
+      "ConfirmedStudents": {
+        "student_test_001": true,
+        "student_test_002": true
+      }
+    },
+    "opp002": {
+      "CompanyId": "company_test_001",
+      "CompanyName": "Orange Jordan",
+      "Title": "Data Analyst Intern",
+      "Description": "Clean datasets and build dashboards for the network team.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Data Science"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796169540000,
+      "ConfirmedStudents": {
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23": true
+      }
+    },
+    "opp003": {
+      "CompanyId": "company_test_001",
+      "CompanyName": "Orange Jordan",
+      "Title": "QA Intern",
+      "Description": "Write test plans and run regression tests.",
+      "Location": "Irbid",
+      "Majors": [
+        "Computer Science"
+      ],
+      "Seats": 2,
+      "Status": "closed",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1790899140000
+    },
+    "opp004": {
+      "CompanyId": "company_test_001",
+      "CompanyName": "Orange Jordan",
+      "Title": "Network Engineering Intern",
+      "Description": "Help configure and monitor the access network.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Engineering"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797811140000
+    },
+    "opp005": {
+      "CompanyId": "company_test_002",
+      "CompanyName": "Zain Jordan",
+      "Title": "Mobile App Developer Intern",
+      "Description": "Help build the customer mobile app with Flutter and REST APIs.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering"
+      ],
+      "Seats": 3,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796947140000,
+      "ConfirmedStudents": {
+        "student_test_005": true,
+        "student_test_006": true
+      }
+    },
+    "opp006": {
+      "CompanyId": "company_test_002",
+      "CompanyName": "Zain Jordan",
+      "Title": "Cloud Support Intern",
+      "Description": "Monitor cloud services and handle first-line support tickets.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Computer Engineering",
+        "Information Systems"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796083140000
+    },
+    "opp007": {
+      "CompanyId": "company_test_003",
+      "CompanyName": "Umniah",
+      "Title": "Backend Developer Intern",
+      "Description": "Work on billing APIs in C# and SQL with the platform team.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796515140000
+    },
+    "opp008": {
+      "CompanyId": "company_test_003",
+      "CompanyName": "Umniah",
+      "Title": "Cyber Security Intern",
+      "Description": "Assist the SOC team with log review and vulnerability scans.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Cyber Security",
+        "Computer Engineering"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797638340000
+    },
+    "opp009": {
+      "CompanyId": "company_test_003",
+      "CompanyName": "Umniah",
+      "Title": "UI/UX Design Intern",
+      "Description": "Design screens and prototypes for the self-service portal.",
+      "Location": "Irbid",
+      "Majors": [
+        "Software Engineering",
+        "Information Systems"
+      ],
+      "Seats": 1,
+      "Status": "closed",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1790812740000
+    },
+    "opp010": {
+      "CompanyId": "company_test_004",
+      "CompanyName": "Aramex",
+      "Title": "Logistics Software Intern",
+      "Description": "Improve shipment tracking tools used by the operations team.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering",
+        "Information Systems"
+      ],
+      "Seats": 3,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797119940000
+    },
+    "opp011": {
+      "CompanyId": "company_test_004",
+      "CompanyName": "Aramex",
+      "Title": "Business Intelligence Intern",
+      "Description": "Build reports and dashboards from delivery data.",
+      "Location": "Amman",
+      "Majors": [
+        "Data Science",
+        "Information Systems",
+        "Computer Science"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1797983940000
+    },
+    "opp012": {
+      "CompanyId": "company_test_005",
+      "CompanyName": "Arab Bank",
+      "Title": "Data Science Intern",
+      "Description": "Prepare data and test simple prediction models for risk reports.",
+      "Location": "Amman",
+      "Majors": [
+        "Data Science",
+        "Computer Science"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1796774340000
+    },
+    "opp013": {
+      "CompanyId": "company_test_005",
+      "CompanyName": "Arab Bank",
+      "Title": "IT Operations Intern",
+      "Description": "Support internal systems, backups and user accounts.",
+      "Location": "Amman",
+      "Majors": [
+        "Information Systems",
+        "Computer Engineering",
+        "Computer Science"
+      ],
+      "Seats": 4,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1798243140000
+    },
+    "opp014": {
+      "CompanyId": "company_test_005",
+      "CompanyName": "Arab Bank",
+      "Title": "Digital Banking QA Intern",
+      "Description": "Test the online banking app before each release.",
+      "Location": "Amman",
+      "Majors": [
+        "Computer Science",
+        "Software Engineering"
+      ],
+      "Seats": 2,
+      "Status": "closed",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1791244740000
+    },
+    "opp015": {
+      "CompanyId": "company_test_006",
+      "CompanyName": "Jordan Phosphate",
+      "Title": "ERP Systems Intern",
+      "Description": "Help maintain and document the ERP system used across plants.",
+      "Location": "Aqaba",
+      "Majors": [
+        "Information Systems",
+        "Computer Science"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1799193540000
+    },
+    "opp016": {
+      "CompanyId": "company_test_006",
+      "CompanyName": "Jordan Phosphate",
+      "Title": "Embedded Systems Intern",
+      "Description": "Work on sensor monitoring devices and their firmware.",
+      "Location": "Aqaba",
+      "Majors": [
+        "Computer Engineering"
+      ],
+      "Seats": 2,
+      "Status": "open",
+      "CreatedAt": 1792584000000,
+      "ApplicationDeadline": 1799625540000
+    }
+  },
+  "Applications": {
+    "app001": {
+      "StudentId": "student_test_001",
+      "OpportunityId": "opp001",
+      "CompanyId": "company_test_001",
+      "OpportunityTitle": "Junior Web Developer Intern",
+      "CompanyName": "Orange Jordan",
+      "CvUrl": "https://example.com/cv/test-student.pdf",
+      "PortfolioUrl": "https://github.com/test-student",
+      "CoverLetter": "I enjoy building web tools and I want to learn from a real team.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1790596800000,
+      "ReviewedAt": 1790856000000,
+      "ConfirmedAt": 1790942400000
+    },
+    "app002": {
+      "StudentId": "student_test_002",
+      "OpportunityId": "opp001",
+      "CompanyId": "company_test_001",
+      "OpportunityTitle": "Junior Web Developer Intern",
+      "CompanyName": "Orange Jordan",
+      "CvUrl": "https://example.com/cv/second-student.pdf",
+      "PortfolioUrl": "https://github.com/second-student",
+      "CoverLetter": "I am looking for hands-on experience in web development.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1790683200000,
+      "ReviewedAt": 1790856000000,
+      "ConfirmedAt": 1791028800000
+    },
+    "app003": {
+      "StudentId": "lLFnP2WAKvTaB1Q0AnSPK0brMd23",
+      "OpportunityId": "opp002",
+      "CompanyId": "company_test_001",
+      "OpportunityTitle": "Data Analyst Intern",
+      "CompanyName": "Orange Jordan",
+      "CvUrl": "https://example.com/cv/wadea.pdf",
+      "PortfolioUrl": "https://github.com/wadea",
+      "CoverLetter": "Data and dashboards interest me and I already use SQL.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1790769600000,
+      "ReviewedAt": 1790942400000,
+      "ConfirmedAt": 1791115200000
+    },
+    "app004": {
+      "StudentId": "student_test_003",
+      "OpportunityId": "opp001",
+      "CompanyId": "company_test_001",
+      "OpportunityTitle": "Junior Web Developer Intern",
+      "CompanyName": "Orange Jordan",
+      "CvUrl": "https://example.com/cv/third-student.pdf",
+      "PortfolioUrl": "https://github.com/third-student",
+      "CoverLetter": "I would like to join the digital team and improve my C# skills.",
+      "Status": "Pending",
+      "RejectionReason": "",
+      "AppliedAt": 1792324800000,
+      "ReviewedAt": 0,
+      "ConfirmedAt": 0
+    },
+    "app005": {
+      "StudentId": "student_test_003",
+      "OpportunityId": "opp005",
+      "CompanyId": "company_test_002",
+      "OpportunityTitle": "Mobile App Developer Intern",
+      "CompanyName": "Zain Jordan",
+      "CvUrl": "https://example.com/cv/third-student.pdf",
+      "PortfolioUrl": "https://github.com/third-student",
+      "CoverLetter": "Mobile apps are my main interest and I have built two small ones.",
+      "Status": "Accepted",
+      "RejectionReason": "",
+      "AppliedAt": 1791806400000,
+      "ReviewedAt": 1792065600000,
+      "ConfirmedAt": 0
+    },
+    "app006": {
+      "StudentId": "student_test_004",
+      "OpportunityId": "opp012",
+      "CompanyId": "company_test_005",
+      "OpportunityTitle": "Data Science Intern",
+      "CompanyName": "Arab Bank",
+      "CvUrl": "https://example.com/cv/fourth-student.pdf",
+      "PortfolioUrl": "https://github.com/fourth-student",
+      "CoverLetter": "I want to work with real banking data.",
+      "Status": "Rejected",
+      "RejectionReason": "The seats were given to students with more data experience.",
+      "AppliedAt": 1791720000000,
+      "ReviewedAt": 1791979200000,
+      "ConfirmedAt": 0
+    },
+    "app007": {
+      "StudentId": "student_test_005",
+      "OpportunityId": "opp005",
+      "CompanyId": "company_test_002",
+      "OpportunityTitle": "Mobile App Developer Intern",
+      "CompanyName": "Zain Jordan",
+      "CvUrl": "https://example.com/cv/student-test-005.pdf",
+      "PortfolioUrl": "https://github.com/student-test-005",
+      "CoverLetter": "I enjoy building mobile apps.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1790899200000,
+      "ReviewedAt": 1791072000000,
+      "ConfirmedAt": 1791158400000
+    },
+    "app008": {
+      "StudentId": "student_test_006",
+      "OpportunityId": "opp005",
+      "CompanyId": "company_test_002",
+      "OpportunityTitle": "Mobile App Developer Intern",
+      "CompanyName": "Zain Jordan",
+      "CvUrl": "https://example.com/cv/student-test-006.pdf",
+      "PortfolioUrl": "https://github.com/student-test-006",
+      "CoverLetter": "I want real experience with a mobile team.",
+      "Status": "Confirmed",
+      "RejectionReason": "",
+      "AppliedAt": 1790985600000,
+      "ReviewedAt": 1791158400000,
+      "ConfirmedAt": 1791244800000
+    }
+  },
   "Tasks": {
     "task001": {
       "TaskName": "Set up the development environment",
@@ -84,12 +649,14 @@
       "DeadLine": "2026-10-09T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 1,
       "ToolsUsed": "Visual Studio, Git",
-      "MaxScore": 10
+      "MaxScore": 10,
+      "Hours": 10
     },
     "task002": {
       "TaskName": "Build the login page",
@@ -99,12 +666,14 @@
       "DeadLine": "2026-10-11T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 1,
       "ToolsUsed": "HTML, CSS, JavaScript",
-      "MaxScore": 20
+      "MaxScore": 20,
+      "Hours": 5
     },
     "task003": {
       "TaskName": "Database schema design",
@@ -114,12 +683,14 @@
       "DeadLine": "2026-10-15T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 2,
       "ToolsUsed": "draw.io, Firebase",
-      "MaxScore": 15
+      "MaxScore": 15,
+      "Hours": 5
     },
     "task004": {
       "TaskName": "REST API documentation",
@@ -129,12 +700,14 @@
       "DeadLine": "2026-10-17T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 2,
       "ToolsUsed": "Postman, Markdown",
-      "MaxScore": 10
+      "MaxScore": 10,
+      "Hours": 3
     },
     "task005": {
       "TaskName": "Weekly presentation slides",
@@ -144,12 +717,14 @@
       "DeadLine": "2026-10-18T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 2,
       "ToolsUsed": "PowerPoint",
-      "MaxScore": 10
+      "MaxScore": 10,
+      "Hours": 3
     },
     "task006": {
       "TaskName": "Unit tests for services",
@@ -159,12 +734,18 @@
       "DeadLine": "2026-10-23T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 3,
       "ToolsUsed": "Visual Studio, NUnit",
-      "MaxScore": 20
+      "MaxScore": 20,
+      "Hours": 6,
+      "StudentHours": {
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23": 4,
+        "student_test_002": 8
+      }
     },
     "task007": {
       "TaskName": "Code review checklist",
@@ -174,12 +755,14 @@
       "DeadLine": "2026-10-24T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 3,
       "ToolsUsed": "GitHub",
-      "MaxScore": 10
+      "MaxScore": 10,
+      "Hours": 3
     },
     "task008": {
       "TaskName": "Fix the reported bugs",
@@ -189,12 +772,17 @@
       "DeadLine": "2026-10-25T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 3,
       "ToolsUsed": "Visual Studio, GitHub",
-      "MaxScore": 15
+      "MaxScore": 15,
+      "Hours": 4,
+      "StudentHours": {
+        "student_test_001": 5
+      }
     },
     "task013": {
       "TaskName": "Old survey task",
@@ -203,12 +791,14 @@
       "StartDate": "2026-10-18T09:00:00+03:00",
       "DeadLine": "2026-10-22T23:59:00+03:00",
       "StudentIds": [
-        "student_test_001"
+        "student_test_001",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 3,
       "ToolsUsed": "None",
-      "MaxScore": 5
+      "MaxScore": 5,
+      "Hours": 2
     },
     "task009": {
       "TaskName": "Integrate Firebase",
@@ -218,12 +808,14 @@
       "DeadLine": "2026-10-30T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 4,
       "ToolsUsed": "Firebase, C#",
-      "MaxScore": 20
+      "MaxScore": 20,
+      "Hours": 5
     },
     "task010": {
       "TaskName": "Write the user guide",
@@ -233,12 +825,14 @@
       "DeadLine": "2026-11-01T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 4,
       "ToolsUsed": "Word",
-      "MaxScore": 10
+      "MaxScore": 10,
+      "Hours": 2
     },
     "task012": {
       "TaskName": "Prepare the demo environment",
@@ -247,12 +841,14 @@
       "StartDate": "2026-10-26T09:00:00+03:00",
       "DeadLine": "2026-10-31T23:59:00+03:00",
       "StudentIds": [
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 4,
       "ToolsUsed": "IIS Express",
-      "MaxScore": 10
+      "MaxScore": 10,
+      "Hours": 2
     },
     "task011": {
       "TaskName": "Performance review",
@@ -262,12 +858,145 @@
       "DeadLine": "2026-11-06T23:59:00+03:00",
       "StudentIds": [
         "student_test_001",
-        "student_test_002"
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
       ],
       "CompanyId": "company_test_001",
       "WeekNumber": 5,
       "ToolsUsed": "Chrome DevTools",
-      "MaxScore": 15
+      "MaxScore": 15,
+      "Hours": 6
+    },
+    "task014": {
+      "TaskName": "Security checklist",
+      "TaskDescription": "Go through the team security checklist and fix what is missing.",
+      "Status": "Open",
+      "StartDate": "2026-11-02T09:00:00+03:00",
+      "DeadLine": "2026-11-07T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 5,
+      "ToolsUsed": "OWASP, Visual Studio",
+      "MaxScore": 10,
+      "Hours": 4
+    },
+    "task015": {
+      "TaskName": "Final project presentation",
+      "TaskDescription": "Present the project to the team: 10 slides and a short demo.",
+      "Status": "Open",
+      "StartDate": "2026-11-09T09:00:00+03:00",
+      "DeadLine": "2026-11-13T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 6,
+      "ToolsUsed": "PowerPoint",
+      "MaxScore": 20,
+      "Hours": 8
+    },
+    "task016": {
+      "TaskName": "Training reflection report",
+      "TaskDescription": "Write what you learned in the six weeks (one page).",
+      "Status": "Open",
+      "StartDate": "2026-11-09T09:00:00+03:00",
+      "DeadLine": "2026-11-15T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_001",
+        "student_test_002",
+        "lLFnP2WAKvTaB1Q0AnSPK0brMd23"
+      ],
+      "CompanyId": "company_test_001",
+      "WeekNumber": 6,
+      "ToolsUsed": "Word",
+      "MaxScore": 15,
+      "Hours": 6
+    },
+    "task101": {
+      "TaskName": "Flutter environment setup",
+      "TaskDescription": "Install Flutter and run the sample app on an emulator.",
+      "Status": "Open",
+      "StartDate": "2026-10-05T09:00:00+03:00",
+      "DeadLine": "2026-10-09T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_005",
+        "student_test_006"
+      ],
+      "CompanyId": "company_test_002",
+      "WeekNumber": 1,
+      "ToolsUsed": "Flutter, Android Studio",
+      "MaxScore": 10,
+      "Hours": 3
+    },
+    "task102": {
+      "TaskName": "Login screen in Flutter",
+      "TaskDescription": "Build the login screen with validation.",
+      "Status": "Open",
+      "StartDate": "2026-10-07T09:00:00+03:00",
+      "DeadLine": "2026-10-12T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_005",
+        "student_test_006"
+      ],
+      "CompanyId": "company_test_002",
+      "WeekNumber": 1,
+      "ToolsUsed": "Flutter",
+      "MaxScore": 20,
+      "Hours": 7
+    },
+    "task103": {
+      "TaskName": "REST API client",
+      "TaskDescription": "Call the customer API and show the result in a list.",
+      "Status": "Open",
+      "StartDate": "2026-10-12T09:00:00+03:00",
+      "DeadLine": "2026-10-16T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_005",
+        "student_test_006"
+      ],
+      "CompanyId": "company_test_002",
+      "WeekNumber": 2,
+      "ToolsUsed": "Dart, Postman",
+      "MaxScore": 15,
+      "Hours": 12
+    },
+    "task104": {
+      "TaskName": "App store listing draft",
+      "TaskDescription": "Write the title, description and screenshots list for the store.",
+      "Status": "Open",
+      "StartDate": "2026-10-19T09:00:00+03:00",
+      "DeadLine": "2026-10-25T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_005",
+        "student_test_006"
+      ],
+      "CompanyId": "company_test_002",
+      "WeekNumber": 3,
+      "ToolsUsed": "Word",
+      "MaxScore": 10,
+      "Hours": 14
+    },
+    "task105": {
+      "TaskName": "Old survey task",
+      "TaskDescription": "This task was cancelled by the supervisor.",
+      "Status": "Closed",
+      "StartDate": "2026-10-14T09:00:00+03:00",
+      "DeadLine": "2026-10-18T23:59:00+03:00",
+      "StudentIds": [
+        "student_test_005",
+        "student_test_006"
+      ],
+      "CompanyId": "company_test_002",
+      "WeekNumber": 2,
+      "ToolsUsed": "None",
+      "MaxScore": 5,
+      "Hours": 2
     }
   },
   "TaskSubmissions": {
@@ -337,6 +1066,221 @@
       "Description": "Tests for the first two services.",
       "Link": "",
       "SubmittedAt": "2026-10-20T12:00:00+03:00",
+      "IsLate": false,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub007": {
+      "TaskId": "task001",
+      "StudentId": "student_test_002",
+      "Version": 1,
+      "Description": "Visual Studio and Git installed, repository cloned.",
+      "Link": "",
+      "SubmittedAt": "2026-10-08T10:00:00+03:00",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Good.",
+      "Score": 8,
+      "EvaluatedAt": "2026-10-09T11:00:00+03:00"
+    },
+    "sub008": {
+      "TaskId": "task001",
+      "StudentId": "lLFnP2WAKvTaB1Q0AnSPK0brMd23",
+      "Version": 1,
+      "Description": "Environment ready, first build passed.",
+      "Link": "",
+      "SubmittedAt": "2026-10-07T15:00:00+03:00",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Perfect.",
+      "Score": 10,
+      "EvaluatedAt": "2026-10-08T09:00:00+03:00"
+    },
+    "sub009": {
+      "TaskId": "task002",
+      "StudentId": "student_test_002",
+      "Version": 1,
+      "Description": "Login form with validation and the show/hide button.",
+      "Link": "https://github.com/example/login-2",
+      "SubmittedAt": "2026-10-10T16:00:00+03:00",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Nice validation messages.",
+      "Score": 15,
+      "EvaluatedAt": "2026-10-12T10:00:00+03:00"
+    },
+    "sub010": {
+      "TaskId": "task002",
+      "StudentId": "lLFnP2WAKvTaB1Q0AnSPK0brMd23",
+      "Version": 1,
+      "Description": "Login page finished, validation works.",
+      "Link": "https://github.com/example/login-wadea",
+      "SubmittedAt": "2026-10-11T20:00:00+03:00",
+      "IsLate": false,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub011": {
+      "TaskId": "task003",
+      "StudentId": "lLFnP2WAKvTaB1Q0AnSPK0brMd23",
+      "Version": 1,
+      "Description": "First schema: students and companies.",
+      "Link": "",
+      "SubmittedAt": "2026-10-14T13:00:00+03:00",
+      "IsLate": false,
+      "Status": "RevisionRequested",
+      "Feedback": "Add the Tasks table and the links between the tables.",
+      "EvaluatedAt": "2026-10-15T09:00:00+03:00"
+    },
+    "sub012": {
+      "TaskId": "task003",
+      "StudentId": "lLFnP2WAKvTaB1Q0AnSPK0brMd23",
+      "Version": 2,
+      "Description": "Added Tasks and TaskSubmissions with the links.",
+      "Link": "https://example.com/schema-wadea",
+      "SubmittedAt": "2026-10-16T10:00:00+03:00",
+      "IsLate": true,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub013": {
+      "TaskId": "task003",
+      "StudentId": "student_test_002",
+      "Version": 1,
+      "Description": "Schema diagram with all tables.",
+      "Link": "https://example.com/schema-2",
+      "SubmittedAt": "2026-10-16T18:00:00+03:00",
+      "IsLate": true,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub014": {
+      "TaskId": "task004",
+      "StudentId": "lLFnP2WAKvTaB1Q0AnSPK0brMd23",
+      "Version": 1,
+      "Description": "Every endpoint documented with examples.",
+      "Link": "https://example.com/api-docs-wadea",
+      "SubmittedAt": "2026-10-15T17:00:00+03:00",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Clear examples.",
+      "Score": 8,
+      "EvaluatedAt": "2026-10-17T09:00:00+03:00"
+    },
+    "sub015": {
+      "TaskId": "task005",
+      "StudentId": "lLFnP2WAKvTaB1Q0AnSPK0brMd23",
+      "Version": 1,
+      "Description": "Five slides about the week.",
+      "Link": "",
+      "SubmittedAt": "2026-10-17T12:00:00+03:00",
+      "IsLate": false,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub016": {
+      "TaskId": "task006",
+      "StudentId": "student_test_001",
+      "Version": 1,
+      "Description": "Tests for the first two services.",
+      "Link": "",
+      "SubmittedAt": "2026-10-21T11:00:00+03:00",
+      "IsLate": false,
+      "Status": "RevisionRequested",
+      "Feedback": "Please add one test for the error case.",
+      "EvaluatedAt": "2026-10-22T09:00:00+03:00"
+    },
+    "sub017": {
+      "TaskId": "task008",
+      "StudentId": "student_test_002",
+      "Version": 1,
+      "Description": "Fixed two of the three bugs and explained each fix.",
+      "Link": "",
+      "SubmittedAt": "2026-10-22T09:00:00+03:00",
+      "IsLate": false,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub018": {
+      "TaskId": "task013",
+      "StudentId": "student_test_001",
+      "Version": 1,
+      "Description": "Short survey answered.",
+      "Link": "",
+      "SubmittedAt": "2026-10-20T10:00:00+03:00",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Thanks.",
+      "Score": 4,
+      "EvaluatedAt": "2026-10-21T09:00:00+03:00"
+    },
+    "sub019": {
+      "TaskId": "task101",
+      "StudentId": "student_test_005",
+      "Version": 1,
+      "Description": "Flutter runs on the emulator.",
+      "Link": "",
+      "SubmittedAt": "2026-10-08T11:00:00+03:00",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Good.",
+      "Score": 9,
+      "EvaluatedAt": "2026-10-09T10:00:00+03:00"
+    },
+    "sub020": {
+      "TaskId": "task101",
+      "StudentId": "student_test_006",
+      "Version": 1,
+      "Description": "Sample app runs.",
+      "Link": "",
+      "SubmittedAt": "2026-10-09T20:00:00+03:00",
+      "IsLate": false,
+      "Status": "Evaluated",
+      "Feedback": "Ok, add screenshots next time.",
+      "Score": 7,
+      "EvaluatedAt": "2026-10-10T09:00:00+03:00"
+    },
+    "sub021": {
+      "TaskId": "task102",
+      "StudentId": "student_test_005",
+      "Version": 1,
+      "Description": "Login screen without validation.",
+      "Link": "",
+      "SubmittedAt": "2026-10-11T14:00:00+03:00",
+      "IsLate": false,
+      "Status": "RevisionRequested",
+      "Feedback": "Please add email and password validation.",
+      "EvaluatedAt": "2026-10-12T09:00:00+03:00"
+    },
+    "sub022": {
+      "TaskId": "task102",
+      "StudentId": "student_test_005",
+      "Version": 2,
+      "Description": "Added validation and error messages.",
+      "Link": "https://github.com/example/flutter-login",
+      "SubmittedAt": "2026-10-14T10:00:00+03:00",
+      "IsLate": true,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub023": {
+      "TaskId": "task102",
+      "StudentId": "student_test_006",
+      "Version": 1,
+      "Description": "Login screen with validation.",
+      "Link": "https://github.com/example/flutter-login-6",
+      "SubmittedAt": "2026-10-13T09:00:00+03:00",
+      "IsLate": true,
+      "Status": "Submitted",
+      "Feedback": ""
+    },
+    "sub024": {
+      "TaskId": "task103",
+      "StudentId": "student_test_005",
+      "Version": 1,
+      "Description": "The list shows the customers from the API.",
+      "Link": "https://github.com/example/api-client",
+      "SubmittedAt": "2026-10-16T21:00:00+03:00",
       "IsLate": false,
       "Status": "Submitted",
       "Feedback": ""

@@ -1,0 +1,17 @@
+.contact-page { max-width: 1140px; font-family: var(--uims-font); }
+.contact-page .contact-eyebrow { color: var(--uims-accent); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.contact-page h1 { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.04em; margin-bottom: 1.25rem; }
+.contact-page .contact-lead { color: var(--uims-muted); line-height: 1.8; }
+.contact-page .contact-note { margin-top: 2rem; padding: 1.5rem; background: var(--uims-mint); border-radius: 14px; }
+.contact-page .contact-note h2 { font-size: 1rem; }
+.contact-page .contact-note p { font-size: .875rem; line-height: 1.7; margin: 0; }
+.contact-page .contact-card { box-shadow: 0 12px 40px rgba(7,82,62,.04); }
+.contact-page .contact-card h2 { font-size: 1.5rem; }
+.contact-page .form-label { font-size: .875rem; font-weight: 600; }
+.contact-page .form-control { padding: .75rem; }
+.contact-page textarea { resize: vertical; min-height: 160px; }
+.contact-page .contact-error { display: block; color: var(--uims-danger); font-size: .8125rem; margin-top: .3rem; }
+.contact-page [aria-invalid="true"] { border-color: var(--uims-danger); }
+.contact-page .alert { font-size: .875rem; overflow-wrap: anywhere; }
+.contact-page .contact-sending { font-size: .875rem; color: var(--uims-muted); }
+@media (max-width: 575px) { .contact-page .btn { width: 100%; } .contact-page .contact-note { margin-top: 1rem; } }
