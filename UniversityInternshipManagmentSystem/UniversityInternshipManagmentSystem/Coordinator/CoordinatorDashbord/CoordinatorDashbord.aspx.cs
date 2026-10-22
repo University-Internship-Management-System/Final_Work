@@ -27,21 +27,15 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
         private async Task ShowDashboardAsync()
         {
-            if (!Request.IsLocal)
-            {
-                lblDataError.Text = "Live data preview is available only from this computer.";
-                lblDataError.Visible = true;
-                return;
-            }
-
             try
             {
                 // Each call reads one section from Firebase.
-                JObject students = JsonConvert.DeserializeObject<JObject>(await FirebaseDb.Get("Students")) ?? new JObject();
-                JObject supervisors = JsonConvert.DeserializeObject<JObject>(await FirebaseDb.Get("AcademicSupervisors")) ?? new JObject();
-                JObject companies = JsonConvert.DeserializeObject<JObject>(await FirebaseDb.Get("CompanySupervisors")) ?? new JObject();
-                JObject evaluations = JsonConvert.DeserializeObject<JObject>(await FirebaseDb.Get("Evaluations")) ?? new JObject();
-                JObject opportunities = JsonConvert.DeserializeObject<JObject>(await FirebaseDb.Get("Opportunities")) ?? new JObject();
+                JObject students = await ReadTable("Students");
+                JObject supervisors = await ReadTable("AcademicSupervisors");
+                JObject companies = await ReadTable("CompanySupervisors");
+                JObject tasks = await ReadTable("Tasks");
+                JObject submissions = await ReadTable("TaskSubmissions");
+                JObject opportunities = await ReadTable("Opportunities");
 
                 int studentCount = 0;
                 int assignedStudents = 0;
@@ -72,21 +66,33 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
                 int evaluationCount = 0;
                 string evaluationRows = "";
-                foreach (JProperty evaluation in evaluations.Properties())
+                var latestSubmissions = new System.Collections.Generic.Dictionary<string, JToken>();
+                foreach (JProperty submission in submissions.Properties())
                 {
+                    JToken item = submission.Value;
+                    if (item == null) continue;
+                    string key = (string)item["StudentId"] + "|" + (string)item["TaskId"];
+                    JToken previous;
+                    if (!latestSubmissions.TryGetValue(key, out previous) ||
+                        (int?)item["Version"] > (int?)previous["Version"])
+                        latestSubmissions[key] = item;
+                }
+                foreach (JToken item in latestSubmissions.Values)
+                {
+                    if (item == null || (string)item["Status"] != "Evaluated" || item["Score"] == null) continue;
                     evaluationCount++;
-                    if (evaluationCount <= 5)
-                    {
-                        string studentId = (string)evaluation.Value["StudentId"];
-                        string studentName = (string)evaluation.Value["StudentName"];
-                        if (!string.IsNullOrEmpty(studentId) && students[studentId] != null)
-                        {
-                            studentName = (string)students[studentId]["Name"];
-                        }
-                        evaluationRows += "<tr><td>" + Encode(studentName) +
-                            "</td><td>" + Encode((string)evaluation.Value["Score"]) +
-                            "</td><td>" + Encode((string)evaluation.Value["Status"]) + "</td></tr>";
-                    }
+                    if (evaluationCount > 5) continue;
+                    string studentId = (string)item["StudentId"];
+                    string taskId = (string)item["TaskId"];
+                    string studentName = !string.IsNullOrEmpty(studentId) && students[studentId] != null
+                        ? (string)students[studentId]["Name"] : studentId;
+                    JToken task = !string.IsNullOrEmpty(taskId) ? tasks[taskId] : null;
+                    string score = (string)item["Score"];
+                    if (task != null && task["MaxScore"] != null)
+                        score += " / " + (string)task["MaxScore"];
+                    evaluationRows += "<tr><td>" + Encode(studentName) +
+                        "</td><td>" + Encode(task == null ? taskId : (string)task["TaskName"]) +
+                        "</td><td>" + Encode(score) + "</td></tr>";
                 }
 
                 // Several supervisors can belong to the same company.
@@ -145,7 +151,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 litEvaluations.Text = evaluationCount.ToString();
                 litCompanies.Text = companyCount.ToString();
                 litStudentPreview.Text = studentRows == "" ? EmptyRow("No students yet.") : studentRows;
-                litEvaluationPreview.Text = evaluationRows == "" ? EmptyRow("No evaluations in Firebase yet.") : evaluationRows;
+                litEvaluationPreview.Text = evaluationRows == "" ? EmptyRow("No evaluated task submissions yet.") : evaluationRows;
                 litCompanyPreview.Text = companyRows == "" ? EmptyRow("No companies yet.") : companyRows;
                 litOpportunityPreview.Text = opportunityRows == "" ? EmptyRow("No opportunities in Firebase yet.") : opportunityRows;
             }
@@ -164,6 +170,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 lblDataError.Text = "Firebase returned data in an unexpected format.";
                 lblDataError.Visible = true;
             }
+        }
+
+        private static async Task<JObject> ReadTable(string name)
+        {
+            string json = await FirebaseDb.Get(name);
+            if (json == null) throw new HttpRequestException();
+            return JsonConvert.DeserializeObject<JObject>(json) ?? new JObject();
         }
 
         private static string EmptyRow(string message)

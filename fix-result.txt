@@ -1,0 +1,112 @@
+===== UIMS fix-project   10/22/2026 00:46:28   DESKTOP-A5C4PEQ =====
+
+--- Checking Visual Studio and the web server
+  ok: Visual Studio is closed
+  ok: no old web server running
+
+--- Finding the project
+  ok: project: C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem
+git branch: dev
+git commit: 6bc10eb This Merge is represent the standard foundation for the project and it's structure
+
+--- Looking for unfinished merge conflicts
+  ok: no conflict markers found
+  ok: every file listed in the project exists, and no page is left out of the project
+
+--- Checking that the package versions agree
+CodeDom version  Web.config=2.0.1  packages.config=2.0.1  csproj=2.0.1
+  ok: all three files use version 2.0.1
+
+--- Checking the tools on this computer
+  ok: MSBuild: C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe
+  ok: the ASP.NET web tools are installed
+  ok: .NET Framework 4.8 targeting pack is installed
+  ok: nuget.org is reachable
+  ok: solution: C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem.sln
+  ok: IIS Express is installed
+  ok: port 60107 is free
+  ok: 717.5 GB free on the drive
+
+--- Cleaning old build files
+  ok: deleted C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages
+  ok: deleted C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\bin
+  ok: deleted C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\obj
+  ok: removed the Windows "downloaded from internet" block from the files
+
+--- Downloading packages and building (1-3 minutes)
+MSBuild exit code: 0
+  ok: the build finished without errors
+
+--- Checking the files in bin and repairing what is missing
+  FIXED: the build did not copy the CodeDom dll into bin, so it was copied from the packages folder
+  ok: roslyn compiler files are in bin
+  ok: UniversityInternshipManagmentSystem.dll is in bin
+  ok: Newtonsoft.Json.dll is in bin
+dll version in bin = 2.0.1.0, Web.config wants = 2.0.1
+  ok: the CodeDom dll version (2.0.1.0) matches Web.config
+  ok: Web.config has a value for ApiKey
+  ok: Web.config has a value for DbUrl
+  ok: the Firebase database answers
+
+--- Checking that nothing removes the files (antivirus)
+  ok: the CodeDom dll is still in bin after 5 seconds
+
+--- extra details
+bin folder:
+  roslyn
+  Antlr3.Runtime.dll
+  Antlr3.Runtime.pdb
+  Microsoft.AspNet.FriendlyUrls.dll
+  Microsoft.AspNet.FriendlyUrls.xml
+  Microsoft.AspNet.Web.Optimization.WebForms.dll
+  Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+  Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+  Microsoft.ScriptManager.MSAjax.dll
+  Microsoft.ScriptManager.WebForms.dll
+  Microsoft.Web.Infrastructure.dll
+  Newtonsoft.Json.dll
+  System.Web.Optimization.dll
+  System.Web.Optimization.xml
+  UniversityInternshipManagmentSystem.dll
+  UniversityInternshipManagmentSystem.dll.config
+  UniversityInternshipManagmentSystem.pdb
+  WebGrease.dll
+last 30 lines of the build output:
+    Restoring NuGet package WebGrease.1.6.0.
+    Adding package 'Microsoft.AspNet.ScriptManager.WebForms.5.0.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'jQuery.3.7.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.Web.Infrastructure.2.0.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.AspNet.FriendlyUrls.Core.1.0.2' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'WebGrease.1.6.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'bootstrap.5.2.3' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Antlr.3.5.0.2' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.AspNet.FriendlyUrls.1.0.2' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.AspNet.Web.Optimization.WebForms.1.1.3' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.AspNet.Web.Optimization.1.1.3' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Modernizr.2.8.3' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.AspNet.ScriptManager.MSAjax.5.0.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Newtonsoft.Json.13.0.4' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.Web.Optimization.WebForms.1.1.3' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Modernizr.2.8.3' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.Web.Infrastructure.2.0.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Antlr.3.5.0.2' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'WebGrease.1.6.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.Web.Optimization.1.1.3' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.FriendlyUrls.Core.1.0.2' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.FriendlyUrls.1.0.2' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'jQuery.3.7.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.ScriptManager.WebForms.5.0.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.ScriptManager.MSAjax.5.0.0' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Newtonsoft.Json.13.0.4' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'bootstrap.5.2.3' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1' to folder 'C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    UniversityInternshipManagmentSystem -> C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\bin\UniversityInternshipManagmentSystem.dll
+
+===== SUMMARY =====
+
+Fixed automatically:
+  - the build did not copy the CodeDom dll into bin, so it was copied from the packages folder
+
+RESULT: everything is fine. Open UniversityInternshipManagmentSystem.sln in Visual Studio and run the site. (Use Start or Build, not Rebuild or Clean.)
+Report file: C:\Users\user\Desktop\UIMS\University-Internship-Management-System-\fix-result.txt

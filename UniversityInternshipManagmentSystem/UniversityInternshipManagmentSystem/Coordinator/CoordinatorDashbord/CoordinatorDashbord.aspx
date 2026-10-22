@@ -20,7 +20,7 @@
                     <div class="col-sm-6 col-xl"><div class="card admin-card p-3 h-100 d-flex flex-row align-items-center justify-content-between"><div><div class="admin-stat"><asp:Literal ID="litAssigned" runat="server" /></div><div class="small-label">Placed students</div></div><span class="stat-icon" aria-hidden="true"><svg><use href="#i-briefcase" /></svg></span></div></div>
                     <div class="col-sm-6 col-xl"><div class="card admin-card p-3 h-100 d-flex flex-row align-items-center justify-content-between"><div><div class="admin-stat"><asp:Literal ID="litCompanies" runat="server" /></div><div class="small-label">Companies</div></div><span class="stat-icon cyan" aria-hidden="true"><svg><use href="#i-building" /></svg></span></div></div>
                     <div class="col-sm-6 col-xl"><div class="card admin-card p-3 h-100 d-flex flex-row align-items-center justify-content-between"><div><div class="admin-stat"><asp:Literal ID="litAcademic" runat="server" /></div><div class="small-label">Academic supervisors</div></div><span class="stat-icon gold" aria-hidden="true"><svg><use href="#i-user" /></svg></span></div></div>
-                    <div class="col-sm-6 col-xl"><div class="card admin-card p-3 h-100 d-flex flex-row align-items-center justify-content-between"><div><div class="admin-stat"><asp:Literal ID="litEvaluations" runat="server" /></div><div class="small-label">Evaluations</div></div><span class="stat-icon gold" aria-hidden="true"><svg><use href="#i-check" /></svg></span></div></div>
+                    <div class="col-sm-6 col-xl"><div class="card admin-card p-3 h-100 d-flex flex-row align-items-center justify-content-between"><div><div class="admin-stat"><asp:Literal ID="litEvaluations" runat="server" /></div><div class="small-label">Evaluated submissions</div></div><span class="stat-icon gold" aria-hidden="true"><svg><use href="#i-check" /></svg></span></div></div>
                 </div>
                 <div class="row g-4 mt-2">
                     <div class="col-xl-6"><section class="card admin-card p-4 h-100"><h2 class="section-title mb-3">Account management and allocation</h2>
@@ -30,7 +30,7 @@
                     </section></div>
                     <div class="col-xl-6"><section class="card admin-card p-4 h-100"><h2 class="section-title mb-3">Monitoring and completion</h2>
                         <a class="feature-row" runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx"><strong><svg class="feature-icon"><use href="#i-briefcase" /></svg> Placement monitoring</strong><small>Students, companies, tasks, hours and progress</small></a>
-                        <div class="feature-row"><strong><svg class="feature-icon"><use href="#i-check" /></svg> Evaluations</strong><small>Available when evaluation records are added to Firebase</small></div>
+                        <a class="feature-row" runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx"><strong><svg class="feature-icon"><use href="#i-check" /></svg> Task evaluations</strong><small>Review evaluated student submissions</small></a>
                         <div class="feature-row"><strong><svg class="feature-icon"><use href="#i-check" /></svg> Final completion review</strong><small>Available when final review records are connected</small></div>
                     </section></div>
                 </div>
@@ -40,8 +40,8 @@
                         <div class="table-responsive"><table class="table preview-table align-middle mb-0"><thead><tr><th>Name</th><th>Major</th><th>Placement</th></tr></thead><tbody><asp:Literal ID="litStudentPreview" runat="server" /></tbody></table></div>
                     </section></div>
                     <div class="col-xl-6"><section class="card admin-card preview-card p-4 h-100" aria-labelledby="evaluationsPreviewHeading">
-                        <h2 id="evaluationsPreviewHeading" class="section-title mb-3">Evaluations</h2>
-                        <div class="table-responsive"><table class="table preview-table align-middle mb-0"><thead><tr><th>Student</th><th>Score</th><th>Status</th></tr></thead><tbody><asp:Literal ID="litEvaluationPreview" runat="server" /></tbody></table></div>
+                        <h2 id="evaluationsPreviewHeading" class="section-title mb-3">Task evaluations</h2>
+                        <div class="table-responsive"><table class="table preview-table align-middle mb-0"><thead><tr><th>Student</th><th>Task</th><th>Score</th></tr></thead><tbody><asp:Literal ID="litEvaluationPreview" runat="server" /></tbody></table></div>
                     </section></div>
                     <div class="col-xl-6"><section class="card admin-card preview-card p-4 h-100" aria-labelledby="companiesPreviewHeading">
                         <h2 id="companiesPreviewHeading" class="section-title mb-3">Companies</h2>
