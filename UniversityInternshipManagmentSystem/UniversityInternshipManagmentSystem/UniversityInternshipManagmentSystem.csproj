@@ -156,7 +156,8 @@
     <Content Include="bin\UniversityInternshipManagmentSystem.dll" />
     <Content Include="bin\UniversityInternshipManagmentSystem.pdb" />
     <Content Include="bin\WebGrease.dll" />
-    <Content Include="Company\Dashboard.aspx" />
+    <Content Include="Company\CompanyDashboard\Dashboard.aspx" />
+    <Content Include="Company\CompanyDashboard\Dashboard.css" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.css" />
     <Content Include="Coordinator\CoordinatorMonitor\CoordinatorMonitor.aspx" />
@@ -269,6 +270,13 @@
     <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
     <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
     <Content Include="Company\MyTrainees\MyTrainees.aspx" />
+    <Compile Include="Company\CompanyDashboard\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\CompanyDashboard\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Company\MyTrainees\MyTrainees.aspx.cs">
       <DependentUpon>MyTrainees.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -336,13 +344,6 @@
       <DependentUpon>SupervisorAccount.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="Company\Dashboard.aspx.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Company\Dashboard.aspx.designer.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Config\AuthHelper.cs" />
     <Compile Include="Config\TaskDb.cs" />
     <Compile Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx.cs">
@@ -528,7 +529,9 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Company\Da\" />
+  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

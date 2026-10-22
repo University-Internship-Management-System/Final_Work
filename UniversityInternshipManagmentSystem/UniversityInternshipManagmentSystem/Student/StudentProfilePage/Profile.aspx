@@ -60,7 +60,9 @@
                             <h2 id="personal-title">Contact &amp; professional details</h2>
                             <span class="sd-count"><%: CanEdit ? "Editable personal fields" : "Read-only" %></span></div>
                         <div class="sd-panel-body">
-                            <p class="sd-note mb-4"><%: CanUpdate ? "Edit and save your contact and professional fields below. Academic and account details stay read-only. Cancel reloads your saved profile." : "A verified Student session is required to edit and save your own profile." %></p>
+                            <p class="sd-note mb-4"><%: CanUpdate ? "Edit and save your contact and professional fields below. Academic and account details stay read-only. Cancel reloads your saved profile." : "A verified Student session is required to edit and save your own profile." %>
+                                <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Button" />
+                            </p>
                             <asp:Label ID="SaveMessage" runat="server" CssClass="sd-save-message" role="status" aria-live="polite" />
                             <div class="mb-4">
                                 <asp:Label runat="server" AssociatedControlID="PhoneNumberInput" CssClass="form-label" Text="Phone number" /><asp:TextBox ID="PhoneNumberInput" runat="server" CssClass="form-control" MaxLength="30" ReadOnly="true" TextMode="Phone" /><span class="sd-note">Include a country code where applicable.</span></div>
@@ -85,6 +87,7 @@
                         </div>
                     </section>
                 </div>
+
             </div>
             <% } %>
         </div>
