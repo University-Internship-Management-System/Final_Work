@@ -33,6 +33,24 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
         protected global::System.Web.UI.WebControls.Label lblCount;
 
         /// <summary>
+        /// pnlNotice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNotice;
+
+        /// <summary>
+        /// lblNotice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNotice;
+
+        /// <summary>
         /// txtSearch control.
         /// </summary>
         /// <remarks>
