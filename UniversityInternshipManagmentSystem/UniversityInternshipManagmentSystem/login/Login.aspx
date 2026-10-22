@@ -85,7 +85,8 @@
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <asp:Button ID="btnSendRecovery" runat="server" Text="Send Reset Link" CssClass="btn btn-uj-primary" OnClick="btnSendRecovery_Click" />
+                    <%-- formnovalidate: the sign-in fields behind this popup are "required" and empty; without it the browser blocks this button --%>
+                    <asp:Button ID="btnSendRecovery" runat="server" Text="Send Reset Link" CssClass="btn btn-uj-primary" OnClick="btnSendRecovery_Click" formnovalidate="formnovalidate" />
                 </div>
             </div>
         </div>
