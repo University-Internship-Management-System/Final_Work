@@ -345,6 +345,8 @@
     <Content Include="Company\FinalEvaluation\FinalEvaluation.css" />
     <Content Include="Company\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
+    <Content Include="Company\SupervisorAccount\css\supervisor-account.css" />
+    <Content Include="Company\SupervisorAccount\javascript\supervisor-account.js" />
     <Content Include="Academic\SupervisorAccount\SupervisorAccount.aspx" />
     <Content Include="Academic\SupervisorAccount\css\supervisor-account.css" />
     <Content Include="Academic\SupervisorAccount\javascript\supervisor-account.js" />
@@ -455,6 +457,13 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Config\AppConfig.cs" />
+    <Compile Include="Company\SupervisorAccount\SupervisorAccount.aspx.cs">
+      <DependentUpon>SupervisorAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\SupervisorAccount\SupervisorAccount.aspx.designer.cs">
+      <DependentUpon>SupervisorAccount.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Config\EmailSender.cs" />
     <Compile Include="Config\Notify.cs" />
     <Compile Include="Config\EmailVerification.cs" />
