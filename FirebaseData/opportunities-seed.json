@@ -12,7 +12,11 @@
     "Seats": 3,
     "Status": "open",
     "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1797379140000
+    "ApplicationDeadline": 1797379140000,
+    "ConfirmedStudents": {
+      "student_test_001": true,
+      "student_test_002": true
+    }
   },
   "opp002": {
     "CompanyId": "company_test_001",
@@ -27,7 +31,10 @@
     "Seats": 2,
     "Status": "open",
     "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1796169540000
+    "ApplicationDeadline": 1796169540000,
+    "ConfirmedStudents": {
+      "lLFnP2WAKvTaB1Q0AnSPK0brMd23": true
+    }
   },
   "opp003": {
     "CompanyId": "company_test_001",
@@ -70,7 +77,11 @@
     "Seats": 3,
     "Status": "open",
     "CreatedAt": 1792584000000,
-    "ApplicationDeadline": 1796947140000
+    "ApplicationDeadline": 1796947140000,
+    "ConfirmedStudents": {
+      "student_test_005": true,
+      "student_test_006": true
+    }
   },
   "opp006": {
     "CompanyId": "company_test_002",

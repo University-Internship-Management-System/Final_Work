@@ -277,9 +277,26 @@
       <DependentUpon>MyTrainees.aspx</DependentUpon>
     </Compile>
     <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
+    <Compile Include="Company\ManageTasks\ManageTasks.aspx.cs">
+      <DependentUpon>ManageTasks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ManageTasks\ManageTasks.aspx.designer.cs">
+      <DependentUpon>ManageTasks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\ManageTasks\ReviewTask.aspx.cs">
+      <DependentUpon>ReviewTask.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ManageTasks\ReviewTask.aspx.designer.cs">
+      <DependentUpon>ReviewTask.aspx</DependentUpon>
+    </Compile>
     <Content Include="Company\MyTrainees\MyTrainees.css" />
     <Content Include="Company\MyTrainees\MyTrainees.js" />
     <Content Include="Company\ManageTasks\ManageTasks.aspx" />
+    <Content Include="Company\ManageTasks\ManageTasks.css" />
+    <Content Include="Company\ManageTasks\ManageTasks.js" />
+    <Content Include="Company\ManageTasks\ReviewTask.aspx" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
     <Content Include="Academic\StudentProgress\StudentProgress.aspx" />

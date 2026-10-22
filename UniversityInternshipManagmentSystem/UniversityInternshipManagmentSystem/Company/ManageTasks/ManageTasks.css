@@ -1,0 +1,25 @@
+﻿/* Company task pages: only the few things that StudentTasks.css (shared) does not have */
+
+/* two boxes side by side in the New task popup (week + max score, start + deadline) */
+.mt-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* the check boxes of the trainees */
+.mt-trainees { display: block; margin-bottom: 8px; }
+.mt-trainee { display: grid; grid-template-columns: 22px 1fr 90px; align-items: center; gap: 8px; margin-bottom: 6px; }
+.mt-trainee input[type=checkbox] { width: auto; margin: 0; }
+.mt-trainee-hours { padding: 4px 8px; height: auto; font-size: 13px; }
+
+/* hours per week */
+.mt-hours { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 14px; }
+.mt-hours-title { font-size: 13px; font-weight: 600; color: var(--uims-text-muted, #5f6b66); margin-right: 4px; }
+.mt-hw { font-size: 12px; padding: 3px 10px; border-radius: 99px; background: #e8f3ee; color: #0e4a38; }
+.mt-hw.full { background: #fdecec; color: #8a1f1f; font-weight: 600; }
+.mt-hours-note { font-size: 12px; color: #5f6b66; margin: 4px 0 6px; }
+.mt-hours-popup { margin-bottom: 4px; }
+
+/* the two buttons of the evaluation form */
+.mt-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 560px) {
+    .mt-two { grid-template-columns: 1fr; }
+}
