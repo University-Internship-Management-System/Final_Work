@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -19,8 +19,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             get
             {
-                return Environment.GetEnvironmentVariable("UIMS_FIREBASE_ADMIN_CREDENTIALS")
-                    ?? Environment.GetEnvironmentVariable("UIMS_FIREBASE_ADMIN_CREDENTIALS", EnvironmentVariableTarget.User);
+                return Environment.GetEnvironmentVariable("UIMS_FIREBASE_ADMIN_CREDENTIALS", EnvironmentVariableTarget.User)
+                    ?? Environment.GetEnvironmentVariable("UIMS_FIREBASE_ADMIN_CREDENTIALS");
             }
         }
 
