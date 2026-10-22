@@ -111,7 +111,7 @@ namespace UniversityInternshipManagmentSystem.login
         protected void btnCancelLogout_Click(object sender, EventArgs e)
         {
             AuthHelper.SignOut();
-            SafeRedirect(LoginUrl + "?msg=" + Server.UrlEncode("You have been signed out successfully."));
+            SafeRedirect("~/index.aspx");
         }
 
         #endregion

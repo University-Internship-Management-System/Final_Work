@@ -197,3 +197,8 @@ h3, .card-title  { font-size: 18px; font-weight: 600; }                     /* C
 .uims-soon-list { margin: 8px 0 24px; padding-left: 20px; color: var(--uims-text); }
 .uims-soon-list li { margin: 4px 0; }
 .uims-soon-card .badge, .uims-soon-card .btn { align-self: flex-start; }
+
+/* University branding links to the home page without ending the session. */
+.uims-brand-image { width: 42px; height: 50px; object-fit: contain; flex: none; }
+.uims-home-brand { display: inline-flex; align-items: center; gap: 9px; color: var(--uims-primary); text-decoration: none; }
+.uims-home-brand img { width: 28px; height: 34px; object-fit: contain; }

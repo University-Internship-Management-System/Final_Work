@@ -1,22 +1,17 @@
-===== UIMS fix-project   10/22/2026 00:41:20   DESKTOP-R9IQPRC =====
+===== UIMS fix-project   10/22/2026 10:03:42   DESKTOP-P56KQ7S =====
 
 --- Checking Visual Studio and the web server
   ok: Visual Studio is closed
   ok: no old web server running
 
 --- Finding the project
-  ok: project: C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem
+  ok: project: C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem
 git branch: dev
 git commit: 6bc10eb This Merge is represent the standard foundation for the project and it's structure
 
 --- Looking for unfinished merge conflicts
   ok: no conflict markers found
-  PROBLEM: The project file lists Scripts\jquery-3.7.0.slim.min.js but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  PROBLEM: The project file lists Scripts\jquery-3.7.0.js but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  PROBLEM: The project file lists Scripts\jquery-3.7.0.slim.js but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  PROBLEM: The project file lists Scripts\jquery-3.7.0.slim.min.map but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  PROBLEM: The project file lists Scripts\jquery-3.7.0.min.js but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  PROBLEM: The project file lists Scripts\jquery-3.7.0.min.map but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
+  ok: every file listed in the project exists, and no page is left out of the project
 
 --- Checking that the package versions agree
 CodeDom version  Web.config=2.0.1  packages.config=2.0.1  csproj=2.0.1
@@ -27,16 +22,15 @@ CodeDom version  Web.config=2.0.1  packages.config=2.0.1  csproj=2.0.1
   ok: the ASP.NET web tools are installed
   ok: .NET Framework 4.8 targeting pack is installed
   ok: nuget.org is reachable
-  ok: solution: C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem.sln
+  ok: solution: C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem.sln
   ok: IIS Express is installed
   ok: port 60107 is free
-  ok: 837.4 GB free on the drive
+  ok: 799.7 GB free on the drive
 
 --- Cleaning old build files
-  ok: deleted C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages
-  ok: deleted C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\bin
-  ok: deleted C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\obj
-  ok: deleted the old Visual Studio cache C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\.vs (it is recreated automatically; it can hold a wrong IIS Express path)
+  ok: deleted C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\bin
+  ok: deleted C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\obj
+  ok: deleted the old Visual Studio cache C:\Users\user\Desktop\work2\University-Internship-Management-System-\.vs (it is recreated automatically; it can hold a wrong IIS Express path)
   ok: cleared the old compiled ASP.NET pages (Temporary ASP.NET Files)
   ok: removed the Windows "downloaded from internet" block from the files
 
@@ -79,49 +73,41 @@ bin folder:
   UniversityInternshipManagmentSystem.pdb
   WebGrease.dll
 last 30 lines of the build output:
-    Adding package 'Antlr.3.5.0.2' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Adding package 'Microsoft.AspNet.FriendlyUrls.Core.1.0.2' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Adding package 'Microsoft.AspNet.ScriptManager.WebForms.5.0.0' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Antlr.3.5.0.2' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Microsoft.AspNet.Web.Optimization.1.1.3' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Microsoft.AspNet.FriendlyUrls.Core.1.0.2' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Microsoft.AspNet.FriendlyUrls.1.0.2' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'jQuery.3.7.0' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.AspNet.Web.Optimization.1.1.3' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'bootstrap.5.2.3' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.Web.Optimization.1.1.3' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.FriendlyUrls.1.0.2' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.ScriptManager.MSAjax.5.0.0' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Antlr.3.5.0.2' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.ScriptManager.WebForms.5.0.0' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.FriendlyUrls.Core.1.0.2' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'jQuery.3.7.0' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
     Restoring NuGet package Microsoft.AspNet.Web.Optimization.WebForms.1.1.3.
+    Restoring NuGet package WebGrease.1.6.0.
+    Restoring NuGet package Modernizr.2.8.3.
     Restoring NuGet package Microsoft.Web.Infrastructure.2.0.0.
     Restoring NuGet package Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1.
-    Restoring NuGet package Modernizr.2.8.3.
-    Added package 'Microsoft.AspNet.ScriptManager.WebForms.5.0.0' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'jQuery.3.7.0' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
     Restoring NuGet package Newtonsoft.Json.13.0.4.
-    Adding package 'Microsoft.AspNet.Web.Optimization.WebForms.1.1.3' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Restoring NuGet package WebGrease.1.6.0.
-    Adding package 'Microsoft.Web.Infrastructure.2.0.0' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Adding package 'Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Adding package 'Modernizr.2.8.3' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Adding package 'Newtonsoft.Json.13.0.4' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Adding package 'WebGrease.1.6.0' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Microsoft.AspNet.ScriptManager.MSAjax.5.0.0' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Microsoft.AspNet.Web.Optimization.WebForms.1.1.3' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Microsoft.Web.Infrastructure.2.0.0' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Modernizr.2.8.3' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'WebGrease.1.6.0' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Newtonsoft.Json.13.0.4' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'bootstrap.5.2.3' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    Added package 'Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1' to folder 'C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
-    UniversityInternshipManagmentSystem -> C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\bin\UniversityInternshipManagmentSystem.dll
+    Adding package 'Modernizr.2.8.3' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.Web.Infrastructure.2.0.0' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Newtonsoft.Json.13.0.4' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'Microsoft.AspNet.Web.Optimization.WebForms.1.1.3' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Adding package 'WebGrease.1.6.0' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.AspNet.Web.Optimization.WebForms.1.1.3' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Modernizr.2.8.3' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.Web.Infrastructure.2.0.0' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'WebGrease.1.6.0' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Newtonsoft.Json.13.0.4' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'bootstrap.5.2.3' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    Added package 'Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1' to folder 'C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\packages'
+    UniversityInternshipManagmentSystem -> C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\UniversityInternshipManagmentSystem\bin\UniversityInternshipManagmentSystem.dll
 
 ===== SUMMARY =====
 
 Fixed automatically:
   - the build did not copy the CodeDom dll into bin, so it was copied from the packages folder
 
-RESULT: these problems could not be fixed automatically:
-  - The project file lists Scripts\jquery-3.7.0.slim.min.js but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  - The project file lists Scripts\jquery-3.7.0.js but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  - The project file lists Scripts\jquery-3.7.0.slim.js but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  - The project file lists Scripts\jquery-3.7.0.slim.min.map but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  - The project file lists Scripts\jquery-3.7.0.min.js but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-  - The project file lists Scripts\jquery-3.7.0.min.map but that file is not on your computer. Run "git pull origin dev". If it is still missing, the teammate who added it forgot to commit it.
-
-The full report was copied to your clipboard. Paste it in a message to Wadea.
-Report file: C:\Users\user\Desktop\LAST\University-Internship-Management-System-\UniversityInternshipManagmentSystem\fix-result.txt
+RESULT: everything is fine. Open UniversityInternshipManagmentSystem.sln in Visual Studio and run the site. (Use Start or Build, not Rebuild or Clean.)
+Report file: C:\Users\user\Desktop\work2\University-Internship-Management-System-\UniversityInternshipManagmentSystem\fix-result.txt
