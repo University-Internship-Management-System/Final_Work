@@ -9,8 +9,8 @@
 
 <nav class="navbar navbar-expand-lg uims-navbar sticky-top bg-white border-bottom shadow-sm py-2">
     <div class="container-fluid px-lg-4">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="<%= ResolveUrl("~/Default.aspx") %>">
-            <img src="<%= ResolveUrl("~/Assets/images/uj-logo.png") %>" alt="UJ Logo" height="46" style="width: auto;" />
+        <a class="navbar-brand d-flex align-items-center gap-2" href="<%= ResolveUrl("~/index.aspx") %>">
+            <img src="<%= ResolveUrl("~/Assets/PublicHome/university-logo.png") %>" alt="UJ Logo" height="46" style="width: auto;" />
             <div class="brand-text">
                 <div class="h6 fw-bold text-uj-green mb-0">Field Training System (UIMS)</div>
                 <small class="text-muted d-block" style="font-size: 0.76rem;">King Abdullah II School of Information Technology - The University of Jordan</small>
@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarMain">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold <%= isHome ? "active text-uj-green" : "" %>" href="<%= ResolveUrl("~/Default.aspx") %>">
+                    <a class="nav-link fw-semibold <%= isHome ? "active text-uj-green" : "" %>" href="<%= ResolveUrl("~/index.aspx") %>">
                         <i class="bi bi-house-door me-1"></i> Home
                     </a>
                 </li>

@@ -23,7 +23,7 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
                     return;
                 }
 
-                string studentId = (string)(Session["dbRecordId"] ?? Session["userId"]);   // dbRecordId = the Students table key set by the login
+                string studentId = (string)Session["userId"];   // dbRecordId = the Students table key set by the login
                 string opportunityId = Request.QueryString["opportunityId"];
 
                 if (string.IsNullOrEmpty(opportunityId))
