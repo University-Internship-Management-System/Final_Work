@@ -97,10 +97,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Academic\Dashboard.aspx" />
-    <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
-    <Content Include="Academic\FinalEvaluation\Trainees.aspx" />
-    <Content Include="Academic\FinalEvaluation\EvaluateTrainee.aspx" />
-    <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
+    <Content Include="Academic\Dashboard.css" />
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
     <Content Include="Assets\images\uj-logo.svg" />
@@ -353,6 +350,8 @@
     <Content Include="Academic\SupervisorAccount\javascript\supervisor-account.js" />
     <Content Include="Coordinator\ContactMessages\ContactMessages.aspx" />
     <Content Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx" />
+    <Content Include="Coordinator\CoordinatorAccount\coordinator-account.css" />
+    <Content Include="Coordinator\CoordinatorAccount\coordinator-account.js" />
     <Content Include="Shared\Sidebar.ascx" />
     <Content Include="Shared\uims.css" />
     <Content Include="Content\uims.css" />
@@ -383,6 +382,9 @@
     <Content Include="Student\Tests\Verify-StudentPages.cjs" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
+    <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
+    <Content Include="Academic\FinalEvaluation\Trainees.aspx" />
+    <Content Include="Academic\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="EmailTemplates\notice.html" />
     <Content Include="EmailTemplates\notice.txt" />
     <Content Include="EmailTemplates\password-reset.html" />
@@ -391,6 +393,7 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx.cs"><DependentUpon>CoordinatorAccount.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
     <Compile Include="Academic\FinalEvaluation\FinalEvaluation.aspx.cs">
       <DependentUpon>FinalEvaluation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -1,14 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.UI;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using System.Web;
+using System;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using UniversityInternshipManagmentSystem.Config;
 using StudentRecord = UniversityInternshipManagmentSystem.Models.Student;
 
@@ -16,23 +16,25 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
 {
     public partial class Profile : StudentPage
     {
+        private static readonly HttpClient PasswordClient = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false }) { Timeout = TimeSpan.FromSeconds(15), MaxResponseContentBufferSize = 256 * 1024 };
         private enum ProfileAction { None, Edit, Validate, Save, Cancel }
         private ProfileAction requestedAction;
-        private static readonly HttpClient PasswordClient = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
         protected StudentRecord Record => Workspace;
         protected bool IsEditing
         {
             get { return ViewState["Profile.Editing"] is bool && (bool)ViewState["Profile.Editing"]; }
             private set { ViewState["Profile.Editing"] = value; }
         }
-        protected bool CanUpdate => true;
+        protected bool CanUpdate => Workspace != null && IsEditing;
         protected string SafeCvUrl => ProfileValidation.GetSafeWebUrl(Record?.CvUrl);
         protected string SafePortfolioUrl => ProfileValidation.GetSafeWebUrl(Record?.PortfolioUrl);
         protected string SafeAvatarUrl => SafeProfileImage(Record?.ProfilePicUrl);
-        protected string CompanyText => string.IsNullOrWhiteSpace(Record?.CompanyId)
-            ? "No company assignment recorded" : "Assignment recorded; company details unavailable";
-        protected string SupervisorText => string.IsNullOrWhiteSpace(Record?.AcademicSupervisorId)
-            ? "No supervisor assignment recorded" : "Assignment recorded; supervisor details unavailable";
+        protected string CompanyText { get; private set; } = "Not available";
+        protected string SupervisorText { get; private set; } = "Not available";
+        protected string PlacementText { get; private set; } = "Not available";
+        protected string OpportunityText { get; private set; } = "Not available";
+        protected string ConfirmationText { get; private set; } = "Not available";
+        protected string TrainingNote { get; private set; } = "Training hours require an authoritative approval source; task completion does not establish approved hours.";
 
         protected override void OnInit(EventArgs e)
         {
@@ -52,6 +54,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         }
         protected void Page_Load(object sender, EventArgs e)
         {
+            PasswordSuccess.Text = PasswordError.Text = "";
             RegisterAsyncTask(new PageAsyncTask(LoadProfileAsync));
         }
         private async Task LoadProfileAsync()
@@ -69,15 +72,16 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
             try
             {
                 if (requestedAction != ProfileAction.None) ValidateCsrf();
-                await ProcessActionAsync();
+                await ProcessAction();
             }
             catch (UnauthorizedAccessException ex) { SetMessage(ex.Message); }
-            catch (StudentDataException ex) { SetMessage(ex.Message); }
-            catch (Exception) { SetMessage("The profile action could not be completed. No changes were saved."); }
+            catch (StudentDataException ex) { SetMessage(ex.Message + " Reload your profile before retrying if saving could not be confirmed."); }
+            catch (Exception) { SetMessage("The profile action could not be completed or confirmed. Reload your profile before retrying."); }
+            await LoadTrainingInfoAsync();
             ApplyPermissions();
         }
         // Invoked only after the shared Student adapter verifies identity and record ownership.
-        private async Task ProcessActionAsync()
+        private async Task ProcessAction()
         {
             if (Workspace == null) throw new UnauthorizedAccessException("A verified Student account is required.");
             ClearFieldErrors();
@@ -86,7 +90,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
                 case ProfileAction.Edit:
                     IsEditing = true;
                     BindFields();
-                    SetMessage("Edit your phone, skills and professional links, then press Save Changes.", false);
+                    SetMessage("Edit your phone, skills and professional links, then choose Save Changes. Validate Changes checks your entries without saving.", false);
                     break;
                 case ProfileAction.Cancel:
                     IsEditing = false;
@@ -94,31 +98,107 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
                     SetMessage("Unsaved changes discarded. Your current Firebase profile has been reloaded.", false);
                     break;
                 case ProfileAction.Validate:
-                    if (!IsEditing) throw new UnauthorizedAccessException("Choose Edit Profile before validating changes.");
-                    bool valid = ValidateInputs();
-                    SetMessage(valid
-                        ? "Your entries passed validation. Press Save Changes to save them."
-                        : "Correct the highlighted fields. Nothing was saved.", !valid);
-                    break;
                 case ProfileAction.Save:
                     if (!IsEditing) throw new UnauthorizedAccessException("Choose Edit Profile before saving changes.");
-                    if (!ValidateInputs())
+                    bool valid = ValidateInputs();
+                    if (!valid) { SetMessage("Correct the highlighted fields. Nothing was saved."); break; }
+                    if (requestedAction == ProfileAction.Validate)
                     {
-                        SetMessage("Correct the highlighted fields. Nothing was saved.");
+                        SetMessage("Your entries passed validation. Nothing was saved. Choose Save Changes to save them.", false);
                         break;
                     }
-                    // Writes only the four editable fields to this student's own record, then reads it again to confirm
-                    var changes = ProfileValidation.CreatePatch(PhoneNumberInput.Text, SkillsInput.Text, CvInput.Text, PortfolioInput.Text, ProfileValidation.EditableFields);
-                    await SaveProfileFieldsAsync(changes);
+                    // Save checks CSRF again and the shared helper re-verifies identity, ownership,
+                    // PATCH allowlist and persistence by reading the student's record back.
+                    ValidateCsrf();
+                    var patch = ProfileValidation.CreatePatch(PhoneNumberInput.Text, SkillsInput.Text, CvInput.Text, PortfolioInput.Text, ProfileValidation.EditableFields);
+                    await PersistProfileAsync(patch);
+                    if (!ProfileValidation.MatchesPatch(Workspace, patch))
+                        throw new StudentDataException("The saved values could not be confirmed. Reload before retrying.");
                     IsEditing = false;
                     BindFields();
-                    SetMessage("Your profile changes were saved.", false);
+                    SetMessage("Your profile was saved and verified in Firebase.", false);
+                    SaveMessage.CssClass = "sd-save-message sd-save-success";
                     break;
                 default:
                     if (!IsEditing) BindFields();
                     break;
             }
         }
+        // Virtual transport seams support offline tests; production always calls the existing
+        // verified team adapter. Browser input cannot choose a repository or student record.
+        protected virtual Task PersistProfileAsync(IDictionary<string, object> patch) => SaveProfileFieldsAsync(patch);
+        protected virtual Task<JToken> ReadProfileApplicationsAsync() => ReadOwnApplicationsAsync();
+        protected virtual async Task<JToken> ReadTrainingRecordAsync(string path)
+        {
+            string token = Session["idToken"] as string;
+            if (Workspace == null || string.IsNullOrWhiteSpace(VerifiedStudentId) || string.IsNullOrWhiteSpace(token))
+                throw new UnauthorizedAccessException("Student authorization is required.");
+            using (var response = await PasswordClient.GetAsync(new Uri(AppConfig.DbUrl.TrimEnd('/') + "/" + path + ".json?auth=" + Uri.EscapeDataString(token))))
+            {
+                if (!response.IsSuccessStatusCode) throw new StudentDataException("Related training details are unavailable under the current Firebase permissions.");
+                return JToken.Parse(await response.Content.ReadAsStringAsync());
+            }
+        }
+        private async Task LoadTrainingInfoAsync()
+        {
+            if (Record == null) return;
+            CompanyText = string.IsNullOrWhiteSpace(Record.CompanyId) ? "No company assignment recorded" : "Assignment recorded; company details unavailable";
+            SupervisorText = string.IsNullOrWhiteSpace(Record.AcademicSupervisorId) ? "No supervisor assignment recorded" : "Assignment recorded; supervisor details unavailable";
+            PlacementText = "Not available"; OpportunityText = ConfirmationText = "Not available";
+            bool partial = false;
+            try
+            {
+                var apps = await ReadProfileApplicationsAsync();
+                if (apps.Type != JTokenType.Null)
+                {
+                    var confirmed = apps.Children<JProperty>().Select(x => x.Value)
+                        .Where(x => (string)x["Status"] == "Confirmed" && !string.IsNullOrWhiteSpace(Record.CompanyId)
+                            && (string)x["CompanyId"] == Record.CompanyId).ToList();
+                    if (confirmed.Count == 1)
+                    {
+                        var app = confirmed[0];
+                        PlacementText = "Confirmed";
+                        if (!string.IsNullOrWhiteSpace((string)app["CompanyName"])) CompanyText = (string)app["CompanyName"];
+                        if (!string.IsNullOrWhiteSpace((string)app["OpportunityTitle"])) OpportunityText = (string)app["OpportunityTitle"];
+                        long? stamp = app["ConfirmedAt"]?.Type == JTokenType.Integer ? (long?)app["ConfirmedAt"] : null;
+                        if (stamp > 0) ConfirmationText = DateTimeOffset.FromUnixTimeMilliseconds(stamp.Value).ToString("dd MMM yyyy HH:mm 'UTC'", System.Globalization.CultureInfo.InvariantCulture);
+                        if (OpportunityText == "Not available" && !string.IsNullOrWhiteSpace((string)app["OpportunityId"]))
+                        {
+                            string id = (string)app["OpportunityId"]; ValidateRecordKey(id);
+                            var opportunity = await ReadTrainingRecordAsync("Opportunities/" + Uri.EscapeDataString(id));
+                            if (opportunity.Type == JTokenType.Object && (string)opportunity["CompanyId"] == Record.CompanyId
+                                && !string.IsNullOrWhiteSpace((string)opportunity["Title"])) OpportunityText = (string)opportunity["Title"];
+                        }
+                    }
+                    else if (confirmed.Count > 1) PlacementText = "Multiple confirmations recorded; coordinator review required";
+                    else if (string.IsNullOrWhiteSpace(Record.CompanyId))
+                        PlacementText = apps.Children<JProperty>().Any(x => (string)x.Value["Status"] == "Accepted")
+                            ? "Accepted offer; awaiting confirmation" : "No confirmed placement recorded";
+                }
+            }
+            catch (Exception) { partial = true; }
+            if (!string.IsNullOrWhiteSpace(Record.CompanyId))
+                try
+                {
+                    ValidateRecordKey(Record.CompanyId);
+                    var company = await ReadTrainingRecordAsync("CompanySupervisors/" + Uri.EscapeDataString(Record.CompanyId));
+                    if (company.Type == JTokenType.Object && (string)company["Role"] == "CompanySupervisor"
+                        && !string.IsNullOrWhiteSpace((string)company["CompanyName"])) CompanyText = (string)company["CompanyName"];
+                }
+                catch (Exception) { partial = true; }
+            if (!string.IsNullOrWhiteSpace(Record.AcademicSupervisorId))
+                try
+                {
+                    ValidateRecordKey(Record.AcademicSupervisorId);
+                    var supervisor = await ReadTrainingRecordAsync("AcademicSupervisors/" + Uri.EscapeDataString(Record.AcademicSupervisorId));
+                    if (supervisor.Type == JTokenType.Object && (string)supervisor["Role"] == "AcademicSupervisor"
+                        && !string.IsNullOrWhiteSpace((string)supervisor["Name"])) SupervisorText = (string)supervisor["Name"];
+                }
+                catch (Exception) { partial = true; }
+            TrainingNote = (partial ? "Some related training details are unavailable under the current permissions or data mapping. " : "")
+                + "Training hours require an authoritative approval source; task completion does not establish approved hours.";
+        }
+
         private System.Web.UI.WebControls.TextBox[] CandidateInputs()
         {
             return new[] { PhoneNumberInput, SkillsInput, CvInput, PortfolioInput };
@@ -138,57 +218,6 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
             CvInput.Text = Record?.CvUrl ?? "";
             PortfolioInput.Text = Record?.PortfolioUrl ?? "";
         }
-        protected void EditButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Edit; }
-        protected void ValidateButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Validate; }
-        protected void SaveButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Save; }
-        protected void CancelButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Cancel; }
-        private void ValidateCsrf()
-        {
-            if (string.IsNullOrEmpty(CsrfToken) || !string.Equals(Request.Form["StudentCsrf"], CsrfToken, StringComparison.Ordinal))
-                throw new UnauthorizedAccessException("Your form session has expired. Reload the page before continuing.");
-        }
-        private void ClearFieldErrors()
-        {
-            foreach (var label in new[] { PhoneError, SkillsError, CvError, PortfolioError }) label.Text = "";
-            foreach (var input in CandidateInputs()) input.Attributes.Remove("aria-invalid");
-        }
-        private bool ValidateInputs()
-        {
-            bool valid = true;
-            string[] fields = { "PhoneNumber", "SkillsList", "CvUrl", "PortfolioUrl" };
-            var labels = new[] { PhoneError, SkillsError, CvError, PortfolioError };
-            var inputs = CandidateInputs();
-            for (int i = 0; i < fields.Length; i++)
-            {
-                try
-                {
-                    ProfileValidation.CreatePatch(PhoneNumberInput.Text, SkillsInput.Text, CvInput.Text, PortfolioInput.Text,
-                        new HashSet<string>(StringComparer.Ordinal) { fields[i] });
-                }
-                catch (ArgumentException ex)
-                {
-                    valid = false;
-                    labels[i].Text = HttpUtility.HtmlEncode(ex.Message);
-                    inputs[i].Attributes["aria-invalid"] = "true";
-                }
-            }
-            return valid;
-        }
-        internal static string SafeProfileImage(string value)
-        {
-            Uri url;
-            return !string.IsNullOrWhiteSpace(value) && value.Length <= 2048 && !value.Any(char.IsControl)
-                && Uri.TryCreate(value, UriKind.Absolute, out url) && url.Scheme == Uri.UriSchemeHttps
-                && !string.IsNullOrEmpty(url.Host) && string.IsNullOrEmpty(url.UserInfo)
-                ? url.AbsoluteUri : null;
-        }
-        private void SetMessage(string message, bool isError = true)
-        {
-            SaveMessage.Text = HttpUtility.HtmlEncode(message);
-            SaveMessage.CssClass = "sd-save-message " + (isError ? "sd-save-error" : "sd-save-info");
-            SaveMessage.Attributes["role"] = isError ? "alert" : "status";
-        }
-
         protected void ResetPasswordButton_Click(object sender, EventArgs e)
         {
             RegisterAsyncTask(new PageAsyncTask(ResetPasswordAsync));
@@ -276,6 +305,57 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
             string query = Request.Url.Query ?? "";
             Response.Redirect("~/login/FirstLogin.aspx" + query, false);
             Context.ApplicationInstance.CompleteRequest();
+        }
+
+        protected void EditButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Edit; }
+        protected void ValidateButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Validate; }
+        protected void SaveButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Save; }
+        protected void CancelButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Cancel; }
+        private void ValidateCsrf()
+        {
+            if (string.IsNullOrEmpty(CsrfToken) || !string.Equals(Request.Form["StudentCsrf"], CsrfToken, StringComparison.Ordinal))
+                throw new UnauthorizedAccessException("Your form session has expired. Reload the page before continuing.");
+        }
+        private void ClearFieldErrors()
+        {
+            foreach (var label in new[] { PhoneError, SkillsError, CvError, PortfolioError }) label.Text = "";
+            foreach (var input in CandidateInputs()) input.Attributes.Remove("aria-invalid");
+        }
+        private bool ValidateInputs()
+        {
+            bool valid = true;
+            string[] fields = { "PhoneNumber", "SkillsList", "CvUrl", "PortfolioUrl" };
+            var labels = new[] { PhoneError, SkillsError, CvError, PortfolioError };
+            var inputs = CandidateInputs();
+            for (int i = 0; i < fields.Length; i++)
+            {
+                try
+                {
+                    ProfileValidation.CreatePatch(PhoneNumberInput.Text, SkillsInput.Text, CvInput.Text, PortfolioInput.Text,
+                        new HashSet<string>(StringComparer.Ordinal) { fields[i] });
+                }
+                catch (ArgumentException ex)
+                {
+                    valid = false;
+                    labels[i].Text = HttpUtility.HtmlEncode(ex.Message);
+                    inputs[i].Attributes["aria-invalid"] = "true";
+                }
+            }
+            return valid;
+        }
+        internal static string SafeProfileImage(string value)
+        {
+            Uri url;
+            return !string.IsNullOrWhiteSpace(value) && value.Length <= 2048 && !value.Any(char.IsControl)
+                && Uri.TryCreate(value, UriKind.Absolute, out url) && url.Scheme == Uri.UriSchemeHttps
+                && !string.IsNullOrEmpty(url.Host) && string.IsNullOrEmpty(url.UserInfo)
+                ? url.AbsoluteUri : null;
+        }
+        private void SetMessage(string message, bool isError = true)
+        {
+            SaveMessage.Text = HttpUtility.HtmlEncode(message);
+            SaveMessage.CssClass = "sd-save-message " + (isError ? "sd-save-error" : "sd-save-info");
+            SaveMessage.Attributes["role"] = isError ? "alert" : "status";
         }
     }
 
