@@ -393,6 +393,12 @@
     <Content Include="Student\Tests\Verify-StudentPages.cjs" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
+    <Content Include="EmailTemplates\welcome.html" />
+    <Content Include="EmailTemplates\welcome.txt" />
+    <Content Include="EmailTemplates\password-reset.html" />
+    <Content Include="EmailTemplates\password-reset.txt" />
+    <None Include="secrets.config.example" />
+    <None Include="secrets.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
@@ -457,6 +463,8 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Config\AppConfig.cs" />
+    <Compile Include="Config\EmailSender.cs" />
+    <Compile Include="Config\FirebaseAdmin.cs" />
     <Compile Include="Config\FirebaseDb.cs" />
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>

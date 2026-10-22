@@ -67,7 +67,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 await LoadAccountStates();
                 BindCompanies();
                 if (!IsPostBack && Request.QueryString["saved"] == "1")
-                    ShowMessage("Company supervisor saved to Firebase successfully.");
+                    ShowMessage("Company supervisor saved to Firebase successfully." + EmailSender.MessageFor(Request.QueryString["mail"]));
             }
             catch
             {
@@ -218,6 +218,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
 
             string newAccountToken = null;
+            string mailResult = null;
             try
             {
                 if (id == null)
@@ -231,6 +232,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     {
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                     }
+                    mailResult = await EmailSender.SendWelcome(name, "Company Supervisor", email);
                 }
                 else
                 {
@@ -261,7 +263,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 return;
             }
             // Refresh only after the write succeeded; never delete a created login because a refresh failed.
-            Response.Redirect(Request.AppRelativeCurrentExecutionFilePath + "?saved=1", false);
+            Response.Redirect(Request.AppRelativeCurrentExecutionFilePath + "?saved=1" + (mailResult == null ? "" : "&mail=" + mailResult), false);
             Context.ApplicationInstance.CompleteRequest();
         }
 

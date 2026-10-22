@@ -80,6 +80,14 @@ namespace UniversityInternshipManagmentSystem.login
 
             try
             {
+                // Our own email (full UIMS design) when it is set up; otherwise Firebase sends its default email.
+                if (await SendOwnResetEmail(email))
+                {
+                    DisplayRecoveryResult("If this email has an account, a password reset link was sent to it. Please check your inbox or spam folder.", true);
+                    txtRecoveryEmail.Text = string.Empty;
+                    return;
+                }
+
                 var payload = new
                 {
                     requestType = "PASSWORD_RESET",
@@ -104,6 +112,23 @@ namespace UniversityInternshipManagmentSystem.login
             catch (Exception ex)
             {
                 DisplayRecoveryResult("Error sending password reset link: " + Server.HtmlEncode(ex.Message), false);
+            }
+        }
+
+        // Creates the reset link with the service account and sends it with our own email design.
+        // Returns false when it is not set up or something failed, so the caller uses Firebase's email.
+        private async Task<bool> SendOwnResetEmail(string email)
+        {
+            if (!FirebaseAdmin.IsConfigured || !EmailSender.IsConfigured) return false;
+            try
+            {
+                string link = await FirebaseAdmin.CreateResetLink(email);
+                if (link != "") await EmailSender.SendPasswordReset(email, link);   // "" = no account, send nothing
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
