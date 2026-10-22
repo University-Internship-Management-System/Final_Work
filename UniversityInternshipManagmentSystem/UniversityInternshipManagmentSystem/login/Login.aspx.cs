@@ -318,6 +318,13 @@ namespace UniversityInternshipManagmentSystem.login
 
         private void DisplayUrlQueryMessage()
         {
+            // sent by the guard in Global.asax.cs when the Firebase token expired
+            if (Request.QueryString["expired"] == "1")
+            {
+                DisplayError("Your session expired. Please sign in again.");
+                return;
+            }
+
             string msg = Request.QueryString["msg"];
             if (!string.IsNullOrEmpty(msg))
             {

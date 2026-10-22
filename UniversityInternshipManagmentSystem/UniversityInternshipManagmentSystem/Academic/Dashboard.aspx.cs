@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -125,6 +127,97 @@ namespace UniversityInternshipManagmentSystem.Academic
             workspace.Visible = false;
             noticePanel.Visible = true;
             notice.Text = text;
+        }
+
+        private static async Task<JObject> ReadTable(string name)
+        {
+            string json = await FirebaseDb.Get(name);
+            if (json == null) throw new HttpRequestException("A Firebase read was denied or failed for " + name + ".");
+            if (json.Trim() == "null") return new JObject();
+            return JsonConvert.DeserializeObject<JObject>(json) ?? new JObject();
+        }
+
+        private static bool EmailMatches(JToken record, string email)
+        {
+            if (record == null || String.IsNullOrWhiteSpace(email)) return false;
+            return Matches((string)record["Email"], email) ||
+                   Matches((string)record["UniversityEmail"], email) ||
+                   Matches((string)record["UniEmail"], email);
+        }
+
+        private static bool Matches(string candidate, string email)
+        {
+            return String.Equals((candidate ?? String.Empty).Trim(), email, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsAssignedToAnyStudent(JToken task, HashSet<string> studentIds)
+        {
+            JArray ids = task == null ? null : task["StudentIds"] as JArray;
+            return ids != null && ids.Any(id => studentIds.Contains((string)id));
+        }
+
+        private static List<JToken> GetLatestSubmissions(JObject submissions, HashSet<string> studentIds, HashSet<string> assignedPairs)
+        {
+            var latest = new Dictionary<string, JToken>(StringComparer.Ordinal);
+            foreach (JProperty entry in submissions.Properties())
+            {
+                JToken submission = entry.Value;
+                string studentId = (string)submission?["StudentId"];
+                string taskId = (string)submission?["TaskId"];
+                if (String.IsNullOrWhiteSpace(studentId) || String.IsNullOrWhiteSpace(taskId) ||
+                    !studentIds.Contains(studentId)) continue;
+
+                string key = studentId + "|" + taskId;
+                if (!assignedPairs.Contains(key)) continue;
+                JToken previous;
+                int version = (int?)submission["Version"] ?? 0;
+                int previousVersion = latest.TryGetValue(key, out previous) ? (int?)previous["Version"] ?? 0 : -1;
+                string submittedAt = (string)submission["SubmittedAt"] ?? String.Empty;
+                string previousSubmittedAt = previous == null ? String.Empty : (string)previous["SubmittedAt"] ?? String.Empty;
+                if (previous == null || version > previousVersion ||
+                    (version == previousVersion && String.CompareOrdinal(submittedAt, previousSubmittedAt) > 0))
+                    latest[key] = submission;
+            }
+            return latest.Values.ToList();
+        }
+
+        private static bool IsSentEvaluation(JToken evaluation, string studentCompanyId)
+        {
+            if (evaluation == null || !String.Equals((string)evaluation["Status"], "Sent", StringComparison.OrdinalIgnoreCase)) return false;
+            string evaluationCompanyId = (string)evaluation["CompanyId"];
+            return String.IsNullOrWhiteSpace(evaluationCompanyId) || String.Equals(evaluationCompanyId, studentCompanyId, StringComparison.Ordinal);
+        }
+
+        private string BuildStudentRows(IEnumerable<JProperty> students, JObject evaluations, JObject companies)
+        {
+            var rows = new System.Text.StringBuilder();
+            foreach (JProperty student in students)
+            {
+                string name = (string)student.Value["Name"] ?? "Name unavailable";
+                string major = (string)student.Value["Major"] ?? "Not specified";
+                string companyId = (string)student.Value["CompanyId"];
+                JToken company = String.IsNullOrWhiteSpace(companyId) ? null : companies[companyId];
+                string companyName = (string)company?["CompanyName"] ?? (string)company?["Name"] ?? "Not assigned";
+                string evaluationStatus = IsSentEvaluation(evaluations[student.Name], companyId) ? "Sent for academic review" : "Not sent";
+                string progressUrl = ResolveUrl("~/Academic/StudentProgress/StudentProgress.aspx") + "?student=" + HttpUtility.UrlEncode(student.Name);
+
+                rows.Append("<tr><td><strong>").Append(HttpUtility.HtmlEncode(name)).Append("</strong></td><td>")
+                    .Append(HttpUtility.HtmlEncode(major)).Append("</td><td>").Append(HttpUtility.HtmlEncode(companyName))
+                    .Append("</td><td>").Append(HttpUtility.HtmlEncode(evaluationStatus)).Append("</td><td><a href=\"")
+                    .Append(HttpUtility.HtmlAttributeEncode(progressUrl)).Append("\">Open progress</a></td></tr>");
+            }
+
+            if (rows.Length == 0)
+                return "<tr><td colspan=\"5\" class=\"ad-muted\">No students are currently assigned to this supervisor.</td></tr>";
+            return rows.ToString();
+        }
+
+        private void SetCountsToZero()
+        {
+            litStudentCount.Text = "0";
+            litTaskCount.Text = "0";
+            litSubmissionCount.Text = "0";
+            litEvaluationCount.Text = "0";
         }
     }
 }

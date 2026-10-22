@@ -1,4 +1,4 @@
-<%@ Page Title="Account Settings" Language="C#" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" Async="true" CodeBehind="SupervisorAccount.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Academic.SupervisorAccount.SupervisorAccount" %>
+<%@ Page Title="Account Settings" Language="C#" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" Async="true" EnableViewState="false" CodeBehind="SupervisorAccount.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Academic.SupervisorAccount.SupervisorAccount" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl("~/Academic/SupervisorAccount/css/supervisor-account.css") %>" />
@@ -12,11 +12,11 @@
             <div>
                 <span class="account-eyebrow">Academic Supervision Portal</span>
                 <h1 class="account-title">Account &amp; Profile Settings</h1>
-                <p class="account-subtitle">View and update your personal details, faculty profile, and change your password.</p>
+                <p class="account-subtitle">View your verified academic account. Editing and password changes are currently disabled.</p>
             </div>
             <div class="d-flex align-items-center gap-2">
                 <span class="badge badge-approved py-2 px-3">
-                    <i class="bi bi-shield-check me-1"></i> Faculty Supervisor
+                    <i class="bi bi-shield-check me-1"></i>Faculty Supervisor
                 </span>
             </div>
         </div>
@@ -24,24 +24,34 @@
         <!-- Global Alert Notifications -->
         <asp:Panel ID="pnlProfileSuccess" runat="server" Visible="false" CssClass="uims-alert uims-alert-success">
             <i class="bi bi-check-circle-fill uims-alert-icon"></i>
-            <div><asp:Literal ID="litProfileSuccess" runat="server" /></div>
+            <div>
+                <asp:Literal ID="litProfileSuccess" runat="server" /></div>
         </asp:Panel>
 
         <asp:Panel ID="pnlProfileError" runat="server" Visible="false" CssClass="uims-alert uims-alert-danger">
             <i class="bi bi-exclamation-triangle-fill uims-alert-icon"></i>
-            <div><asp:Literal ID="litProfileError" runat="server" /></div>
+            <div>
+                <asp:Literal ID="litProfileError" runat="server" /></div>
         </asp:Panel>
 
         <asp:Panel ID="pnlPasswordSuccess" runat="server" Visible="false" CssClass="uims-alert uims-alert-success">
             <i class="bi bi-check-circle-fill uims-alert-icon"></i>
-            <div><asp:Literal ID="litPasswordSuccess" runat="server" /></div>
+            <div>
+                <asp:Literal ID="litPasswordSuccess" runat="server" /></div>
         </asp:Panel>
 
         <asp:Panel ID="pnlPasswordError" runat="server" Visible="false" CssClass="uims-alert uims-alert-danger">
             <i class="bi bi-exclamation-triangle-fill uims-alert-icon"></i>
-            <div><asp:Literal ID="litPasswordError" runat="server" /></div>
+            <div>
+                <asp:Literal ID="litPasswordError" runat="server" /></div>
         </asp:Panel>
 
+        <asp:Panel ID="pnlAccountStatus" runat="server" CssClass="notice-box mb-4" role="status" aria-live="polite">
+            <asp:Literal ID="litAccountStatus" runat="server" />
+        </asp:Panel>
+        <p><a href="<%= ResolveUrl("~/login/Login.aspx") %>">Team sign-in</a> &middot;
+            <a href="<%= ResolveUrl("~/Academic/SupervisorAccount/SupervisorAccount.aspx") %>" onclick="this.textContent='Loading account...'; this.setAttribute('aria-busy','true');">Reload account</a></p>
+        <asp:Panel ID="pnlAccountContent" runat="server" Visible="false">
         <div class="row g-4">
 
             <!-- Left Column: Profile Summary Overview -->
@@ -71,7 +81,7 @@
 
                     <div class="d-flex justify-content-center gap-2 mb-3">
                         <span class="badge badge-submitted">
-                            <i class="bi bi-building me-1"></i> KASIT - JU
+                            <i class="bi bi-building me-1"></i>KASIT - JU
                         </span>
                     </div>
 
@@ -79,7 +89,7 @@
                         <div class="profile-meta-item">
                             <i class="bi bi-grid-fill profile-meta-icon"></i>
                             <div>
-                                <div class="profile-meta-label">Department</div>
+                                <div class="profile-meta-label">Major</div>
                                 <div class="profile-meta-value">
                                     <asp:Literal ID="litProfileMajor" runat="server" />
                                 </div>
@@ -89,7 +99,7 @@
                         <div class="profile-meta-item">
                             <i class="bi bi-envelope-fill profile-meta-icon"></i>
                             <div>
-                                <div class="profile-meta-label">Institutional Email</div>
+                                <div class="profile-meta-label">Account Email</div>
                                 <div class="profile-meta-value">
                                     <asp:Literal ID="litProfileEmail" runat="server" />
                                 </div>
@@ -109,7 +119,7 @@
                         <div class="profile-meta-item">
                             <i class="bi bi-geo-alt-fill profile-meta-icon"></i>
                             <div>
-                                <div class="profile-meta-label">Office Location</div>
+                                <div class="profile-meta-label">University Email</div>
                                 <div class="profile-meta-value">
                                     <asp:Literal ID="litProfileOffice" runat="server" />
                                 </div>
@@ -138,7 +148,7 @@
                         </div>
                         <div>
                             <h2 class="uims-card-header-title">Personal &amp; Faculty Information</h2>
-                            <p class="uims-card-header-subtitle">Update your official contact information and academic specialization.</p>
+                            <p class="uims-card-header-subtitle">Read-only account information. Changes require approved field permissions.</p>
                         </div>
                     </div>
 
@@ -154,25 +164,19 @@
 
                             <div class="col-md-6">
                                 <label for="<%= ddlMajor.ClientID %>" class="form-label">
-                                    Academic Department <span class="text-danger">*</span>
+                                    Major
                                 </label>
                                 <asp:DropDownList ID="ddlMajor" runat="server" CssClass="form-select">
-                                    <asp:ListItem Text="Computer Science" Value="Computer Science" />
-                                    <asp:ListItem Text="Software Engineering" Value="Software Engineering" />
-                                    <asp:ListItem Text="Computer Information Systems" Value="Computer Information Systems" />
-                                    <asp:ListItem Text="Artificial Intelligence" Value="Artificial Intelligence" />
-                                    <asp:ListItem Text="Cyber Security" Value="Cyber Security" />
-                                    <asp:ListItem Text="Data Science" Value="Data Science" />
                                 </asp:DropDownList>
-                                <span class="input-hint">Your primary department within KASIT.</span>
+                                <span class="input-hint">Academic information is read-only.</span>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="<%= txtEmail.ClientID %>" class="form-label">
-                                    University Email Address
+                                    Account Email Address
                                 </label>
                                 <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" ReadOnly="true" />
-                                <span class="input-hint"><i class="bi bi-lock me-1"></i> Institutional login identity (Managed by UJ IT Center).</span>
+                                <span class="input-hint"><i class="bi bi-lock me-1"></i> Account email from your Firebase record.</span>
                             </div>
 
                             <div class="col-md-6">
@@ -185,10 +189,10 @@
 
                             <div class="col-md-6">
                                 <label for="<%= txtOfficeNumber.ClientID %>" class="form-label">
-                                    Office Number
+                                    University Email
                                 </label>
-                                <asp:TextBox ID="txtOfficeNumber" runat="server" CssClass="form-control" placeholder="e.g. IT-304" MaxLength="50" />
-                                <span class="input-hint">KASIT building room number for student consultations.</span>
+                                <asp:TextBox ID="txtOfficeNumber" runat="server" CssClass="form-control" ReadOnly="true" MaxLength="50" />
+                                <span class="input-hint">Optional: shown only when present in your record.</span>
                             </div>
 
                             <div class="col-12">
@@ -196,10 +200,11 @@
                                     Profile Picture URL
                                 </label>
                                 <asp:TextBox ID="txtProfilePicUrl" runat="server" CssClass="form-control" placeholder="https://example.com/avatar.jpg" MaxLength="500" />
-                                <span class="input-hint">Enter an image URL or leave blank to display your name initials.</span>
+                                <span class="input-hint">Stored profile picture URL; only safe HTTPS images are displayed.</span>
                             </div>
                         </div>
 
+                        <p class="input-hint mt-3">First login pending: <asp:Literal ID="litFirstLogin" runat="server" /></p>
                         <div class="form-actions">
                             <asp:Button ID="btnSaveDetails" runat="server" CssClass="btn-uims-primary" Text="Save Details" OnClick="btnSaveDetails_Click" />
                             <asp:Button ID="btnCancelDetails" runat="server" CssClass="btn-uims-secondary" Text="Reset Changes" OnClick="btnCancelDetails_Click" CausesValidation="false" />
@@ -215,7 +220,7 @@
                         </div>
                         <div>
                             <h2 class="uims-card-header-title">Change Password</h2>
-                            <p class="uims-card-header-subtitle">Update your password to keep your academic supervisor account secure.</p>
+                            <p class="uims-card-header-subtitle">Disabled until the team confirms the password-change workflow.</p>
                         </div>
                     </div>
 
@@ -227,7 +232,7 @@
                                 </label>
                                 <div class="password-toggle-group">
                                     <asp:TextBox ID="txtCurrentPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="Enter current password" autocomplete="current-password" />
-                                    <button type="button" class="password-toggle-btn" data-target="<%= txtCurrentPassword.ClientID %>" aria-label="Show password">
+                                    <button type="button" disabled class="password-toggle-btn" data-target="<%= txtCurrentPassword.ClientID %>" aria-label="Show password">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
@@ -240,7 +245,7 @@
                                 </label>
                                 <div class="password-toggle-group">
                                     <asp:TextBox ID="txtNewPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="Minimum 6 characters" data-role="new-password" autocomplete="new-password" />
-                                    <button type="button" class="password-toggle-btn" data-target="<%= txtNewPassword.ClientID %>" aria-label="Show password">
+                                    <button type="button" disabled class="password-toggle-btn" data-target="<%= txtNewPassword.ClientID %>" aria-label="Show password">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
@@ -252,7 +257,7 @@
                                 </label>
                                 <div class="password-toggle-group">
                                     <asp:TextBox ID="txtConfirmPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="Repeat new password" data-role="confirm-password" autocomplete="new-password" />
-                                    <button type="button" class="password-toggle-btn" data-target="<%= txtConfirmPassword.ClientID %>" aria-label="Show password">
+                                    <button type="button" disabled class="password-toggle-btn" data-target="<%= txtConfirmPassword.ClientID %>" aria-label="Show password">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
@@ -263,8 +268,8 @@
                         <div class="security-checklist mt-3">
                             <div class="security-checklist-title">Password Security Requirements</div>
                             <ul class="security-checklist-items">
-                                <li id="ruleLength"><i class="bi bi-circle text-muted"></i> At least 6 characters long</li>
-                                <li id="ruleMatch"><i class="bi bi-circle text-muted"></i> New password and confirmation match</li>
+                                <li id="ruleLength"><i class="bi bi-circle text-muted"></i>At least 6 characters long</li>
+                                <li id="ruleMatch"><i class="bi bi-circle text-muted"></i>New password and confirmation match</li>
                             </ul>
                         </div>
 
@@ -280,6 +285,7 @@
 
     </div>
 
+    </asp:Panel>
     <!-- Supervisor Account Scripts -->
     <script src="<%= ResolveUrl("~/Academic/SupervisorAccount/javascript/supervisor-account.js") %>"></script>
 </asp:Content>

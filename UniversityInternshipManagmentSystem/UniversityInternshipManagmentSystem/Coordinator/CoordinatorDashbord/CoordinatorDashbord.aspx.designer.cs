@@ -29,9 +29,11 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         protected global::System.Web.UI.WebControls.Literal litAcademic;
         protected global::System.Web.UI.WebControls.Literal litEvaluations;
         protected global::System.Web.UI.WebControls.Literal litCompanies;
-        protected global::System.Web.UI.WebControls.Literal litStudentPreview;
-        protected global::System.Web.UI.WebControls.Literal litEvaluationPreview;
-        protected global::System.Web.UI.WebControls.Literal litCompanyPreview;
-        protected global::System.Web.UI.WebControls.Literal litOpportunityPreview;
+        protected global::System.Web.UI.WebControls.Literal litMajorChart;
+        protected global::System.Web.UI.WebControls.Literal litCompanyChart;
+        protected global::System.Web.UI.WebControls.Literal litTotalOpportunities;
+        protected global::System.Web.UI.WebControls.Literal litOpenOpportunities;
+        protected global::System.Web.UI.WebControls.Literal litClosedOpportunities;
+        protected global::System.Web.UI.WebControls.Literal litOpportunityCompanies;
     }
 }

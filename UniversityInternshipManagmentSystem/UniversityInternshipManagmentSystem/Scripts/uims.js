@@ -1,0 +1,21 @@
+(()=>{'use strict';
+const one=s=>document.querySelector(s),all=s=>[...document.querySelectorAll(s)];
+const toggle=one('#uimsNavToggle'),menu=one('#uimsNavMenu');
+toggle?.addEventListener('click',()=>{const open=menu.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open));});
+all('.uims-nav-link').forEach(link=>link.addEventListener('click',()=>{menu.classList.remove('open');toggle.setAttribute('aria-expanded','false');all('.uims-nav-link').forEach(a=>a.classList.toggle('active',a===link));}));
+all('.uims-accordion-btn').forEach((btn,i)=>{const panel=btn.closest('.uims-accordion-item').querySelector('.uims-accordion-collapse');panel.id='faq-answer-'+i;btn.setAttribute('aria-controls',panel.id);btn.addEventListener('click',()=>{const open=btn.getAttribute('aria-expanded')!=='true';btn.setAttribute('aria-expanded',String(open));btn.closest('.uims-accordion-item').classList.toggle('open',open);});});
+const top=one('#backToTop');top?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+function scroll(){const max=document.documentElement.scrollHeight-innerHeight;one('#scrollProgress').style.width=(max>0?scrollY/max*100:0)+'%';top?.classList.toggle('visible',scrollY>500);}addEventListener('scroll',scroll,{passive:true});scroll();
+function clock(){const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Amman',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).filter(p=>p.type!=='literal').map(p=>[p.type,+p.value]));const h=parts.hour,m=parts.minute,s=parts.second;one('#ammanTimeDisplay').textContent=[h,m,s].map(n=>String(n).padStart(2,'0')).join(':');[['hour',(h%12)*30+m/2],['minute',m*6+s/10],['second',s*6]].forEach(([id,deg])=>one('#hand-'+id)?.setAttribute('transform',`rotate(${deg} 200 135)`));}clock();setInterval(clock,1000);
+// The supplied statistics are demonstration numbers, not database totals.
+all('.uims-stat-number').forEach(el=>{el.textContent=Number(el.dataset.target).toLocaleString('en-US')+(el.dataset.suffix||'');});
+const note=document.createElement('p');note.textContent='Preview statistics · illustrative figures, not live system totals';note.style.cssText='text-align:center;font-size:10px;color:#6b7e77;margin:12px 0';one('.uims-stats-strip .uims-container')?.append(note);
+let data={opportunities:[],message:'Internship listings are currently unavailable.'};try{data=JSON.parse(one('#home-data').textContent);}catch{}
+let page=0;const size=3,grid=one('#jobGrid'),search=one('#searchInput'),prev=one('#previousJobs'),next=one('#nextJobs');
+function element(tag,text,cls){const el=document.createElement(tag);el.textContent=text;if(cls)el.className=cls;return el;}
+function render(){const query=(search.value||'').trim().toLowerCase();const list=(data.opportunities||[]).filter(o=>[o.title,o.companyName,o.location,o.major].join(' ').toLowerCase().includes(query));const pages=Math.max(1,Math.ceil(list.length/size));page=Math.min(page,pages-1);grid.replaceChildren();list.slice(page*size,(page+1)*size).forEach(o=>{const card=element('article','','uims-job-card');card.append(element('small',o.companyName),element('h3',o.title),element('p',o.location+' · '+o.major),element('p',o.seatsLeft+' seats available · Deadline: '+o.deadline));const link=element('a',data.canApply?'View application':'Sign in to apply','uims-btn uims-btn--outline-primary');link.href=data.canApply?data.applyUrl+'?opportunityId='+encodeURIComponent(o.id):data.loginUrl;card.append(link);grid.append(card);});if(!list.length)grid.append(element('div',query?'No matching internships.':data.message,'uims-job-empty'));one('#carouselCount').textContent=list.length?`${page+1} / ${pages} · ${list.length} opportunities`:'No listings';prev.disabled=page===0;next.disabled=page>=pages-1;}
+search?.addEventListener('input',()=>{page=0;render();});prev?.addEventListener('click',()=>{page--;render();});next?.addEventListener('click',()=>{page++;render();});render();
+})();
+(()=>{const clock=document.querySelector('.uims-photo-clock'),tooltip=document.querySelector('#clockTooltip');if(!clock||!tooltip)return;const update=()=>tooltip.classList.toggle('is-visible',clock.matches(':hover')||document.activeElement===clock);['pointerenter','pointerleave','focus','blur'].forEach(event=>clock.addEventListener(event,update));})();
+
+
