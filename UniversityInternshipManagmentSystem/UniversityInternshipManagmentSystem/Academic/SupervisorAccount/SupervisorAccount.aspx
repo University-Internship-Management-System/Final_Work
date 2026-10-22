@@ -5,6 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
+    <input type="hidden" name="AcademicAccountCsrf" value="<%: AccountCsrf %>" />
     <div class="container-fluid px-0">
 
         <!-- Page Header -->
@@ -12,7 +13,7 @@
             <div>
                 <span class="account-eyebrow">Academic Supervision Portal</span>
                 <h1 class="account-title">Account &amp; Profile Settings</h1>
-                <p class="account-subtitle">View your verified academic account. Editing and password changes are currently disabled.</p>
+                <p class="account-subtitle">Manage your verified academic account and password.</p>
             </div>
             <div class="d-flex align-items-center gap-2">
                 <span class="badge badge-approved py-2 px-3">
@@ -21,6 +22,7 @@
             </div>
         </div>
 
+        <p id="account-submit-status" hidden role="status" aria-live="polite"></p>
         <!-- Global Alert Notifications -->
         <asp:Panel ID="pnlProfileSuccess" runat="server" Visible="false" CssClass="uims-alert uims-alert-success">
             <i class="bi bi-check-circle-fill uims-alert-icon"></i>
@@ -148,7 +150,7 @@
                         </div>
                         <div>
                             <h2 class="uims-card-header-title">Personal &amp; Faculty Information</h2>
-                            <p class="uims-card-header-subtitle">Read-only account information. Changes require approved field permissions.</p>
+                            <p class="uims-card-header-subtitle">Update your name, phone number and profile picture. University email remains read-only.</p>
                         </div>
                     </div>
 
@@ -158,32 +160,19 @@
                                 <label for="<%= txtFullName.ClientID %>" class="form-label">
                                     Full Name <span class="text-danger">*</span>
                                 </label>
-                                <asp:TextBox ID="txtFullName" runat="server" CssClass="form-control" placeholder="Dr. First Last" MaxLength="100" />
+                                <asp:TextBox ID="txtFullName" runat="server" EnableViewState="false" CssClass="form-control" placeholder="Dr. First Last" MaxLength="100" />
                                 <span class="input-hint">Displayed across supervised student diaries and reviews.</span>
                             </div>
 
-                            <div class="col-md-6">
-                                <label for="<%= ddlMajor.ClientID %>" class="form-label">
-                                    Major
-                                </label>
-                                <asp:DropDownList ID="ddlMajor" runat="server" CssClass="form-select">
-                                </asp:DropDownList>
-                                <span class="input-hint">Academic information is read-only.</span>
-                            </div>
 
-                            <div class="col-md-6">
-                                <label for="<%= txtEmail.ClientID %>" class="form-label">
-                                    Account Email Address
-                                </label>
-                                <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" ReadOnly="true" />
-                                <span class="input-hint"><i class="bi bi-lock me-1"></i> Account email from your Firebase record.</span>
-                            </div>
+
+
 
                             <div class="col-md-6">
                                 <label for="<%= txtPhoneNumber.ClientID %>" class="form-label">
                                     Phone Number
                                 </label>
-                                <asp:TextBox ID="txtPhoneNumber" runat="server" CssClass="form-control" placeholder="e.g. 0790000000" MaxLength="20" />
+                                <asp:TextBox ID="txtPhoneNumber" runat="server" EnableViewState="false" CssClass="form-control" placeholder="e.g. 0790000000" MaxLength="30" />
                                 <span class="input-hint">Used for urgent notifications and coordinator contact.</span>
                             </div>
 
@@ -199,14 +188,14 @@
                                 <label for="<%= txtProfilePicUrl.ClientID %>" class="form-label">
                                     Profile Picture URL
                                 </label>
-                                <asp:TextBox ID="txtProfilePicUrl" runat="server" CssClass="form-control" placeholder="https://example.com/avatar.jpg" MaxLength="500" />
+                                <asp:TextBox ID="txtProfilePicUrl" runat="server" EnableViewState="false" CssClass="form-control" placeholder="https://example.com/avatar.jpg" MaxLength="2048" />
                                 <span class="input-hint">Stored profile picture URL; only safe HTTPS images are displayed.</span>
                             </div>
                         </div>
 
                         <p class="input-hint mt-3">First login pending: <asp:Literal ID="litFirstLogin" runat="server" /></p>
                         <div class="form-actions">
-                            <asp:Button ID="btnSaveDetails" runat="server" CssClass="btn-uims-primary" Text="Save Details" OnClick="btnSaveDetails_Click" />
+                            <asp:Button ID="btnSaveDetails" runat="server" CausesValidation="false" CssClass="btn-uims-primary" Text="Save Details" OnClick="btnSaveDetails_Click" />
                             <asp:Button ID="btnCancelDetails" runat="server" CssClass="btn-uims-secondary" Text="Reset Changes" OnClick="btnCancelDetails_Click" CausesValidation="false" />
                         </div>
                     </div>
@@ -220,7 +209,7 @@
                         </div>
                         <div>
                             <h2 class="uims-card-header-title">Change Password</h2>
-                            <p class="uims-card-header-subtitle">Disabled until the team confirms the password-change workflow.</p>
+                            <p class="uims-card-header-subtitle">Verify your current password to set a new password for this account.</p>
                         </div>
                     </div>
 
@@ -231,8 +220,8 @@
                                     Current Password
                                 </label>
                                 <div class="password-toggle-group">
-                                    <asp:TextBox ID="txtCurrentPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="Enter current password" autocomplete="current-password" />
-                                    <button type="button" disabled class="password-toggle-btn" data-target="<%= txtCurrentPassword.ClientID %>" aria-label="Show password">
+                                    <asp:TextBox ID="txtCurrentPassword" runat="server" EnableViewState="false" MaxLength="128" CssClass="form-control" TextMode="Password" placeholder="Enter current password" autocomplete="current-password" />
+                                    <button type="button" class="password-toggle-btn" data-target="<%= txtCurrentPassword.ClientID %>" aria-label="Show password">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
@@ -244,8 +233,8 @@
                                     New Password <span class="text-danger">*</span>
                                 </label>
                                 <div class="password-toggle-group">
-                                    <asp:TextBox ID="txtNewPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="Minimum 6 characters" data-role="new-password" autocomplete="new-password" />
-                                    <button type="button" disabled class="password-toggle-btn" data-target="<%= txtNewPassword.ClientID %>" aria-label="Show password">
+                                    <asp:TextBox ID="txtNewPassword" runat="server" EnableViewState="false" MaxLength="128" CssClass="form-control" TextMode="Password" placeholder="Minimum 6 characters" data-role="new-password" autocomplete="new-password" />
+                                    <button type="button" class="password-toggle-btn" data-target="<%= txtNewPassword.ClientID %>" aria-label="Show password">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
@@ -256,8 +245,8 @@
                                     Confirm New Password <span class="text-danger">*</span>
                                 </label>
                                 <div class="password-toggle-group">
-                                    <asp:TextBox ID="txtConfirmPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="Repeat new password" data-role="confirm-password" autocomplete="new-password" />
-                                    <button type="button" disabled class="password-toggle-btn" data-target="<%= txtConfirmPassword.ClientID %>" aria-label="Show password">
+                                    <asp:TextBox ID="txtConfirmPassword" runat="server" EnableViewState="false" MaxLength="128" CssClass="form-control" TextMode="Password" placeholder="Repeat new password" data-role="confirm-password" autocomplete="new-password" />
+                                    <button type="button" class="password-toggle-btn" data-target="<%= txtConfirmPassword.ClientID %>" aria-label="Show password">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
@@ -274,7 +263,7 @@
                         </div>
 
                         <div class="form-actions">
-                            <asp:Button ID="btnSavePassword" runat="server" CssClass="btn-uims-primary" Text="Update Password" OnClick="btnSavePassword_Click" />
+                            <asp:Button ID="btnSavePassword" runat="server" CausesValidation="false" CssClass="btn-uims-primary" Text="Update Password" OnClick="btnSavePassword_Click" />
                         </div>
                     </div>
                 </div>
