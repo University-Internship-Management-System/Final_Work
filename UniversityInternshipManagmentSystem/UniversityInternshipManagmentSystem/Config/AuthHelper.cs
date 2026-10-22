@@ -64,7 +64,7 @@ namespace UniversityInternshipManagmentSystem.Config
             switch (norm)
             {
                 case RoleStudent:
-                    return "~/Student/Dashboard/Dashboard.aspx";
+                    return "~/Student/StudentDashboardPage/Dashboard.aspx";
                 case RoleCompany:
                     return "~/Company/Dashboard.aspx";
                 case RoleAcademic:

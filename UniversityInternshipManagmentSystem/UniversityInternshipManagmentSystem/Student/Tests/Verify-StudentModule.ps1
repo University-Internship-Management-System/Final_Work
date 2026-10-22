@@ -4,6 +4,8 @@ $assemblyPath = Join-Path $projectRoot 'bin/UniversityInternshipManagmentSystem.
 $jsonPath = Join-Path $projectRoot 'App_Data/firebase-realtime-dummy-data.json'
 [void][System.Reflection.Assembly]::LoadFrom((Join-Path $projectRoot 'bin/Newtonsoft.Json.dll'))
 [void][System.Reflection.Assembly]::LoadFrom($assemblyPath)
+[xml]$teamConfig = Get-Content (Join-Path $projectRoot 'Web.config')
+[UniversityInternshipManagmentSystem.Config.AppConfig]::DbUrl = ($teamConfig.configuration.appSettings.add | Where-Object { $_.key -eq 'DbUrl' }).value
 Add-Type -ReferencedAssemblies @($assemblyPath, 'System.Web', 'System.Core') -TypeDefinition @'
 using System;
 using System.Collections.Generic;
@@ -53,7 +55,7 @@ public static class StudentModuleChecks
         fieldCopy.Add("GPA");
         Check(!ProfileValidation.EditableFields.Contains("GPA"), "Module allowlist cannot be expanded by callers");
         var mutableAccess = new StudentAccess {
-            StudentId = "student_001", FirebaseIdToken = "offline-test",
+            StudentId = "student_001", FirebaseUid = "offline-uid", FirebaseIdToken = "offline-test",
             ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(5), EditableFields = new HashSet<string>()
         };
         var boundRepository = new FirebaseStudentRepository(mutableAccess);
@@ -65,9 +67,9 @@ public static class StudentModuleChecks
         Check(!ProfileValidation.IsSafeUrl("http://example.com/"), "HTTP URL denied");
         Check(!ProfileValidation.IsSafeUrl("//example.com/"), "Relative URL denied");
         Reject(() => new FirebaseStudentRepository(new StudentAccess { StudentId = "student_001" }), "Missing token denied before any network request");
-        Reject(() => new FirebaseStudentRepository(new StudentAccess { StudentId = "student_001", FirebaseIdToken = "offline-test", ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(-1) }), "Expired token denied before any network request");
+        Reject(() => new FirebaseStudentRepository(new StudentAccess { StudentId = "student_001", FirebaseUid = "offline-uid", FirebaseIdToken = "offline-test", ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(-1) }), "Expired token denied before any network request");
         var previous = StudentModule.SessionProvider;
-        Check(FirebaseStudentRepository.DatabaseUrl == "https://uims-student-2026-default-rtdb.firebaseio.com/", "Student endpoint targets the approved database independently of shared configuration");
+        Check(FirebaseStudentRepository.DatabaseUrl == UniversityInternshipManagmentSystem.Config.AppConfig.DbUrl.TrimEnd('/' ) + "/", "Student endpoint reuses the team database configuration");
         Check(!FirebaseStudentRepository.ProfileWritesEnabled, "Student writes remain disabled regardless of session permissions");
         try
         {
@@ -134,6 +136,7 @@ public static class StudentModuleChecks
             request = new TestRequest(local);
             user = new GenericPrincipal(new GenericIdentity(authenticated ? "verified-test" : ""), new[] { "Student" });
         }
+        public override HttpSessionStateBase Session { get { return null; } }
         public override HttpRequestBase Request { get { return request; } }
         public override bool IsDebuggingEnabled { get { return debug; } }
         public override IPrincipal User { get { return user; } set { throw new NotSupportedException(); } }
