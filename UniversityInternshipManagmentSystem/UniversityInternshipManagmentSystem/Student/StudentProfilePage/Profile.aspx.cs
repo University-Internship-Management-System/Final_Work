@@ -3,12 +3,14 @@ using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using System.Web;
+using System;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using UniversityInternshipManagmentSystem.Config;
 using StudentRecord = UniversityInternshipManagmentSystem.Models.Student;
 
@@ -16,7 +18,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
 {
     public partial class Profile : StudentPage
     {
-        private static readonly HttpClient PasswordClient = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
+        private static readonly HttpClient PasswordClient = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false }) { Timeout = TimeSpan.FromSeconds(15), MaxResponseContentBufferSize = 256 * 1024 };
         private enum ProfileAction { None, Edit, Validate, Save, Cancel }
         private ProfileAction requestedAction;
         protected StudentRecord Record => Workspace;
@@ -228,7 +230,6 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         {
             RegisterAsyncTask(new PageAsyncTask(ResetPasswordAsync));
         }
-
 
         private async Task ResetPasswordAsync()
         {

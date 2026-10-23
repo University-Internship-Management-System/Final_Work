@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using UniversityInternshipManagmentSystem.Config;
@@ -22,6 +22,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 Context.ApplicationInstance.CompleteRequest();
                 return;
             }
+
             RegisterAsyncTask(new PageAsyncTask(ShowDashboardAsync));
         }
 
@@ -90,6 +91,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                             break;
                         }
                     }
+
                     if (!alreadyCounted)
                     {
                         companyNames.Add(companyName);
@@ -282,33 +284,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             return HttpUtility.HtmlEncode(string.IsNullOrWhiteSpace(value) ? "—" : value);
         }
-
-        private static void AddCount(Dictionary<string, int> counts, string name)
-        {
-            if (!counts.ContainsKey(name)) counts[name] = 0;
-            counts[name]++;
-        }
-
-        private static int CountEvaluatedSubmissions(JObject submissions)
-        {
-            var latest = new Dictionary<string, JToken>();
-            foreach (JProperty entry in submissions.Properties())
-            {
-                JToken submission = entry.Value;
-                if (submission == null) continue;
-                string key = (string)submission["StudentId"] + "|" + (string)submission["TaskId"];
-                JToken previous;
-                if (!latest.TryGetValue(key, out previous) ||
-                    (int?)submission["Version"] > (int?)previous["Version"])
-                    latest[key] = submission;
-            }
-            int count = 0;
-            foreach (JToken submission in latest.Values)
-            {
-                if ((string)submission["Status"] == "Evaluated" && submission["Score"] != null)
-                    count++;
-            }
-            return count;
-        }
     }
+
 }
+
+
