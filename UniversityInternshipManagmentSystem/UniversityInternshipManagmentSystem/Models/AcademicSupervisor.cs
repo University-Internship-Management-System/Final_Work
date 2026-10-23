@@ -18,7 +18,7 @@ namespace UniversityInternshipManagmentSystem.Models
 
         public AcademicSupervisor(string name, string email, bool firstLogin,string phoneNumber, string profilePic,string universityEmail, string major) : base(name, "AcademicSupervisor", email, firstLogin, phoneNumber, profilePic)
         {
-            UniversityEmail = universityEmail;
+            UniversityEmail = email;
             Major = major;
         }
     }

@@ -13,6 +13,15 @@ namespace UniversityInternshipManagmentSystem
             // Code that runs on application startup
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // The "task due soon" emails (Config/DeadlineReminders.cs): a timer that checks every 30 minutes
+            DeadlineReminders.Start();
+        }
+
+        // The emails that are sent without a web request need the address of the site for their buttons
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            Notify.RememberSite();
         }
 
         protected void Application_PostAcquireRequestState(object sender, EventArgs e)

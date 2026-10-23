@@ -54,11 +54,65 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
             await UseCurrentOpportunityNamesAsync(list);
             await UseCurrentCompanyNamesAsync(list);
 
-            rptApplications.DataSource = list;
+            // a confirmed training gets its own card on top
+            Application confirmed = null;
+            foreach (var app in list)
+            {
+                if (confirmed == null && app.Status == ApplicationStatus.Confirmed)
+                {
+                    confirmed = app;
+                }
+            }
+
+            // the table shows everything else
+            List<Application> others = new List<Application>();
+            foreach (var app in list)
+            {
+                if (app != confirmed) others.Add(app);
+            }
+
+            if (confirmed != null)
+            {
+                await ShowConfirmedAsync(confirmed);
+
+                // the other applications are only history now
+                pnlHistoryHead.Visible = (others.Count > 0);
+                pnlList.Visible = (others.Count > 0);
+                pnlList.CssClass = "card app-table-card app-history";
+            }
+
+            rptApplications.DataSource = others;
             rptApplications.DataBind();
 
-            rptApplications.Visible = (list.Count > 0);
+            rptApplications.Visible = (others.Count > 0);
             pnlEmpty.Visible = (list.Count == 0);
+        }
+
+        // fills the "Your training" card
+        private async Task ShowConfirmedAsync(Application confirmed)
+        {
+            litConfirmedTitle.Text = confirmed.OpportunityTitle;
+            litConfirmedCompany.Text = confirmed.CompanyName;
+
+            // the training start date is saved on the opportunity (older ones don't have it)
+            try
+            {
+                if (!string.IsNullOrEmpty(confirmed.OpportunityId))
+                {
+                    Opportunity opportunity = await LoadOpportunityAsync(confirmed.OpportunityId);
+                    if (opportunity != null && opportunity.TrainingStartDate > 0)
+                    {
+                        litTrainingStart.Text = FormatDate(opportunity.TrainingStartDate);
+                        pnlTrainingStart.Visible = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Could not read the training start date: " + ex.Message);
+            }
+
+            pnlConfirmed.Visible = true;
         }
 
         // Confirm / Reject buttons

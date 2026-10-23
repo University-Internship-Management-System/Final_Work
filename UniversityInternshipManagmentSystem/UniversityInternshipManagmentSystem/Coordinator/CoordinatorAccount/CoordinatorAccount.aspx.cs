@@ -164,8 +164,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
         private async Task<JObject> CloudinaryRequest(string action, string publicId, byte[] image = null)
         {
-            string path = Environment.GetEnvironmentVariable("UIMS_CLOUDINARY_CREDENTIALS", EnvironmentVariableTarget.User)
-                ?? Environment.GetEnvironmentVariable("UIMS_CLOUDINARY_CREDENTIALS");
+            // App_Data/keys/cloudinary.json (team file) or the Windows variable, see Config/TeamKeys.cs
+            string path = TeamKeys.FindFile(TeamKeys.CloudinaryVariable, TeamKeys.CloudinaryFile);
+            if (path == null) throw new InvalidOperationException("The Cloudinary key file was not found.");
             var settings = JObject.Parse(File.ReadAllText(path));
             string cloud = ((string)settings["cloud_name"] ?? "").Trim();
             string key = ((string)settings["api_key"] ?? "").Trim();

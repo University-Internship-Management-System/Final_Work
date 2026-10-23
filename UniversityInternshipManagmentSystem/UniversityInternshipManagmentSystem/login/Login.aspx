@@ -35,7 +35,7 @@
 
             <!-- Email Address Field -->
             <div class="mb-3">
-                <label class="form-label" for="txtEmail">University email address</label>
+                <label class="form-label" for="txtEmail">Email address</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                     <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="form-control" placeholder="name@ju.edu.jo" required="required" ClientIDMode="Static" />

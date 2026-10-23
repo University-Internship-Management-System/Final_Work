@@ -18,9 +18,9 @@ nothing breaks: the page just does not send the email.
 
 | Email | To | When | Where in the code |
 |---|---|---|---|
-| **Account created** (sign-in email + temporary password + steps) | the new person | The coordinator creates a Student / Company / Academic account | `Coordinator/Manage*/...aspx.cs` |
+| **Account created** (email, temporary password, steps) | the new person | The coordinator creates a Student / Company / Academic account. Firebase also sends its own "confirm your email" email at the same moment. | `Coordinator/Manage*/...aspx.cs` |
+| **Welcome** (what UIMS is, what this person can do) | the person | Right after the person **saves his own password** on the First Login page (once) | `login/FirstLogin.aspx.cs` |
 | Account deactivated / active again | the supervisor | The coordinator turns the account off or on | `ManageCompanySupervisors.aspx.cs` |
-| Welcome | the new person | The **first sign-in after confirming the email** (once) | `Notify.AfterSignIn`, called by `login/Login.aspx.cs` |
 | Your password was changed | the person | The next sign-in after the password changed (Firebase reset page or the profile page; the profile page sends it at once) | `Notify.AfterSignIn` |
 | Academic supervisor assigned | each student + the supervisor | The coordinator assigns students | `AssignAcademicSupervisors.aspx.cs` |
 | Application received | the student | The student applies | `Student/ApplicationForm/ApplicationForm.aspx.cs` |
@@ -30,6 +30,7 @@ nothing breaks: the page just does not send the email.
 | Offer declined | the company supervisor | The student declines the offer | same |
 | New task | the trainees | A task is created, or a trainee is added to it | `Company/ManageTasks/ManageTasks.aspx.cs` |
 | Task updated / closed / opened again | the trainees of the task | The supervisor edits, closes or reopens it | same |
+| **Deadline soon** | the trainee | A task is due in the next 24 hours and no work was sent (or changes were asked and not sent). Once per task. | `Config/DeadlineReminders.cs` |
 | New work to review | the company supervisor | The trainee sends work (or a new version) | `Student/StudentTasksPage/WeekTasksForm.aspx.cs` |
 | Task done (score + feedback) | the trainee | The supervisor saves a score | `Company/ManageTasks/ReviewTask.aspx.cs` |
 | Changes needed (feedback) | the trainee | The supervisor asks for changes | same |
@@ -37,6 +38,13 @@ nothing breaks: the page just does not send the email.
 | Final evaluation sent | the student and the student's academic supervisor | The company sends the final evaluation | `Company/FinalEvaluation/EvaluateTrainee.aspx.cs` |
 | Ready for approval | the student and all coordinators/admins | The academic supervisor passes the student | `Academic/FinalEvaluation/FinalEvaluation.aspx.cs` |
 | Certificate approved | the student | The coordinator approves the completion | `Coordinator/FinalCompletionReview/FinalCompletionReview.aspx.cs` |
+
+**The first-login flow:** coordinator creates the account -> the person gets the "Account created" email (email + temporary password) and
+Firebase's "confirm your email" email -> signs in (after confirming) -> chooses his own password -> gets the "Welcome" email.
+
+**Deadline alerts** use a timer that starts with the website and checks every 30 minutes (the first check 2 minutes after the start).
+They read the database with the Firebase admin key (`App_Data/keys/firebase-admin.json`), so they only work when that file exists, and only while the site is running.
+Change the 24 hours with `HoursBefore` in `Config/DeadlineReminders.cs`.
 
 How it works: a page calls one method of `Config/Notify.cs` after it saved something. The method does everything else in the
 **background** (finds the people, builds the email, sends it), so a page never waits for the database or the mail server, and it
@@ -49,17 +57,21 @@ never throws. People are found in the database: `Students`, `CompanySupervisors`
 
 To add another email: add a method to `Notify.cs` (copy a short one such as `TaskNews`) and call it from the page (no `await`).
 
-### SMTP settings (already done for the whole team)
-The team's email settings (Gmail address and App password) are in `Web.config` on purpose, so everybody gets them with `git pull`
-and the emails work on every PC with nothing to set up.
-- To send from a different Gmail on **your** PC only: copy `secrets.config.example` to `secrets.config` and fill it in. It overrides
-  `Web.config`, and Git ignores it.
-- The repository must stay **private**: anyone who can read it can send email from this Gmail. If it ever becomes public, delete the
-  App password in Google (Security -> App passwords) and make a new one.
+### Port 465, and what happens when the mail server does not answer
+The team settings use Gmail on **port 465** (secure from the first byte). Port 587, the usual one, was blocked on one PC: the connection opened but
+Gmail's greeting never arrived, so the built-in mail client waited for ever. Now:
+- Port **465** uses our own small sender (`SendWithImplicitTls` in `Config/EmailSender.cs`); any other port uses the built-in client.
+- **Every send has a time limit** (`SmtpTimeoutSeconds`, 20 by default). When the server does not answer, the send is given up, the log says
+  `FAILED ... did not answer in 20 seconds`, and the page carries on. A page or a sign-in can no longer hang because of email.
+- The **account created** email is sent while the coordinator waits, so the green message says if it was sent, or **could NOT be sent** (then read the log).
 
-## Not used now
-`Config/FirebaseAdmin.cs` and `EmailTemplates/password-reset.*` can send our own design of the reset email, but only when the
-file `App_Data/service-account.json` exists (a Firebase service account key). We do not use it: Firebase sends the reset email.
+### SMTP settings (already done for the whole team)
+The team's email settings (Gmail address and App password) are in `Web.config`, so everybody gets them with `git pull`.
+- To send from a different Gmail on **your** PC only: copy `secrets.config.example` to `secrets.config` and fill it in. It overrides `Web.config`.
+- The repository must stay **private**: anyone who can read it can send email from this Gmail.
+
+### The other team keys (Firebase admin key, Cloudinary)
+They are files in `App_Data/keys/` that are committed on purpose for team testing. See `App_Data/keys/README.md` for how to add and edit them.
 
 ## Notes
 - The email address used is the `Email` field of the person's record.
