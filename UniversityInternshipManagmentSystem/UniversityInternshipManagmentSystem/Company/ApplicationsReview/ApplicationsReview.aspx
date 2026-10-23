@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <%-- Why an action was refused, or why the list could not be loaded --%>
+                    <%-- error message --%>
                     <asp:Panel ID="pnlMessage" runat="server" Visible="false" EnableViewState="false" CssClass="alert alert-warning">
                         <asp:Label ID="lblMessage" runat="server" />
                     </asp:Panel>
@@ -46,7 +46,7 @@
                     <div class="card app-table-card">
                         <div class="card-body p-4">
 
-                            <%-- Count + status filter --%>
+                            <%-- count and status filter --%>
                             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                                 <asp:Label ID="lblCount" runat="server" CssClass="small-label" />
                                 <div class="d-flex align-items-center gap-2">
@@ -62,7 +62,7 @@
                                 </div>
                             </div>
 
-                            <%-- Applications table (Pending ones first) --%>
+                            <%-- applications table, pending first --%>
                             <asp:Repeater ID="rptApplications" runat="server" OnItemCommand="rptApplications_ItemCommand">
                                 <HeaderTemplate>
                                     <div class="table-responsive">
@@ -101,7 +101,7 @@
                                 </FooterTemplate>
                             </asp:Repeater>
 
-                            <%-- حالة عدم وجود طلبات --%>
+                            <%-- no applications --%>
                             <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="text-center py-5">
                                 <h5 class="text-muted mb-2">No applications to show</h5>
                                 <p class="text-muted small mb-0">When students apply to your opportunities, they will appear here.</p>
@@ -117,10 +117,10 @@
 
         </div>
 
-        <%-- The application that is open in the window (Accept / Reject use it) --%>
+        <%-- id of the application open in the popup --%>
         <asp:HiddenField ID="hfApplicationId" runat="server" />
 
-        <!-- Application Form window (opened by "View") -->
+        <!-- application popup (View button) -->
         <div class="modal fade" id="applicationModal" tabindex="-1" aria-labelledby="applicationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
@@ -130,75 +130,91 @@
                     </div>
                     <div class="modal-body">
 
-                        <%-- Why the last decision was refused --%>
+                        <%-- why the decision failed --%>
                         <asp:Panel ID="pnlModalError" runat="server" Visible="false" EnableViewState="false" CssClass="alert alert-danger">
                             <asp:Label ID="lblModalError" runat="server" />
                         </asp:Panel>
 
-                        <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                        <%-- who applied, for what, and the status --%>
+                        <div class="app-summary">
                             <div>
-                                <div class="small text-muted">Applied for</div>
-                                <div class="fw-bold"><asp:Literal ID="litOpportunity" runat="server" Mode="Encode" /></div>
-                                <div class="small text-muted">on <asp:Literal ID="litApplied" runat="server" Mode="Encode" /></div>
+                                <div class="app-student"><asp:Literal ID="litStudent" runat="server" Mode="Encode" /></div>
+                                <div class="app-applied">
+                                    Applied for <strong><asp:Literal ID="litOpportunity" runat="server" Mode="Encode" /></strong>
+                                    on <asp:Literal ID="litApplied" runat="server" Mode="Encode" />
+                                </div>
                             </div>
                             <asp:Label ID="lblStatus" runat="server" CssClass="badge" />
                         </div>
 
-                        <h6 class="app-section-title">Applicant Information</h6>
-                        <div class="row g-3 mb-3">
+                        <%-- already answered --%>
+                        <asp:Label ID="lblNextStep" runat="server" CssClass="app-next-step" />
+
+                        <h6 class="app-section-title">Student details</h6>
+                        <div class="row g-2">
                             <div class="col-md-6">
-                                <span class="app-field-label">Full Name</span>
-                                <asp:Literal ID="litStudent" runat="server" Mode="Encode" />
+                                <div class="app-tile">
+                                    <span class="app-field-label">Major</span>
+                                    <asp:Literal ID="litMajor" runat="server" Mode="Encode" />
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <span class="app-field-label">Major</span>
-                                <asp:Literal ID="litMajor" runat="server" Mode="Encode" />
+                                <div class="app-tile">
+                                    <span class="app-field-label">GPA</span>
+                                    <asp:Literal ID="litGpa" runat="server" Mode="Encode" />
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <span class="app-field-label">Email Address</span>
-                                <asp:Literal ID="litEmail" runat="server" Mode="Encode" />
+                                <div class="app-tile">
+                                    <span class="app-field-label">Email</span>
+                                    <asp:Literal ID="litEmail" runat="server" Mode="Encode" />
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <span class="app-field-label">Phone Number</span>
-                                <asp:Literal ID="litPhone" runat="server" Mode="Encode" />
-                            </div>
-                            <div class="col-md-3">
-                                <span class="app-field-label">GPA</span>
-                                <asp:Literal ID="litGpa" runat="server" Mode="Encode" />
+                            <div class="col-md-6">
+                                <div class="app-tile">
+                                    <span class="app-field-label">Phone</span>
+                                    <asp:Literal ID="litPhone" runat="server" Mode="Encode" />
+                                </div>
                             </div>
                             <div class="col-12">
-                                <span class="app-field-label">Skills</span>
-                                <asp:Literal ID="litSkills" runat="server" Mode="Encode" />
+                                <div class="app-tile">
+                                    <span class="app-field-label">Skills</span>
+                                    <asp:Literal ID="litSkills" runat="server" Mode="Encode" />
+                                </div>
                             </div>
                         </div>
 
-                        <h6 class="app-section-title">Application Details</h6>
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <span class="app-field-label">CV</span>
-                                <asp:HyperLink ID="lnkCv" runat="server" Target="_blank" />
-                            </div>
-                            <div class="col-md-6">
-                                <span class="app-field-label">Portfolio</span>
-                                <asp:HyperLink ID="lnkPortfolio" runat="server" Target="_blank" />
-                            </div>
-                            <div class="col-12">
-                                <span class="app-field-label">Why are you interested in this internship? (Cover Letter)</span>
-                                <p class="app-cover"><asp:Literal ID="litCover" runat="server" Mode="Encode" /></p>
-                            </div>
+                        <h6 class="app-section-title">Documents</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <asp:HyperLink ID="lnkCv" runat="server" Target="_blank" CssClass="app-doc" />
+                            <asp:HyperLink ID="lnkPortfolio" runat="server" Target="_blank" CssClass="app-doc" />
                         </div>
 
-                        <%-- Accepted / Confirmed / Rejected: what happens next --%>
-                        <asp:Label ID="lblNextStep" runat="server" CssClass="d-block small fw-semibold" />
+                        <h6 class="app-section-title">Cover letter</h6>
+                        <div class="app-question">Why are you interested in this internship?</div>
+                        <p class="app-cover"><asp:Literal ID="litCover" runat="server" Mode="Encode" /></p>
 
-                        <%-- Pending only: the company decides. Enter in the reason box presses Reject. --%>
-                        <asp:Panel ID="pnlDecision" runat="server" DefaultButton="btnReject" CssClass="app-decision border-top pt-3 mt-3">
-                            <asp:Button ID="btnAccept" runat="server" Text="Accept" CssClass="btn btn-success"
-                                OnClick="btnAccept_Click" OnClientClick="return confirm('Accept this application?');" />
-                            <div class="app-reject">
-                                <asp:TextBox ID="txtReason" runat="server" ClientIDMode="Static" CssClass="form-control" MaxLength="300" placeholder="Reason for rejection" />
-                                <asp:Button ID="btnReject" runat="server" Text="Reject" CssClass="btn btn-outline-danger"
-                                    OnClick="btnReject_Click" OnClientClick="return confirmReject();" />
+                        <%-- pending: accept or reject (enter in the reason box = reject) --%>
+                        <asp:Panel ID="pnlDecision" runat="server" DefaultButton="btnReject" CssClass="app-decision">
+                            <%-- step 1: Accept or Reject --%>
+                            <div id="decisionButtons" class="app-decision-row">
+                                <span class="app-decision-label">Your decision</span>
+                                <div class="app-decision-buttons">
+                                    <asp:Button ID="btnAccept" runat="server" Text="Accept" CssClass="btn btn-success"
+                                        OnClick="btnAccept_Click" OnClientClick="return confirm('Accept this application?');" />
+                                    <button type="button" class="btn btn-outline-danger" onclick="showRejectBox()">Reject</button>
+                                </div>
+                            </div>
+
+                            <%-- step 2: shown only after Reject is clicked --%>
+                            <div id="rejectBox" class="d-none">
+                                <label class="app-field-label" for="txtReason">Reason for rejection</label>
+                                <asp:TextBox ID="txtReason" runat="server" ClientIDMode="Static" CssClass="form-control" MaxLength="300" placeholder="Write why the application is rejected (the student will see it)" />
+                                <div class="app-decision-buttons">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="hideRejectBox()">Cancel</button>
+                                    <asp:Button ID="btnReject" runat="server" Text="Confirm rejection" CssClass="btn btn-danger"
+                                        OnClick="btnReject_Click" OnClientClick="return confirmReject();" />
+                                </div>
                             </div>
                         </asp:Panel>
 

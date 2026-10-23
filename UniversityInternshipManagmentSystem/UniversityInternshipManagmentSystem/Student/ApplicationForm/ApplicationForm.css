@@ -1,18 +1,69 @@
-﻿/* Application Form Page Styles */
+﻿/* Application Form page */
+
+/* "Applying for ... at ..." banner */
+#lblOpportunity {
+    background: var(--uims-mint);
+    border-left: 4px solid var(--uims-accent);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    color: var(--uims-text);
+}
+
+    #lblOpportunity:empty {
+        display: none !important;
+    }
 
 .app-form-card {
     border: 1px solid var(--uims-border, #e5e7eb);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(7, 82, 62, .06);
 }
 
+/* section titles with a small green bar */
 .form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--uims-primary, #07523e);
 }
 
-/* Modal Custom Styling */
+    .form-section-title::before {
+        content: "";
+        width: 4px;
+        height: 18px;
+        border-radius: 4px;
+        background: var(--uims-accent);
+    }
+
+.app-form-card .form-label {
+    font-weight: 600;
+    color: var(--uims-text);
+}
+
+.app-form-card .form-control {
+    padding: .6rem .85rem;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.app-form-card textarea.form-control {
+    line-height: 1.5;
+}
+
+.app-form-card hr {
+    border-color: var(--uims-border);
+    opacity: 1;
+}
+
+.app-form-card .btn {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: .55rem 1.3rem;
+}
+
+/* success popup */
 .modal-icon {
     width: 64px;
     height: 64px;
@@ -32,9 +83,15 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Highlight ReadOnly inputs */
+    .modal-content .btn {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+/* read only fields */
 .form-control[readonly] {
-    background-color: #f8fafc;
-    color: #64748b;
+    background-color: #F4F8F6;
+    border-color: #E6EEEA;
+    color: #4B5F57;
     cursor: not-allowed;
 }

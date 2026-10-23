@@ -37,7 +37,7 @@
                             <h1 class="page-title mb-1">Manage Opportunities</h1>
                             <p class="text-muted mb-0">Add, edit, and close internship opportunities, specify specializations, requirements, and available seats.</p>
                         </div>
-                        <%-- Hidden when the company profile is missing (nothing could be saved) --%>
+                        <%-- hidden if the company has no profile --%>
                         <asp:PlaceHolder ID="phAddButton" runat="server">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#opportunityModal" id="btnAddOpportunity" onclick="resetModalForAdd()">
                                 <i class="fa fa-plus me-1"></i> Add New Opportunity
@@ -45,15 +45,15 @@
                         </asp:PlaceHolder>
                     </div>
 
-                    <%-- Why an action was refused, or why the list could not be loaded --%>
+                    <%-- error message --%>
                     <asp:Panel ID="pnlMessage" runat="server" Visible="false" EnableViewState="false" CssClass="alert alert-warning">
                         <asp:Label ID="lblMessage" runat="server" />
                     </asp:Panel>
 
-                    <!-- Hidden field to track editing ID -->
+                    <!-- id of the opportunity being edited -->
                     <asp:HiddenField ID="hfEditingOpportunityId" runat="server" ClientIDMode="Static" />
 
-                    <!-- Opportunities Table Card -->
+                    <!-- opportunities table -->
                     <div class="card opp-table-card">
                         <div class="card-body p-4">
                             
@@ -114,7 +114,7 @@
                                 </FooterTemplate>
                             </asp:Repeater>
 
-                            <!-- حالة عدم وجود بيانات -->
+                            <!-- no opportunities yet -->
                             <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="text-center py-5">
                                 <h5 class="text-muted mb-2">No opportunities found</h5>
                                 <p class="text-muted small mb-3">Click on "Add New Opportunity" to create the first one.</p>
@@ -130,7 +130,7 @@
 
         </div>
 
-        <!-- Modal for Add/Edit Opportunity -->
+        <!-- add / edit popup -->
         <div class="modal fade" id="opportunityModal" tabindex="-1" aria-labelledby="opportunityModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content p-3">
@@ -139,7 +139,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <%-- Why the last save was refused (the form opens again with what was typed) --%>
+                        <%-- why the save failed --%>
                         <asp:Panel ID="pnlFormError" runat="server" ClientIDMode="Static" Visible="false" EnableViewState="false" CssClass="alert alert-danger">
                             <asp:Label ID="lblFormError" runat="server" />
                         </asp:Panel>
@@ -156,13 +156,17 @@
                                 <label class="form-label small-label" for="txtLocation">Location</label>
                                 <asp:TextBox ID="txtLocation" runat="server" ClientIDMode="Static" CssClass="form-control bg-light" ReadOnly="true" />
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label small-label" for="txtSeats">Available Seats <span class="text-danger">*</span></label>
                                 <asp:TextBox ID="txtSeats" runat="server" ClientIDMode="Static" CssClass="form-control" TextMode="Number" placeholder="e.g. 5" min="1" Required="true" />
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label small-label" for="txtDeadline">Application Deadline <span class="text-danger">*</span></label>
                                 <asp:TextBox ID="txtDeadline" runat="server" ClientIDMode="Static" TextMode="Date" CssClass="form-control" Required="true" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small-label" for="txtStartDate">Training Start Date <span class="text-danger">*</span></label>
+                                <asp:TextBox ID="txtStartDate" runat="server" ClientIDMode="Static" TextMode="Date" CssClass="form-control" Required="true" />
                             </div>
                             <div class="col-12">
                                 <label class="form-label small-label" for="txtDescription">Description <span class="text-danger">*</span></label>

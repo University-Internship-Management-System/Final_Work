@@ -7,42 +7,38 @@
     const countLabel = document.getElementById('lblCount');
     const allCountText = countLabel ? countLabel.textContent : "";
 
-    // إظهار البطاقات المطابقة فقط، ثم تحديث العدد ورسالة "لا توجد نتائج"
+    // show only the cards that match, and update the count
     function applyFilter(keyword, selectedCompany) {
-        // جلب جميع بطاقات الفرص المعروضة ديناميكياً
         let opportunityCards = document.querySelectorAll('.opp-item');
         let visibleCount = 0;
 
         opportunityCards.forEach(card => {
-            // data-search = العنوان والشركة والوصف والموقع والتخصصات (بدون نصوص الأزرار)
+            // data-search and data-company are set in the code behind
             let cardText = card.getAttribute('data-search') || "";
             let cardCompany = card.getAttribute('data-company') || "";
 
-            // مطابقة الكلمة المفتاحية (في العنوان أو الوصف أو الشركة)
             let matchesKeyword = keyword === "" || cardText.includes(keyword);
 
-            // مطابقة الشركة المختارة من القائمة المنسدلة
             let matchesCompany = selectedCompany === "" || cardCompany === selectedCompany;
 
-            // إظهار أو إخفاء البطاقة بناءً على الشروط
             if (matchesKeyword && matchesCompany) {
-                card.style.display = ""; // إظهار
+                card.style.display = "";
                 visibleCount++;
             } else {
-                card.style.display = "none"; // إخفاء
+                card.style.display = "none";
             }
         });
 
         let isFiltering = keyword !== "" || selectedCompany !== "";
 
-        // "No opportunities match" only when the search hides every card
+        // show "no results" only if the search hid every card
         if (noMatch) noMatch.classList.toggle('opp-hidden', !(isFiltering && opportunityCards.length > 0 && visibleCount === 0));
 
-        // "X of Y opportunities" while searching, the original text after Reset
+        // "X of Y opportunities" while searching
         if (countLabel) countLabel.textContent = isFiltering ? visibleCount + " of " + opportunityCards.length + " opportunities" : allCountText;
     }
 
-    // 1. عند الضغط على زر البحث (Search)
+    // search button
     if (searchBtn) {
         searchBtn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -53,16 +49,14 @@
         });
     }
 
-    // 2. عند الضغط على زر إعادة التعيين (Reset)
+    // reset button
     if (resetBtn) {
         resetBtn.addEventListener('click', function (e) {
             e.preventDefault();
 
-            // تفريغ حقل البحث وإعادة القائمة للافتراضي
             if (searchInput) searchInput.value = "";
             if (companySelect) companySelect.selectedIndex = 0;
 
-            // إظهار جميع البطاقات مرة أخرى
             applyFilter("", "");
         });
     }
