@@ -56,7 +56,7 @@
             <div class="sp-profile-grid">
                 <section class="sd-panel sp-card" aria-labelledby="personal-title">
                     <div class="sd-panel-head"><div class="sp-card-title"><span class="sp-section-icon"><i class="bi bi-person" aria-hidden="true"></i></span><div><h2 id="personal-title">Personal Information</h2><p>The details that make you, you.</p></div></div><span class="sp-readonly-tag"><i class="bi bi-lock" aria-hidden="true"></i>Protected identity</span></div>
-                    <div class="sd-panel-body"><dl class="sp-field-grid"><div><dt>Full name</dt><dd><%: Show(Record.Name) %></dd></div><div><dt>Account email</dt><dd><%: Show(Record.Email) %></dd></div><div><dt>University email</dt><dd><%: Show(Record.UniEmail) %></dd></div></dl>
+                    <div class="sd-panel-body"><dl class="sp-field-grid"><div><dt>Full name</dt><dd><%: Show(Record.Name) %></dd></div><div><dt>Account email</dt><dd><%: Show(Record.Email) %></dd></div></dl>
                         <div class="sp-phone-field"><asp:Label runat="server" AssociatedControlID="PhoneNumberInput" CssClass="form-label" Text="Phone number" /><asp:TextBox ID="PhoneNumberInput" runat="server" EnableViewState="false" CssClass="form-control" MaxLength="30" TextMode="Phone" placeholder="Not provided" aria-describedby="phone-help PhoneError" /><span id="phone-help" class="sd-note sp-edit-only">Optional. Use 7–30 characters; include a country code where applicable.</span><asp:Label ID="PhoneError" runat="server" ClientIDMode="Static" CssClass="sd-field-error" role="alert" /></div>
                     </div>
                 </section>
