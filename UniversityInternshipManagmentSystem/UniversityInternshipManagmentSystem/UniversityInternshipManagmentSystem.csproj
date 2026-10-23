@@ -250,6 +250,8 @@
     <Content Include="App_Data\keys\firebase-admin.json" />
     <Content Include="App_Data\keys\README.md" />
     <Content Include="App_Data\completion-awaiting-admin-pass.test.json" />
+    <Content Include="App_Data\keys\firebase-admin.example.json" />
+    <Content Include="App_Data\keys\cloudinary.example.json" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
