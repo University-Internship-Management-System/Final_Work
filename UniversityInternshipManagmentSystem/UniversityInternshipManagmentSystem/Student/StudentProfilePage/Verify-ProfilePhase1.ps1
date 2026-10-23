@@ -309,3 +309,21 @@ foreach($required in @('ValidateCsrf();','ProfileValidation.EditableFields','Pro
 if($page -match 'EnableEventValidation="false"|ValidateRequest="false"'){throw 'Production Web Forms protections disabled'}
 Write-Output 'PASS: sections, shared master, designer parity, read-only identity, verified save adapter and related-data source checks.'
 Write-Output 'Offline checks exercise page controls and the actual shared adapter against an in-memory HTTP handler. They do not prove live Firebase access.'
+
+# Regressions for duplicated security controls/handlers introduced by an earlier dev merge.
+$ids=[regex]::Matches($page,'<asp:\w+\b[^>]*\bID="([^"]+)"') | ForEach-Object { $_.Groups[1].Value }
+$duplicateIds=$ids | Group-Object | Where-Object { $_.Count -gt 1 }
+if($duplicateIds) { throw ('Duplicate ASPX server controls: '+(($duplicateIds | ForEach-Object Name) -join ', ')) }
+foreach($id in @('resetPasswordModal','resetPasswordTitle','security-title')) {
+ if(([regex]::Matches($page,'\bid="'+$id+'"')).Count -ne 1) { throw "Duplicate or missing security element: $id" }
+}
+foreach($method in @('ResetPasswordButton_Click','ResetPasswordAsync','ShowPasswordError','CancelButton_Click')) {
+ if(([regex]::Matches($code,'(?:protected|private)\s+(?:async\s+)?(?:void|Task)\s+'+$method+'\s*\(')).Count -ne 1) { throw "Duplicate or missing handler: $method" }
+}
+$footer=$page.IndexOf('<div class="sp-profile-footer">')
+if($footer -lt $page.IndexOf('id="security-title"')) { throw 'Profile action bar must be below profile information and account security' }
+foreach($id in @('EditButton','ValidateButton','SaveButton','CancelButton')) {
+ if($page.IndexOf('ID="'+$id+'"') -lt $footer) { throw "Profile action remains in header: $id" }
+}
+if($page.Contains('sp-hero-actions')) { throw 'Old header action container remains' }
+Write-Output 'PASS: unique security controls/handlers and bottom-only Edit/Validate/Save/Cancel placement.'

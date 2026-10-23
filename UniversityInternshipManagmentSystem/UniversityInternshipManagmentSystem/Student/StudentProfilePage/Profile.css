@@ -42,9 +42,9 @@
 .student-profile .sp-major { display: flex; align-items: center; gap: 7px; font-size: 14px; color: var(--sp-muted); }
 .student-profile .sp-university-line { display: flex; gap: 8px; align-items: flex-start; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--sp-line); font-size: 10px; font-weight: 550; color: var(--sp-muted); }
 .student-profile .sp-university-ar { display: inline-block; margin-inline-start: 9px; padding-inline-start: 9px; border-inline-start: 1px solid var(--sp-line); }
-.student-profile .sp-hero-actions { display: flex; flex: 0 1 290px; flex-direction: column; align-items: flex-end; gap: 13px; min-width: 0; }
+.student-profile .sp-profile-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px 24px; min-width: 0; margin-top: 22px; padding: 20px 24px; border: 1px solid var(--sp-line); border-radius: 12px; background: var(--sp-paper); }
 .student-profile .sp-mode-label { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--sp-muted); }
-.student-profile .sd-profile-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; width: 100%; }
+.student-profile .sd-profile-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; max-width: 100%; }
 .student-profile .sd-save-button, .student-profile .sp-button-primary, .student-profile .sp-button-secondary, .student-profile .sp-button-quiet {
     display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 10px 15px; min-height: 42px;
     max-width: 100%; border: 1px solid transparent; border-radius: 7px; font-family: inherit; font-size: 12px;
@@ -160,7 +160,7 @@
 }
 @media (max-width: 1199.98px) {
     .student-profile .sp-identity-main { gap: 20px; padding: 26px; flex-wrap: wrap; }
-    .student-profile .sp-hero-actions { flex: 1 1 100%; flex-direction: row; align-items: center; justify-content: space-between; border-top: 1px solid var(--sp-line); padding-top: 18px; }
+    .student-profile .sp-profile-footer { padding: 18px 20px; }
     .student-profile .sd-profile-actions { width: auto; }
     .student-profile .sd-panel-head { padding: 19px 20px; flex-wrap: wrap; }
     .student-profile .sp-readonly-tag { padding-inline-start: 47px; padding-top: 0; }
@@ -193,7 +193,7 @@
     .student-profile .sp-major { font-size: 12px; }
     .student-profile .sp-university-line { font-size: 9px; margin-top: 10px; padding-top: 9px; }
     .student-profile .sp-university-ar { margin-inline-start: 0; padding-inline-start: 0; border: 0; display: block; margin-top: 4px; }
-    .student-profile .sp-hero-actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .student-profile .sp-profile-footer { flex-direction: column; align-items: stretch; gap: 14px; padding: 18px; }
     .student-profile .sd-profile-actions { width: 100%; justify-content: flex-start; }
     .student-profile .sd-profile-actions > input { flex: 1 1 auto; min-height: 44px; font-size: 11px; }
     .student-profile .sp-section-index { gap: 5px 18px; padding-top: 16px; margin-bottom: 18px; }
