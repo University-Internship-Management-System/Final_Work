@@ -41,7 +41,7 @@ namespace UniversityInternshipManagmentSystem.Models
             phoneNumber,
             profilePic)
         {
-            UniEmail = uniEmail;
+            UniEmail = email;
             Major = major;
             CompanyId = companyId;
             AcademicSupervisorId = academicSupervisorId;
