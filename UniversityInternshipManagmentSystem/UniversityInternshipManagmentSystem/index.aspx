@@ -1,5 +1,5 @@
-<%@ Page Title="University Internship Management System" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" CodeBehind="index.aspx.cs" Inherits="UniversityInternshipManagmentSystem.PublicHome" %>
-<asp:Content ID="HomeHead" ContentPlaceHolderID="HeadContent" runat="server"><link href="<%= ResolveUrl("~/Content/uims.css") %>" rel="stylesheet" /></asp:Content>
+﻿<%@ Page Title="University Internship Management System" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" CodeBehind="index.aspx.cs" Inherits="UniversityInternshipManagmentSystem.PublicHome" %>
+<asp:Content ID="HomeHead" ContentPlaceHolderID="HeadContent" runat="server"><link href="<%= ResolveUrl("~/Content/uims.css") %>" rel="stylesheet" /><link href="<%= ResolveUrl("~/Content/student-guide.css") %>" rel="stylesheet" /></asp:Content>
 <asp:Content ID="HomeBody" ContentPlaceHolderID="MainContent" runat="server">
 <!-- Top Scroll Progress Bar -->
     <div class="uims-scroll-progress" id="scrollProgress" aria-hidden="true"></div>
@@ -112,8 +112,8 @@
                             <span>Browse Internships</span>
                             <i class="bi bi-arrow-right"></i>
                         </a>
-                        <a href="#how-it-works" class="uims-btn uims-btn--outline-white">
-                            <span>Learn How It Works</span>
+                        <a href="#student-guide" class="uims-btn uims-btn--outline-white">
+                            <span>Watch Student Guide</span>
                             <i class="bi bi-play-circle"></i>
                         </a>
                     </div>
@@ -542,109 +542,38 @@
         </div>
     </section>
 
-    <!-- 5. "How It Works" Timeline Section (Scroll-Driven Progress) -->
-    <section class="uims-timeline-section" id="how-it-works">
+    <section class="uims-guide-section" id="how-it-works" aria-labelledby="student-guide-title">
         <div class="uims-container">
             <div class="uims-section-header">
-                <span class="uims-eyebrow"><i class="bi bi-diagram-3-fill"></i> Internship Lifecycle</span>
-                <h2 class="uims-section-title">Your Internship Journey, Step by Step</h2>
-                <p class="uims-section-subtitle">
-                    Follow the verified 6-stage roadmap from initial application to official graduation sign-off.
-                </p>
+                <span class="uims-eyebrow">Your internship, step by step</span>
+                <h2 class="uims-section-title" id="student-guide-title">How Does Your Internship Work?</h2>
+                <p class="uims-section-subtitle">A simple guide from finding your opportunity to completing your training.</p>
             </div>
-
-            <div class="uims-timeline-container">
-                <!-- Vertical Progress Line -->
-                <div class="uims-timeline-track" aria-hidden="true">
-                    <div class="uims-timeline-progress-bar" id="timelineProgressBar"></div>
+            <div class="uims-guide-layout">
+                <div class="uims-guide-preview" id="student-guide">
+                    <video id="guidePreview" autoplay muted loop playsinline preload="metadata" poster="<%= ResolveUrl("~/Assets/PublicHome/student-guide-poster.jpg") %>" aria-hidden="true" tabindex="-1">
+                        <source src="<%= ResolveUrl("~/Assets/PublicHome/student-guide.mp4") %>" type="video/mp4" />
+                    </video>
+                    <button type="button" class="uims-guide-open" id="openStudentGuide" aria-label="Watch student guide in a larger player with sound" aria-haspopup="dialog">
+                        <span class="uims-guide-play" aria-hidden="true">&#9654;</span>
+                        <span class="uims-guide-overlay-copy"><span class="uims-guide-label">Internship walkthrough</span><strong>Your journey starts here.</strong><span>Watch the full guide with sound <span aria-hidden="true">&#8599;</span></span></span>
+                    </button>
                 </div>
-
-                <!-- Step 1 -->
-                <div class="uims-timeline-step reveal-up" data-delay="100">
-                    <div class="uims-timeline-node">
-                        <i class="bi bi-person-plus-fill"></i>
-                    </div>
-                    <div class="uims-timeline-card">
-                        <div class="uims-timeline-step-num">Step 01</div>
-                        <h3 class="uims-timeline-step-title">Register &amp; Complete Student Profile</h3>
-                        <p class="uims-timeline-step-desc">
-                            Sign in using your official university credentials. Update your technical skills, CV link, and major specialization to become eligible for placement matching.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="uims-timeline-step reveal-up" data-delay="200">
-                    <div class="uims-timeline-node">
-                        <i class="bi bi-search"></i>
-                    </div>
-                    <div class="uims-timeline-card">
-                        <div class="uims-timeline-step-num">Step 02</div>
-                        <h3 class="uims-timeline-step-title">Browse &amp; Apply for Opportunities</h3>
-                        <p class="uims-timeline-step-desc">
-                            Explore verified internships from leading telecom companies, software houses, and banks. Submit your application directly through the student portal.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="uims-timeline-step reveal-up" data-delay="300">
-                    <div class="uims-timeline-node">
-                        <i class="bi bi-check2-circle"></i>
-                    </div>
-                    <div class="uims-timeline-card">
-                        <div class="uims-timeline-step-num">Step 03</div>
-                        <h3 class="uims-timeline-step-title">Company Review &amp; Placement Confirmation</h3>
-                        <p class="uims-timeline-step-desc">
-                            Host companies review candidate portfolios, conduct interviews, and issue digital acceptance offers. Once confirmed, your official training term commences.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="uims-timeline-step reveal-up" data-delay="400">
-                    <div class="uims-timeline-node">
-                        <i class="bi bi-code-slash"></i>
-                    </div>
-                    <div class="uims-timeline-card">
-                        <div class="uims-timeline-step-num">Step 04</div>
-                        <h3 class="uims-timeline-step-title">Execute Tasks &amp; Submit Weekly Diaries</h3>
-                        <p class="uims-timeline-step-desc">
-                            Work on real company assignments. Submit weekly diaries and code links for review. Accumulate verified hours toward the mandatory 320-hour milestone.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 5 -->
-                <div class="uims-timeline-step reveal-up" data-delay="500">
-                    <div class="uims-timeline-node">
-                        <i class="bi bi-star-fill"></i>
-                    </div>
-                    <div class="uims-timeline-card">
-                        <div class="uims-timeline-step-num">Step 05</div>
-                        <h3 class="uims-timeline-step-title">Dual Academic &amp; Corporate Evaluation</h3>
-                        <p class="uims-timeline-step-desc">
-                            Your company supervisor assesses technical performance and professionalism, while your academic supervisor conducts site visits and assesses learning outcomes.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 6 -->
-                <div class="uims-timeline-step reveal-up" data-delay="600">
-                    <div class="uims-timeline-node">
-                        <i class="bi bi-mortarboard-fill"></i>
-                    </div>
-                    <div class="uims-timeline-card">
-                        <div class="uims-timeline-step-num">Step 06</div>
-                        <h3 class="uims-timeline-step-title">Faculty Sign-Off &amp; Official Completion</h3>
-                        <p class="uims-timeline-step-desc">
-                            The KASIT Field Training Coordinator reviews overall evaluations and gives final approval. Your accredited completion report is issued for graduation clearance.
-                        </p>
-                    </div>
+                <div class="uims-guide-steps">
+                    <div class="uims-guide-step"><span class="uims-guide-number">01</span><div><h3>Find your opportunity &amp; apply</h3><p>Log in with your student account, explore internships that match your major, and submit your application.</p></div></div>
+                    <div class="uims-guide-step"><span class="uims-guide-number">02</span><div><h3>Train, submit &amp; track</h3><p>Once accepted, follow your supervisor's tasks, submit your work, and track your feedback and training hours.</p></div></div>
+                    <div class="uims-guide-step"><span class="uims-guide-number">03</span><div><h3>Complete your internship</h3><p>After your evaluations are reviewed and approved by the university coordinator, view and save your completion certificate.</p></div></div>
+                    <a class="uims-guide-explore" href="#opportunities">Explore internship opportunities <span aria-hidden="true">&#8594;</span></a>
                 </div>
             </div>
         </div>
     </section>
+    <dialog class="uims-guide-dialog" id="studentGuideDialog" aria-labelledby="guide-dialog-title">
+        <div class="uims-guide-dialog-bar"><h2 id="guide-dialog-title">Your Internship Journey</h2><button type="button" id="closeStudentGuide" aria-label="Close video">&#10005;</button></div>
+        <video id="guideFullVideo" controls playsinline preload="none" aria-label="Student guide with Arabic narration">
+            <source src="<%= ResolveUrl("~/Assets/PublicHome/student-guide.mp4") %>" type="video/mp4" />
+        </video>
+    </dialog>
 
     <!-- 6. Role Portals Section (4 Stakeholder Cards) -->
     <section class="uims-roles-section" id="roles">
@@ -1004,6 +933,7 @@
 
     <!-- UIMS Unified Interactive Scripts -->
     <script src="<%= ResolveUrl("~/Scripts/uims.js") %>"></script>
+    <script src="<%= ResolveUrl("~/Scripts/student-guide.js") %>"></script>
 
         
 </asp:Content>
