@@ -261,70 +261,21 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             };
             string error = ValidateStudent(student, EditingId);
             if (error != null) { ShowMessage(error); return; }
-            string verifyResult = null;
+            string verifyResult = null, mailResult = null;
             if (EditingId == null)
             {
                 if (temporaryPassword.Text.Length < 12) { ShowMessage("Generate a temporary password before saving."); return; }
                 AccountResult result = await CreateStudent(student, temporaryPassword.Text);
                 if (!result.Success) { ShowMessage(result.Message); return; }
                 verifyResult = result.Verification;
+                mailResult = result.Mail;
             }
             else
             {
-<<<<<<< HEAD
                 try
                 {
                     var changes = new { student.Name, student.PhoneNumber, student.UniEmail, student.Major, student.GPA, student.AcademicSupervisorId };
                     using (var response = await FirebaseDb.Patch("Students", EditingId, changes))
-=======
-                ShowMessage("Enter " + phoneCountry.SelectedItem.Attributes["data-digits"] + " digits for " + phoneCountry.SelectedItem.Text
-                    + ", without the country code or leading zero. Check the mobile prefix too.");
-                return;
-            }
-            phone = phoneCountry.SelectedValue + phone;
-            AcademicSupervisor supervisor;
-            if (major == "" || !supervisors.TryGetValue(supervisorId, out supervisor)
-                || !String.Equals(supervisor.Major, major, StringComparison.OrdinalIgnoreCase))
-            {
-                PopulateSupervisors();
-                ShowMessage("Choose an academic supervisor with the same major before saving.");
-                return;
-            }
-            string id = EditingId;
-            if (id != null && !records.ContainsKey(id)) { ShowMessage("Student no longer exists."); return; }
-            if (records.Any(item => item.Key != id && (String.Equals(item.Value.Email, email, StringComparison.OrdinalIgnoreCase)
-                || String.Equals(item.Value.UniEmail, uniEmail, StringComparison.OrdinalIgnoreCase))))
-            {
-                ShowMessage("A student with this login or university email already exists.");
-                return;
-            }
-            string newAccountToken = null, verifyResult = null, mailResult = null;
-            try
-            {
-                if (id == null)
-                {
-                    if (temporaryPassword.Text.Length < 12) { ShowMessage("Generate a temporary password before saving."); return; }
-                    var auth = await AuthenticationRequest(AppConfig.SignUpUrl,
-                        new { email, password = temporaryPassword.Text, returnSecureToken = true });
-                    id = (string)auth["localId"];
-                    newAccountToken = (string)auth["idToken"];
-                    var student = new StudentModel
-                    {
-                        Name = name, Email = email, Role = "Student", FirstLogin = true,
-                        PhoneNumber = phone, UniEmail = uniEmail, Major = major,
-                        AcademicSupervisorId = supervisorId, GPA = grade,
-                        CompanyId = "", ProfilePicUrl = "", CvUrl = "", PortfolioUrl = ""
-                    };
-                    using (var response = await FirebaseDb.Put("Students", id, student))
-                        if (!response.IsSuccessStatusCode) throw new HttpRequestException();
-                    verifyResult = await EmailVerification.RequireAndSend("Students", id, newAccountToken);
-                    mailResult = await Notify.AccountCreated(name, "student", email, temporaryPassword.Text);
-                }
-                else
-                {
-                    var changes = new { Name = name, PhoneNumber = phone, UniEmail = uniEmail, Major = major, GPA = grade, AcademicSupervisorId = supervisorId };
-                    using (var response = await FirebaseDb.Patch("Students", id, changes))
->>>>>>> 013cfa62b01afef7273f8a4c3184ca9e0140d5b0
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                 }
                 catch { ShowMessage("Could not save the student. Check the connection and database permissions."); return; }
@@ -374,6 +325,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             public bool Success { get; set; }
             public string Message { get; set; }
             public string Verification { get; set; }
+            public string Mail { get; set; }
         }
 
         private async Task<AccountResult> CreateStudent(StudentModel student, string password)
@@ -412,10 +364,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     : "Could not confirm the account save. Ask the coordinator to check Authentication and Students before retrying." };
             }
             string verification = await EmailVerification.RequireAndSend("Students", id, token);
-            Notify.AccountCreated(student.Name, "student", student.Email, password);
-            return new AccountResult { Success = profileSaved, Verification = verification,
-                Message = verification == "sent" ? "Created. Verification email sent; welcome email queued."
-                    : "Created. Verification email needs retry at sign-in; welcome email queued." };
+            string mail = await Notify.AccountCreated(student.Name, "student", student.Email, password);
+            return new AccountResult { Success = profileSaved, Verification = verification, Mail = mail,
+                Message = "Created." + EmailVerification.MessageFor(verification) + Notify.AccountMailMessage(mail) };
         }
 
         // Preview stays on the server. Confirmation consumes it once, so refreshing cannot add it again.
@@ -434,7 +385,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             public List<ImportRow> Rows { get; set; }
         }
 
-        private const string CsvHeader = "FullName,LoginEmail,UniversityEmail,CountryCode,PhoneNumber,Major,GPA,AcademicSupervisorEmail";
+        private const string CsvHeader = "FullName,UniversityEmail,ConfirmedEmail,CountryCode,PhoneNumber,Major,GPA,AcademicSupervisorEmail";
 
         private void DownloadTemplate()
         {
