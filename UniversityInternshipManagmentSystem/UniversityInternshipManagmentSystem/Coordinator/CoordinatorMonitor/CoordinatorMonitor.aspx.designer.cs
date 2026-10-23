@@ -23,11 +23,6 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         protected global::System.Web.UI.WebControls.Label lblError;
-        protected global::System.Web.UI.WebControls.Panel pnlUserDetail;
-        protected global::System.Web.UI.WebControls.Literal litDetailTitle;
-        protected global::System.Web.UI.WebControls.Literal litUserDetail;
-        protected global::System.Web.UI.WebControls.Literal litMajorOptions;
-        protected global::System.Web.UI.WebControls.Literal litStudentRows;
         protected global::System.Web.UI.WebControls.Literal litStudentDetails;
         protected global::System.Web.UI.WebControls.Literal litAcademicRows;
         protected global::System.Web.UI.WebControls.Literal litCompanyRows;
