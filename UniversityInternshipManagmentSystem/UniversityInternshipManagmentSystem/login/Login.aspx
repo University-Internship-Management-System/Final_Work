@@ -5,13 +5,20 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container py-4">
-        <div class="card login-card p-4 p-md-5">
-            <!-- Header Brand & Title -->
-            <div class="text-center mb-4">
-                <img src="<%= ResolveUrl("~/login/images/uj-logo.png") %>" alt="University of Jordan Logo" class="login-logo mb-2" />
-                <h4 class="fw-bold text-uj-green mb-1">Unified Login Portal</h4>
-                <p class="text-muted small">King Abdullah II School of Information Technology (KASIT)</p>
+    <%-- Full-screen background (see login.css). The navigation bar is hidden on this page by Shared/Public.Master. --%>
+    <div class="auth-bg" aria-hidden="true">
+        <span class="auth-blob b1"></span><span class="auth-blob b2"></span><span class="auth-blob b3"></span>
+        <span class="auth-ring r1"></span><span class="auth-ring r2"></span><span class="auth-ring r3"></span><span class="auth-ring r4"></span>
+    </div>
+
+    <div class="auth-wrap">
+        <div class="auth-card">
+            <!-- Brand & Title -->
+            <div class="auth-brand">
+                <img src="<%= ResolveUrl("~/login/images/uj-logo.png") %>" alt="University of Jordan Logo" class="auth-logo" />
+                <div><span class="auth-eyebrow">Field Training System</span></div>
+                <h1 class="auth-title">Welcome back</h1>
+                <p class="auth-sub">Sign in to the University Internship Management System.<br />King Abdullah II School of Information Technology (KASIT)</p>
             </div>
 
             <!-- Error Notification Panel -->
@@ -28,7 +35,7 @@
 
             <!-- Email Address Field -->
             <div class="mb-3">
-                <label class="form-label fw-semibold">University Email Address <span class="text-danger">*</span></label>
+                <label class="form-label" for="txtEmail">University email address</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                     <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="form-control" placeholder="name@ju.edu.jo" required="required" ClientIDMode="Static" />
@@ -38,8 +45,8 @@
             <!-- Password Field with Show/Hide Toggle -->
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label class="form-label fw-semibold mb-0">Password <span class="text-danger">*</span></label>
-                    <button type="button" class="btn-forgot-password" id="btnOpenForgotModal">Forgot Password?</button>
+                    <label class="form-label mb-0" for="txtPassword">Password</label>
+                    <button type="button" class="btn-forgot-password" id="btnOpenForgotModal">Forgot password?</button>
                 </div>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-lock"></i></span>
@@ -51,12 +58,11 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="d-grid gap-2 mt-4">
+            <div class="d-grid mt-4">
                 <asp:Button ID="btnLogin" runat="server" Text="Sign In" CssClass="btn btn-uj-primary btn-lg" OnClick="btnLogin_Click" />
             </div>
 
-            <hr class="my-4 text-muted" />
-
+            <div class="auth-secure"><i class="bi bi-shield-check"></i> Secure sign-in with Firebase Authentication</div>
         </div>
     </div>
 
@@ -85,7 +91,8 @@
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <asp:Button ID="btnSendRecovery" runat="server" Text="Send Reset Link" CssClass="btn btn-uj-primary" OnClick="btnSendRecovery_Click" />
+                    <%-- formnovalidate: the sign-in fields behind this popup are "required" and empty; without it the browser blocks this button --%>
+                    <asp:Button ID="btnSendRecovery" runat="server" Text="Send Reset Link" CssClass="btn btn-uj-primary" OnClick="btnSendRecovery_Click" formnovalidate="formnovalidate" />
                 </div>
             </div>
         </div>

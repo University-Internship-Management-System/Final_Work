@@ -389,6 +389,9 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             {
                 return "Could not save the decision. Please try again.";
             }
+
+            // Tell the student (Config/Notify.cs does nothing when email is not set up)
+            Notify.ApplicationDecided(app.StudentId, opportunity.Title, opportunity.CompanyName, accept, reason);
             return null;
         }
 

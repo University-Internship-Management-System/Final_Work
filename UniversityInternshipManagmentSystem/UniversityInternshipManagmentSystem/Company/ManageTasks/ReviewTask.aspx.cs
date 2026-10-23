@@ -287,6 +287,14 @@ namespace UniversityInternshipManagmentSystem.Company.ManageTasksPage
                 return;
             }
 
+            // Tell the trainee (Config/Notify.cs does nothing when email is not set up)
+            Models.Student trainee;
+            if (_students.TryGetValue(sub.StudentId, out trainee))
+            {
+                if (status == SubmissionState.Evaluated) Notify.TaskDone(trainee.Name, trainee.Email, _task.TaskName, score.Value, _task.MaxScore, feedback);
+                else Notify.TaskNeedsChanges(trainee.Name, trainee.Email, _task.TaskName, feedback);
+            }
+
             pnlReview.Visible = false;
             await LoadTask();               // reload so the table and the numbers show the new state
             lblMessage.Text = doneText;

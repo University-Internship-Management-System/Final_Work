@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -298,6 +298,7 @@ namespace UniversityInternshipManagmentSystem.Company.FinalEvaluationPage
             record.TotalHours = record.ApprovedWeeks.Values.Sum();
             record.UpdatedAt = DateTime.Now;
             record.Status = send ? FinalEvaluation.Sent : FinalEvaluation.Draft;
+            if (send) record.IsPassCompany = true;
             if (send) record.SentAt = DateTime.Now;
 
             bool saved = await TaskDb.SaveFinalEvaluation(_studentId, record);
@@ -306,6 +307,8 @@ namespace UniversityInternshipManagmentSystem.Company.FinalEvaluationPage
                 lblFormError.Text = "Could not save. Please try again.";
                 return;
             }
+
+            if (send) Notify.CompanyEvaluationSent(_studentId, _student.Name, _student.Email, (string)Session["name"]);
 
             await LoadData();                                         // reload so the page shows the saved state
             BindPage();

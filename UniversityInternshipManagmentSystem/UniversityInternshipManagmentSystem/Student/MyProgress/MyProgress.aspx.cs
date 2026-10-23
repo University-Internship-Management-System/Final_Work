@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -349,12 +349,10 @@ namespace UniversityInternshipManagmentSystem.Student
             // The administrator's decision is the final pass result.
             CoursePassed = certificate.IsPassAdmin;
 
-            CoursePassed = certificate.IsPassAdmin;
-
             if (CoursePassed)
             {
                 CertificateDownloadUrl =
-                     ResolveUrl("~/MyProgress/Files/download.png");
+                    ResolveUrl("~/Student/MyProgress/Certificate.aspx");
             }
             else
             {

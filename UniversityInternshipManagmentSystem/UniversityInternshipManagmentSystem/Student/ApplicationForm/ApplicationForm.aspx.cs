@@ -157,6 +157,7 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
                 // show the popup and hide the form so it can't be sent twice
                 if (response.IsSuccessStatusCode)
                 {
+                    Notify.ApplicationSubmitted(student.Name, student.Email, opportunity.Title, companyName, opportunity.CompanyId);
                     ScriptManager.RegisterStartupScript(this, GetType(), "saved", "window.applicationSaved = true;", true);
                     pnlApply.Visible = false;
                     ShowMessage("Your application was submitted. You can track it in My Applications.", "alert-success");

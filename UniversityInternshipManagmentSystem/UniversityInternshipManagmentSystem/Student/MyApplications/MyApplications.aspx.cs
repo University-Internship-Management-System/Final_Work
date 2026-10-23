@@ -180,8 +180,10 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
                     RejectionReason = "Rejected by student."
                 });
 
-                if (response.IsSuccessStatusCode) return null;
-                return "Could not reject the offer. Please try again.";
+                if (!response.IsSuccessStatusCode) return "Could not reject the offer. Please try again.";
+
+                Notify.OfferDeclined((string)Session["name"], offer.OpportunityTitle, offer.CompanyId);
+                return null;
             }
 
             if (command != "ConfirmApp") return "Unknown action.";
@@ -197,8 +199,11 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
             if (opportunity.SeatsLeft <= 0) return "There are no seats left in this opportunity, so the offer cannot be confirmed.";
 
             bool saved = await ConfirmOfferAsync(StudentId, offer, opportunity, myApplications);
-            if (saved) return null;
-            return "Could not confirm the offer. Please try again.";
+            if (!saved) return "Could not confirm the offer. Please try again.";
+
+            // Tell the student and the company (Config/Notify.cs does nothing when email is not set up)
+            Notify.OfferConfirmed(student.Name, student.Email, opportunity.Title, opportunity.CompanyName, opportunity.CompanyId);
+            return null;
         }
 
         // everything is saved in one request so it's all or nothing.

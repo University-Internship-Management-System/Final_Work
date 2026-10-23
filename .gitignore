@@ -15,3 +15,7 @@ nuget.exe
 # Misc
 *.log
 Thumbs.db
+
+# secrets.config (the team email settings) is committed on purpose, so everybody gets it
+**/App_Data/service-account.json
+**/App_Data/email-log.txt
