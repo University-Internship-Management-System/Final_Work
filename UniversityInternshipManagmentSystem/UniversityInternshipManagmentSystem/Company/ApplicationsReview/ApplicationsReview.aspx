@@ -48,18 +48,19 @@
 
                             <%-- count and status filter --%>
                             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                                 <div class="d-flex align-items-center gap-2">
+     <label class="small-label mb-0" for="ddlStatus">Status</label>
+     <asp:DropDownList ID="ddlStatus" runat="server" ClientIDMode="Static" AutoPostBack="true"
+         OnSelectedIndexChanged="ddlStatus_SelectedIndexChanged" CssClass="form-select form-select-sm app-filter">
+         <asp:ListItem Value="">All</asp:ListItem>
+         <asp:ListItem Value="Pending">Pending</asp:ListItem>
+         <asp:ListItem Value="Accepted">Accepted</asp:ListItem>
+         <asp:ListItem Value="Rejected">Rejected</asp:ListItem>
+         <asp:ListItem Value="Confirmed">Confirmed</asp:ListItem>
+     </asp:DropDownList>
+ </div>
                                 <asp:Label ID="lblCount" runat="server" CssClass="small-label" />
-                                <div class="d-flex align-items-center gap-2">
-                                    <label class="small-label mb-0" for="ddlStatus">Status</label>
-                                    <asp:DropDownList ID="ddlStatus" runat="server" ClientIDMode="Static" AutoPostBack="true"
-                                        OnSelectedIndexChanged="ddlStatus_SelectedIndexChanged" CssClass="form-select form-select-sm app-filter">
-                                        <asp:ListItem Value="">All</asp:ListItem>
-                                        <asp:ListItem Value="Pending">Pending</asp:ListItem>
-                                        <asp:ListItem Value="Accepted">Accepted</asp:ListItem>
-                                        <asp:ListItem Value="Rejected">Rejected</asp:ListItem>
-                                        <asp:ListItem Value="Confirmed">Confirmed</asp:ListItem>
-                                    </asp:DropDownList>
-                                </div>
+                               
                             </div>
 
                             <%-- applications table, pending first --%>
