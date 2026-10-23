@@ -25,11 +25,6 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
 
             RegisterAsyncTask(new PageAsyncTask(LoadProgressAsync));
         }
-            //AuthHelper.RequireAuth(this, AuthHelper.RoleAcademic);
-            //if (Response.IsRequestBeingRedirected) return;
-            //RegisterAsyncTask(new PageAsyncTask(LoadProgressAsync));
-        
-
         private async Task LoadProgressAsync()
         {
             try
@@ -42,6 +37,7 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
                 JObject tasks = await ReadTable("Tasks");
                 JObject submissions = await ReadTable("TaskSubmissions");
                 JObject evaluations = await ReadTable("FinalEvaluations");
+                JObject academicEvaluations = await ReadTable("AcademicEvaluations");
 
                 JToken supervisor = ResolveSupervisor(supervisors, ref supervisorId);
                 string supervisorMajor = supervisor == null ? null : (string)supervisor["Major"];
@@ -152,7 +148,10 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
                         Status = status,
                         Score = submission == null ? null : (string)submission["Score"],
                         MaxScore = (string)task.Value["MaxScore"],
-                        Feedback = submission == null ? null : (string)submission["Feedback"]
+                        Feedback = submission == null ? null : (string)submission["Feedback"],
+                        SubmissionId = submission == null ? null : latestSubmissions[task.Name].Parent is JProperty
+                            ? ((JProperty)latestSubmissions[task.Name].Parent).Name : null,
+                        AcademicFeedback = submission == null ? null : (string)submission["AcademicFeedback"]
                     });
                 }
 
@@ -180,6 +179,7 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
                     RequiredHours = RequiredTrainingHours,
                     SubmittedTasks = submittedTasks,
                     Tasks = taskData,
+                    FeedbackLocked = String.Equals((string)academicEvaluations[selected.Name]?["Status"], "Sent", StringComparison.OrdinalIgnoreCase),
                     CompanyStatus = companyStatus
                 }, new JsonSerializerSettings { StringEscapeHandling = StringEscapeHandling.EscapeHtml });
 
@@ -283,6 +283,77 @@ namespace UniversityInternshipManagmentSystem.Academic.StudentProgress
             catch (Exception ex) when (ex is HttpRequestException || ex is JsonException || ex is InvalidOperationException)
             {
                 lblNoteStatus.Text = "The note could not be saved. Try again.";
+            }
+        }
+
+        protected async void btnSaveTaskFeedback_Click(object sender, EventArgs e)
+        {
+            if (!AuthHelper.IsAuthenticated || AuthHelper.UserRole != AuthHelper.RoleAcademic)
+            {
+                lblTaskFeedbackStatus.Text = "Only an academic supervisor can save feedback.";
+                return;
+            }
+
+            string studentId = hidSelectedStudent.Value;
+            string submissionId = hidSubmissionId.Value;
+            string feedback = (txtTaskFeedback.Text ?? "").Trim();
+            if (String.IsNullOrWhiteSpace(studentId) || String.IsNullOrWhiteSpace(submissionId) || feedback.Length > 2000)
+            {
+                lblTaskFeedbackStatus.Text = "Select a task and enter feedback of up to 2,000 characters.";
+                return;
+            }
+
+            try
+            {
+                string supervisorId = Convert.ToString(Session["dbRecordId"] ?? Session["userId"]);
+                JObject supervisors = await ReadTable("AcademicSupervisors");
+                JToken supervisor = ResolveSupervisor(supervisors, ref supervisorId);
+                JObject students = await ReadTable("Students");
+                JToken student = students[studentId];
+                string supervisorMajor = ((string)supervisor?["Major"])?.Trim();
+                string studentMajor = ((string)student?["Major"])?.Trim();
+                if (student == null || String.IsNullOrWhiteSpace(supervisorMajor) ||
+                    !String.Equals((string)student["AcademicSupervisorId"], supervisorId, StringComparison.Ordinal) ||
+                    !String.Equals(studentMajor, supervisorMajor, StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("You cannot save feedback for this student.");
+
+                JObject academicEvaluations = await ReadTable("AcademicEvaluations");
+                if (String.Equals((string)academicEvaluations[studentId]?["Status"], "Sent", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("This academic evaluation has already been sent and is locked.");
+
+                JObject submissions = await ReadTable("TaskSubmissions");
+                JToken submission = submissions[submissionId];
+                string taskId = (string)submission?["TaskId"];
+                JObject tasks = await ReadTable("Tasks");
+                JArray studentIds = taskId == null ? null : tasks[taskId]?["StudentIds"] as JArray;
+                bool assigned = false;
+                if (studentIds != null)
+                    foreach (JToken id in studentIds)
+                        if (String.Equals((string)id, studentId, StringComparison.Ordinal)) { assigned = true; break; }
+                if (submission == null || (string)submission["StudentId"] != studentId || !assigned)
+                    throw new InvalidOperationException("This task submission is not available for this student.");
+
+                foreach (JProperty entry in submissions.Properties())
+                {
+                    if (entry.Name == submissionId || (string)entry.Value["StudentId"] != studentId ||
+                        (string)entry.Value["TaskId"] != taskId) continue;
+                    int version = (int?)entry.Value["Version"] ?? 0;
+                    int selectedVersion = (int?)submission["Version"] ?? 0;
+                    if (version > selectedVersion || (version == selectedVersion &&
+                        String.Compare((string)entry.Value["SubmittedAt"], (string)submission["SubmittedAt"], StringComparison.Ordinal) > 0))
+                        throw new InvalidOperationException("A newer submission is available. Reload the page and try again.");
+                }
+
+                bool saved;
+                using (HttpResponseMessage response = await FirebaseDb.Patch("TaskSubmissions", submissionId,
+                    new { AcademicFeedback = feedback, AcademicFeedbackAt = DateTime.UtcNow, AcademicFeedbackBy = supervisorId }))
+                    saved = response.IsSuccessStatusCode;
+                lblTaskFeedbackStatus.Text = saved ? "Academic task feedback saved." : "Could not save task feedback. Check Firebase permissions and try again.";
+                if (saved) await LoadProgressAsync();
+            }
+            catch (Exception ex) when (ex is HttpRequestException || ex is JsonException || ex is InvalidOperationException)
+            {
+                lblTaskFeedbackStatus.Text = ex is InvalidOperationException ? ex.Message : "Could not save task feedback. Try again.";
             }
         }
 
