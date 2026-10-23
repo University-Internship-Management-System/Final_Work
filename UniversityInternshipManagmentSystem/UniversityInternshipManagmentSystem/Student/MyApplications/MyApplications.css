@@ -1,5 +1,10 @@
 ﻿/* My Applications page */
 
+/* space between the page title and what comes under it */
+.uims-page-head {
+    margin-bottom: 24px;
+}
+
 .app-table-card {
     border: 1px solid var(--uims-border);
     border-radius: 16px;
@@ -97,3 +102,171 @@
     background-color: #FEE2E2;
     color: #B91C1C;
 }
+
+/* "Your training" card for the confirmed application */
+.confirmed-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin: 0 0 36px;
+    padding: 30px 32px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--uims-primary) 0%, var(--uims-accent) 100%);
+    color: #ffffff;
+    box-shadow: 0 14px 34px rgba(7, 82, 62, .25);
+}
+
+    /* two soft circles in the corner, just for decoration */
+    .confirmed-card::before,
+    .confirmed-card::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .08);
+        pointer-events: none;
+    }
+
+    .confirmed-card::before {
+        width: 240px;
+        height: 240px;
+        top: -110px;
+        right: -70px;
+    }
+
+    .confirmed-card::after {
+        width: 150px;
+        height: 150px;
+        bottom: -80px;
+        right: 140px;
+    }
+
+    /* keep the text above the circles */
+    .confirmed-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+/* the check mark on the left */
+.confirmed-icon {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, .45);
+    background: rgba(255, 255, 255, .18);
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.confirmed-body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.confirmed-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .75);
+}
+
+.confirmed-title {
+    margin: 4px 0 2px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.confirmed-company {
+    font-size: 15px;
+    color: rgba(255, 255, 255, .85);
+}
+
+/* "Training starts ..." */
+.confirmed-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 6px 14px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, .16);
+    font-size: 0.85rem;
+}
+
+.confirmed-pill {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 99px;
+    background: #ffffff;
+    color: var(--uims-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+    .confirmed-pill::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--uims-success);
+    }
+
+@media (max-width: 575px) {
+    .confirmed-card {
+        flex-wrap: wrap;
+        padding: 24px;
+    }
+}
+
+/* the other applications after a confirmed training: greyed out as history */
+.history-head {
+    margin: 0 0 14px;
+}
+
+    .history-head h5 {
+        font-weight: 700;
+        color: var(--uims-text);
+    }
+
+.app-history {
+    background-color: #FBFCFB;
+    box-shadow: none;
+}
+
+    .app-history .uims-app-table thead th {
+        background-color: #F1F4F3;
+        color: var(--uims-muted);
+    }
+
+    .app-history .uims-app-table tbody td,
+    .app-history .text-dark,
+    .app-history .text-secondary {
+        color: var(--uims-muted) !important;
+    }
+
+    .app-history .uims-app-table tbody tr:hover td {
+        background-color: transparent;
+    }
+
+    .app-history .text-danger {
+        color: var(--uims-muted) !important;
+        font-weight: 500 !important;
+    }
+
+    .app-history .badge-pending,
+    .app-history .badge-accepted,
+    .app-history .badge-confirmed,
+    .app-history .badge-rejected {
+        background-color: #EEF2F0;
+        color: var(--uims-muted);
+    }

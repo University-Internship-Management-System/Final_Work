@@ -96,7 +96,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     if (Request.QueryString["saved"] == "1")
                     {
                         savedPanel.Visible = true;
-                        savedMessage.Text = "Student saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]);
+                        savedMessage.Text = "Student saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]) + Notify.AccountMailMessage(Request.QueryString["mail"]);
                     }
                 }
             }
@@ -271,15 +271,65 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             else
             {
+<<<<<<< HEAD
                 try
                 {
                     var changes = new { student.Name, student.PhoneNumber, student.UniEmail, student.Major, student.GPA, student.AcademicSupervisorId };
                     using (var response = await FirebaseDb.Patch("Students", EditingId, changes))
+=======
+                ShowMessage("Enter " + phoneCountry.SelectedItem.Attributes["data-digits"] + " digits for " + phoneCountry.SelectedItem.Text
+                    + ", without the country code or leading zero. Check the mobile prefix too.");
+                return;
+            }
+            phone = phoneCountry.SelectedValue + phone;
+            AcademicSupervisor supervisor;
+            if (major == "" || !supervisors.TryGetValue(supervisorId, out supervisor)
+                || !String.Equals(supervisor.Major, major, StringComparison.OrdinalIgnoreCase))
+            {
+                PopulateSupervisors();
+                ShowMessage("Choose an academic supervisor with the same major before saving.");
+                return;
+            }
+            string id = EditingId;
+            if (id != null && !records.ContainsKey(id)) { ShowMessage("Student no longer exists."); return; }
+            if (records.Any(item => item.Key != id && (String.Equals(item.Value.Email, email, StringComparison.OrdinalIgnoreCase)
+                || String.Equals(item.Value.UniEmail, uniEmail, StringComparison.OrdinalIgnoreCase))))
+            {
+                ShowMessage("A student with this login or university email already exists.");
+                return;
+            }
+            string newAccountToken = null, verifyResult = null, mailResult = null;
+            try
+            {
+                if (id == null)
+                {
+                    if (temporaryPassword.Text.Length < 12) { ShowMessage("Generate a temporary password before saving."); return; }
+                    var auth = await AuthenticationRequest(AppConfig.SignUpUrl,
+                        new { email, password = temporaryPassword.Text, returnSecureToken = true });
+                    id = (string)auth["localId"];
+                    newAccountToken = (string)auth["idToken"];
+                    var student = new StudentModel
+                    {
+                        Name = name, Email = email, Role = "Student", FirstLogin = true,
+                        PhoneNumber = phone, UniEmail = uniEmail, Major = major,
+                        AcademicSupervisorId = supervisorId, GPA = grade,
+                        CompanyId = "", ProfilePicUrl = "", CvUrl = "", PortfolioUrl = ""
+                    };
+                    using (var response = await FirebaseDb.Put("Students", id, student))
+                        if (!response.IsSuccessStatusCode) throw new HttpRequestException();
+                    verifyResult = await EmailVerification.RequireAndSend("Students", id, newAccountToken);
+                    mailResult = await Notify.AccountCreated(name, "student", email, temporaryPassword.Text);
+                }
+                else
+                {
+                    var changes = new { Name = name, PhoneNumber = phone, UniEmail = uniEmail, Major = major, GPA = grade, AcademicSupervisorId = supervisorId };
+                    using (var response = await FirebaseDb.Patch("Students", id, changes))
+>>>>>>> 013cfa62b01afef7273f8a4c3184ca9e0140d5b0
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                 }
                 catch { ShowMessage("Could not save the student. Check the connection and database permissions."); return; }
             }
-            Response.Redirect("ManageStudents.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult), false);
+            Response.Redirect("ManageStudents.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult) + (mailResult == null ? "" : "&mail=" + mailResult), false);
             Context.ApplicationInstance.CompleteRequest();
         }
 
