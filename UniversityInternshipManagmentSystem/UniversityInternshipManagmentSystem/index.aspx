@@ -1,5 +1,6 @@
-﻿<%@ Page Title="University Internship Management System" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" CodeBehind="index.aspx.cs" Inherits="UniversityInternshipManagmentSystem.PublicHome" %>
-<asp:Content ID="HomeHead" ContentPlaceHolderID="HeadContent" runat="server"><link href="<%= ResolveUrl("~/Content/uims.css") %>" rel="stylesheet" /><link href="<%= ResolveUrl("~/Content/student-guide.css") %>" rel="stylesheet" /></asp:Content>
+<%@ Page Title="University Internship Management System" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" CodeBehind="index.aspx.cs" Inherits="UniversityInternshipManagmentSystem.PublicHome" %>
+<asp:Content ID="HomeHead" ContentPlaceHolderID="HeadContent" runat="server"><link href="<%= ResolveUrl("~/Content/uims.css") %>" rel="stylesheet" /><link href="<%= ResolveUrl("~/Content/student-guide.css") %>" rel="stylesheet" />    <link href="<%= ResolveUrl("~/Content/index-text-reveal.css") %>" rel="stylesheet" />
+</asp:Content>
 <asp:Content ID="HomeBody" ContentPlaceHolderID="MainContent" runat="server">
 <!-- Top Scroll Progress Bar -->
     <div class="uims-scroll-progress" id="scrollProgress" aria-hidden="true"></div>
@@ -917,6 +918,8 @@
                 <div class="d-flex align-items-center gap-3">
                     <a href="<%= ResolveUrl("~/Contact.aspx") %>" class="text-light">Contact Us</a>
                     <span>&bull;</span>
+                    <a href="<%= ResolveUrl("~/PoweredBy/PoweredBy.aspx") %>" class="text-light">Powered by</a>
+                    <span>&bull;</span>
                     <a href="<%: DashboardHref %>" class="text-light"><%: IsSignedIn ? "My Dashboard" : "Sign In Portal" %></a>
                 </div>
             </div>
@@ -934,6 +937,7 @@
     <!-- UIMS Unified Interactive Scripts -->
     <script src="<%= ResolveUrl("~/Scripts/uims.js") %>"></script>
     <script src="<%= ResolveUrl("~/Scripts/student-guide.js") %>"></script>
+    <script src="<%= ResolveUrl("~/Scripts/index-text-reveal.js") %>"></script>
 
         
 </asp:Content>
