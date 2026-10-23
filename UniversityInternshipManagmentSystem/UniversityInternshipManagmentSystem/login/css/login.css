@@ -405,3 +405,155 @@ body.uims-auth .uims-footer a:hover { color: #fff; text-decoration: underline; }
     .auth-blob, .auth-card { animation: none; }
     .btn-uj-primary, .auth-card .input-group, .pw-meter span { transition: none; }
 }
+
+
+/* Hide About KASIT and Login Portal on login / auth pages */
+body.uims-auth .uims-footer a[href*="About"],
+body.uims-auth .uims-footer a[href*="Login"] {
+    display: none !important;
+}
+
+
+/* ==========================================================================
+   Full-Space 100vh Layout (Spacious, Prominent Dimensions, Zero-Scroll)
+   ========================================================================== */
+html:has(body.uims-auth),
+html,
+body.uims-auth {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+}
+
+body.uims-auth form#form1 {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+body.uims-auth main {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+}
+
+body.uims-auth .auth-wrap {
+    height: 100%;
+    width: 100%;
+    padding: clamp(14px, 2.5vh, 32px) 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+body.uims-auth .auth-card {
+    width: min(430px, 94vw) !important;
+    max-width: 450px !important;
+    min-height: min(710px, calc(100vh - 110px));
+    padding: clamp(30px, 4.2vh, 46px) clamp(32px, 4vw, 52px) !important;
+    border-radius: 28px !important;
+    box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.44),
+        0 0 0 1px rgba(255, 255, 255, 0.55) inset !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+body.uims-auth .auth-logo {
+    width: clamp(70px, 8.5vh, 84px) !important;
+    height: clamp(70px, 8.5vh, 84px) !important;
+    padding: 10px !important;
+    border-radius: 50% !important;
+    box-shadow: 0 12px 28px rgba(7, 82, 62, 0.22), 0 0 0 5px var(--auth-mint) !important;
+    margin-bottom: clamp(10px, 1.5vh, 16px) !important;
+}
+
+body.uims-auth .auth-brand {
+    text-align: center;
+    margin-bottom: clamp(16px, 2.5vh, 28px) !important;
+}
+
+body.uims-auth .auth-eyebrow {
+    font-size: 0.74rem !important;
+    letter-spacing: 0.14em !important;
+    padding: 6px 14px !important;
+    margin-bottom: clamp(8px, 1.2vh, 12px) !important;
+}
+
+body.uims-auth .auth-title {
+    font-size: clamp(1.6rem, 2.6vh, 1.95rem) !important;
+    font-weight: 800 !important;
+    color: var(--auth-green-dark) !important;
+    margin: 0 0 6px !important;
+}
+
+body.uims-auth .auth-sub {
+    font-size: clamp(0.85rem, 1.3vh, 0.94rem) !important;
+    line-height: 1.55 !important;
+    color: var(--auth-muted) !important;
+}
+
+body.uims-auth .auth-card .mb-3 {
+    margin-bottom: clamp(14px, 2.2vh, 22px) !important;
+}
+
+body.uims-auth .auth-card .form-label {
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    color: var(--auth-text) !important;
+    margin-bottom: 7px !important;
+}
+
+body.uims-auth .btn-forgot-password {
+    font-size: 0.85rem !important;
+}
+
+body.uims-auth .auth-card .input-group {
+    border-radius: 14px !important;
+}
+
+body.uims-auth .auth-card .input-group .form-control {
+    padding: clamp(12px, 1.8vh, 15px) 16px !important;
+    font-size: 0.98rem !important;
+}
+
+body.uims-auth .auth-card .input-group .input-group-text {
+    padding-left: 18px !important;
+    padding-right: 6px !important;
+    font-size: 1.15rem !important;
+}
+
+body.uims-auth .auth-card .d-grid.mt-4 {
+    margin-top: clamp(18px, 2.8vh, 28px) !important;
+}
+
+body.uims-auth .btn-uj-primary {
+    padding: clamp(13px, 2vh, 16px) 24px !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    border-radius: 14px !important;
+}
+
+body.uims-auth .auth-secure {
+    margin-top: clamp(14px, 2vh, 22px) !important;
+    font-size: 0.82rem !important;
+    gap: 8px !important;
+}
+
+body.uims-auth .auth-secure i {
+    font-size: 1rem !important;
+}
+
+body.uims-auth .uims-footer {
+    flex: 0 0 auto !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    font-size: 0.86rem !important;
+}

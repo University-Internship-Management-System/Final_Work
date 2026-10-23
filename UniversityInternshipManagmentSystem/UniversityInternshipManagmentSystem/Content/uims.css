@@ -620,3 +620,352 @@ html[dir="ltr"] .dash-nav-link.active {
 .uims-hero-watermark{background-image:linear-gradient(105deg,rgba(3,25,21,.32) 0%,rgba(3,25,21,.32) 42%,rgba(255,255,255,.16) 46%,rgba(255,255,255,.49) 50%,rgba(255,255,255,.16) 54%,rgba(3,25,21,.32) 58%,rgba(3,25,21,.32) 100%)}
 @media(prefers-reduced-motion:reduce){.uims-hero-watermark{background-image:none;color:rgba(3,25,21,.32)}}
 
+
+
+/* ==========================================================================
+   UIMS Motion Design & Interaction System
+   - Preserves 100% of original visual styles, layouts, colors, and typography
+   - Restrained, GPU-accelerated entrance and scroll reveals
+   - Subtle interactive hover and focus states
+   - Full RTL compatibility and accessibility (prefers-reduced-motion)
+   ========================================================================== */
+
+/* 1. Entrance & Scroll Reveal Animations */
+.reveal,
+.reveal-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+[dir="rtl"] .reveal-left {
+    transform: translateX(24px);
+}
+
+[dir="rtl"] .reveal-right {
+    transform: translateX(-24px);
+}
+
+.reveal.is-revealed,
+.reveal-up.is-revealed,
+.reveal-left.is-revealed,
+.reveal-right.is-revealed {
+    opacity: 1 !important;
+    transform: translate(0, 0) !important;
+}
+
+/* 2. Sticky Navbar State Change & Scrollspy */
+.uims-navbar-wrapper {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.uims-nav-container {
+    transition: min-height 0.3s ease;
+}
+
+.uims-navbar-wrapper.navbar-scrolled {
+    background: #07523E !important;
+    box-shadow: 0 4px 20px rgba(4, 56, 45, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.uims-navbar-wrapper.navbar-scrolled .uims-nav-container {
+    min-height: 68px;
+}
+
+.uims-nav-link {
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.uims-nav-link.active {
+    color: #38e4b3 !important;
+    font-weight: 700;
+}
+
+/* 3. Parallax Elements */
+.uims-hero-bg {
+    will-change: transform;
+    transition: transform 0.05s linear;
+}
+
+.uims-identity-visual img {
+    will-change: transform;
+    transition: transform 0.1s linear;
+}
+
+/* 4. Timeline / Guide Progress Line & Step Activation */
+.uims-guide-steps {
+    position: relative;
+}
+
+.uims-guide-steps::before {
+    content: "";
+    position: absolute;
+    left: 23px;
+    top: 24px;
+    bottom: 50px;
+    width: 2px;
+    background: #c8ded2;
+    z-index: 0;
+}
+
+.uims-guide-steps::after {
+    content: "";
+    position: absolute;
+    left: 23px;
+    top: 24px;
+    height: var(--guide-progress, 0%);
+    max-height: calc(100% - 74px);
+    width: 2px;
+    background: #07523E;
+    z-index: 1;
+    transition: height 0.2s ease-out;
+}
+
+[dir="rtl"] .uims-guide-steps::before,
+[dir="rtl"] .uims-guide-steps::after {
+    left: auto;
+    right: 23px;
+}
+
+.uims-guide-step {
+    position: relative;
+    z-index: 2;
+    opacity: 0.55;
+    transform: translateX(12px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+[dir="rtl"] .uims-guide-step {
+    transform: translateX(-12px);
+}
+
+.uims-guide-step.is-active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.uims-guide-number {
+    position: relative;
+    z-index: 3;
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.uims-guide-step.is-active .uims-guide-number {
+    background: #07523E;
+    color: #ffffff;
+    border-color: #07523E;
+    box-shadow: 0 4px 14px rgba(7, 82, 62, 0.3);
+    transform: scale(1.05);
+}
+
+/* 5. Interactive Motion: Subtle Hover and Focus States */
+.uims-stat-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.uims-stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.uims-role-card {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.uims-role-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(4, 56, 45, 0.12);
+}
+
+.uims-role-card .uims-role-link i {
+    transition: transform 0.2s ease;
+}
+
+.uims-role-card:hover .uims-role-link i {
+    transform: translateX(4px);
+}
+
+[dir="rtl"] .uims-role-card:hover .uims-role-link i {
+    transform: translateX(-4px);
+}
+
+.uims-job-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: uims-card-fadein 0.35s ease-out;
+}
+
+@keyframes uims-card-fadein {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.uims-job-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(4, 56, 45, 0.1);
+}
+
+.uims-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.uims-card:hover {
+    transform: translateY(-3px);
+}
+
+.uims-arrow-btn {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.uims-arrow-btn:hover:not(:disabled) {
+    transform: scale(1.06);
+}
+
+.uims-arrow-btn:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+.uims-btn i {
+    transition: transform 0.2s ease;
+}
+
+.uims-btn:hover i {
+    transform: translateX(3px);
+}
+
+[dir="rtl"] .uims-btn:hover i {
+    transform: translateX(-3px);
+}
+
+.uims-back-to-top {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px) scale(0.9);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background-color 0.2s ease;
+}
+
+.uims-back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.uims-back-to-top:hover {
+    transform: translateY(-3px) scale(1.08);
+    background: #178568;
+}
+
+/* 6. FAQ Accordion Smooth Height Animation & Plus Icon Rotation */
+.uims-accordion-collapse {
+    display: grid !important;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.uims-accordion-item.open .uims-accordion-collapse {
+    grid-template-rows: 1fr;
+}
+
+.uims-accordion-body {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.uims-accordion-icon {
+    transition: transform 0.25s ease;
+}
+
+.uims-accordion-item.open .uims-accordion-icon {
+    transform: rotate(45deg);
+}
+
+/* 7. Micro-Animations: Scroll Wheel & Top Progress Bar */
+@keyframes uims-wheel-bounce {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateY(5px);
+        opacity: 0.3;
+    }
+}
+
+.uims-scroll-wheel {
+    animation: uims-wheel-bounce 1.8s ease-in-out infinite;
+}
+
+.uims-scroll-progress {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 3px;
+    background: #178568 !important;
+    z-index: 100;
+    width: 0;
+    transition: width 0.08s ease-out;
+}
+
+/* 8. Accessibility: Strict Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    html {
+        scroll-behavior: auto !important;
+    }
+    .reveal,
+    .reveal-up,
+    .reveal-left,
+    .reveal-right {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .uims-guide-step {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .uims-stat-card:hover,
+    .uims-role-card:hover,
+    .uims-job-card:hover,
+    .uims-card:hover,
+    .uims-arrow-btn:hover,
+    .uims-back-to-top:hover,
+    .uims-btn:hover {
+        transform: none !important;
+    }
+    .uims-scroll-wheel {
+        animation: none !important;
+    }
+    .uims-hero-bg,
+    .uims-identity-visual img {
+        transform: none !important;
+    }
+}
