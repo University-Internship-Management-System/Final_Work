@@ -357,6 +357,10 @@
     <Content Include="Shared\Sidebar.ascx" />
     <Content Include="Shared\uims.css" />
     <Content Include="Content\uims.css" />
+    <Content Include="Content\student-guide.css" />
+    <Content Include="Scripts\student-guide.js" />
+    <Content Include="Assets\PublicHome\student-guide.mp4" />
+    <Content Include="Assets\PublicHome\student-guide-poster.jpg" />
     <Content Include="Scripts\uims.js" />
     <Content Include="Site.Master" />
     <Content Include="Student\ApplicationForm\ApplicationForm.aspx" />
