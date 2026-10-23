@@ -1,4 +1,4 @@
-<%@ Page Title="My Profile" Language="C#" ResponseEncoding="utf-8" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" Async="true" AsyncTimeout="90" CodeBehind="Profile.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Student.StudentProfilePage.Profile" %>
+﻿<%@ Page Title="My Profile" Language="C#" ResponseEncoding="utf-8" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" Async="true" AsyncTimeout="90" CodeBehind="Profile.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Student.StudentProfilePage.Profile" %>
 <%@ Import Namespace="System.Linq" %>
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl("~/Student/Content/Student.css") %>" />
