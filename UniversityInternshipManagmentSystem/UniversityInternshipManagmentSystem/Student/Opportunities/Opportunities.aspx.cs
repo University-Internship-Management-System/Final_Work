@@ -82,8 +82,8 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                 // hide opportunities of deactivated companies
                 all = await RemoveDeactivatedCompaniesAsync(all);
 
-                // show the company's current name, the one saved in the opportunity can be old
-                await UseCurrentCompanyNamesAsync(all);
+                // show the company's current name and location, the ones saved in the opportunity can be old
+                await UseCurrentCompanyInfoAsync(all);
 
                 // company dropdown
                 ddlCompany.Items.Clear();
@@ -147,9 +147,9 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
             }
         }
 
-        // takes the name from the company's profile (by CompanyId),
-        // if the profile can't be read the saved name stays
-        private static async Task UseCurrentCompanyNamesAsync(List<Opportunity> opportunities)
+        // takes the name and location from the company's profile (by CompanyId),
+        // if the profile can't be read (or a field is empty) the saved one stays
+        private static async Task UseCurrentCompanyInfoAsync(List<Opportunity> opportunities)
         {
             try
             {
@@ -161,15 +161,15 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                     if (opp.CompanyId == null || !companies.ContainsKey(opp.CompanyId)) continue;
 
                     CompanySupervisor company = companies[opp.CompanyId];
-                    if (company != null && !string.IsNullOrWhiteSpace(company.CompanyName))
-                    {
-                        opp.CompanyName = company.CompanyName;
-                    }
+                    if (company == null) continue;
+
+                    if (!string.IsNullOrWhiteSpace(company.CompanyName)) opp.CompanyName = company.CompanyName;
+                    if (!string.IsNullOrWhiteSpace(company.Location)) opp.Location = company.Location;
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Could not read the company names: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not read the company info: " + ex.Message);
             }
         }
 
@@ -236,13 +236,9 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                 }
 
                 // used by Opportunities.js for the search and the company filter
-                string majorsText = "";
-                if (opp.Majors != null)
-                {
-                    majorsText = string.Join(" ", opp.Majors);
-                }
                 string companyKey = Encode((opp.CompanyName ?? "").Trim().ToLowerInvariant());
-                string searchText = Encode((opp.Title + " " + opp.CompanyName + " " + opp.Description + " " + opp.Location + " " + majorsText).ToLowerInvariant());
+                // the search box only looks at the title, the description and the location
+                string searchText = Encode((opp.Title + " " + opp.Description + " " + opp.Location).ToLowerInvariant());
 
                 html.Append($@"
                 <div class='col-md-6 opp-item' data-company='{companyKey}' data-search='{searchText}'>

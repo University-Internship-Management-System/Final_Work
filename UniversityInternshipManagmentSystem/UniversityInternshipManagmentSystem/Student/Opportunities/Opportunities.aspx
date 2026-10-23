@@ -48,7 +48,7 @@
                             <div class="row g-3 align-items-end">
                                 <div class="col-md-6">
                                     <label class="small-label mb-1" for="txtSearch">Search</label>
-                                    <asp:TextBox ID="txtSearch" runat="server" ClientIDMode="Static" CssClass="form-control" placeholder="Title, company or keyword" />
+                                    <asp:TextBox ID="txtSearch" runat="server" ClientIDMode="Static" CssClass="form-control" placeholder="Title, keyword or location" />
                                 </div>
                                 <div class="col-md-3">
                                     <label class="small-label mb-1" for="<%= ddlCompany.ClientID %>">Company</label>

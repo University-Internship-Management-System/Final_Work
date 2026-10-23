@@ -1,58 +1,99 @@
 ﻿/* My Applications page */
 
 .app-table-card {
-    border: 1px solid #e9ecef;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--uims-border);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(7, 82, 62, .06);
     background-color: #ffffff;
 }
 
-.uims-app-table thead th {
-    background-color: #f8f9fa;
-    color: #495057;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid #dee2e6;
-    padding: 12px 16px;
+/* separate borders so the header corners can be rounded */
+.uims-app-table {
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
+/* light green header with rounded ends */
+.uims-app-table thead th {
+    background-color: var(--uims-mint);
+    color: var(--uims-primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-bottom: none;
+    padding: 12px 16px;
+    white-space: nowrap;
+}
+
+    .uims-app-table thead th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .uims-app-table thead th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+
 .uims-app-table tbody td {
-    padding: 14px 16px;
-    border-bottom: 1px solid #f1f3f5;
+    padding: 16px;
+    border-bottom: 1px solid #EEF2F0;
     font-size: 0.92rem;
+    transition: background-color .15s;
 }
 
 .uims-app-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-.uims-app-table tbody tr:hover {
-    background-color: #fdfdfd;
+.uims-app-table tbody tr:hover td {
+    background-color: #F5FAF7;
 }
 
-/* status badges */
+.uims-app-table .btn-sm {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: .3rem .85rem;
+}
+
+/* status badges, a pill with a small dot */
+.badge-pending,
+.badge-accepted,
+.badge-confirmed,
+.badge-rejected {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    border: none;
+}
+
+    .badge-pending::before,
+    .badge-accepted::before,
+    .badge-confirmed::before,
+    .badge-rejected::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
 .badge-pending {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
+    background-color: #FEF3C7;
+    color: #B45309;
 }
 
 .badge-accepted {
-    background-color: #cce5ff;
-    color: #004085;
-    border: 1px solid #b8daff;
+    background-color: #DBEAFE;
+    color: #1D4ED8;
 }
 
 .badge-confirmed {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background-color: #DCFCE7;
+    color: #15803D;
 }
 
 .badge-rejected {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background-color: #FEE2E2;
+    color: #B91C1C;
 }

@@ -1,46 +1,192 @@
 ﻿/* ManageOpportunities.css */
 
+#btnAddOpportunity {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: .55rem 1.1rem;
+    box-shadow: 0 4px 12px rgba(7, 82, 62, .18);
+}
+
 .opp-table-card {
-    border: 1px solid #e9ecef;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--uims-border);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(7, 82, 62, .06);
     background-color: #ffffff;
 }
 
+/* separate borders so the header corners can be rounded */
+.uims-opp-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* light green header with rounded ends */
 .uims-opp-table thead th {
-    background-color: #f8f9fa;
-    color: #495057;
-    font-size: 0.85rem;
+    background-color: var(--uims-mint);
+    color: var(--uims-primary);
+    font-size: 0.78rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid #dee2e6;
+    letter-spacing: 0.6px;
+    border-bottom: none;
     padding: 12px 16px;
+    white-space: nowrap;
 }
+
+    .uims-opp-table thead th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .uims-opp-table thead th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
 
 .uims-opp-table tbody td {
-    padding: 14px 16px;
-    border-bottom: 1px solid #f1f3f5;
+    padding: 16px;
+    border-bottom: 1px solid #EEF2F0;
     font-size: 0.92rem;
+    transition: background-color .15s;
 }
 
-.uims-opp-table tbody tr:hover {
-    background-color: #fdfdfd;
-}
-/* majors checkboxes */
-.majors-checkbox-list label {
-    margin-left: 8px;
-    margin-right: 20px;
-    font-weight: 500;
-    color: #333;
-    cursor: pointer;
+.uims-opp-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
-.majors-checkbox-list input[type="checkbox"] {
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
+.uims-opp-table tbody tr:hover td {
+    background-color: #F5FAF7;
 }
+
+.uims-opp-table .btn-sm {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: .3rem .8rem;
+}
+
+/* seats "1 of 3" */
+.uims-opp-table .badge.bg-light {
+    background-color: var(--uims-mint) !important;
+    color: var(--uims-primary) !important;
+    border-color: transparent !important;
+    font-weight: 600;
+}
+
+/* status pills: soft color with a small dot */
+.uims-opp-table .badge.bg-success,
+.uims-opp-table .badge.bg-danger,
+.uims-opp-table .badge.bg-warning {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+    .uims-opp-table .badge.bg-success::before,
+    .uims-opp-table .badge.bg-danger::before,
+    .uims-opp-table .badge.bg-warning::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+.uims-opp-table .badge.bg-success {
+    background-color: #DCFCE7 !important;
+    color: #15803D !important;
+}
+
+.uims-opp-table .badge.bg-danger {
+    background-color: #FEE2E2 !important;
+    color: #B91C1C !important;
+}
+
+.uims-opp-table .badge.bg-warning {
+    background-color: #FEF3C7 !important;
+    color: #B45309 !important;
+}
+
+/* add / edit popup */
+#opportunityModal .modal-content {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(4, 56, 45, .25);
+}
+
+#opportunityModal .form-label {
+    font-weight: 600;
+    color: var(--uims-text);
+}
+
+#opportunityModal .form-control {
+    padding: .6rem .85rem;
+}
+
+#opportunityModal .form-control[readonly] {
+    background-color: #F4F8F6 !important;
+    border-color: #E6EEEA;
+    color: #4B5F57;
+    cursor: not-allowed;
+}
+
+#opportunityModal .modal-footer .btn {
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+/* majors checkboxes as chips you click */
+.majors-checkbox-list {
+    background-color: #F8FBF9 !important;
+    border-color: #E6EEEA !important;
+}
+
+    .majors-checkbox-list br {
+        display: none;
+    }
+
+    .majors-checkbox-list input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+    }
+
+    .majors-checkbox-list label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0 8px 8px 0;
+        padding: 6px 14px;
+        border: 1px solid var(--uims-border);
+        border-radius: 99px;
+        background: #ffffff;
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: var(--uims-text);
+        cursor: pointer;
+        user-select: none;
+        transition: background-color .15s, border-color .15s, color .15s;
+    }
+
+        .majors-checkbox-list label:hover {
+            border-color: var(--uims-accent);
+        }
+
+    .majors-checkbox-list input[type="checkbox"]:checked + label {
+        background: var(--uims-mint);
+        border-color: var(--uims-accent);
+        color: var(--uims-primary);
+        font-weight: 600;
+    }
+
+        .majors-checkbox-list input[type="checkbox"]:checked + label::before {
+            content: "\2713";
+            font-weight: 700;
+        }
+
+    .majors-checkbox-list input[type="checkbox"]:focus-visible + label {
+        outline: 2px solid var(--uims-accent);
+        outline-offset: 2px;
+    }
 
 .major-item {
     display: inline-block;

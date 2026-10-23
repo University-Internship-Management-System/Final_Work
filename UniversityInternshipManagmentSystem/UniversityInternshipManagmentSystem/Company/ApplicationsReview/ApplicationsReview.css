@@ -1,27 +1,100 @@
 ﻿/* ApplicationsReview.css */
 
 .app-table-card {
-    border: 1px solid #e9ecef;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--uims-border);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(7, 82, 62, .06);
     background-color: #ffffff;
 }
 
-.uims-app-table thead th {
-    background-color: #f8f9fa;
-    color: #495057;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid #dee2e6;
-    padding: 12px 16px;
+/* separate borders so the header corners can be rounded */
+.uims-app-table {
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
+/* light green header with rounded ends */
+.uims-app-table thead th {
+    background-color: var(--uims-mint);
+    color: var(--uims-primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-bottom: none;
+    padding: 12px 16px;
+    white-space: nowrap;
+}
+
+    .uims-app-table thead th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .uims-app-table thead th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+
 .uims-app-table tbody td {
-    padding: 14px 16px;
-    border-bottom: 1px solid #f1f3f5;
+    padding: 16px;
+    border-bottom: 1px solid #EEF2F0;
     font-size: 0.92rem;
+    transition: background-color .15s;
+}
+
+.uims-app-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.uims-app-table tbody tr:hover td {
+    background-color: #F5FAF7;
+}
+
+.uims-app-table .btn-sm {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: .3rem .95rem;
+}
+
+/* status pills in the table and the popup: soft color with a small dot */
+.uims-app-table .badge,
+#applicationModal .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+    .uims-app-table .badge::before,
+    #applicationModal .badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+.uims-app-table .badge.bg-success,
+#applicationModal .badge.bg-success {
+    background-color: #DCFCE7 !important;
+    color: #15803D !important;
+}
+
+.uims-app-table .badge.bg-primary,
+#applicationModal .badge.bg-primary {
+    background-color: #DBEAFE !important;
+    color: #1D4ED8 !important;
+}
+
+.uims-app-table .badge.bg-danger,
+#applicationModal .badge.bg-danger {
+    background-color: #FEE2E2 !important;
+    color: #B91C1C !important;
+}
+
+.uims-app-table .badge.bg-warning,
+#applicationModal .badge.bg-warning {
+    background-color: #FEF3C7 !important;
+    color: #B45309 !important;
 }
 
 /* status filter */
@@ -31,39 +104,197 @@
 }
 
 /* application popup */
-.app-section-title {
+#applicationModal .modal-content {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(4, 56, 45, .25);
+}
+
+#applicationModal .modal-header {
+    background-color: #F5FAF7;
+    border-bottom: 1px solid var(--uims-border);
+}
+
+#applicationModal .modal-title {
+    color: var(--uims-primary);
+}
+
+#applicationModal .btn {
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+#applicationModal .modal-body {
+    padding: 20px 22px;
+}
+
+/* top box: student name, what they applied for, status */
+.app-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    background: #F5FAF7;
+    border: 1px solid #E3EFE9;
+    border-radius: 14px;
+    padding: 16px 18px;
+}
+
+.app-student {
+    font-size: 1.35rem;
     font-weight: 700;
-    border-bottom: 1px solid #e9ecef;
-    padding-bottom: 6px;
-    margin-bottom: 12px;
+    line-height: 1.2;
+    color: var(--uims-text);
+}
+
+.app-applied {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: var(--uims-muted);
+}
+
+    .app-applied strong {
+        color: var(--uims-text);
+    }
+
+/* the note for answered applications, e.g. "The student confirmed..." */
+.app-next-step {
+    display: block;
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-left: 4px solid var(--uims-accent);
+    border-radius: 10px;
+    background: var(--uims-mint);
+    color: var(--uims-text);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.app-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--uims-primary);
+    margin: 22px 0 10px;
+}
+
+    .app-section-title::before {
+        content: "";
+        width: 4px;
+        height: 16px;
+        border-radius: 4px;
+        background: var(--uims-accent);
+    }
+
+/* one box per field, so the values line up */
+.app-tile {
+    height: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--uims-border);
+    border-radius: 12px;
+    background: #ffffff;
+    font-size: 0.95rem;
+    color: var(--uims-text);
+    overflow-wrap: anywhere;
 }
 
 .app-field-label {
     display: block;
-    font-size: 0.8rem;
-    color: #6c757d;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--uims-muted);
+    margin-bottom: 3px;
+}
+
+/* CV and portfolio as buttons */
+.app-doc {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .45rem 1rem;
+    border: 1px solid var(--uims-accent);
+    border-radius: 10px;
+    color: var(--uims-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color .15s;
+}
+
+    .app-doc:hover {
+        background: var(--uims-mint);
+        color: var(--uims-primary);
+    }
+
+    .app-doc[href]::after {
+        content: "\2197";
+    }
+
+    /* "No CV link": not a link */
+    .app-doc:not([href]) {
+        border-color: var(--uims-border);
+        background: #F8FAF9;
+        color: var(--uims-muted);
+        font-weight: 500;
+        cursor: default;
+    }
+
+.app-question {
+    font-size: 0.85rem;
+    color: var(--uims-muted);
+    margin-bottom: 6px;
 }
 
 /* keep the line breaks in the cover letter */
 .app-cover {
     white-space: pre-wrap;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 10px 12px;
+    background-color: #F5FAF7;
+    border-left: 4px solid var(--uims-accent);
+    border-radius: 10px;
+    padding: 12px 14px;
     font-size: 0.92rem;
+    line-height: 1.55;
     margin-bottom: 0;
 }
 
-/* accept on the left, reason and reject on the right */
+/* Accept and Reject next to each other, the reason box only after Reject */
 .app-decision {
+    margin-top: 22px;
+    padding: 14px;
+    border: 1px solid var(--uims-border);
+    border-radius: 12px;
+    background: #F8FAF9;
+}
+
+.app-decision-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
 }
 
-.app-reject {
-    display: flex;
-    gap: 8px;
-    flex: 1 1 280px;
+.app-decision-label {
+    font-weight: 600;
+    color: var(--uims-text);
 }
+
+.app-decision-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+#rejectBox .app-decision-buttons {
+    margin-top: 12px;
+}
+
+    .app-decision-buttons .btn {
+        min-width: 100px;
+    }

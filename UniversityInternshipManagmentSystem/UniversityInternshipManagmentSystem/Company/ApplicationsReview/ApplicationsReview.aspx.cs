@@ -295,6 +295,9 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
                 return;
             }
 
+            // if the reject fails the popup opens again, so keep the reason box open too
+            ClientScript.RegisterStartupScript(GetType(), "OpenRejectBox", "window.openRejectBox = true;", true);
+
             // reject needs a reason, the student sees it in My Applications
             string reason = txtReason.Text.Trim();
             if (reason == "")

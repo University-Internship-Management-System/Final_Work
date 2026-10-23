@@ -9,26 +9,74 @@
     margin-bottom: 24px;
 }
 
-
-/* majors badges */
-.opp-card .badge {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 8px;
+/* "X opportunities" counter */
+#lblCount {
+    background: var(--uims-mint);
+    color: var(--uims-primary);
+    font-weight: 600;
+    border-radius: 99px;
+    padding: 5px 14px;
 }
 
+    #lblCount:empty {
+        display: none;
+    }
+
+/* search bar */
+.uims-content > .card.mb-4 {
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(7, 82, 62, .05);
+}
+
+    .uims-content > .card.mb-4 .form-control,
+    .uims-content > .card.mb-4 .form-select {
+        padding-top: .55rem;
+        padding-bottom: .55rem;
+    }
+
+    .uims-content > .card.mb-4 .btn {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+/* the card */
 .opp-card {
-    transition: box-shadow .15s, transform .15s;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--uims-border);
+    box-shadow: 0 2px 8px rgba(7, 82, 62, .04);
+    transition: box-shadow .2s, transform .2s, border-color .2s;
 }
+
+    /* thin green line on top */
+    .opp-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--uims-primary), var(--uims-accent));
+    }
 
     .opp-card:hover {
-        box-shadow: 0 8px 22px rgba(7, 82, 62, .10);
-        transform: translateY(-2px);
+        border-color: #CFE3DA;
+        box-shadow: 0 12px 28px rgba(7, 82, 62, .12);
+        transform: translateY(-3px);
+    }
+
+    .opp-card .card-title {
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--uims-text);
     }
 
 .opp-company {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
     color: var(--uims-accent);
 }
 
@@ -38,12 +86,62 @@
 }
 
 .opp-desc {
-    color: var(--uims-text);
+    color: var(--uims-muted);
     font-size: 14px;
+    line-height: 1.55;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+/* majors chips */
+.opp-card .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 8px;
+}
+
+    .opp-card .badge.bg-light {
+        background-color: var(--uims-mint) !important;
+        color: var(--uims-primary) !important;
+        border: 1px solid #D5E9DF !important;
+        padding: 5px 10px;
+    }
+
+/* deadline and training start lines */
+.opp-card .text-muted.small {
+    color: var(--uims-text) !important;
+}
+
+    .opp-card .text-muted.small .bi {
+        color: var(--uims-accent);
+        margin-right: 2px;
+    }
+
+/* bottom row: seats, then Apply or a label */
+.opp-card .border-top {
+    border-color: #EEF2F0 !important;
+}
+
+.opp-card .btn-primary {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: .35rem 1.2rem;
+}
+
+.opp-card .badge.bg-secondary {
+    background-color: #EEF2F0 !important;
+    color: var(--uims-text) !important;
+    font-weight: 600;
+    padding: 6px 12px;
+}
+
+.opp-card .badge.bg-danger {
+    background-color: #FEE2E2 !important;
+    color: #B91C1C !important;
+    font-weight: 600;
+    padding: 6px 12px;
 }
 
 .opp-tag {
@@ -51,9 +149,9 @@
     background: var(--uims-mint);
     color: var(--uims-primary);
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
     border-radius: 99px;
-    padding: .3em .8em;
+    padding: .35em .9em;
 }
 
 .opp-empty {
