@@ -24,8 +24,8 @@
             <asp:Panel ID="editorNotice" runat="server" CssClass="student-notice student-error" Visible="false" role="alert"><asp:Literal ID="editorMessage" Mode="Encode" runat="server" /></asp:Panel>
             <fieldset class="student-fields"><legend><span>1</span> Student details</legend><div class="student-form-grid">
                 <div><asp:Label runat="server" AssociatedControlID="studentName" Text="Full name *" /><asp:TextBox ID="studentName" ClientIDMode="Static" runat="server" CssClass="form-control" MaxLength="100" autocomplete="name" /></div>
-                <div><asp:Label runat="server" AssociatedControlID="loginEmail" Text="Login email *" /><asp:TextBox ID="loginEmail" runat="server" CssClass="form-control" MaxLength="254" inputmode="email" /><small>Login email is fixed after account creation.</small></div>
-                <div><asp:Label runat="server" AssociatedControlID="universityEmail" Text="University email *" /><asp:TextBox ID="universityEmail" runat="server" CssClass="form-control" MaxLength="254" inputmode="email" /></div>
+                <div><asp:Label runat="server" AssociatedControlID="loginEmail" Text="University email *" /><asp:TextBox ID="loginEmail" runat="server" CssClass="form-control" MaxLength="254" inputmode="email" /><small>Login email is fixed after account creation.</small></div>
+                <div><asp:Label runat="server" AssociatedControlID="universityEmail" Text="Confirmed email *" /><asp:TextBox ID="universityEmail" runat="server" ReadOnly="true" CssClass="form-control" MaxLength="254" inputmode="email" /></div>
                 <div><asp:Label runat="server" AssociatedControlID="phoneNumber" Text="Phone number *" /><div class="student-phone"><asp:DropDownList ID="phoneCountry" runat="server" AutoPostBack="true" OnSelectedIndexChanged="PhoneCountryChanged" CssClass="form-select" aria-label="Phone country code">
 <asp:ListItem data-pattern="7[0-9]{8}" data-length="9" data-digits="9" Value="+962">Jordan +962</asp:ListItem>
 <asp:ListItem data-pattern="5[69][0-9]{7}" data-length="9" data-digits="9" Value="+970">Palestine +970</asp:ListItem>
