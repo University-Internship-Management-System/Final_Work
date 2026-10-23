@@ -1,3 +1,83 @@
+var monitorDataElement = document.getElementById('studentDetailData');
+var monitorData = monitorDataElement ? JSON.parse(monitorDataElement.textContent || '{}') : {};
+var monitorStudents = monitorData.Students || [];
+
+(function () {
+            var table = document.querySelector('#studentsPanel tbody');
+            var majorFilter = document.getElementById('majorFilter');
+            var majorNames = [];
+            function show(value) {
+                return value == null || String(value).trim() === '' ? '—' : String(value);
+            }
+            monitorStudents.forEach(function (student) {
+                if (student.Major && majorNames.indexOf(student.Major) === -1) majorNames.push(student.Major);
+                var row = document.createElement('tr');
+                row.className = 'student-row';
+                row.setAttribute('data-search', ((student.Name || '') + ' ' + (student.Email || '')).toLowerCase());
+                row.setAttribute('data-major', student.Major || '');
+                row.setAttribute('data-placement', student.Placed ? 'assigned' : 'unassigned');
+                var cells = [
+                    document.createElement('td'), document.createElement('td'), document.createElement('td'),
+                    document.createElement('td'), document.createElement('td'), document.createElement('td')
+                ];
+                cells[0].className = 'student-name';
+                var name = document.createElement('strong');
+                name.textContent = show(student.Name);
+                cells[0].appendChild(name);
+                cells[0].appendChild(document.createElement('br'));
+                var major = document.createElement('small');
+                major.className = 'text-muted';
+                major.textContent = show(student.Major);
+                cells[0].appendChild(major);
+                cells[1].textContent = show(student.CompanyName);
+                cells[2].textContent = show(student.AcademicSupervisorName);
+                var hours = document.createElement('strong');
+                hours.textContent = student.ApprovedHours + ' / ' + student.RequiredHours + ' h';
+                cells[3].appendChild(hours);
+                var track = document.createElement('div');
+                track.className = 'hours-track';
+                var fill = document.createElement('span');
+                fill.style.width = student.ApprovedPercent + '%';
+                track.appendChild(fill);
+                cells[3].appendChild(track);
+                var stage = document.createElement('span');
+                stage.className = 'status-badge';
+                stage.textContent = show(student.CompletionStage);
+                cells[4].appendChild(stage);
+                var actions = document.createElement('div');
+                actions.className = 'student-actions';
+                var view = document.createElement('button');
+                view.type = 'button';
+                view.className = 'btn btn-outline-primary btn-sm view-student';
+                view.setAttribute('data-student', student.Id);
+                view.innerHTML = '&#128065; View Details';
+                var more = document.createElement('button');
+                more.type = 'button';
+                more.className = 'btn btn-outline-primary btn-sm more-button';
+                more.setAttribute('data-student', student.Id);
+                more.setAttribute('aria-label', 'More actions for ' + (student.Name || ''));
+                more.setAttribute('aria-haspopup', 'menu');
+                more.setAttribute('aria-expanded', 'false');
+                more.innerHTML = '&#8943;';
+                actions.appendChild(view);
+                actions.appendChild(more);
+                cells[5].appendChild(actions);
+                cells.forEach(function (cell) { row.appendChild(cell); });
+                table.appendChild(row);
+            });
+            if (!monitorStudents.length) {
+                var empty = document.createElement('tr');
+                var cell = document.createElement('td');
+                cell.colSpan = 6;
+                cell.className = 'text-muted';
+                cell.textContent = 'No students found.';
+                empty.appendChild(cell);
+                table.appendChild(empty);
+            }
+            majorNames.sort();
+            majorNames.forEach(function (major) { majorFilter.add(new Option(major, major)); });
+        }());
+
 (function () {
             var tabs = document.querySelectorAll('.monitor-tab');
             var panels = document.querySelectorAll('.monitor-panel');
@@ -27,9 +107,64 @@
         }());
         (function () {
             var dialog = document.querySelector('.detail-overlay[role="dialog"]');
-            if (!dialog) return;
             var close = document.getElementById('closeDetail');
-            if (!close) return;
+            var details = document.getElementById('userDetail');
+            var query = new URLSearchParams(window.location.search);
+            var academicId = query.get('academic');
+            var companyId = query.get('company');
+            if (!academicId && !companyId) return;
+            var academic = !!academicId;
+            var id = academic ? academicId : companyId;
+            var supervisors = academic ? monitorData.Academics : monitorData.Companies;
+            var supervisor = supervisors ? supervisors[id] : null;
+            document.getElementById('detailTitle').textContent = academic ? 'Academic supervisor details' : 'Company supervisor details';
+            function field(label, value) {
+                var column = document.createElement('div');
+                column.className = 'col-sm-6 col-xl-4';
+                var list = document.createElement('dl');
+                list.className = 'mb-0';
+                var title = document.createElement('dt');
+                title.textContent = label;
+                var description = document.createElement('dd');
+                description.textContent = value == null || String(value).trim() === '' ? '—' : value;
+                list.appendChild(title);
+                list.appendChild(description);
+                column.appendChild(list);
+                details.appendChild(column);
+                return description;
+            }
+            if (supervisor) {
+                details.className = 'row student-detail';
+                field('Supervisor ID', id);
+                field('Name', supervisor.Name);
+                field('Email', supervisor.Email);
+                field('Phone', supervisor.PhoneNumber);
+                if (academic) {
+                    field('University email', supervisor.UniversityEmail);
+                    field('Major', supervisor.Major);
+                } else {
+                    field('Company email', supervisor.CompEmail);
+                    field('Company', supervisor.CompanyName);
+                    field('Location', supervisor.Location);
+                }
+                field('First login', supervisor.FirstLogin === true ? 'Yes' : 'No');
+                var picture = field('Profile picture', null);
+                try {
+                    var url = new URL(supervisor.ProfilePicUrl);
+                    if (url.protocol === 'http:' || url.protocol === 'https:') {
+                        picture.textContent = '';
+                        var link = document.createElement('a');
+                        link.href = url.href;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.textContent = 'Open Profile picture';
+                        picture.appendChild(link);
+                    }
+                } catch (error) { }
+            } else {
+                details.textContent = 'Supervisor record was not found.';
+            }
+            dialog.hidden = false;
             close.focus();
             dialog.addEventListener('click', function (event) { if (event.target === dialog) close.click(); });
             document.addEventListener('keydown', function (event) { if (event.key === 'Escape') close.click(); });
@@ -70,11 +205,124 @@
             var backdrop = document.getElementById('drawerBackdrop');
             var closeButton = document.getElementById('drawerClose');
             var body = document.getElementById('drawerBody');
-            var records = document.querySelectorAll('.drawer-record');
+            var records = monitorStudents;
             var tabButtons = drawer.querySelectorAll('[data-drawer-tab]');
             var activeMenuButton = null;
             var activeStudent = null;
             var returnFocus = null;
+            function escapeHtml(value) {
+                return String(value == null ? '' : value).replace(/[&<>"']/g, function (character) {
+                    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
+                });
+            }
+            function show(value) { return escapeHtml(value == null || String(value).trim() === '' ? '—' : value); }
+            function detail(label, value) {
+                return '<div class="col-sm-6 col-xl-4"><dl class="mb-0"><dt>' + show(label) +
+                    '</dt><dd>' + show(value) + '</dd></dl></div>';
+            }
+            function linkDetail(label, value) {
+                try {
+                    var url = new URL(value);
+                    if (url.protocol === 'http:' || url.protocol === 'https:') {
+                        return '<div class="col-sm-6 col-xl-4"><dl class="mb-0"><dt>' + show(label) +
+                            '</dt><dd><a target="_blank" rel="noopener noreferrer" href="' + escapeHtml(url.href) +
+                            '">Open ' + show(label) + '</a></dd></dl></div>';
+                    }
+                } catch (error) { }
+                return detail(label, null);
+            }
+            function passFlag(value) { return value === true ? 'Yes' : value === false ? 'No' : null; }
+            function dateText(value) {
+                if (!value) return null;
+                var iso = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/i.exec(String(value));
+                if (iso) return iso[1] + '-' + iso[2] + '-' + iso[3] + ' ' + iso[4] + ':' + iso[5] +
+                    ' ' + (iso[6].toUpperCase() === 'Z' ? '+00:00' : iso[6]);
+                var date = new Date(value);
+                if (isNaN(date.getTime())) return value;
+                var pad = function (number) { return String(number).padStart(2, '0'); };
+                var offset = -date.getTimezoneOffset();
+                var zone = (offset < 0 ? '-' : '+') + pad(Math.floor(Math.abs(offset) / 60)) + ':' + pad(Math.abs(offset) % 60);
+                return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) + ' ' +
+                    pad(date.getHours()) + ':' + pad(date.getMinutes()) + ' ' + zone;
+            }
+            function renderRecord(record) {
+                var html = '<section data-detail-section="overview"><div class="drawer-section"><h3>Student information</h3><div class="row student-detail">';
+                html += detail('Student ID', record.Id) + detail('Name', record.Name) + detail('Major', record.Major);
+                html += detail('Email', record.Email) + detail('University email', record.UniversityEmail);
+                html += detail('Phone', record.Phone) + detail('GPA', record.Gpa);
+                html += detail('Skills', Array.isArray(record.Skills) ? record.Skills.join(', ') : null);
+                html += linkDetail('CV', record.CvUrl) + linkDetail('Portfolio', record.PortfolioUrl);
+                html += '</div></div><div class="drawer-section"><h3>Placement and progress</h3><div class="row student-detail">';
+                html += detail('Training company', record.CompanyName) + detail('Academic supervisor', record.AcademicSupervisorName);
+                html += detail('Placement status', record.Placed ? 'Assigned' : 'Unassigned');
+                html += detail('Approved training hours', record.ApprovedHours + ' / ' + record.RequiredHours + ' hours');
+                html += detail('Evaluated task hours', record.EvaluatedHours + ' hours');
+                html += detail('Tasks submitted or evaluated', record.SubmittedTasks + ' / ' + record.AssignedTasks);
+                html += detail('Company report', record.CompanyReportStatus) + detail('Academic evaluation', record.AcademicReportStatus);
+                html += detail('Completion stage', record.CompletionStage) + '</div></div></section>';
+
+                html += '<section data-detail-section="tasks"><div class="drawer-section"><h3>Tasks</h3>';
+                record.Tasks.forEach(function (task) {
+                    html += '<div class="mb-3"><strong>' + show(task.Name) + '</strong>' +
+                        '<div class="text-muted small">Week ' + show(task.Week) + ' · ' + task.Hours + ' hours · ' +
+                        show(task.Status || 'Not submitted') + '</div>';
+                    if (task.Feedback) html += '<div class="text-muted small">Company feedback: ' + show(task.Feedback) + '</div>';
+                    html += '</div>';
+                });
+                if (!record.Tasks.length) html += '<p class="drawer-empty">No tasks assigned.</p>';
+                html += '</div></section>';
+
+                html += '<section data-detail-section="hours"><div class="drawer-section"><h3>Training hours</h3><div class="row student-detail">';
+                html += detail('Assigned task hours', record.AssignedHours + ' hours');
+                html += detail('Evaluated task hours', record.EvaluatedHours + ' hours');
+                html += detail('Approved hours', record.ApprovedHours + ' hours');
+                html += detail('Evaluated hours in unsigned weeks', record.PendingHours + ' hours');
+                html += detail('Required hours', record.RequiredHours + ' hours');
+                html += '</div><div class="hours-track hours-track-wide"><span style="width:' + record.ApprovedPercent +
+                    '%"></span></div><p class="text-muted small mt-2 mb-0">Approved hours come from signed weekly reports.</p></div></section>';
+
+                html += '<section data-detail-section="evaluations"><div class="drawer-section"><h3>Task evaluations</h3>';
+                var evaluated = record.Tasks.filter(function (task) { return task.Status === 'Evaluated' && task.Score != null; });
+                evaluated.forEach(function (task) {
+                    html += '<div class="mb-3"><strong>' + show(task.Name) + '</strong><div>' +
+                        show(task.Score) + ' / ' + show(task.MaxScore) + '</div>';
+                    if (task.Feedback) html += '<div class="text-muted small">' + show(task.Feedback) + '</div>';
+                    html += '</div>';
+                });
+                if (!evaluated.length) html += '<p class="drawer-empty">No evaluated task submissions.</p>';
+                html += '</div><div class="drawer-section"><h3>Company final report</h3><div class="row student-detail">';
+                html += detail('Status', record.CompanyReportStatus);
+                var report = record.CompanyReport;
+                if (report) {
+                    html += detail('Approved hours', record.ApprovedHours + ' hours');
+                    html += detail('Training start', dateText(report.StartDate)) + detail('Training end', dateText(report.EndDate));
+                    html += detail('Sent at', dateText(report.SentAt)) + detail('Company comments', report.Comments);
+                    var ratings = report.Ratings || {};
+                    [['Responsibility', 'Responsibility'], ['WorkingHours', 'Working hours'], ['Accuracy', 'Accuracy'],
+                        ['Teamwork', 'Teamwork'], ['Adaptation', 'Adaptation'], ['LearningSpeed', 'Learning speed']]
+                        .forEach(function (rating) { if (ratings[rating[0]] != null) html += detail(rating[1], ratings[rating[0]]); });
+                }
+                html += '</div></div><div class="drawer-section"><h3>Academic final evaluation</h3><div class="row student-detail">';
+                html += detail('Status', record.AcademicReportStatus);
+                var academic = record.AcademicReport;
+                if (academic) {
+                    html += detail('Academic pass decision', passFlag(academic.IsPassAcademic));
+                    html += detail('Academic comments', academic.Comments) + detail('Sent at', dateText(academic.SentAt));
+                    html += detail('Last updated', dateText(academic.UpdatedAt));
+                }
+                html += '</div></div><div class="drawer-section"><h3>Coordinator completion</h3><div class="row student-detail">';
+                html += detail('Stage', record.CompletionStage);
+                var certificate = record.Certificate;
+                if (certificate) {
+                    html += detail('Certificate ID', certificate.CertificateId) + detail('Opportunity ID', certificate.OpportunityId);
+                    html += detail('Company pass flag', passFlag(certificate.IsPassCompany));
+                    html += detail('Academic pass flag', passFlag(certificate.IsPassAcademic));
+                    html += detail('Coordinator pass flag', passFlag(certificate.IsPassAdmin));
+                    html += detail('Coordinator comments', certificate.AdminComments);
+                    html += detail('Approved at', dateText(certificate.ApprovedAt)) + detail('Approved by', certificate.ApprovedBy);
+                }
+                return html + '</div></div></section>';
+            }
             function hideMenu() {
                 menu.hidden = true;
                 if (activeMenuButton) activeMenuButton.setAttribute('aria-expanded', 'false');
@@ -82,7 +330,7 @@
             }
             function findRecord(id) {
                 for (var i = 0; i < records.length; i++) {
-                    if (records[i].getAttribute('data-student') === id) return records[i];
+                    if (records[i].Id === id) return records[i];
                 }
                 return null;
             }
@@ -102,9 +350,9 @@
                 hideMenu();
                 activeStudent = id;
                 returnFocus = source;
-                document.getElementById('drawerTitle').textContent = record.getAttribute('data-name') || 'Student';
-                document.getElementById('drawerMajor').textContent = record.getAttribute('data-major') || '';
-                body.innerHTML = record.innerHTML;
+                document.getElementById('drawerTitle').textContent = record.Name || 'Student';
+                document.getElementById('drawerMajor').textContent = record.Major || '';
+                body.innerHTML = renderRecord(record);
                 selectTab(section || 'overview');
                 drawer.hidden = false;
                 backdrop.hidden = false;
@@ -172,7 +420,7 @@
                     }
                 }
             });
-            // Old student links still open the same details drawer.
+            // روابط الطلاب القديمة تفتح نافذة التفاصيل نفسها.
             var link = new URLSearchParams(window.location.search);
             var studentId = link.get('student');
             if (studentId) {

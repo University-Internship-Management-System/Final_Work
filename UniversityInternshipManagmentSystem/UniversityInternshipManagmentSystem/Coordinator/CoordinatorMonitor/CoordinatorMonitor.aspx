@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="CoordinatorMonitor.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.CoordinatorMonitor" MasterPageFile="~/Shared/Dashboard.Master" %>
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
-    <link href="CoordinatorMonitor.css" rel="stylesheet" />
+    <link href="CoordinatorMonitor.css?v=3" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="PageMain" ContentPlaceHolderID="MainContent" runat="server">
             <div class="cm-hero-card">
@@ -15,15 +15,15 @@
                 <button type="button" class="monitor-tab" data-target="companiesPanel" aria-selected="false">Companies</button>
                 <button type="button" class="monitor-tab" data-target="academicPanel" aria-selected="false">Academic supervisors</button>
             </nav>
-            <asp:Panel ID="pnlUserDetail" runat="server" Visible="false" CssClass="detail-overlay" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+            <div id="supervisorDetail" class="detail-overlay" role="dialog" aria-modal="true" aria-labelledby="detailTitle" hidden>
                 <div class="detail-dialog p-4 p-md-5">
                     <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
-                        <h2 id="detailTitle" class="section-title mb-0"><asp:Literal ID="litDetailTitle" runat="server" /></h2>
-                        <a id="closeDetail" runat="server" href="~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.aspx" class="btn btn-outline-primary btn-sm">Close</a>
+                        <h2 id="detailTitle" class="section-title mb-0"></h2>
+                        <a id="closeDetail" href="CoordinatorMonitor.aspx" class="btn btn-outline-primary btn-sm">Close</a>
                     </div>
-                    <asp:Literal ID="litUserDetail" runat="server" />
+                    <div id="userDetail"></div>
                 </div>
-            </asp:Panel>
+            </div>
             <section id="studentsPanel" class="card admin-card p-3 p-md-4 mb-4 monitor-panel" aria-labelledby="studentsHeading">
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
                     <h2 id="studentsHeading" class="section-title mb-0">Students</h2>
@@ -31,14 +31,14 @@
                 </div>
                 <div class="row g-3 mb-3 p-3 monitor-filters align-items-end" aria-label="Student filters">
                     <div class="col-lg-5 col-md-6"><label class="form-label" for="studentSearch">Search students</label><input id="studentSearch" type="search" class="form-control" placeholder="Name or email" /></div>
-                    <div class="col-lg-3 col-md-6"><label class="form-label" for="majorFilter">Major</label><select id="majorFilter" class="form-select"><option value="">All majors</option><asp:Literal ID="litMajorOptions" runat="server" /></select></div>
+                    <div class="col-lg-3 col-md-6"><label class="form-label" for="majorFilter">Major</label><select id="majorFilter" class="form-select"><option value="">All majors</option></select></div>
                     <div class="col-lg-3 col-md-8"><label class="form-label" for="placementFilter">Placement</label><select id="placementFilter" class="form-select"><option value="">All students</option><option value="assigned">Assigned</option><option value="unassigned">Unassigned</option></select></div>
                     <div class="col-lg-1 col-md-4"><button id="clearFilters" type="button" class="btn btn-outline-secondary btn-sm w-100">Reset</button></div>
                 </div>
                 <div class="table-responsive">
                     <table class="table monitor-table align-middle mb-0">
-                        <thead><tr><th>Student / Major</th><th>Training company</th><th>Academic supervisor</th><th>Training hours</th><th>Final status</th><th>Actions</th></tr></thead>
-                        <tbody><asp:Literal ID="litStudentRows" runat="server" /></tbody>
+                        <thead><tr><th>Student / Major</th><th>Training company</th><th>Academic supervisor</th><th>Approved hours</th><th>Completion stage</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
                     </table>
                     <p id="noFilterResults" class="text-muted py-3 mb-0" style="display:none">No students match the selected filters.</p>
                 </div>
@@ -79,6 +79,6 @@
             <div id="drawerBody"></div>
         </div>
     </aside>
-    <div id="studentDetailData" hidden><asp:Literal ID="litStudentDetails" runat="server" /></div>
-    <script src="<%= ResolveUrl("~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.js") %>?v=2"></script>
+    <script id="studentDetailData" type="application/json"><asp:Literal ID="litStudentDetails" runat="server" /></script>
+    <script src="<%= ResolveUrl("~/Coordinator/CoordinatorMonitor/CoordinatorMonitor.js") %>?v=4"></script>
 </asp:Content>
