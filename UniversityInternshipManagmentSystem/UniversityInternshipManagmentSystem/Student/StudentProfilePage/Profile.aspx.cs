@@ -7,8 +7,6 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI;
-using System.Web;
-using System;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using UniversityInternshipManagmentSystem.Config;

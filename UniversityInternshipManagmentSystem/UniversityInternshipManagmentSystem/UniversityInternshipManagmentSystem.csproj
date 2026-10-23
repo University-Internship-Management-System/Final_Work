@@ -98,6 +98,7 @@
     <Content Include="About.aspx" />
     <Content Include="Academic\Dashboard.aspx" />
     <Content Include="Academic\Dashboard.css" />
+    <Content Include="App_Data\email-log.txt" />
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
     <Content Include="Assets\images\uj-logo.svg" />
@@ -245,6 +246,10 @@
     <Content Include="bin\roslyn\vbc.rsp" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <Content Include="bin\UniversityInternshipManagmentSystem.dll.config" />
+    <Content Include="App_Data\keys\cloudinary.json" />
+    <Content Include="App_Data\keys\firebase-admin.json" />
+    <Content Include="App_Data\keys\README.md" />
+    <Content Include="App_Data\completion-awaiting-admin-pass.test.json" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -399,7 +404,10 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx.cs"><DependentUpon>CoordinatorAccount.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
+    <Compile Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx.cs">
+      <DependentUpon>CoordinatorAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Academic\FinalEvaluation\FinalEvaluation.aspx.cs">
       <DependentUpon>FinalEvaluation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -469,6 +477,8 @@
       <DependentUpon>SupervisorAccount.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\EmailSender.cs" />
+    <Compile Include="Config\TeamKeys.cs" />
+    <Compile Include="Config\DeadlineReminders.cs" />
     <Compile Include="Config\Notify.cs" />
     <Compile Include="Config\EmailVerification.cs" />
     <Compile Include="Config\FirebaseAdmin.cs" />
@@ -676,6 +686,7 @@
     <Content Include="Student\Tests\Verify-EditProfile.ps1" />
     <Content Include="Student\Tests\Verify-StudentAuthentication.ps1" />
     <Content Include="Student\Tests\Verify-StudentModule.ps1" />
+    <Content Include="secrets.config.example" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

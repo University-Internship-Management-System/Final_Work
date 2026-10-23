@@ -79,7 +79,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     if (Request.QueryString["saved"] == "1")
                     {
                         savedPanel.Visible = true;
-                        savedMessage.Text = "Student saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]);
+                        savedMessage.Text = "Student saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]) + Notify.AccountMailMessage(Request.QueryString["mail"]);
                     }
                 }
             }
@@ -267,7 +267,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 ShowMessage("A student with this login or university email already exists.");
                 return;
             }
-            string newAccountToken = null, verifyResult = null;
+            string newAccountToken = null, verifyResult = null, mailResult = null;
             try
             {
                 if (id == null)
@@ -287,7 +287,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     using (var response = await FirebaseDb.Put("Students", id, student))
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                     verifyResult = await EmailVerification.RequireAndSend("Students", id, newAccountToken);
-                    Notify.AccountCreated(name, "student", email, temporaryPassword.Text);
+                    mailResult = await Notify.AccountCreated(name, "student", email, temporaryPassword.Text);
                 }
                 else
                 {
@@ -306,7 +306,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 ShowMessage("Could not save the student. Check email availability and database permissions.");
                 return;
             }
-            Response.Redirect("ManageStudents.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult), false);
+            Response.Redirect("ManageStudents.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult) + (mailResult == null ? "" : "&mail=" + mailResult), false);
             Context.ApplicationInstance.CompleteRequest();
         }
 
