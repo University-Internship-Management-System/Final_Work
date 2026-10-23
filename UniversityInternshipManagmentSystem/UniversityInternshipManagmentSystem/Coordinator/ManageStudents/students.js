@@ -23,6 +23,10 @@
         Sys.Application.add_load(updateModal);
     }
     updateModal();
+    const importModal = document.getElementById('studentImportModal');
+    const importOpen = document.getElementById('openImport');
+    if (importModal && importOpen && importOpen.value === '1' && window.bootstrap)
+        bootstrap.Modal.getOrCreateInstance(importModal).show();
     const saved = document.getElementById('studentSavedModal');
     if (saved && window.bootstrap) bootstrap.Modal.getOrCreateInstance(saved).show();
     // "Confirmed email" is read-only and always shows the login email while it is typed

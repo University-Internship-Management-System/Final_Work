@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.IO;
+using System.Web;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Security.Cryptography;
@@ -32,6 +34,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         protected HiddenField openEditor;
         private Dictionary<string, StudentModel> records;
         private Dictionary<string, AcademicSupervisor> supervisors;
+        protected FileUpload importFile;
+        protected Panel importNotice, importPreview;
+        protected Literal importMessage, importSummary;
+        protected Repeater importRows, importSupervisors;
+        protected Button confirmImport;
+        protected HiddenField openImport, importToken;
+        private bool downloadingTemplate;
         private bool allowed;
         private string EditingId { get; set; }
         private bool resetPage;
@@ -50,8 +59,15 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             AuthHelper.RequireAuth(this, AuthHelper.RoleCoordinator);
             if (Response.IsRequestBeingRedirected) return;
+            if (Request.QueryString["template"] == "1")
+            {
+                DownloadTemplate();
+                return;
+            }
             EditingId = Request.QueryString["edit"];
             openEditor.Value = "0";
+            openImport.Value = "0";
+            importNotice.Visible = false;
             messagePanel.Visible = editorNotice.Visible = false;
             if (String.IsNullOrWhiteSpace(AuthHelper.IdToken) || AuthHelper.IdToken == "mock-token")
             {
@@ -69,6 +85,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 foreach (var item in records) item.Value.Id = item.Key;
                 foreach (var item in supervisors) item.Value.Id = item.Key;
                 allowed = workspace.Visible = addStudent.Visible = true;
+                if (!IsPostBack && Request.QueryString["import"] == "1") openImport.Value = "1";
                 if (!IsPostBack)
                 {
                     studentSearch.Text = Request.QueryString["q"] ?? "";
@@ -94,6 +111,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             BindStudents();
+            importSupervisors.DataSource = supervisors.Values.OrderBy(item => item.Major).ThenBy(item => item.Name);
+            importSupervisors.DataBind();
             phoneNumber.MaxLength = Int32.Parse(phoneCountry.SelectedItem.Attributes["data-length"]);
             phoneHelp.Text = "Enter " + phoneCountry.SelectedItem.Attributes["data-digits"] + " digits, without the country code or leading zero.";
             addStudent.NavigateUrl = "ManageStudents.aspx?add=1&q=" + Server.UrlEncode(studentSearch.Text)
@@ -191,9 +210,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         protected void GeneratePassword(object sender, EventArgs e)
         {
             if (!allowed) return;
-            byte[] bytes = new byte[12];
-            using (var random = RandomNumberGenerator.Create()) random.GetBytes(bytes);
-            temporaryPassword.Text = "Ua7!" + Convert.ToBase64String(bytes);
+            temporaryPassword.Text = NewPassword();
             openEditor.Value = "1";
         }
 
@@ -234,81 +251,291 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             openEditor.Value = "1";
-            string name = studentName.Text.Trim(), email = loginEmail.Text.Trim();
-            string uniEmail = email;   // "Confirmed email" is read-only on the page: it always equals the login email
-            string phone = phoneNumber.Text.Trim(), major = studentMajor.SelectedValue, supervisorId = academicSupervisor.SelectedValue;
             double grade;
-            if (name.Length < 2 || name.Length > 100 || !ValidEmail(email)
-                || !Double.TryParse(gpa.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out grade) || !(grade >= 0 && grade <= 4))
+            if (!Double.TryParse(gpa.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out grade)) grade = Double.NaN;
+            var student = new StudentModel
             {
-                ShowMessage("Enter a name, a valid email and phone number, and a GPA between 0 and 4.");
-                return;
+                Name = studentName.Text.Trim(), Email = loginEmail.Text.Trim(), UniEmail = universityEmail.Text.Trim(),
+                PhoneNumber = phoneCountry.SelectedValue + Regex.Replace(phoneNumber.Text.Trim(), @"[ ()-]", ""),
+                Major = studentMajor.SelectedValue, AcademicSupervisorId = academicSupervisor.SelectedValue, GPA = grade
+            };
+            string error = ValidateStudent(student, EditingId);
+            if (error != null) { ShowMessage(error); return; }
+            string verifyResult = null, mailResult = null;
+            if (EditingId == null)
+            {
+                if (temporaryPassword.Text.Length < 12) { ShowMessage("Generate a temporary password before saving."); return; }
+                AccountResult result = await CreateStudent(student, temporaryPassword.Text);
+                if (!result.Success) { ShowMessage(result.Message); return; }
+                verifyResult = result.Verification;
+                mailResult = result.Mail;
             }
-            phone = Regex.Replace(phone, @"[ ()-]", "");
-            if (!Regex.IsMatch(phone, "^(?:" + phoneCountry.SelectedItem.Attributes["data-pattern"] + ")$"))
+            else
             {
-                ShowMessage("Enter " + phoneCountry.SelectedItem.Attributes["data-digits"] + " digits for " + phoneCountry.SelectedItem.Text
-                    + ", without the country code or leading zero. Check the mobile prefix too.");
-                return;
-            }
-            phone = phoneCountry.SelectedValue + phone;
-            AcademicSupervisor supervisor;
-            if (major == "" || !supervisors.TryGetValue(supervisorId, out supervisor)
-                || !String.Equals(supervisor.Major, major, StringComparison.OrdinalIgnoreCase))
-            {
-                PopulateSupervisors();
-                ShowMessage("Choose an academic supervisor with the same major before saving.");
-                return;
-            }
-            string id = EditingId;
-            if (id != null && !records.ContainsKey(id)) { ShowMessage("Student no longer exists."); return; }
-            if (records.Any(item => item.Key != id && (String.Equals(item.Value.Email, email, StringComparison.OrdinalIgnoreCase)
-                || String.Equals(item.Value.UniEmail, uniEmail, StringComparison.OrdinalIgnoreCase))))
-            {
-                ShowMessage("A student with this login or university email already exists.");
-                return;
-            }
-            string newAccountToken = null, verifyResult = null, mailResult = null;
-            try
-            {
-                if (id == null)
+                try
                 {
-                    if (temporaryPassword.Text.Length < 12) { ShowMessage("Generate a temporary password before saving."); return; }
-                    var auth = await AuthenticationRequest(AppConfig.SignUpUrl,
-                        new { email, password = temporaryPassword.Text, returnSecureToken = true });
-                    id = (string)auth["localId"];
-                    newAccountToken = (string)auth["idToken"];
-                    var student = new StudentModel
-                    {
-                        Name = name, Email = email, Role = "Student", FirstLogin = true,
-                        PhoneNumber = phone, UniEmail = uniEmail, Major = major,
-                        AcademicSupervisorId = supervisorId, GPA = grade,
-                        CompanyId = "", ProfilePicUrl = "", CvUrl = "", PortfolioUrl = ""
-                    };
-                    using (var response = await FirebaseDb.Put("Students", id, student))
-                        if (!response.IsSuccessStatusCode) throw new HttpRequestException();
-                    verifyResult = await EmailVerification.RequireAndSend("Students", id, newAccountToken);
-                    mailResult = await Notify.AccountCreated(name, "student", email, temporaryPassword.Text);
-                }
-                else
-                {
-                    var changes = new { Name = name, PhoneNumber = phone, UniEmail = uniEmail, Major = major, GPA = grade, AcademicSupervisorId = supervisorId };
-                    using (var response = await FirebaseDb.Patch("Students", id, changes))
+                    var changes = new { student.Name, student.PhoneNumber, student.UniEmail, student.Major, student.GPA, student.AcademicSupervisorId };
+                    using (var response = await FirebaseDb.Patch("Students", EditingId, changes))
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                 }
-            }
-            catch
-            {
-                if (newAccountToken != null)
-                {
-                    try { await AuthenticationRequest("https://identitytoolkit.googleapis.com/v1/accounts:delete?key=" + AppConfig.ApiKey, new { idToken = newAccountToken }); }
-                    catch { ShowMessage("Login created, but the profile could not be confirmed. Check Authentication before retrying."); return; }
-                }
-                ShowMessage("Could not save the student. Check email availability and database permissions.");
-                return;
+                catch { ShowMessage("Could not save the student. Check the connection and database permissions."); return; }
             }
             Response.Redirect("ManageStudents.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult) + (mailResult == null ? "" : "&mail=" + mailResult), false);
             Context.ApplicationInstance.CompleteRequest();
+        }
+
+
+        // Both the form and the CSV import use these same rules.
+        private string ValidateStudent(StudentModel student, string editingId = null)
+        {
+            if (student.Name.Length < 2 || student.Name.Length > 100 || !ValidEmail(student.Email) || !ValidEmail(student.UniEmail)
+                || !(student.GPA >= 0 && student.GPA <= 4))
+                return "Enter a name, valid emails, and a GPA between 0 and 4.";
+            ListItem country = phoneCountry.Items.Cast<ListItem>().FirstOrDefault(item => student.PhoneNumber.StartsWith(item.Value));
+            if (country == null || !Regex.IsMatch(student.PhoneNumber.Substring(country.Value.Length),
+                @"\A(?:" + country.Attributes["data-pattern"] + @")\z"))
+                return "Enter a valid mobile number with a supported country code and no leading zero after the code.";
+            AcademicSupervisor supervisor;
+            if (studentMajor.Items.FindByValue(student.Major) == null || student.Major == ""
+                || !supervisors.TryGetValue(student.AcademicSupervisorId ?? "", out supervisor)
+                || !String.Equals(supervisor.Major, student.Major, StringComparison.OrdinalIgnoreCase))
+                return "Choose an academic supervisor with the same major.";
+            if (editingId != null && !records.ContainsKey(editingId)) return "Student no longer exists.";
+            if (records.Any(item => item.Key != editingId && (SameEmail(item.Value.Email, student.Email)
+                || SameEmail(item.Value.UniEmail, student.UniEmail) || SameEmail(item.Value.Email, student.UniEmail)
+                || SameEmail(item.Value.UniEmail, student.Email))))
+                return "A student with this login or university email already exists.";
+            return null;
+        }
+
+        private static bool SameEmail(string first, string second)
+        {
+            return String.Equals((first ?? "").Trim(), (second ?? "").Trim(), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string NewPassword()
+        {
+            byte[] bytes = new byte[12];
+            using (var random = RandomNumberGenerator.Create()) random.GetBytes(bytes);
+            return "Ua7!" + Convert.ToBase64String(bytes);
+        }
+
+        private class AccountResult
+        {
+            public bool Success { get; set; }
+            public string Message { get; set; }
+            public string Verification { get; set; }
+            public string Mail { get; set; }
+        }
+
+        private async Task<AccountResult> CreateStudent(StudentModel student, string password)
+        {
+            string token = null, id = null;
+            bool profileSaved = false;
+            try
+            {
+                JObject auth = await AuthenticationRequest(AppConfig.SignUpUrl,
+                    new { email = student.Email, password, returnSecureToken = true });
+                id = (string)auth["localId"];
+                token = (string)auth["idToken"];
+                if (String.IsNullOrWhiteSpace(id) || String.IsNullOrWhiteSpace(token)) throw new HttpRequestException();
+                student.Role = "Student";
+                student.FirstLogin = true;
+                student.CompanyId = student.ProfilePicUrl = student.CvUrl = student.PortfolioUrl = "";
+                JObject data = JObject.FromObject(student);
+                data[EmailVerification.RequiredField] = true;
+                using (var response = await FirebaseDb.Put("Students", id, data))
+                {
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        await AuthenticationRequest("https://identitytoolkit.googleapis.com/v1/accounts:delete?key=" + AppConfig.ApiKey,
+                            new { idToken = token });
+                        return new AccountResult { Message = "Profile was rejected; the new login was removed. Check permissions before retrying." };
+                    }
+                }
+                profileSaved = true;
+                student.Id = id;
+                records[id] = student;
+            }
+            catch
+            {
+                return new AccountResult { Message = token == null
+                    ? "Could not create the login. The email may already be registered, or the connection failed. Check Authentication before retrying."
+                    : "Could not confirm the account save. Ask the coordinator to check Authentication and Students before retrying." };
+            }
+            string verification = await EmailVerification.RequireAndSend("Students", id, token);
+            string mail = await Notify.AccountCreated(student.Name, "student", student.Email, password);
+            return new AccountResult { Success = profileSaved, Verification = verification, Mail = mail,
+                Message = "Created." + EmailVerification.MessageFor(verification) + Notify.AccountMailMessage(mail) };
+        }
+
+        // Preview stays on the server. Confirmation consumes it once, so refreshing cannot add it again.
+        public class ImportRow
+        {
+            public int RowNumber { get; set; }
+            public StudentModel Student { get; set; }
+            public string Error { get; set; }
+            public string Status { get; set; }
+        }
+
+        private class ImportDraft
+        {
+            public string Token { get; set; }
+            public DateTime Created { get; set; }
+            public List<ImportRow> Rows { get; set; }
+        }
+
+        private const string CsvHeader = "FullName,UniversityEmail,ConfirmedEmail,CountryCode,PhoneNumber,Major,GPA,AcademicSupervisorEmail";
+
+        private void DownloadTemplate()
+        {
+            downloadingTemplate = true;
+            Response.Clear();
+            Response.ContentType = "text/csv";
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.AddHeader("Content-Disposition", "attachment; filename=students-template.csv");
+            Response.BinaryWrite(Encoding.UTF8.GetPreamble());
+            Response.Write(CsvHeader + "\r\n");
+            Context.ApplicationInstance.CompleteRequest();
+        }
+
+        protected override void Render(HtmlTextWriter writer)
+        {
+            if (!downloadingTemplate) base.Render(writer);
+        }
+
+        protected void PreviewImport(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            openImport.Value = "1";
+            Session.Remove("StudentImportDraft");
+            importPreview.Visible = confirmImport.Visible = false;
+            try
+            {
+                if (!importFile.HasFile || !String.Equals(Path.GetExtension(importFile.FileName), ".csv", StringComparison.OrdinalIgnoreCase))
+                    throw new FormatException("Choose a CSV file. In Excel, save it as CSV UTF-8 first.");
+                if (importFile.PostedFile.ContentLength > 256 * 1024)
+                    throw new FormatException("Use a CSV file smaller than 256 KB, with at most 25 students.");
+                string text;
+                using (var reader = new StreamReader(importFile.FileContent, new UTF8Encoding(false, true), true)) text = reader.ReadToEnd();
+                List<string[]> lines = ReadCsv(text);
+                if (lines.Count < 2 || !lines[0].SequenceEqual(CsvHeader.Split(','), StringComparer.OrdinalIgnoreCase))
+                    throw new FormatException("Use the template headers in the same order, followed by at least one student.");
+                var rows = new List<ImportRow>();
+                var emails = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                for (int index = 1; index < lines.Count; index++)
+                {
+                    string[] cells = lines[index];
+                    if (cells.Length != 8) throw new FormatException("Row " + (index + 1) + ": expected 8 columns. Use the template.");
+                    double grade;
+                    if (!Double.TryParse(cells[6], NumberStyles.Number, CultureInfo.InvariantCulture, out grade)) grade = Double.NaN;
+                    var matches = supervisors.Values.Where(person => SameEmail(person.Email, cells[7]) || SameEmail(person.UniversityEmail, cells[7])).ToList();
+                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[2],
+                        PhoneNumber = (cells[3].StartsWith("+") ? cells[3] : "+" + cells[3]) + cells[4], Major = cells[5], GPA = grade,
+                        AcademicSupervisorId = matches.Count == 1 ? matches[0].Id : "" };
+                    string error = ValidateStudent(student);
+                    if (matches.Count != 1) error = "Supervisor email must match exactly one existing academic supervisor.";
+                    if (emails.Contains(student.Email) || emails.Contains(student.UniEmail)) error = "Email is repeated in this file.";
+                    emails.Add(student.Email);
+                    emails.Add(student.UniEmail);
+                    rows.Add(new ImportRow { RowNumber = index + 1, Student = student, Error = error,
+                        Status = error ?? "Ready" });
+                }
+                var draft = new ImportDraft { Token = Guid.NewGuid().ToString("N"), Created = DateTime.UtcNow, Rows = rows };
+                importToken.Value = draft.Token;
+                Session["StudentImportDraft"] = draft;
+                ShowImportRows(rows, false);
+            }
+            catch (FormatException ex) { ImportMessage(ex.Message); }
+            catch (DecoderFallbackException) { ImportMessage("Save the file as CSV UTF-8 in Excel, then upload it again."); }
+            catch { ImportMessage("Could not read this file. Use the CSV template and try again."); }
+        }
+
+        protected async void ConfirmImport(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            openImport.Value = "1";
+            var draft = Session["StudentImportDraft"] as ImportDraft;
+            if (draft == null || draft.Token != importToken.Value || draft.Created < DateTime.UtcNow.AddMinutes(-20))
+            {
+                importPreview.Visible = confirmImport.Visible = false;
+                ImportMessage("This preview expired or was already used. Upload the file again.");
+                return;
+            }
+            // Recheck fresh database data before creating any accounts.
+            foreach (ImportRow row in draft.Rows)
+            {
+                row.Error = row.Error ?? ValidateStudent(row.Student);
+                row.Status = row.Error ?? "Ready";
+            }
+            if (draft.Rows.Any(row => row.Error != null)) { ShowImportRows(draft.Rows, false); return; }
+            Session.Remove("StudentImportDraft");
+            foreach (ImportRow row in draft.Rows)
+            {
+                AccountResult result = await CreateStudent(row.Student, NewPassword());
+                row.Error = result.Success ? null : result.Message;
+                row.Status = result.Message;
+            }
+            ShowImportRows(draft.Rows, true);
+        }
+
+        private void ShowImportRows(List<ImportRow> rows, bool completed)
+        {
+            importPreview.Visible = true;
+            importRows.DataSource = rows;
+            importRows.DataBind();
+            int failed = rows.Count(row => row.Error != null);
+            importSummary.Text = completed ? (rows.Count - failed) + " created · " + failed + " not created. Do not re-import successful rows."
+                : rows.Count + " students · " + failed + " rows need correction. No accounts have been created yet.";
+            confirmImport.Visible = !completed && failed == 0;
+        }
+
+        private void ImportMessage(string text)
+        {
+            importNotice.Visible = true;
+            importMessage.Text = text;
+        }
+
+        // Commas (or Excel's semicolons), quoted fields, escaped quotes and line breaks.
+        private static List<string[]> ReadCsv(string text)
+        {
+            char separator = text.Split('\n')[0].Contains(";") ? ';' : ',';
+            var rows = new List<string[]>();
+            var cells = new List<string>();
+            var field = new StringBuilder();
+            bool quoted = false, closedQuote = false;
+            text = text.TrimStart('\uFEFF') + "\n";
+            for (int index = 0; index < text.Length; index++)
+            {
+                char letter = text[index];
+                if (quoted)
+                {
+                    if (letter != '"') field.Append(letter);
+                    else if (index + 1 < text.Length && text[index + 1] == '"') { field.Append('"'); index++; }
+                    else { quoted = false; closedQuote = true; }
+                    continue;
+                }
+                if (letter == '"' && field.Length == 0 && !closedQuote) { quoted = true; continue; }
+                if (letter == separator || letter == '\r' || letter == '\n')
+                {
+                    cells.Add(field.ToString().Trim());
+                    field.Clear();
+                    closedQuote = false;
+                    if (cells.Count > 8) throw new FormatException("Each row must contain the 8 template columns.");
+                    if (letter == separator) continue;
+                    if (letter == '\r' && index + 1 < text.Length && text[index + 1] == '\n') index++;
+                    if (cells.Any(cell => cell != "")) rows.Add(cells.ToArray());
+                    cells.Clear();
+                    if (rows.Count > 26) throw new FormatException("Import at most 25 students at a time.");
+                }
+                else
+                {
+                    if (letter == '"' || (closedQuote && !Char.IsWhiteSpace(letter))) throw new FormatException("Invalid CSV quotes. Save the file as CSV UTF-8 in Excel.");
+                    if (!closedQuote) field.Append(letter);
+                }
+            }
+            if (quoted) throw new FormatException("A quoted CSV field was not closed.");
+            return rows;
         }
 
         private static bool ValidEmail(string value)
