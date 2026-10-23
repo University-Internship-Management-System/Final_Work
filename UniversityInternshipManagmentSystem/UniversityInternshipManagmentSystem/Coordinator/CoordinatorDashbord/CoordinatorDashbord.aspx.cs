@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.UI;
 using UniversityInternshipManagmentSystem.Config;
 
@@ -20,6 +22,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 Context.ApplicationInstance.CompleteRequest();
                 return;
             }
+
             RegisterAsyncTask(new PageAsyncTask(ShowDashboardAsync));
         }
 
@@ -82,13 +85,18 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     bool alreadyCounted = false;
                     foreach (string savedName in companyNames)
                     {
-                        if (string.Equals(savedName, name, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(savedName, companyName, StringComparison.OrdinalIgnoreCase))
                         {
-                            found = true;
+                            alreadyCounted = true;
                             break;
                         }
                     }
-                    if (!found) companyNames.Add(name);
+
+                    if (!alreadyCounted)
+                    {
+                        companyNames.Add(companyName);
+                        companyCount++;
+                    }
                 }
 
                 int opportunityCount = 0;
@@ -272,32 +280,12 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             return html.ToString();
         }
 
-        private static void AddCount(Dictionary<string, int> counts, string name)
+        private static string Encode(string value)
         {
-            if (!counts.ContainsKey(name)) counts[name] = 0;
-            counts[name]++;
-        }
-
-        private static int CountEvaluatedSubmissions(JObject submissions)
-        {
-            var latest = new Dictionary<string, JToken>();
-            foreach (JProperty entry in submissions.Properties())
-            {
-                JToken submission = entry.Value;
-                if (submission == null) continue;
-                string key = (string)submission["StudentId"] + "|" + (string)submission["TaskId"];
-                JToken previous;
-                if (!latest.TryGetValue(key, out previous) ||
-                    (int?)submission["Version"] > (int?)previous["Version"])
-                    latest[key] = submission;
-            }
-            int count = 0;
-            foreach (JToken submission in latest.Values)
-            {
-                if ((string)submission["Status"] == "Evaluated" && submission["Score"] != null)
-                    count++;
-            }
-            return count;
+            return HttpUtility.HtmlEncode(string.IsNullOrWhiteSpace(value) ? "—" : value);
         }
     }
+
 }
+
+
