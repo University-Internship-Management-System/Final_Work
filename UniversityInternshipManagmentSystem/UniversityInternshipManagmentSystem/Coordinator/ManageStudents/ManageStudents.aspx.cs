@@ -234,13 +234,14 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             openEditor.Value = "1";
-            string name = studentName.Text.Trim(), email = loginEmail.Text.Trim(), uniEmail = universityEmail.Text.Trim();
+            string name = studentName.Text.Trim(), email = loginEmail.Text.Trim();
+            string uniEmail = email;   // "Confirmed email" is read-only on the page: it always equals the login email
             string phone = phoneNumber.Text.Trim(), major = studentMajor.SelectedValue, supervisorId = academicSupervisor.SelectedValue;
             double grade;
-            if (name.Length < 2 || name.Length > 100 || !ValidEmail(email) || !ValidEmail(uniEmail)
+            if (name.Length < 2 || name.Length > 100 || !ValidEmail(email)
                 || !Double.TryParse(gpa.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out grade) || !(grade >= 0 && grade <= 4))
             {
-                ShowMessage("Enter a name, valid emails and phone number, and a GPA between 0 and 4.");
+                ShowMessage("Enter a name, a valid email and phone number, and a GPA between 0 and 4.");
                 return;
             }
             phone = Regex.Replace(phone, @"[ ()-]", "");

@@ -154,13 +154,12 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             var person = new AcademicSupervisor
             {
                 Name = fullName.Text.Trim(), Email = email.Text.Trim(),
-                UniversityEmail = universityEmail.Text.Trim(), Major = major.SelectedValue,
+                UniversityEmail = email.Text.Trim(), Major = major.SelectedValue,
                 PhoneNumber = phone.Text.Trim(), Role = "AcademicSupervisor", FirstLogin = true, ProfilePicUrl = ""
             };
-            if (person.Name.Length < 2 || person.Name.Length > 100 || !ValidEmail(person.Email)
-                || !ValidEmail(person.UniversityEmail) || person.Major == "")
+            if (person.Name.Length < 2 || person.Name.Length > 100 || !ValidEmail(person.Email) || person.Major == "")
             {
-                Tell("Enter a name, valid login and university emails, and select a major.");
+                Tell("Enter a name, a valid university email, and select a major.");
                 return;
             }
             if (!Regex.IsMatch(person.PhoneNumber, @"\A07[0-9]{8}\z"))
