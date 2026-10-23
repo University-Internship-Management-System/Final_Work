@@ -1,23 +1,19 @@
-﻿/* Profile and local sign-in content only; uses Shared/uims.css variables. */
-.student-dashboard .sd-profile-banner { display: flex; align-items: center; gap: 22px; padding: 28px; border-radius: 12px; background: var(--soft); margin-bottom: 24px; }
-.student-dashboard .sd-profile-banner h2 { font-size: 23px; margin-bottom: 6px; }
-.student-dashboard .sd-profile-avatar { display: grid; place-items: center; flex-shrink: 0; width: 76px; height: 76px; background: var(--deep); color: var(--paper); border-radius: 22px; font-size: 30px; }
-.student-dashboard .sd-details { margin: 0; overflow-wrap: anywhere; }
-.student-dashboard .sd-details dt { font-size: 13px; color: var(--deep); font-weight: 500; margin-bottom: 6px; }
-.student-dashboard .sd-details dd { font-size: 14px; font-weight: 600; border-bottom: 1px solid var(--line); padding-bottom: 17px; margin-bottom: 17px; }
-.student-dashboard .sd-details dd:last-child { border-bottom: 0; margin-bottom: 0; }
-.student-dashboard .form-label { font-size: 12px; font-weight: 650; }
-.student-dashboard .form-control { max-width: none; background: var(--paper); color: var(--ink); border: 1px solid var(--line); font-size: 14px; padding: 11px 13px; }
-.student-dashboard .form-control[readonly] { background: var(--soft); color: var(--deep); }
-.student-dashboard .form-control:focus { border-color: var(--green); outline: 2px solid var(--green); outline-offset: 2px; box-shadow: none; }
-.student-dashboard textarea.form-control { resize: vertical; }
-.student-dashboard .sd-save-button { max-width: none; padding: 12px 20px; border: 1px solid var(--deep); border-radius: 8px; background: var(--deep); color: var(--paper); font-size: 13px; font-weight: 600; }
-.student-dashboard .sd-save-button:hover { background: var(--forest); }
-.student-dashboard .sd-save-button:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
-@media (max-width: 575.98px) {
-    .student-dashboard .sd-profile-banner { padding: 22px 16px; gap: 14px; }
-    .student-dashboard .sd-profile-avatar { width: 54px; height: 54px; border-radius: 16px; font-size: 24px; }
-    .student-dashboard .sd-profile-banner h2 { font-size: 20px; }
+/* Student Profile presentation only. Every selector stays inside this page. */
+.student-profile {
+    --sp-ink: var(--uims-text, #183B31);
+    --sp-muted: var(--uims-muted, #65756E);
+    --sp-green: var(--uims-primary, #07523E);
+    --sp-accent: var(--uims-accent, #178568);
+    --sp-mint: var(--uims-mint, #EAF4EF);
+    --sp-line: var(--uims-border, #E2E8E5);
+    --sp-paper: var(--uims-white, #FFFFFF);
+    max-width: 1240px;
+    margin-inline: auto;
+    min-width: 0;
+    color: var(--sp-ink);
+    font-family: var(--uims-font);
+    padding-bottom: 8px;
+    line-height: 1.55;
 }
 .student-dashboard .sd-save-message:not(:empty) { display: block; margin-bottom: 20px; padding: 14px; border: 1px solid var(--uims-border); border-radius: 8px; background: var(--uims-mint); color: var(--uims-primary); }
 .student-dashboard .sd-save-error:not(:empty) { border-color: var(--uims-danger); }

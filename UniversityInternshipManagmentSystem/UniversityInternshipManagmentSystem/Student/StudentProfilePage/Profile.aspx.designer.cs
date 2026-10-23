@@ -19,6 +19,8 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         protected global::System.Web.UI.WebControls.Label SkillsError;
         protected global::System.Web.UI.WebControls.Label CvError;
         protected global::System.Web.UI.WebControls.Label PortfolioError;
+        protected global::System.Web.UI.WebControls.Label LinkedInError;
+        protected global::System.Web.UI.WebControls.TextBox LinkedInInput;
 
         /// <summary>
         /// SaveMessage control.

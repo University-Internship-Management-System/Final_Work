@@ -12,6 +12,7 @@ namespace UniversityInternshipManagmentSystem.Models
         public double GPA { get; set; }
         public string CvUrl { get; set; }
         public string PortfolioUrl { get; set; }
+        public string LinkedInUrl { get; set; }
 
         public List<string> SkillsList { get; set; }
             = new List<string>();

@@ -42,7 +42,7 @@ public static class ProfilePhase1Checks
             if(DenySave) throw new UniversityInternshipManagmentSystem.Student.StudentDataException("Firebase denied this operation.");
             if(!IgnoreSave) {
                 Workspace.PhoneNumber=(string)patch["PhoneNumber"];Workspace.SkillsList=new List<string>((IList<string>)patch["SkillsList"]);
-                Workspace.CvUrl=(string)patch["CvUrl"];Workspace.PortfolioUrl=(string)patch["PortfolioUrl"];
+                Workspace.CvUrl=(string)patch["CvUrl"];Workspace.PortfolioUrl=(string)patch["PortfolioUrl"];if(patch.ContainsKey("LinkedInUrl"))Workspace.LinkedInUrl=(string)patch["LinkedInUrl"];
             }
             return Task.CompletedTask;
         }
@@ -89,10 +89,10 @@ public static class ProfilePhase1Checks
         public bool EditVisible { get { return EditButton.Visible; } }
         public bool CancelVisible { get { return CancelButton.Visible; } }
         public string Message { get { return SaveMessage.Text; } }
-        public TextBox[] Inputs { get { return new[] { PhoneNumberInput,SkillsInput,CvInput,PortfolioInput }; } }
-        public Label[] Errors { get { return new[] { PhoneError,SkillsError,CvError,PortfolioError }; } }
-        public void Post(string phone, string skills, string cv, string portfolio) {
-            var values=new[] {phone,skills,cv,portfolio};
+        public TextBox[] Inputs { get { return new[] { PhoneNumberInput,SkillsInput,CvInput,PortfolioInput,LinkedInInput }; } }
+        public Label[] Errors { get { return new[] { PhoneError,SkillsError,CvError,PortfolioError,LinkedInError }; } }
+        public void Post(string phone, string skills, string cv, string portfolio, string linkedIn="") {
+            var values=new[] {phone,skills,cv,portfolio,linkedIn};
             for(int i=0;i<Inputs.Length;i++) {
                 var input=Inputs[i];
                 var form=new NameValueCollection { { input.UniqueID,values[i] } };
@@ -121,7 +121,7 @@ public static class ProfilePhase1Checks
             if(request.Method==HttpMethod.Get)return Reply(HttpStatusCode.OK,Record);
             Check(request.Method.Method=="PATCH","Adapter used unexpected mutation method");Writes++;
             var sent=JObject.Parse(request.Content.ReadAsStringAsync().GetAwaiter().GetResult());
-            Check(sent.Count==4&&sent.Properties().All(x=>ProfileValidation.EditableFields.Contains(x.Name)),"Adapter overposted academic/identity fields");
+            Check(sent.Count==5&&sent.Properties().All(x=>ProfileValidation.EditableFields.Contains(x.Name)),"Adapter overposted academic/identity fields");
             if(!Denied&&!IgnoreWrite)foreach(var field in sent.Properties())Record[field.Name]=field.Value.DeepClone();
             return Reply(Denied?HttpStatusCode.Forbidden:HttpStatusCode.OK,sent);
         }
@@ -138,7 +138,7 @@ public static class ProfilePhase1Checks
             long now=DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             session["userId"]=session["dbRecordId"]="student-fixture";session["dbTable"]="Students";
             session["idToken"]=B64("{\"alg\":\"RS256\"}")+"."+B64(new JObject{{"sub","student-fixture"},{"aud","offline-profile"},{"iss","https://securetoken.google.com/offline-profile"},{"exp",now+600},{"iat",now-10},{"auth_time",now-10}}.ToString())+".offline";
-            var patch=ProfileValidation.CreatePatch("0791234567","C#\nSQL","https://example.invalid/cv","https://example.invalid/portfolio",ProfileValidation.EditableFields);
+            var patch=ProfileValidation.CreatePatch("0791234567","C#\nSQL","https://example.invalid/cv","https://example.invalid/portfolio",ProfileValidation.EditableFields,"https://www.linkedin.com/in/offline-test");
             var adapter=new AdapterHarness();adapter.Save(patch).GetAwaiter().GetResult();
             Check(handler.Writes==1&&ProfileValidation.MatchesPatch(adapter.Workspace,patch),"Actual adapter failed PATCH/read-back");
             var extra=new Dictionary<string,object>(patch){{"Role","Admin"}};int before=handler.Writes;
@@ -170,22 +170,23 @@ public static class ProfilePhase1Checks
             object editState=view.State();
             var postback=new Harness(record); postback.Restore(editState);
             Check(postback.Editing,"Edit mode lost across ViewState restore");
-            postback.Post("+962 791234567","C#\nSQL","www.example.com/cv","https://example.com/portfolio");
+            postback.Post("+962 791234567","C#\nSQL","www.example.com/cv","https://example.com/portfolio","www.linkedin.com/in/edited-student");
             Check(postback.Inputs[0].Text=="+962 791234567","New phone POST was ignored");
             Check(postback.Inputs[1].Text=="C#\nSQL","New multiline POST was ignored");
             Check(postback.Inputs[2].Text=="www.example.com/cv","New CV POST was ignored");
             Check(postback.Inputs[3].Text=="https://example.com/portfolio","New portfolio POST was ignored");
+            Check(postback.Inputs[4].Text=="www.linkedin.com/in/edited-student","LinkedIn POST was ignored");
             postback.Action("validate");
             Check(postback.Message.Contains("passed validation") && postback.Message.Contains("Nothing was saved"),"Valid draft falsely reported saved");
             Check(postback.SaveEnabled && record.PhoneNumber=="0791234567" && record.CvUrl=="https://example.invalid/original.pdf","Validation mutated stored profile");
-            postback.Post("bad","toolong"+new string('x',60),"javascript:alert(1)","https://user:secret@example.com");
+            postback.Post("bad","toolong"+new string('x',60),"javascript:alert(1)","https://user:secret@example.com","https://linkedin.com.evil.invalid/in/test");
             postback.Action("validate");
-            for(int i=0;i<4;i++) {
+            for(int i=0;i<5;i++) {
                 Check(postback.Errors[i].Text.Length>0,"Missing field-level validation");
                 Check(postback.Inputs[i].Attributes["aria-invalid"]=="true","Missing invalid-field accessibility");
             }
             Check(postback.Inputs[0].Text=="bad" && postback.Inputs[2].Text=="javascript:alert(1)","Invalid entries were overwritten");
-            postback.Post("0799876543","Updated","https://example.com/new","https://example.com/p");
+            postback.Post("0799876543","Updated","https://example.com/new","https://example.com/p","https://www.linkedin.com/in/saved-student");
             context.Session["Student.Csrf"]="save-csrf";
             var postedForm=context.Request.Form;
             var formLock=typeof(NameObjectCollectionBase).GetProperty("IsReadOnly",BindingFlags.Instance|BindingFlags.NonPublic);
@@ -197,12 +198,18 @@ public static class ProfilePhase1Checks
             Reject(()=>postback.Action("save"),"Unconfirmed persistence reported success");postback.IgnoreSave=false;
             postback.Action("save");
             Check(!postback.Editing&&!postback.SaveEnabled&&postback.Message.Contains("saved and verified")&&record.PhoneNumber=="0799876543","Save/read-back did not exit editing");
-            Check(postback.SavedPatch.Count==4&&!postback.SavedPatch.ContainsKey("Name")&&!postback.SavedPatch.ContainsKey("CompanyId"),"Save allowlist expanded");
+            Check(postback.SavedPatch.Count==5&&!postback.SavedPatch.ContainsKey("Name")&&!postback.SavedPatch.ContainsKey("CompanyId"),"Save allowlist expanded");
+            Check(record.LinkedInUrl=="https://www.linkedin.com/in/saved-student" && record.PortfolioUrl=="https://example.com/p","LinkedIn overwrote portfolio or failed read-back");
             Check(record.Name=="Offline student" && record.Email=="fixture@example.invalid" && record.Major=="Recorded major" && record.GPA==3.1,"Academic identity changed");
             postback.Action("edit");postback.Post("0790000000","Unsaved","","");postback.Action("cancel");
             Check(!postback.Editing && postback.EditVisible && !postback.CancelVisible,"Cancel failed to exit editing");
             Check(postback.Inputs[0].Text==record.PhoneNumber && postback.Inputs[1].Text=="Updated","Cancel did not restore authoritative values");
+            Check(postback.Inputs[4].Text==record.LinkedInUrl,"Cancel failed to restore LinkedIn");
             foreach(var input in postback.Inputs) Check(input.ReadOnly,"Cancel left an editable field");
+            postback.Action("edit");postback.Action("save");
+            Check(!postback.SavedPatch.ContainsKey("LinkedInUrl") && record.LinkedInUrl=="https://www.linkedin.com/in/saved-student","Unchanged LinkedIn disrupted existing four-field saves");
+            postback.Action("edit");postback.Post(record.PhoneNumber,"Updated",record.CvUrl,record.PortfolioUrl,"");postback.Action("save");
+            Check(record.LinkedInUrl=="" && record.PortfolioUrl=="https://example.com/p","Clearing LinkedIn failed or changed portfolio");
             context.Session.Remove("Student.Csrf");
             formLock.SetValue(postedForm,false,null);postedForm.Remove("StudentCsrf");formLock.SetValue(postedForm,true,null);
             Reject(()=>new Harness(record).Action("save"),"Save accepted without Edit");
@@ -229,6 +236,16 @@ public static class ProfilePhase1Checks
             Check(ProfileValidation.NormalizeWebUrl("www.example.com/cv")=="https://www.example.com/cv","Missing scheme normalization changed");
             Check(ProfileValidation.NormalizeWebUrl("http://example.com")=="http://example.com/","HTTP link support changed");
             Check(ProfileValidation.CreatePatch("","","","",ProfileValidation.EditableFields).Count==4,"Empty optional fields rejected");
+            foreach(string link in new[] {"http://www.linkedin.com/in/test","https://linkedin.com.evil.invalid/in/test","https://evil-linkedin.com","javascript:alert(1)","https://user:pass@www.linkedin.com/in/test","https://www.linkedin.com/"+new string('x',2048),"https://www.linkedin.com/in/test\n"})
+                Reject(()=>ProfileValidation.NormalizeLinkedInUrl(link),"Unsafe or foreign LinkedIn URL accepted");
+            Check(ProfileValidation.NormalizeLinkedInUrl("www.linkedin.com/in/test")=="https://www.linkedin.com/in/test","LinkedIn scheme normalization failed");
+            Check(ProfileValidation.GetSafeLinkedInUrl("https://evil.invalid")==null,"Unsafe stored LinkedIn link rendered");
+            Check(ProfileValidation.NormalizeLinkedInUrl("")=="","Optional LinkedIn cannot be cleared");
+            var linkedinPatch=ProfileValidation.CreatePatch("","","","",ProfileValidation.EditableFields,"https://www.linkedin.com/in/test");
+            Check(linkedinPatch.Count==5 && (string)linkedinPatch["PortfolioUrl"]=="","LinkedIn patch replaced portfolio");
+            Reject(()=>ProfileValidation.ValidatePatch(new Dictionary<string,object>{{"LinkedInUrl","https://evil.invalid"}},ProfileValidation.EditableFields),"LinkedIn transport validation bypassed");
+            Reject(()=>ProfileValidation.ValidatePatch(new Dictionary<string,object>{{"LinkedInUrl","https://www.linkedin.com/in/test"}},new HashSet<string>{"PortfolioUrl"}),"Unauthorized LinkedIn field accepted");
+            Check(!ProfileValidation.MatchesPatch(new Student{LinkedInUrl="https://www.linkedin.com/in/other"},new Dictionary<string,object>{{"LinkedInUrl","https://www.linkedin.com/in/test"}}),"LinkedIn read-back mismatch accepted");
             var imageMethod=typeof(Profile).GetMethod("SafeProfileImage",BindingFlags.Static|BindingFlags.NonPublic);
             foreach(string image in new[] {null,"","javascript:alert(1)","http://example.com/avatar","https://u:p@example.com/avatar"})
                 Check(imageMethod.Invoke(null,new object[]{image})==null,"Unsafe avatar accepted");
