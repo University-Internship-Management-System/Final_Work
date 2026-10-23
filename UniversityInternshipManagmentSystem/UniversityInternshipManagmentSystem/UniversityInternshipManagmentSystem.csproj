@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -97,10 +97,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Academic\Dashboard.aspx" />
-    <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
-    <Content Include="Academic\FinalEvaluation\Trainees.aspx" />
-    <Content Include="Academic\FinalEvaluation\EvaluateTrainee.aspx" />
-    <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
+    <Content Include="Academic\Dashboard.css" />
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
     <Content Include="Assets\images\uj-logo.svg" />
@@ -160,8 +157,14 @@
     <Content Include="bin\UniversityInternshipManagmentSystem.dll" />
     <Content Include="bin\UniversityInternshipManagmentSystem.pdb" />
     <Content Include="bin\WebGrease.dll" />
+    <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
+    <Content Include="Company\ApplicationsReview\ApplicationsReview.css" />
+    <Content Include="Company\ApplicationsReview\ApplicationsReview.js" />
     <Content Include="Company\CompanyDashboard\Dashboard.aspx" />
     <Content Include="Company\CompanyDashboard\Dashboard.css" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.css" />
+    <Content Include="Company\ManageOpportunities\ManageOpportunities.js" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.aspx" />
     <Content Include="Coordinator\FinalCompletionReview\FinalCompletionReview.aspx" />
     <Content Include="Coordinator\CoordinatorDashbord\CoordinatorDashbord.css" />
@@ -274,14 +277,27 @@
     <Content Include="Shared\Navbar.ascx" />
     <Content Include="Shared\Public.Master" />
     <Content Include="Shared\ComingSoon.ascx" />
-    <Content Include="Company\ApplicationsReview\ApplicationsReview.aspx" />
     <Content Include="Company\MyTrainees\MyTrainees.aspx" />
+    <Compile Include="Company\ApplicationsReview\ApplicationsReview.aspx.cs">
+      <DependentUpon>ApplicationsReview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ApplicationsReview\ApplicationsReview.aspx.designer.cs">
+      <DependentUpon>ApplicationsReview.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Company\CompanyDashboard\Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Company\CompanyDashboard\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.cs">
+      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.designer.cs">
+      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
     </Compile>
     <Compile Include="Company\MyTrainees\MyTrainees.aspx.cs">
       <DependentUpon>MyTrainees.aspx</DependentUpon>
@@ -291,13 +307,6 @@
       <DependentUpon>MyTrainees.aspx</DependentUpon>
     </Compile>
     <Compile Include="Company\MyTrainees\MyTraineesRepository.cs" />
-    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.cs">
-      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Company\ManageOpportunities\ManageOpportunities.aspx.designer.cs">
-      <DependentUpon>ManageOpportunities.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Company\FinalEvaluation\FinalEvaluation.aspx.cs">
       <DependentUpon>FinalEvaluation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -332,21 +341,26 @@
     <Content Include="Company\ManageTasks\ManageTasks.css" />
     <Content Include="Company\ManageTasks\ManageTasks.js" />
     <Content Include="Company\ManageTasks\ReviewTask.aspx" />
-    <Content Include="Company\ManageOpportunities\ManageOpportunities.aspx" />
-    <Content Include="Company\ManageOpportunities\ManageOpportunities.css" />
-    <Content Include="Company\ManageOpportunities\ManageOpportunities.js" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.aspx" />
     <Content Include="Company\FinalEvaluation\FinalEvaluation.css" />
     <Content Include="Company\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="Company\SupervisorAccount\SupervisorAccount.aspx" />
+    <Content Include="Company\SupervisorAccount\css\supervisor-account.css" />
+    <Content Include="Company\SupervisorAccount\javascript\supervisor-account.js" />
     <Content Include="Academic\SupervisorAccount\SupervisorAccount.aspx" />
     <Content Include="Academic\SupervisorAccount\css\supervisor-account.css" />
     <Content Include="Academic\SupervisorAccount\javascript\supervisor-account.js" />
     <Content Include="Coordinator\ContactMessages\ContactMessages.aspx" />
     <Content Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx" />
+    <Content Include="Coordinator\CoordinatorAccount\coordinator-account.css" />
+    <Content Include="Coordinator\CoordinatorAccount\coordinator-account.js" />
     <Content Include="Shared\Sidebar.ascx" />
     <Content Include="Shared\uims.css" />
     <Content Include="Content\uims.css" />
+    <Content Include="Content\student-guide.css" />
+    <Content Include="Scripts\student-guide.js" />
+    <Content Include="Assets\PublicHome\student-guide.mp4" />
+    <Content Include="Assets\PublicHome\student-guide-poster.jpg" />
     <Content Include="Scripts\uims.js" />
     <Content Include="Site.Master" />
     <Content Include="Student\ApplicationForm\ApplicationForm.aspx" />
@@ -374,9 +388,18 @@
     <Content Include="Student\Tests\Verify-StudentPages.cjs" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
+    <Content Include="Academic\FinalEvaluation\FinalEvaluation.aspx" />
+    <Content Include="Academic\FinalEvaluation\Trainees.aspx" />
+    <Content Include="Academic\FinalEvaluation\EvaluateTrainee.aspx" />
+    <Content Include="EmailTemplates\notice.html" />
+    <Content Include="EmailTemplates\notice.txt" />
+    <Content Include="EmailTemplates\password-reset.html" />
+    <Content Include="EmailTemplates\password-reset.txt" />
+    <None Include="secrets.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx.cs"><DependentUpon>CoordinatorAccount.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
     <Compile Include="Academic\FinalEvaluation\FinalEvaluation.aspx.cs">
       <DependentUpon>FinalEvaluation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -438,6 +461,17 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Config\AppConfig.cs" />
+    <Compile Include="Company\SupervisorAccount\SupervisorAccount.aspx.cs">
+      <DependentUpon>SupervisorAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Company\SupervisorAccount\SupervisorAccount.aspx.designer.cs">
+      <DependentUpon>SupervisorAccount.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\EmailSender.cs" />
+    <Compile Include="Config\Notify.cs" />
+    <Compile Include="Config\EmailVerification.cs" />
+    <Compile Include="Config\FirebaseAdmin.cs" />
     <Compile Include="Config\FirebaseDb.cs" />
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
@@ -708,4 +742,3 @@
   </ItemGroup>
   <ItemGroup />
 </Project>
-

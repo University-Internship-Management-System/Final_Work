@@ -3,12 +3,19 @@
 <%@ Register Src="~/Shared/Footer.ascx" TagPrefix="uims" TagName="Footer" %>
 
 <script runat="server">
+    // " uims-auth" on the sign-in and first-login pages: no navigation bar there, only the footer, and a full-screen background
+    protected string BodyClass = "";
+
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        bool customHome = string.Equals(Page.AppRelativeVirtualPath, "~/index.aspx", StringComparison.OrdinalIgnoreCase);
-        StandardPublicNavigation.Visible = !customHome;
+        string path = Page.AppRelativeVirtualPath ?? "";
+        bool customHome = string.Equals(path, "~/index.aspx", StringComparison.OrdinalIgnoreCase);
+        bool authPage = path.StartsWith("~/login/Login.aspx", StringComparison.OrdinalIgnoreCase)
+                     || path.StartsWith("~/login/FirstLogin.aspx", StringComparison.OrdinalIgnoreCase);
+        StandardPublicNavigation.Visible = !customHome && !authPage;
         StandardPublicFooter.Visible = !customHome;
+        if (authPage) BodyClass = " uims-auth";
     }
 </script>
 <!DOCTYPE html>
@@ -34,7 +41,7 @@
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
     </asp:ContentPlaceHolder>
 </head>
-<body class="uims-public d-flex flex-column min-vh-100">
+<body class="uims-public d-flex flex-column min-vh-100<%= BodyClass %>">
     <form id="form1" runat="server" class="d-flex flex-column flex-grow-1">
         <!-- Main Navigation Bar -->
         <asp:PlaceHolder ID="StandardPublicNavigation" runat="server"><uims:Navbar runat="server" /></asp:PlaceHolder>

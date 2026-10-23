@@ -1,10 +1,13 @@
-<%@ Control Language="C#" %>
+﻿<%@ Control Language="C#" %>
 <%@ Import Namespace="UniversityInternshipManagmentSystem.Config" %>
 <%
     string currentPath = Request.AppRelativeCurrentExecutionFilePath ?? string.Empty;
-    bool isHome = currentPath.Equals("~/Default.aspx", StringComparison.OrdinalIgnoreCase) || currentPath.Equals("~/", StringComparison.OrdinalIgnoreCase);
+    bool isHome = currentPath.Equals("~/Default.aspx", StringComparison.OrdinalIgnoreCase)
+                  || currentPath.Equals("~/index.aspx", StringComparison.OrdinalIgnoreCase)
+                  || currentPath.Equals("~/", StringComparison.OrdinalIgnoreCase);
     bool isAbout = currentPath.IndexOf("About", StringComparison.OrdinalIgnoreCase) >= 0;
     bool isContact = currentPath.IndexOf("Contact", StringComparison.OrdinalIgnoreCase) >= 0;
+    bool isLogin = currentPath.IndexOf("Login", StringComparison.OrdinalIgnoreCase) >= 0;
 %>
 
 <nav class="navbar navbar-expand-lg uims-navbar sticky-top bg-white border-bottom shadow-sm py-2">

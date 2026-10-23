@@ -14,7 +14,69 @@
         initPasswordToggles();
         initDemoAutofill();
         initForgotModal();
+        initPasswordMeter();
     });
+
+    /**
+     * First-login page: shows how strong the new password is and whether the two boxes match.
+     * (Only a hint for the person; the server checks the password again.)
+     */
+    function initPasswordMeter() {
+        var newInput = document.getElementById("txtNewPassword");
+        var confirmInput = document.getElementById("txtConfirmPassword");
+        var bar = document.getElementById("pwMeterBar");
+        var text = document.getElementById("pwMeterText");
+        var match = document.getElementById("pwMatch");
+        if (!newInput || !bar || !text) return;
+
+        var levels = [
+            { width: "12%", color: "#DC2626", label: "Too short" },
+            { width: "35%", color: "#F59E0B", label: "Weak" },
+            { width: "60%", color: "#EAB308", label: "Fair" },
+            { width: "82%", color: "#65A30D", label: "Good" },
+            { width: "100%", color: "#16A34A", label: "Strong" }
+        ];
+
+        function score(value) {
+            if (value.length < 6) return 0;
+            var points = 1;
+            if (value.length >= 10) points++;
+            if (/[a-z]/.test(value) && /[A-Z]/.test(value)) points++;
+            if (/\d/.test(value)) points++;
+            if (/[^A-Za-z0-9]/.test(value)) points++;
+            return Math.min(points, 4);
+        }
+
+        function update() {
+            var value = newInput.value;
+            if (value.length === 0) {
+                bar.style.width = "0";
+                text.textContent = "At least 6 characters. Longer is stronger.";
+                text.style.color = "";
+            } else {
+                var level = levels[score(value)];
+                bar.style.width = level.width;
+                bar.style.backgroundColor = level.color;
+                text.textContent = level.label;
+                text.style.color = level.color;
+            }
+            if (match && confirmInput) {
+                if (confirmInput.value.length === 0) {
+                    match.textContent = "";
+                    match.className = "pw-match";
+                } else if (confirmInput.value === value) {
+                    match.textContent = "Passwords match";
+                    match.className = "pw-match ok";
+                } else {
+                    match.textContent = "Passwords do not match yet";
+                    match.className = "pw-match bad";
+                }
+            }
+        }
+
+        newInput.addEventListener("input", update);
+        if (confirmInput) confirmInput.addEventListener("input", update);
+    }
 
     /**
      * Sets up password visibility toggles via declarative [data-toggle-target] attributes.

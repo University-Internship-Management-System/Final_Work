@@ -149,6 +149,7 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
                 // 4. إظهار الـ Pop-up Modal (نجاح العملية)، and hide the form so it cannot be sent twice
                 if (response.IsSuccessStatusCode)
                 {
+                    Notify.ApplicationSubmitted(student.Name, student.Email, opportunity.Title, opportunity.CompanyName, opportunity.CompanyId);
                     ScriptManager.RegisterStartupScript(this, GetType(), "saved", "window.applicationSaved = true;", true);
                     pnlApply.Visible = false;
                     ShowMessage("Your application was submitted. You can track it in My Applications.", "alert-success");

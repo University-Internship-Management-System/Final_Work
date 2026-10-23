@@ -178,6 +178,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 string key = existing == null ? certificate.CertificateId : existing.CertificateId;
                 HttpResponseMessage response = await FirebaseDb.Put("Certificate", key, certificate);
                 if (!response.IsSuccessStatusCode) throw new HttpRequestException("Firebase refused to save the coordinator's certificate decision.");
+                Notify.CertificateApproved((string)entry.Value["Name"], (string)entry.Value["Email"], adminComment);
                 ShowMessage(String.IsNullOrWhiteSpace(adminComment) ? "Completion approved and certificate record saved." : "Completion approved. Coordinator comment: " + adminComment, false);
                 await LoadPageAsync();
             }

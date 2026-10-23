@@ -15,7 +15,7 @@ Never work directly on `dev` or `main`.
 | Folder | What is in it | Who |
 |---|---|---|
 | `login/` | Login, FirstLogin, Logout | Alaa |
-| `Config/` | `AuthHelper` (session + role), `FirebaseDb` (Get/Post/Put/Delete), `AppConfig`, `TaskDb` | Alaa, Wadea |
+| `Config/` | `AuthHelper` (session + role), `FirebaseDb` (Get/Post/Put/Delete), `AppConfig`, `TaskDb`, `EmailVerification` (Firebase "confirm your email"; new accounts can not sign in until confirmed), `EmailSender` + `Notify` (our SMTP emails: welcome, password changed, task, certificate; secrets in `secrets.config`), `FirebaseAdmin` (not used), see `docs/emails/README.md` | Alaa, Wadea |
 | `Models/` | One class per Firebase table | whole team |
 | `Shared/` | Layouts (`Dashboard.Master`, `Public.Master`), `Sidebar.ascx`, `Navbar.ascx`, `Footer.ascx`, `uims.css` | Wadea |
 | `Student/StudentTasksPage/` | My Tasks: weeks overview + week page | Wadea |
