@@ -22,18 +22,36 @@ namespace UniversityInternshipManagmentSystem.Config
     {
         // ---- accounts ----
 
-        // The coordinator created an account: the person gets the sign-in details for the first time
-        public static void AccountCreated(string name, string role, string email, string temporaryPassword)
+        // The coordinator created an account: the person gets the sign-in details for the first time.
+        // This one is sent right away (the page waits for it) so the coordinator can be told whether it worked:
+        // returns "sent", "failed" (see App_Data/email-log.txt) or "off" (SMTP is not set up).
+        public static async Task<string> AccountCreated(string name, string role, string email, string temporaryPassword)
         {
+            if (!EmailSender.IsConfigured)
+            {
+                EmailSender.Log("SKIPPED (SMTP is not set up in secrets.config) | account email for " + email);
+                return "off";
+            }
+            EmailSender.Log("account email requested for " + email);
             var site = Here();
-            Later(async () => await Mail(email, "Your UIMS account", "ACCOUNT CREATED", "Your UIMS account is ready", name,
+            bool sent = await Mail(email, "Your UIMS account", "ACCOUNT CREATED", "Your UIMS account is ready", name,
                 "The internship coordinator created a UIMS account for you as a " + RoleLabel(role) + ".\n\n"
                     + "1. Open the email from Firebase and press its link to confirm your email address.\n"
                     + "2. Sign in with the details below.\n"
-                    + "3. UIMS asks you to choose your own password.",
+                    + "3. UIMS asks you to choose your own password. After that you get a welcome email about the system.",
                 "Your sign-in details", "Email: " + email + "\nTemporary password: " + temporaryPassword
                     + "\n\nKeep this email private. The temporary password stops working once you choose your own.",
-                "Open the sign-in page", Link(site, "~/login/Login.aspx")));
+                "Open the sign-in page", Link(site, "~/login/Login.aspx"));
+            return sent ? "sent" : "failed";
+        }
+
+        // The sentence the Manage pages add to the "saved" message
+        public static string AccountMailMessage(string result)
+        {
+            if (result == "sent") return " The sign-in details email (email and temporary password) was sent.";
+            if (result == "failed") return " The sign-in details email could NOT be sent. Open App_Data/email-log.txt to see why.";
+            if (result == "off") return " The sign-in details email was not sent because email is not set up on this PC.";
+            return "";
         }
 
         // The coordinator turned an account off or on
@@ -47,10 +65,8 @@ namespace UniversityInternshipManagmentSystem.Config
                 null, null, "Open the sign-in page", Link(site, "~/login/Login.aspx")));
         }
 
-        // Called at sign-in, before the session starts. Does two things with ONE read of the person's record:
-        // 1. Welcome email, once, for an account that had to confirm its email (it is sent at the first sign-in after the confirmation).
-        // 2. "Your password was changed" email, when the password is newer than the last one we told the person about.
-        //    This also covers the Firebase reset page, which our website never sees.
+        // Called at sign-in, before the session starts: the "Your password was changed" email, when the password is newer
+        // than the last one we told the person about. This also covers the Firebase reset page, which our website never sees.
         public static void AfterSignIn(string table, string recordId, string name, string role, string email, string idToken)
         {
             if (!EmailSender.IsConfigured || string.IsNullOrEmpty(table) || string.IsNullOrEmpty(recordId)) return;
@@ -68,10 +84,6 @@ namespace UniversityInternshipManagmentSystem.Config
                 var record = JObject.Parse(json);
 
                 var changes = new JObject();
-                bool sendWelcome = IsTrue(record[EmailVerification.RequiredField]) && !IsTrue(record["WelcomeEmailSent"]);
-                if (!sendWelcome)
-                    EmailSender.Log("sign-in of " + email + ": no welcome email (" + (IsTrue(record["WelcomeEmailSent"]) ? "already sent before"
-                        : "this account was not created with the email confirmation, so it has no welcome email") + ")");
 
                 long? passwordTime = await PasswordUpdatedAt(idToken);
                 bool sendPasswordChanged = false;
@@ -85,11 +97,6 @@ namespace UniversityInternshipManagmentSystem.Config
                 if (changes.HasValues) await FirebaseDb.Patch(table, recordId, changes, idToken);
 
                 // The "done" flag is saved only after the email was really sent. If the mail server fails, the next sign-in tries again.
-                if (sendWelcome)
-                    Later(async () => await Mail(email, "Welcome to UIMS", "EMAIL CONFIRMED", "Welcome to UIMS", name,
-                        "Your email is confirmed and your UIMS account is ready. You are signed up as a " + RoleLabel(role) + ".",
-                        null, null, "Open UIMS", Link(site, "~/login/Login.aspx"),
-                        () => FirebaseDb.Patch(table, recordId, new JObject { { "WelcomeEmailSent", true } }, idToken)));
                 if (sendPasswordChanged)
                 {
                     string when = DateTimeOffset.FromUnixTimeMilliseconds(passwordTime.Value).ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture) + " (UTC)";
@@ -106,6 +113,72 @@ namespace UniversityInternshipManagmentSystem.Config
                 // Never stop a sign-in because of an email
                 EmailSender.Log("sign-in check failed | " + ex.Message);
             }
+        }
+
+        // The person just chose their own password for the first time (First Login page): the welcome email, once.
+        // It also remembers the time of this password change, so the "password changed" email does not follow it.
+        public static void WelcomeAfterFirstPassword(string table, string recordId, string name, string role, string email, string idToken)
+        {
+            if (!EmailSender.IsConfigured || string.IsNullOrEmpty(table) || string.IsNullOrEmpty(recordId)) return;
+            var site = Here(idToken);
+            HostingEnvironment.QueueBackgroundWorkItem(async token =>
+            {
+                try
+                {
+                    string json = await FirebaseDb.Get(table, recordId, idToken);
+                    var record = string.IsNullOrEmpty(json) || json.Trim() == "null" ? new JObject() : JObject.Parse(json);
+
+                    long? passwordTime = await PasswordUpdatedAt(idToken);
+                    if (passwordTime.HasValue)
+                        await FirebaseDb.Patch(table, recordId, new JObject { { "PasswordUpdatedAt", passwordTime.Value } }, idToken);
+
+                    if (IsTrue(record["WelcomeEmailSent"])) return;
+                    string tips = WelcomeTips(role);
+                    await Mail(email, "Welcome to UIMS", "WELCOME", "Welcome to UIMS", name,
+                        "Your password is set and your account is ready. UIMS is the University Internship Management System of the King Abdullah II School of Information Technology, "
+                            + "The University of Jordan. It takes you through the whole field training: from the opportunity to the certificate. You are signed up as a " + RoleLabel(role) + ".",
+                        "What you can do here", tips, "Open my dashboard", Link(site, AuthHelper.GetDashboardUrl(role)),
+                        () => FirebaseDb.Patch(table, recordId, new JObject { { "WelcomeEmailSent", true } }, idToken));
+                }
+                catch (Exception ex)
+                {
+                    EmailSender.Log("welcome email failed | " + ex.Message);
+                }
+            });
+        }
+
+        // What each kind of person can do in UIMS (the list in the welcome email)
+        static string WelcomeTips(string role)
+        {
+            switch ((role ?? "").ToLowerInvariant())
+            {
+                case "company": case "company supervisor":
+                    return "Post internship opportunities and choose how many seats.\nReview the applications and accept or reject them.\n"
+                        + "Give your trainees tasks and weekly hours, review their work and score it.\nSign the weekly hours and send the final evaluation.";
+                case "academic": case "academic supervisor":
+                    return "See the students that the coordinator assigned to you.\nFollow their tasks, scores and hours.\n"
+                        + "Write feedback on their work.\nReview the company evaluation and pass the student to the coordinator.";
+                case "coordinator":
+                    return "Create student, company supervisor and academic supervisor accounts.\nAssign academic supervisors to students.\n"
+                        + "Monitor the progress of every student.\nApprove the completion and the certificate, and read the contact messages.";
+                default:
+                    return "Browse the internship opportunities and apply.\nConfirm the offer you want to accept.\n"
+                        + "Get tasks from your company supervisor, send your work and read the feedback.\nFollow your hours and progress, and get your certificate at the end.";
+            }
+        }
+
+        // A task is due soon and the trainee has not sent work (or has to send it again). Called by Config/DeadlineReminders.cs,
+        // which runs without a web request, so the site address was remembered from an earlier request (see RememberSite).
+        // onSent runs only when the email really went out.
+        public static Task TaskDeadlineReminder(string name, string email, string taskName, DateTime deadline, Func<Task> onSent)
+        {
+            var site = new Site { Root = lastRoot ?? "http://localhost/" };
+            double hours = Math.Max(0, (deadline - DateTime.Now).TotalHours);
+            string left = hours < 1 ? "less than an hour" : "about " + Math.Round(hours) + " hour" + (Math.Round(hours) == 1 ? "" : "s");
+            return Mail(email, "Deadline soon: " + taskName, "DEADLINE", "A task is due soon", name,
+                "The task \"" + taskName + "\" is due on " + deadline.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)
+                    + " (" + left + " left). We did not receive your work yet. Please send it before the deadline.",
+                null, null, "Open my tasks", Link(site, "~/Student/StudentTasksPage/StudentTasksForm.aspx"), onSent);
         }
 
         // The coordinator gave students an academic supervisor: tell each student, and tell the supervisor
@@ -309,13 +382,25 @@ namespace UniversityInternshipManagmentSystem.Config
             public string Token;
         }
 
+        // The address of the site, remembered from the last web request. Jobs that run without a request (deadline alerts) need it for the buttons.
+        static string lastRoot;
+
+        // Called by Global.asax for every request
+        public static void RememberSite()
+        {
+            var context = HttpContext.Current;
+            if (context != null && context.Request != null)
+                lastRoot = context.Request.Url.GetLeftPart(UriPartial.Authority) + VirtualPathUtility.ToAbsolute("~/");
+        }
+
         static Site Here(string token = null)
         {
             var context = HttpContext.Current;
+            RememberSite();
             return new Site
             {
-                Root = context.Request.Url.GetLeftPart(UriPartial.Authority) + VirtualPathUtility.ToAbsolute("~/"),
-                Token = token ?? (context.Session == null ? null : context.Session["idToken"] as string)
+                Root = lastRoot,
+                Token = token ?? (context == null || context.Session == null ? null : context.Session["idToken"] as string)
             };
         }
 
@@ -341,8 +426,8 @@ namespace UniversityInternshipManagmentSystem.Config
         }
 
         // Builds one email from EmailTemplates/notice and sends it. onSent runs only when the email really went out.
-        static async Task Mail(string to, string subject, string tag, string title, string name, string message,
-                               string noteLabel, string note, string buttonText, string buttonUrl, Func<Task> onSent = null)
+        static async Task<bool> Mail(string to, string subject, string tag, string title, string name, string message,
+                                     string noteLabel, string note, string buttonText, string buttonUrl, Func<Task> onSent = null)
         {
             var values = new Dictionary<string, string>
             {
@@ -350,7 +435,9 @@ namespace UniversityInternshipManagmentSystem.Config
                 { "MESSAGE", message }, { "NOTE_LABEL", noteLabel ?? "" }, { "NOTE", note ?? "" },
                 { "BUTTON_TEXT", buttonText }, { "BUTTON_URL", buttonUrl }
             };
-            if (await EmailSender.TrySend(to, subject, "notice", values) && onSent != null) await onSent();
+            bool sent = await EmailSender.TrySend(to, subject, "notice", values);
+            if (sent && onSent != null) await onSent();
+            return sent;
         }
 
         // Name and email of one record, for example PersonOf(site, "Students", id). Empty when it can not be read.

@@ -144,7 +144,15 @@ namespace UniversityInternshipManagmentSystem.login
                 TryRefreshSessionToken(responseJson, ref idToken);
 
                 // Update FirstLogin flag to false across database tables
-                await ClearFirstLoginFlagInDatabaseAsync(uid, idToken);
+                if (!await ClearFirstLoginFlagInDatabaseAsync(uid, idToken))
+                {
+                    DisplayAlert("Your new password is saved, but we could not finish setting up your account. Sign in again with your NEW password and repeat this step, or contact the coordinator.", "alert-danger");
+                    return;
+                }
+
+                // The welcome email (what UIMS is and what this person can do). Does nothing when SMTP is not set up (Config/Notify.cs).
+                Notify.WelcomeAfterFirstPassword(Session["dbTable"] as string, Session["dbRecordId"] as string,
+                    AuthHelper.UserName, AuthHelper.UserRole, AuthHelper.UserEmail, idToken);
 
                 // Update active user session state
                 CompleteFirstLoginSession();
@@ -162,8 +170,10 @@ namespace UniversityInternshipManagmentSystem.login
             }
         }
 
-        private async Task ClearFirstLoginFlagInDatabaseAsync(string uid, string idToken)
+        // Returns false when Firebase refused the change of the main record (then the person would be asked again at the next sign-in)
+        private async Task<bool> ClearFirstLoginFlagInDatabaseAsync(string uid, string idToken)
         {
+            bool mainRecordSaved = true;
             var updatePayload = new { FirstLogin = false, firstLogin = false };
 
             string recordId = Session["dbRecordId"] as string;
@@ -174,11 +184,12 @@ namespace UniversityInternshipManagmentSystem.login
             {
                 try
                 {
-                    await FirebaseDb.Patch(tableName, recordId, updatePayload, idToken);
+                    using (var saved = await FirebaseDb.Patch(tableName, recordId, updatePayload, idToken))
+                        mainRecordSaved = saved.IsSuccessStatusCode;
                 }
                 catch
                 {
-                    // Continue with general pass
+                    mainRecordSaved = false;
                 }
             }
 
@@ -197,6 +208,8 @@ namespace UniversityInternshipManagmentSystem.login
                     // Proceed to next table
                 }
             }
+
+            return mainRecordSaved;
         }
 
         #endregion

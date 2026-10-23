@@ -12,7 +12,6 @@ using UniversityInternshipManagmentSystem.Config;
 using UniversityInternshipManagmentSystem.Models;
 using StudentModel = UniversityInternshipManagmentSystem.Models.Student;
 using ApplicationModel = UniversityInternshipManagmentSystem.Models.Application;
-using System.Web;
 
 namespace UniversityInternshipManagmentSystem.Academic
 {

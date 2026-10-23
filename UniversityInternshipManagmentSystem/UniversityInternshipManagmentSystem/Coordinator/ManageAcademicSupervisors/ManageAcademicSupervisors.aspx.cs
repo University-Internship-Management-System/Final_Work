@@ -67,7 +67,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 if (Request.QueryString["saved"] == "1")
                 {
                     savedPanel.Visible = true;
-                    savedMessage.Text = "Academic supervisor saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]);
+                    savedMessage.Text = "Academic supervisor saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]) + Notify.AccountMailMessage(Request.QueryString["mail"]);
                 }
             }
             catch
@@ -176,7 +176,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 Tell("A supervisor with this login or university email already exists.");
                 return;
             }
-            string createdToken = null, verifyResult = null;
+            string createdToken = null, verifyResult = null, mailResult = null;
             try
             {
                 // A supervisor's major must continue to match their assigned students.
@@ -202,7 +202,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     using (var response = await FirebaseDb.Put("AcademicSupervisors", id, person))
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                     verifyResult = await EmailVerification.RequireAndSend("AcademicSupervisors", id, createdToken);
-                    Notify.AccountCreated(person.Name, "academic", person.Email, temporaryPassword.Text);
+                    mailResult = await Notify.AccountCreated(person.Name, "academic", person.Email, temporaryPassword.Text);
                 }
                 else
                 {
@@ -222,7 +222,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 Tell("Could not save the supervisor. Check email availability and Firebase permissions.");
                 return;
             }
-            Response.Redirect("ManageAcademicSupervisors.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult), false);
+            Response.Redirect("ManageAcademicSupervisors.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult) + (mailResult == null ? "" : "&mail=" + mailResult), false);
             Context.ApplicationInstance.CompleteRequest();
         }
 

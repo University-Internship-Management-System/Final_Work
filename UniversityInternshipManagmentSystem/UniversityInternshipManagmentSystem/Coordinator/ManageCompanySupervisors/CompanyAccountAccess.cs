@@ -17,11 +17,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
     {
         private static string CredentialsPath
         {
-            get
-            {
-                return Environment.GetEnvironmentVariable("UIMS_FIREBASE_ADMIN_CREDENTIALS", EnvironmentVariableTarget.User)
-                    ?? Environment.GetEnvironmentVariable("UIMS_FIREBASE_ADMIN_CREDENTIALS");
-            }
+            // App_Data/keys/firebase-admin.json (team file) or the Windows variable, see Config/TeamKeys.cs
+            get { return TeamKeys.FindFile(TeamKeys.FirebaseAdminVariable, TeamKeys.FirebaseAdminFile); }
         }
 
         public static bool IsConfigured

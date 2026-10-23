@@ -74,7 +74,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                         + accounts[toggleId].Name + "? Inactive accounts cannot sign in.";
                 }
                 if (Request.QueryString["saved"] == "1")
-                    ShowSuccess("Company supervisor saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]));
+                    ShowSuccess("Company supervisor saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]) + Notify.AccountMailMessage(Request.QueryString["mail"]));
                 if (Request.QueryString["status"] == "inactive") ShowSuccess("Account deactivated. The supervisor cannot sign in.");
                 if (Request.QueryString["status"] == "active") ShowSuccess("Account activated. The supervisor can sign in again.");
             }
@@ -226,7 +226,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 ShowMessage("A supervisor with this login email already exists.");
                 return;
             }
-            string newAccountToken = null, verifyResult = null;
+            string newAccountToken = null, verifyResult = null, mailResult = null;
             try
             {
                 if (id == null)
@@ -239,7 +239,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     using (var response = await FirebaseDb.Put("CompanySupervisors", id, person))
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                     verifyResult = await EmailVerification.RequireAndSend("CompanySupervisors", id, newAccountToken);
-                    Notify.AccountCreated(person.Name, "company", person.Email, temporaryPassword.Text);
+                    mailResult = await Notify.AccountCreated(person.Name, "company", person.Email, temporaryPassword.Text);
                 }
                 else
                 {
@@ -259,7 +259,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 ShowMessage("Could not save the account. Check email availability and Firebase permissions.");
                 return;
             }
-            Response.Redirect("ManageCompanySupervisors.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult), false);
+            Response.Redirect("ManageCompanySupervisors.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult) + (mailResult == null ? "" : "&mail=" + mailResult), false);
             Context.ApplicationInstance.CompleteRequest();
         }
 

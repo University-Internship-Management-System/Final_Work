@@ -90,15 +90,16 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
             // 3. Fallback to default in-memory model if no database record found
             if (supervisor == null)
             {
+                // No record was found: show an empty profile (never made-up data) with the name and email of the signed-in person
                 supervisor = new Models.CompanySupervisor
                 {
-                    Id = !string.IsNullOrEmpty(recordId) ? recordId : "company_test_001",
-                    Name = !string.IsNullOrWhiteSpace(AuthHelper.UserName) ? AuthHelper.UserName : "Omar Al-Khatib",
-                    Email = !string.IsNullOrWhiteSpace(AuthHelper.UserEmail) ? AuthHelper.UserEmail : "omar@progresssoft.com",
-                    CompanyName = "ProgressSoft Corporation",
-                    CompEmail = !string.IsNullOrWhiteSpace(AuthHelper.UserEmail) ? AuthHelper.UserEmail : "omar@progresssoft.com",
-                    Location = "King Hussein Business Park, Bldg 23, Amman",
-                    PhoneNumber = "0795551234",
+                    Id = recordId ?? string.Empty,
+                    Name = AuthHelper.UserName ?? string.Empty,
+                    Email = AuthHelper.UserEmail ?? string.Empty,
+                    CompanyName = string.Empty,
+                    CompEmail = AuthHelper.UserEmail ?? string.Empty,
+                    Location = string.Empty,
+                    PhoneNumber = string.Empty,
                     ProfilePicUrl = string.Empty,
                     Role = "CompanySupervisor"
                 };
@@ -203,7 +204,13 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
                 return;
             }
 
-            string recordId = Session["dbRecordId"] as string ?? "company_test_001";
+            // Only the record of the signed-in supervisor can be changed (there is no fallback record)
+            string recordId = Session["dbRecordId"] as string;
+            if (string.IsNullOrEmpty(recordId))
+            {
+                ShowProfileError("Your supervisor record was not found, so nothing was saved. Please contact the coordinator.");
+                return;
+            }
 
             var patchPayload = new
             {
@@ -217,6 +224,11 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
             try
             {
                 var response = await FirebaseDb.Patch(TableCompany, recordId, patchPayload);
+                if (!response.IsSuccessStatusCode)
+                {
+                    ShowProfileError("Firebase did not accept the changes, so nothing was saved. Please try again.");
+                    return;
+                }
 
                 // Update active user session
                 Session["name"] = fullName;
@@ -269,9 +281,21 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
             string newPassword = txtNewPassword.Text;
             string confirmPassword = txtConfirmPassword.Text;
 
+            if (string.IsNullOrEmpty(currentPassword))
+            {
+                ShowPasswordError("Please enter your current password.");
+                return;
+            }
+
             if (string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(confirmPassword))
             {
                 ShowPasswordError("Please enter both the new password and its confirmation.");
+                return;
+            }
+
+            if (newPassword == currentPassword)
+            {
+                ShowPasswordError("Choose a new password that is different from the current one.");
                 return;
             }
 
@@ -294,6 +318,22 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
                 // Update password in Firebase Auth if live token is present
                 if (!string.IsNullOrEmpty(idToken))
                 {
+                    // The current password must be correct: sign in with it first (a session left open must not be enough to change it)
+                    var verifyBody = new StringContent(JsonConvert.SerializeObject(new
+                    {
+                        email = AuthHelper.UserEmail,
+                        password = currentPassword,
+                        returnSecureToken = true
+                    }), Encoding.UTF8, "application/json");
+                    using (var verify = await FirebaseDb.client.PostAsync(AppConfig.SignInUrl, verifyBody))
+                    {
+                        if (!verify.IsSuccessStatusCode)
+                        {
+                            ShowPasswordError("The current password is not correct.");
+                            return;
+                        }
+                    }
+
                     var payload = new
                     {
                         idToken = idToken,
