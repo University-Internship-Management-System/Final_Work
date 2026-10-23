@@ -13,12 +13,17 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 {
     public partial class AssignAcademicSupervisorsPage : Page
     {
-        protected Panel messagePanel, workspace, reviewPanel;
-        protected Literal message, groupCaption, supervisorHelp, reviewSummary;
+        protected Panel messagePanel, workspace, reviewPanel, reviewNotice, emptyStudents, savedPanel;
+        protected Literal message, groupCaption, supervisorHelp, reviewSummary, selectedCount, reviewError;
         protected DropDownList assignMajor, assignStatus, assignSupervisor;
+        protected TextBox assignSearch;
         protected Repeater students, reviewStudents;
+        protected CheckBox selectAll;
+        protected Button reviewButton, clearSelection;
+        protected HiddenField openReview;
         private Dictionary<string, StudentModel> records;
         private Dictionary<string, AcademicSupervisor> supervisors;
+        private List<string> SelectedIds { get; set; } = new List<string>();
         private bool allowed;
 
         protected void Page_Init(object sender, EventArgs e)
@@ -35,9 +40,12 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             AuthHelper.RequireAuth(this, AuthHelper.RoleCoordinator);
             if (Response.IsRequestBeingRedirected) return;
+            messagePanel.Visible = reviewNotice.Visible = false;
+            openReview.Value = "0";
+            SelectedIds = ViewState["SelectedIds"] as List<string> ?? new List<string>();
             if (String.IsNullOrWhiteSpace(AuthHelper.IdToken) || AuthHelper.IdToken == "mock-token")
             {
-                ShowMessage("Sign in with a real coordinator account to assign supervisors.", true);
+                ShowMessage("Sign in with a real coordinator account to assign supervisors.");
                 return;
             }
             try
@@ -45,113 +53,169 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 string json = await FirebaseDb.Get("Students");
                 string supervisorJson = await FirebaseDb.Get("AcademicSupervisors");
                 if (json == null || supervisorJson == null) throw new HttpRequestException();
-                records = JsonConvert.DeserializeObject<Dictionary<string, StudentModel>>(json)
-                    ?? new Dictionary<string, StudentModel>();
-                supervisors = JsonConvert.DeserializeObject<Dictionary<string, AcademicSupervisor>>(supervisorJson)
-                    ?? new Dictionary<string, AcademicSupervisor>();
+                records = JsonConvert.DeserializeObject<Dictionary<string, StudentModel>>(json) ?? new Dictionary<string, StudentModel>();
+                supervisors = JsonConvert.DeserializeObject<Dictionary<string, AcademicSupervisor>>(supervisorJson) ?? new Dictionary<string, AcademicSupervisor>();
+                foreach (var item in records) item.Value.Id = item.Key;
                 allowed = workspace.Visible = true;
                 if (!IsPostBack)
                 {
-                    BindStudents();
                     PopulateSupervisors();
-                    if (Request.QueryString["saved"] == "1") ShowMessage("Academic supervisor assignments saved to Firebase successfully.");
+                    savedPanel.Visible = Request.QueryString["saved"] == "1";
                 }
             }
             catch
             {
-                workspace.Visible = false;
-                ShowMessage("Could not load students and supervisors. Check the connection, permissions or sign in again.", true);
+                allowed = workspace.Visible = reviewPanel.Visible = false;
+                ShowMessage("Could not load students and supervisors. Check the connection or sign in again.");
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            BindStudents();
+            selectedCount.Text = SelectedIds.Count + " selected";
+            clearSelection.Enabled = SelectedIds.Count > 0;
+            reviewButton.Enabled = ValidAssignment(SelectedIds.ToArray(), assignSupervisor.SelectedValue, assignMajor.SelectedValue);
+            ViewState["SelectedIds"] = SelectedIds;
+            // This starts a partial update; searching and selection stay in C#.
+            assignSearch.Attributes["oninput"] = "clearTimeout(window.assignSearchTimer);window.assignSearchTimer=setTimeout(function(){__doPostBack('"
+                + assignSearch.UniqueID + "','');},300);";
         }
 
         private void BindStudents()
         {
-            var group = records.Where(item => item.Value.Major == assignMajor.SelectedValue
-                && (assignStatus.SelectedValue == "All"
-                    || (assignStatus.SelectedValue == "Assigned") == !String.IsNullOrEmpty(item.Value.AcademicSupervisorId)));
-            students.DataSource = group.OrderBy(item => item.Value.Name).Select(item => new
+            var rows = new List<StudentModel>();
+            foreach (var student in records.Values.OrderBy(item => item.Name))
             {
-                Id = item.Key, item.Value.Name, item.Value.UniEmail, item.Value.Major,
-                SupervisorName = SupervisorName(item.Value.AcademicSupervisorId)
-            });
+                if (student.Major != assignMajor.SelectedValue) continue;
+                bool assigned = !String.IsNullOrEmpty(student.AcademicSupervisorId);
+                if (assignStatus.SelectedValue == "Assigned" && !assigned) continue;
+                if (assignStatus.SelectedValue == "Unassigned" && assigned) continue;
+                string text = String.Join(" ", student.Name, student.UniEmail);
+                if (text.IndexOf(assignSearch.Text.Trim(), StringComparison.OrdinalIgnoreCase) >= 0) rows.Add(student);
+            }
+            students.DataSource = rows;
             students.DataBind();
-            groupCaption.Text = assignMajor.SelectedValue == "" ? "Choose a major to display students." : assignMajor.SelectedValue;
+            foreach (RepeaterItem item in students.Items)
+            {
+                string id = ((HiddenField)item.FindControl("studentId")).Value;
+                var checkbox = (CheckBox)item.FindControl("selectedStudent");
+                checkbox.Checked = SelectedIds.Contains(id);
+                ScriptManager.GetCurrent(this).RegisterAsyncPostBackControl(checkbox);
+            }
+            selectAll.Enabled = rows.Count > 0;
+            selectAll.Checked = rows.Count > 0 && rows.All(student => SelectedIds.Contains(student.Id));
+            emptyStudents.Visible = rows.Count == 0;
+            groupCaption.Text = assignMajor.SelectedValue == "" ? "Choose a major to display students."
+                : rows.Count + " student(s) shown · " + assignMajor.SelectedValue;
         }
 
-        private string SupervisorName(string id)
+        protected string SupervisorName(string id)
         {
-            AcademicSupervisor supervisor;
-            return !String.IsNullOrEmpty(id) && supervisors.TryGetValue(id, out supervisor)
-                ? supervisor.Name : "Not assigned";
+            return supervisors.ContainsKey(id ?? "") ? supervisors[id].Name : "Not assigned";
         }
 
         private void PopulateSupervisors()
         {
             assignSupervisor.Items.Clear();
             assignSupervisor.Items.Add(new ListItem("Select an academic supervisor", ""));
-            foreach (var item in supervisors.Where(item => item.Value.Major == assignMajor.SelectedValue)
-                .OrderBy(item => item.Value.Name))
-                assignSupervisor.Items.Add(new ListItem(item.Value.Name, item.Key));
+            foreach (var item in supervisors.OrderBy(item => item.Value.Name))
+                if (item.Value.Major == assignMajor.SelectedValue)
+                    assignSupervisor.Items.Add(new ListItem(item.Value.Name, item.Key));
             assignSupervisor.Enabled = assignMajor.SelectedValue != "" && assignSupervisor.Items.Count > 1;
             supervisorHelp.Text = assignMajor.SelectedValue == "" ? "Choose a major first."
                 : assignSupervisor.Enabled ? "Only supervisors with the same major are listed."
-                : "No academic supervisors are available for this major. Create one before assigning students.";
+                : "No supervisors are available for this major. Create one before assigning students.";
         }
 
         protected void FiltersChanged(object sender, EventArgs e)
         {
             if (!allowed) return;
-            reviewPanel.Visible = false;
-            ViewState.Remove("StudentIds");
-            BindStudents();
+            SelectedIds.Clear();
+            InvalidateReview();
             PopulateSupervisors();
+        }
+
+        // Read only the displayed checkboxes; searching keeps any selections hidden by the search.
+        private void ReadSelection()
+        {
+            foreach (RepeaterItem item in students.Items)
+            {
+                string id = ((HiddenField)item.FindControl("studentId")).Value;
+                SelectedIds.Remove(id);
+                if (((CheckBox)item.FindControl("selectedStudent")).Checked) SelectedIds.Add(id);
+            }
+        }
+
+        protected void SelectionChanged(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            ReadSelection();
+            InvalidateReview();
+        }
+
+        protected void SelectAllChanged(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            foreach (RepeaterItem item in students.Items)
+                ((CheckBox)item.FindControl("selectedStudent")).Checked = selectAll.Checked;
+            SelectionChanged(sender, e);
+        }
+
+        protected void ClearSelection(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            SelectedIds.Clear();
+            InvalidateReview();
+        }
+
+        private void InvalidateReview()
+        {
+            reviewPanel.Visible = false;
+            ViewState.Remove("ReviewIds");
         }
 
         private bool ValidAssignment(string[] ids, string supervisorId, string major)
         {
-            AcademicSupervisor supervisor;
-            return ids != null && ids.Length > 0 && major != ""
-                && supervisors.TryGetValue(supervisorId, out supervisor) && supervisor.Major == major
-                && ids.All(id => records.ContainsKey(id) && records[id].Major == major);
+            if (ids == null || ids.Length == 0 || major == "" || !supervisors.ContainsKey(supervisorId)) return false;
+            if (supervisors[supervisorId].Major != major) return false;
+            foreach (string id in ids)
+                if (!records.ContainsKey(id) || records[id].Major != major) return false;
+            return true;
         }
 
         protected void ReviewAssignment(object sender, EventArgs e)
         {
             if (!allowed) return;
-            var ids = new List<string>();
-            foreach (RepeaterItem item in students.Items)
+            ReadSelection();
+            if (!ValidAssignment(SelectedIds.ToArray(), assignSupervisor.SelectedValue, assignMajor.SelectedValue))
             {
-                if (((CheckBox)item.FindControl("selectedStudent")).Checked)
-                    ids.Add(((HiddenField)item.FindControl("studentId")).Value);
-            }
-            string[] selected = ids.Distinct().ToArray();
-            if (!ValidAssignment(selected, assignSupervisor.SelectedValue, assignMajor.SelectedValue))
-            {
-                ShowMessage("Select students and an academic supervisor with the same major.", true);
+                ShowMessage("Select students and a supervisor with the same major.");
                 return;
             }
-            ViewState["StudentIds"] = selected;
+            ViewState["ReviewIds"] = SelectedIds.ToArray();
             ViewState["SupervisorId"] = assignSupervisor.SelectedValue;
             ViewState["Major"] = assignMajor.SelectedValue;
-            reviewSummary.Text = selected.Length + " student(s) in " + assignMajor.SelectedValue
+            reviewSummary.Text = SelectedIds.Count + " student(s) in " + assignMajor.SelectedValue
                 + " will be assigned to " + supervisors[assignSupervisor.SelectedValue].Name + ".";
-            reviewStudents.DataSource = selected.Select(id => new { records[id].Name, Previous = SupervisorName(records[id].AcademicSupervisorId) });
+            reviewStudents.DataSource = SelectedIds.Select(id => records[id]);
             reviewStudents.DataBind();
             reviewPanel.Visible = true;
+            openReview.Value = "1";
         }
 
         protected async void ConfirmAssignment(object sender, EventArgs e)
         {
             if (!allowed) return;
-            string[] ids = ViewState["StudentIds"] as string[];
+            string[] ids = ViewState["ReviewIds"] as string[];
             string supervisorId = ViewState["SupervisorId"] as string ?? "";
             string major = ViewState["Major"] as string ?? "";
-            // Recheck the current Firebase records before saving the reviewed selection.
+            // Page_Load fetched fresh Firebase records. Recheck them before saving the reviewed group.
             if (!ValidAssignment(ids, supervisorId, major))
             {
-                reviewPanel.Visible = false;
-                ShowMessage("The students or supervisor have changed. Review a matching group again before saving.", true);
-                BindStudents();
+                InvalidateReview();
+                ShowMessage("The students or supervisor have changed. Review a matching group again before saving.");
                 PopulateSupervisors();
                 return;
             }
@@ -159,32 +223,20 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             {
                 var updates = new Dictionary<string, object>();
                 foreach (string id in ids) updates[id + "/AcademicSupervisorId"] = supervisorId;
-                // One multi-location update changes only the selected students' assignments.
                 using (var response = await FirebaseDb.Patch("Students", null, updates))
-                {
                     if (!response.IsSuccessStatusCode) throw new HttpRequestException();
-                }
                 Notify.SupervisorAssigned(ids, supervisorId);
                 Response.Redirect("AssignAcademicSupervisors.aspx?saved=1", false);
                 Context.ApplicationInstance.CompleteRequest();
             }
             catch
             {
-                ShowMessage("Assignments could not be saved. Check the connection and try again.", true);
+                reviewNotice.Visible = true;
+                reviewError.Text = "Assignments could not be saved. Check the connection and try again.";
+                openReview.Value = "1";
             }
         }
 
-        protected void CancelReview(object sender, EventArgs e)
-        {
-            reviewPanel.Visible = false;
-            ViewState.Remove("StudentIds");
-        }
-
-        private void ShowMessage(string text, bool error = false)
-        {
-            messagePanel.Visible = true;
-            messagePanel.CssClass = "assign-notice" + (error ? " assign-error" : "");
-            message.Text = text;
-        }
+        private void ShowMessage(string text) { messagePanel.Visible = true; message.Text = text; }
     }
 }
