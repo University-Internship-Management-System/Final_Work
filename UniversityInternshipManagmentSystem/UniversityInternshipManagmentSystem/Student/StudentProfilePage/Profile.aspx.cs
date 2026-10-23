@@ -28,6 +28,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         protected bool CanUpdate => Workspace != null && IsEditing;
         protected string SafeCvUrl => ProfileValidation.GetSafeWebUrl(Record?.CvUrl);
         protected string SafePortfolioUrl => ProfileValidation.GetSafeWebUrl(Record?.PortfolioUrl);
+        protected string SafeLinkedInUrl => ProfileValidation.GetSafeLinkedInUrl(Record?.LinkedInUrl);
         protected string SafeAvatarUrl => SafeProfileImage(Record?.ProfilePicUrl);
         protected string CompanyText { get; private set; } = "Not available";
         protected string SupervisorText { get; private set; } = "Not available";
@@ -110,7 +111,11 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
                     // Save checks CSRF again and the shared helper re-verifies identity, ownership,
                     // PATCH allowlist and persistence by reading the student's record back.
                     ValidateCsrf();
-                    var patch = ProfileValidation.CreatePatch(PhoneNumberInput.Text, SkillsInput.Text, CvInput.Text, PortfolioInput.Text, ProfileValidation.EditableFields);
+                    var patch = ProfileValidation.CreatePatch(PhoneNumberInput.Text, SkillsInput.Text, CvInput.Text, PortfolioInput.Text, ProfileValidation.EditableFields, LinkedInInput.Text);
+                    // Keep existing four-field saves compatible with rules that have not yet approved LinkedIn.
+                    // Only request a LinkedIn write when the student actually changed that value.
+                    if (string.Equals((string)patch["LinkedInUrl"], Record.LinkedInUrl ?? "", StringComparison.Ordinal))
+                        patch.Remove("LinkedInUrl");
                     await PersistProfileAsync(patch);
                     if (!ProfileValidation.MatchesPatch(Workspace, patch))
                         throw new StudentDataException("The saved values could not be confirmed. Reload before retrying.");
@@ -201,7 +206,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
 
         private System.Web.UI.WebControls.TextBox[] CandidateInputs()
         {
-            return new[] { PhoneNumberInput, SkillsInput, CvInput, PortfolioInput };
+            return new[] { PhoneNumberInput, SkillsInput, CvInput, PortfolioInput, LinkedInInput };
         }
         private void ApplyPermissions()
         {
@@ -217,6 +222,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
             SkillsInput.Text = string.Join(Environment.NewLine, Record?.SkillsList ?? new List<string>());
             CvInput.Text = Record?.CvUrl ?? "";
             PortfolioInput.Text = Record?.PortfolioUrl ?? "";
+            LinkedInInput.Text = Record?.LinkedInUrl ?? "";
         }
         protected void ResetPasswordButton_Click(object sender, EventArgs e)
         {
@@ -317,21 +323,21 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         }
         private void ClearFieldErrors()
         {
-            foreach (var label in new[] { PhoneError, SkillsError, CvError, PortfolioError }) label.Text = "";
+            foreach (var label in new[] { PhoneError, SkillsError, CvError, PortfolioError, LinkedInError }) label.Text = "";
             foreach (var input in CandidateInputs()) input.Attributes.Remove("aria-invalid");
         }
         private bool ValidateInputs()
         {
             bool valid = true;
-            string[] fields = { "PhoneNumber", "SkillsList", "CvUrl", "PortfolioUrl" };
-            var labels = new[] { PhoneError, SkillsError, CvError, PortfolioError };
+            string[] fields = { "PhoneNumber", "SkillsList", "CvUrl", "PortfolioUrl", "LinkedInUrl" };
+            var labels = new[] { PhoneError, SkillsError, CvError, PortfolioError, LinkedInError };
             var inputs = CandidateInputs();
             for (int i = 0; i < fields.Length; i++)
             {
                 try
                 {
                     ProfileValidation.CreatePatch(PhoneNumberInput.Text, SkillsInput.Text, CvInput.Text, PortfolioInput.Text,
-                        new HashSet<string>(StringComparer.Ordinal) { fields[i] });
+                        new HashSet<string>(StringComparer.Ordinal) { fields[i] }, LinkedInInput.Text);
                 }
                 catch (ArgumentException ex)
                 {
@@ -364,7 +370,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
 {
     public static class ProfileValidation
     {
-        public static IDictionary<string, object> CreatePatch(string phone, string skillsText, string cv, string portfolio, ISet<string> authorized)
+        public static IDictionary<string, object> CreatePatch(string phone, string skillsText, string cv, string portfolio, ISet<string> authorized, string linkedIn = null)
         {
             var patch = new Dictionary<string, object>(StringComparer.Ordinal);
             if (authorized == null) throw new UnauthorizedAccessException("No profile fields are authorized for editing.");
@@ -378,6 +384,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
             }
             if (authorized.Contains("CvUrl")) patch["CvUrl"] = NormalizeWebUrl(cv);
             if (authorized.Contains("PortfolioUrl")) patch["PortfolioUrl"] = NormalizeWebUrl(portfolio);
+            if (linkedIn != null && authorized.Contains("LinkedInUrl")) patch["LinkedInUrl"] = NormalizeLinkedInUrl(linkedIn);
             ValidatePatch(patch, authorized);
             return patch;
         }
@@ -392,6 +399,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
                     case "PhoneNumber": if (record.PhoneNumber != (string)pair.Value) return false; break;
                     case "CvUrl": if (record.CvUrl != (string)pair.Value) return false; break;
                     case "PortfolioUrl": if (record.PortfolioUrl != (string)pair.Value) return false; break;
+                    case "LinkedInUrl": if ((record.LinkedInUrl ?? "") != (string)pair.Value) return false; break;
                     // Firebase removes an empty array; null is equivalent only for an empty skills list.
                     case "SkillsList": if (!(record.SkillsList ?? new List<string>()).SequenceEqual((IList<string>)pair.Value)) return false; break;
                     default: return false;
@@ -401,7 +409,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         }
         // Return a copy so callers cannot expand the module's permanent field policy.
         public static ISet<string> EditableFields => new HashSet<string>(StringComparer.Ordinal)
-        { "PhoneNumber", "SkillsList", "CvUrl", "PortfolioUrl" };
+        { "PhoneNumber", "SkillsList", "CvUrl", "PortfolioUrl", "LinkedInUrl" };
 
         public static string NormalizeWebUrl(string value)
         {
@@ -438,6 +446,25 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         }
         public static bool IsSafeUrl(string value) => GetSafeWebUrl(value) != null;
 
+        public static string NormalizeLinkedInUrl(string value)
+        {
+            const string error = "Enter a valid HTTPS LinkedIn link, such as https://www.linkedin.com/in/your-name (up to 2048 characters).";
+            if (value != null && (value.Length > 2048 || value.Any(char.IsControl))) throw new ArgumentException(error);
+            string normalized;
+            try { normalized = NormalizeWebUrl(value); }
+            catch (ArgumentException) { throw new ArgumentException(error); }
+            if (normalized.Length == 0) return "";
+            var uri = new Uri(normalized);
+            if (uri.Scheme != Uri.UriSchemeHttps || !(uri.Host.Equals("linkedin.com", StringComparison.OrdinalIgnoreCase)
+                || uri.Host.EndsWith(".linkedin.com", StringComparison.OrdinalIgnoreCase))) throw new ArgumentException(error);
+            return normalized;
+        }
+        public static string GetSafeLinkedInUrl(string value)
+        {
+            try { var normalized = NormalizeLinkedInUrl(value); return normalized.Length == 0 ? null : normalized; }
+            catch (ArgumentException) { return null; }
+        }
+
         public static void ValidatePatch(IDictionary<string, object> changes, ISet<string> authorized)
         {
             if (changes == null || changes.Count == 0) throw new ArgumentException("There are no authorized changes to save.");
@@ -462,6 +489,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
                             || value.Count(c => c >= '0' && c <= '9') < 7)))
                             throw new ArgumentException("Enter a phone number with 7–30 characters using digits, spaces, +, parentheses, or hyphens.");
                     }
+                    else if (pair.Key == "LinkedInUrl") NormalizeLinkedInUrl(value);
                     else if (value.Length > 0 && (value.Length > 2048 || value.Any(char.IsControl) || !IsSafeUrl(value)))
                         throw new ArgumentException("Enter a valid CV or portfolio web link (http://, https:// or www.example.com; up to 2048 characters).");
                 }
