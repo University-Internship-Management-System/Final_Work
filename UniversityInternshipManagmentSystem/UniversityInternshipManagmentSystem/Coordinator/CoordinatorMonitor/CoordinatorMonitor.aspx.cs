@@ -1,8 +1,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
@@ -12,6 +13,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 {
     public partial class CoordinatorMonitor : Page
     {
+        private const int RequiredTrainingHours = 90;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["userId"] == null)
@@ -73,69 +76,69 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
         private void ShowSupervisorDetail(JObject supervisors, string id, bool isAcademic)
         {
-            JToken supervisor = supervisors[id];
-            if (supervisor == null)
-            {
-                lblError.Text = "Supervisor record was not found.";
-                lblError.Visible = true;
-                return;
-            }
-            if (isAcademic)
-            {
-                litDetailTitle.Text = "Academic supervisor details";
-            }
-            else
-            {
-                litDetailTitle.Text = "Company supervisor details";
-            }
-            litUserDetail.Text = BuildSupervisorDetail(id, supervisor, isAcademic);
-            pnlUserDetail.Visible = true;
+            string json = await FirebaseDb.Get(name);
+            if (json == null) throw new HttpRequestException();
+            JObject table = JsonConvert.DeserializeObject<JObject>(json);
+            if (table == null) table = new JObject();
+            return table;
         }
 
-        private static string BuildStudentRows(JObject students, JObject supervisors, JObject companies)
+        private static async Task<JObject> ReadOptionalTable(string name)
         {
-            string rows = "";
-            foreach (JProperty studentEntry in students.Properties())
+            string json = await FirebaseDb.Get(name);
+            if (json == null) return null;
+            JObject table = JsonConvert.DeserializeObject<JObject>(json);
+            if (table == null) table = new JObject();
+            return table;
+        }
+
+        private static void BuildStudents(JObject students, JObject supervisors, JObject companies, JObject tasks,
+            JObject submissions, JObject reports, JObject academicReports, JObject certificates,
+            out string data)
+        {
+            var records = new List<object>();
+            foreach (JProperty entry in students.Properties())
             {
-                JToken student = studentEntry.Value;
+                JToken student = entry.Value;
+                string studentId = entry.Name;
                 string name = (string)student["Name"];
                 string email = (string)student["Email"];
                 string major = (string)student["Major"];
                 string companyId = (string)student["CompanyId"];
                 string supervisorId = (string)student["AcademicSupervisorId"];
+                JToken company = null;
+                if (!string.IsNullOrEmpty(companyId)) company = companies[companyId];
+                JToken supervisor = null;
+                if (!string.IsNullOrEmpty(supervisorId)) supervisor = supervisors[supervisorId];
                 string companyName = null;
+                if (company != null) companyName = (string)company["CompanyName"];
                 string supervisorName = null;
-                if (!string.IsNullOrEmpty(companyId) && companies[companyId] != null)
-                    companyName = (string)companies[companyId]["CompanyName"];
-                if (!string.IsNullOrEmpty(supervisorId) && supervisors[supervisorId] != null)
-                    supervisorName = (string)supervisors[supervisorId]["Name"];
+                if (supervisor != null) supervisorName = (string)supervisor["Name"];
 
-                string placement = "unassigned";
-                if (!string.IsNullOrEmpty(companyId))
+                JToken report = null;
+                if (reports != null) report = reports[studentId];
+                if (report != null && !String.Equals((string)report["CompanyId"], companyId, StringComparison.Ordinal)) report = null;
+                string companyStatus = ReportStatus(reports, report);
+                JToken academicReport = null;
+                if (academicReports != null) academicReport = academicReports[studentId];
+                if (academicReport != null &&
+                    (!String.Equals((string)academicReport["StudentId"], studentId, StringComparison.Ordinal) ||
+                     !String.Equals((string)academicReport["AcademicSupervisorId"], supervisorId, StringComparison.Ordinal) ||
+                     !String.Equals((string)academicReport["CompanyId"], companyId, StringComparison.Ordinal)))
+                    academicReport = null;
+                string academicStatus = ReportStatus(academicReports, academicReport);
+                JToken certificate = null;
+                if (certificates != null)
                 {
-                    placement = "assigned";
+                    foreach (JProperty item in certificates.Properties())
+                    {
+                        if ((string)item.Value["StudentId"] != studentId) continue;
+                        certificate = item.Value;
+                        break;
+                    }
                 }
-                string studentId = HttpUtility.HtmlAttributeEncode(studentEntry.Name);
-                string search = HttpUtility.HtmlAttributeEncode(((name ?? "") + " " + (email ?? "")).ToLowerInvariant());
-                rows += "<tr class=\"student-row\" data-search=\"" + search +
-                    "\" data-major=\"" + HttpUtility.HtmlAttributeEncode(major) +
-                    "\" data-placement=\"" + placement + "\">" +
-                    "<td class=\"student-name\"><strong>" + Encode(name) + "</strong><br><small class=\"text-muted\">" + Encode(major) + "</small></td>" +
-                    "<td>" + Encode(companyName) + "</td><td>" + Encode(supervisorName) + "</td>" +
-                    "<td><span class=\"text-muted\">Not recorded</span><div class=\"hours-track\"></div></td>" +
-                    "<td><span class=\"status-badge\">Not tracked</span></td>" +
-                    "<td><div class=\"student-actions\">" +
-                    "<button type=\"button\" class=\"btn btn-outline-primary btn-sm view-student\" data-student=\"" + studentId + "\">&#128065; View Details</button>" +
-                    "<button type=\"button\" class=\"btn btn-outline-primary btn-sm more-button\" data-student=\"" + studentId +
-                    "\" aria-label=\"More actions for " + HttpUtility.HtmlAttributeEncode(name) +
-                    "\" aria-haspopup=\"menu\" aria-expanded=\"false\">&#8943;</button></div></td></tr>";
-            }
-            if (rows == "")
-            {
-                return "<tr><td colspan=\"6\" class=\"text-muted\">No students found.</td></tr>";
-            }
-            return rows;
-        }
+                string stage = CompletionStage(certificate, reports, academicReports, certificates,
+                    academicStatus, companyStatus, companyId);
 
         private static string BuildStudentDrawerData(JObject students, JObject academic, JObject company, JObject tasks, JObject submissions)
         {
@@ -171,34 +174,56 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 string skillNames = null;
                 if (skills != null)
                 {
-                    skillNames = "";
-                    foreach (JToken skill in skills)
+                    // الساعات المعتمدة تُحسب من الأسابيع الموقعة في تقرير الشركة.
+                    foreach (JProperty week in signedWeeks.Properties())
                     {
-                        if (skillNames != "")
-                        {
-                            skillNames += ", ";
-                        }
-                        skillNames += (string)skill;
+                        int hours;
+                        if (Int32.TryParse((string)week.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out hours) && hours > 0)
+                            approvedHours += hours;
                     }
                 }
-                AddDetail(html, "Skills", skillNames);
-                AddLinkDetail(html, "CV", (string)student["CvUrl"]);
-                AddLinkDetail(html, "Portfolio", (string)student["PortfolioUrl"]);
-                html.Append("</div></div><div class=\"drawer-section\"><h3>Placement and progress</h3><div class=\"row student-detail\">");
-                string companyName = null;
-                string supervisorName = null;
-                if (employer != null)
+                int assignedHours = 0;
+                int evaluatedHours = 0;
+                int pendingHours = 0;
+                int submittedTasks = 0;
+                var studentTasks = new List<object>();
+                foreach (JProperty task in StudentTasks(tasks, studentId))
                 {
-                    companyName = (string)employer["CompanyName"];
+                    JToken latest = LatestSubmission(submissions, studentId, task.Name);
+                    string status = null;
+                    string feedback = null;
+                    string score = null;
+                    if (latest != null)
+                    {
+                        status = (string)latest["Status"];
+                        feedback = (string)latest["Feedback"];
+                        score = (string)latest["Score"];
+                    }
+                    int hours = TaskHours(task.Value, studentId);
+                    assignedHours += hours;
+                    if (String.Equals(status, "Submitted", StringComparison.OrdinalIgnoreCase) ||
+                        String.Equals(status, "Evaluated", StringComparison.OrdinalIgnoreCase)) submittedTasks++;
+                    if (String.Equals(status, "Evaluated", StringComparison.OrdinalIgnoreCase))
+                    {
+                        evaluatedHours += hours;
+                        int week = 0;
+                        if (task.Value["WeekNumber"] != null) week = (int)task.Value["WeekNumber"];
+                        if (signedWeeks == null || !signedWeeks.ContainsKey("w" + week)) pendingHours += hours;
+                    }
+                    studentTasks.Add(new
+                    {
+                        Name = (string)task.Value["TaskName"],
+                        Week = (string)task.Value["WeekNumber"],
+                        Hours = hours,
+                        Status = status,
+                        Feedback = feedback,
+                        Score = score,
+                        MaxScore = (string)task.Value["MaxScore"]
+                    });
                 }
-                if (supervisor != null)
-                {
-                    supervisorName = (string)supervisor["Name"];
-                }
-                AddDetail(html, "Training company", companyName);
-                AddDetail(html, "Academic supervisor", supervisorName);
-                string placementStatus = "Unassigned";
-                if (!string.IsNullOrEmpty(companyId))
+                int approvedPercent = Math.Min(100, (int)Math.Round(100.0 * approvedHours / RequiredTrainingHours));
+                bool isPlaced = !string.IsNullOrEmpty(companyId);
+                records.Add(new
                 {
                     placementStatus = "Assigned";
                 }
@@ -246,7 +271,10 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 if (evaluationCount == 0) html.Append("<p class=\"drawer-empty\">No evaluated task submissions.</p>");
                 html.Append("</div><div class=\"drawer-section\"><h3>Final evaluations</h3><p class=\"drawer-empty\">Final evaluations are not connected to this page yet.</p></div></section></div>");
             }
-            return html.ToString();
+            data = JsonConvert.SerializeObject(new { Students = records, Academics = supervisors, Companies = companies }, new JsonSerializerSettings
+            {
+                StringEscapeHandling = StringEscapeHandling.EscapeHtml
+            });
         }
 
         private static bool ContainsStudent(JArray studentIds, string studentId)
@@ -271,50 +299,74 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
         private static string BuildMajorOptions(JObject students)
         {
-            string options = "";
-            System.Collections.Generic.List<string> majors = new System.Collections.Generic.List<string>();
-            foreach (JProperty student in students.Properties())
-            {
-                string major = (string)student.Value["Major"];
-                if (!string.IsNullOrWhiteSpace(major) && !majors.Contains(major))
-                {
-                    majors.Add(major);
-                }
-            }
-            majors.Sort();
-            foreach (string major in majors)
-            {
-                options += "<option value=\"" + HttpUtility.HtmlAttributeEncode(major) + "\">" + Encode(major) + "</option>";
-            }
-            return options;
+            if (table == null) return "Unavailable";
+            if (report == null) return "Not started";
+            if (String.Equals((string)report["Status"], "Sent", StringComparison.OrdinalIgnoreCase)) return "Sent";
+            return "Draft";
         }
 
-        private static string BuildSupervisorDetail(string id, JToken supervisor, bool isAcademic)
+        private static string CompletionStage(JToken certificate, JObject reports, JObject academicReports,
+            JObject certificates, string academicStatus, string companyStatus, string companyId)
         {
-            StringBuilder html = new StringBuilder("<div class=\"row student-detail\">");
-            AddDetail(html, "Supervisor ID", id);
-            AddDetail(html, "Name", (string)supervisor["Name"]);
-            AddDetail(html, "Email", (string)supervisor["Email"]);
-            AddDetail(html, "Phone", (string)supervisor["PhoneNumber"]);
-            if (isAcademic)
+            if (certificate != null)
             {
-                AddDetail(html, "University email", (string)supervisor["UniversityEmail"]);
-                AddDetail(html, "Major", (string)supervisor["Major"]);
+                bool adminPassed = (bool?)certificate["IsPassAdmin"] == true;
+                bool companyPassed = (bool?)certificate["IsPassCompany"] == true;
+                bool academicPassed = (bool?)certificate["IsPassAcademic"] == true;
+                if (adminPassed && companyPassed && academicPassed) return "Approved";
+                return "Coordinator record";
             }
-            else
+            if (reports == null || academicReports == null || certificates == null) return "Unavailable";
+            if (academicStatus == "Sent") return "Academic sent";
+            if (companyStatus == "Sent") return "Company sent";
+            if (companyStatus == "Draft") return "Company draft";
+            if (!String.IsNullOrWhiteSpace(companyId)) return "Training";
+            return "Unassigned";
+        }
+
+        private static int TaskHours(JToken task, string studentId)
+        {
+            JObject overrides = task["StudentHours"] as JObject;
+            JToken value = overrides == null ? null : overrides[studentId];
+            if (value == null) value = task["Hours"];
+            int hours;
+            return Int32.TryParse((string)value, NumberStyles.Integer, CultureInfo.InvariantCulture, out hours)
+                ? Math.Max(0, hours) : 0;
+        }
+
+        private static List<JProperty> StudentTasks(JObject tasks, string studentId)
+        {
+            var assigned = new List<JProperty>();
+            foreach (JProperty task in tasks.Properties())
             {
-                AddDetail(html, "Company email", (string)supervisor["CompEmail"]);
-                AddDetail(html, "Company", (string)supervisor["CompanyName"]);
-                AddDetail(html, "Location", (string)supervisor["Location"]);
+                if (task.Value == null || task.Value.Type == JTokenType.Null ||
+                    String.Equals((string)task.Value["Status"], "Closed", StringComparison.OrdinalIgnoreCase)) continue;
+                JArray studentIds = task.Value["StudentIds"] as JArray;
+                if (studentIds != null && ContainsStudent(studentIds, studentId)) assigned.Add(task);
             }
-            string firstLogin = "No";
-            if ((bool?)supervisor["FirstLogin"] == true)
+            return assigned;
+        }
+
+        private static bool ContainsStudent(JArray studentIds, string studentId)
+        {
+            foreach (JToken id in studentIds)
+                if (string.Equals((string)id, studentId, StringComparison.Ordinal)) return true;
+            return false;
+        }
+
+        private static JToken LatestSubmission(JObject submissions, string studentId, string taskId)
+        {
+            JToken latest = null;
+            foreach (JProperty entry in submissions.Properties())
             {
-                firstLogin = "Yes";
+                JToken submission = entry.Value;
+                if ((string)submission?["StudentId"] != studentId || (string)submission["TaskId"] != taskId) continue;
+                if (latest == null || (int?)submission["Version"] > (int?)latest["Version"] ||
+                    ((int?)submission["Version"] == (int?)latest["Version"] &&
+                     String.Compare((string)submission["SubmittedAt"], (string)latest["SubmittedAt"], StringComparison.Ordinal) > 0))
+                    latest = submission;
             }
-            AddDetail(html, "First login", firstLogin);
-            AddLinkDetail(html, "Profile picture", (string)supervisor["ProfilePicUrl"]);
-            return html.Append("</div>").ToString();
+            return latest;
         }
 
         private static string ViewLink(string kind, string id)
@@ -323,57 +375,23 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 kind + "=" + HttpUtility.UrlEncode(id) + "\">View</a>";
         }
 
-        private static void AddDetail(StringBuilder html, string label, string value)
-        {
-            html.Append("<div class=\"col-sm-6 col-xl-4\"><dl class=\"mb-0\"><dt>" +
-                Encode(label) + "</dt><dd>" + Encode(value) + "</dd></dl></div>");
-        }
-
-        private static void AddLinkDetail(StringBuilder html, string label, string value)
-        {
-            Uri uri;
-            if (!Uri.TryCreate(value, UriKind.Absolute, out uri) ||
-                (uri.Scheme != Uri.UriSchemeHttps && uri.Scheme != Uri.UriSchemeHttp))
-            {
-                AddDetail(html, label, null);
-                return;
-            }
-            html.Append("<div class=\"col-sm-6 col-xl-4\"><dl class=\"mb-0\"><dt>" +
-                Encode(label) + "</dt><dd><a target=\"_blank\" rel=\"noopener noreferrer\" href=\"" +
-                HttpUtility.HtmlAttributeEncode(uri.AbsoluteUri) + "\">Open " +
-                Encode(label) + "</a></dd></dl></div>");
-        }
-
-        private static string BuildAcademicRows(JObject academic)
+        private static string BuildSupervisorRows(JObject supervisors, bool academic)
         {
             string rows = "";
-            foreach (JProperty item in academic.Properties())
+            foreach (JProperty item in supervisors.Properties())
             {
+                string secondColumn = academic ? (string)item.Value["Email"] : (string)item.Value["CompanyName"];
+                string thirdColumn = academic ? (string)item.Value["Major"] : (string)item.Value["Location"];
+                string linkType = academic ? "academic" : "company";
                 rows += "<tr><td>" + Encode((string)item.Value["Name"]) +
-                    "</td><td>" + Encode((string)item.Value["Email"]) +
-                    "</td><td>" + Encode((string)item.Value["Major"]) +
-                    "</td><td>" + ViewLink("academic", item.Name) + "</td></tr>";
+                    "</td><td>" + Encode(secondColumn) +
+                    "</td><td>" + Encode(thirdColumn) +
+                    "</td><td>" + ViewLink(linkType, item.Name) + "</td></tr>";
             }
             if (rows == "")
             {
-                return "<tr><td colspan=\"4\" class=\"text-muted\">No academic supervisors found.</td></tr>";
-            }
-            return rows;
-        }
-
-        private static string BuildCompanyRows(JObject company)
-        {
-            string rows = "";
-            foreach (JProperty item in company.Properties())
-            {
-                rows += "<tr><td>" + Encode((string)item.Value["Name"]) +
-                    "</td><td>" + Encode((string)item.Value["CompanyName"]) +
-                    "</td><td>" + Encode((string)item.Value["Location"]) +
-                    "</td><td>" + ViewLink("company", item.Name) + "</td></tr>";
-            }
-            if (rows == "")
-            {
-                return "<tr><td colspan=\"4\" class=\"text-muted\">No company supervisors found.</td></tr>";
+                string message = academic ? "No academic supervisors found." : "No company supervisors found.";
+                return "<tr><td colspan=\"4\" class=\"text-muted\">" + message + "</td></tr>";
             }
             return rows;
         }
@@ -384,7 +402,3 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         }
     }
 }
-
-
-
-

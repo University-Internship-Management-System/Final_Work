@@ -1,24 +1,23 @@
-﻿// Application Form Client Script
-document.addEventListener('DOMContentLoaded', function() {
+﻿document.addEventListener('DOMContentLoaded', function() {
     'use strict';
 
     var btnSubmit = document.getElementById('btnSubmitApp');
     var txtCoverLetter = document.getElementById('txtCoverLetter');
     var successModalEl = document.getElementById('successModal');
 
-    // The server sets this flag only after the application was really saved.
-    // Checked before looking at the button: after saving, the form and its button are hidden.
+    // the server sets this after the application is saved
+    // check it before the button because the form is hidden after saving
     if (successModalEl && window.applicationSaved) {
         new bootstrap.Modal(successModalEl).show();
     }
 
-    // No button = the server hid the form (the student cannot apply, or already applied)
+    // no button means the server hid the form
     if (!btnSubmit) return;
 
     btnSubmit.addEventListener('click', function(e) {
         e.preventDefault();
 
-        // 1. Simple Client-Side Validation (the server checks everything again)
+        // quick check, the server checks again
         var coverVal = txtCoverLetter ? txtCoverLetter.value.trim() : '';
 
         if (!coverVal) {
@@ -27,8 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // 2. Save it once: block a second click, then press the hidden server button
-        //    (runs btnSubmit_Click, which writes to Firebase)
+        // disable the button so it can't be clicked twice, then click the hidden server button
         btnSubmit.disabled = true;
         btnSubmit.textContent = 'Submitting...';
         document.getElementById('btnSubmit').click();

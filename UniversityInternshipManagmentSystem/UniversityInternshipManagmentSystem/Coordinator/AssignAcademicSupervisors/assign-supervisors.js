@@ -1,42 +1,29 @@
 (() => {
     'use strict';
-    const container = document.getElementById('assignStudentRows');
-    if (!container) return;
-    const rows = [...container.querySelectorAll('[data-student-row]')];
-    const search = document.getElementById('assignSearch');
-    const all = document.getElementById('assignSelectAll');
-    const clear = document.getElementById('assignClear');
-    const supervisor = document.getElementById('assignSupervisor');
-    function updateSelection() {
-        const visible = rows.filter(row => !row.hidden);
-        const count = rows.filter(row => row.querySelector('input[type="checkbox"]').checked).length;
-        const visibleCount = visible.filter(row => row.querySelector('input[type="checkbox"]').checked).length;
-        document.getElementById('assignSelectionBadge').textContent = count + ' selected';
-        all.disabled = visible.length === 0;
-        all.checked = visible.length > 0 && visibleCount === visible.length;
-        all.indeterminate = visibleCount > 0 && visibleCount < visible.length;
-        clear.disabled = count === 0;
-        document.getElementById('reviewButton').disabled = !count || !supervisor.value;
+    const review = document.getElementById('assignReviewModal');
+    let listScroll = 0;
+    function updateReview() {
+        const list = document.querySelector('.assign-list-scroll');
+        if (list) list.scrollTop = listScroll;
+        const open = document.getElementById('openReview');
+        if (!open || !window.bootstrap) return;
+        const modal = bootstrap.Modal.getOrCreateInstance(review);
+        if (open.value === '1') modal.show();
+        else modal.hide();
     }
-    search.addEventListener('input', () => {
-        const query = search.value.trim().toLowerCase();
-        rows.forEach(row => { row.hidden = !row.textContent.toLowerCase().includes(query); });
-        document.getElementById('assignEmptyRow').hidden = rows.some(row => !row.hidden);
-        updateSelection();
+    review.addEventListener('hidden.bs.modal', () => {
+        document.getElementById('openReview').value = '0';
     });
-    search.addEventListener('keydown', event => { if (event.key === 'Enter') event.preventDefault(); });
-    container.addEventListener('change', updateSelection);
-    supervisor.addEventListener('change', updateSelection);
-    all.addEventListener('change', () => {
-        rows.filter(row => !row.hidden).forEach(row => { row.querySelector('input[type="checkbox"]').checked = all.checked; });
-        updateSelection();
-    });
-    clear.addEventListener('click', () => {
-        rows.forEach(row => { row.querySelector('input[type="checkbox"]').checked = false; });
-        updateSelection();
-    });
-    document.getElementById('assignEmptyRow').hidden = rows.length > 0;
-    updateSelection();
-    const review = document.querySelector('.assign-review');
-    if (review) review.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (window.Sys) {
+        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest((sender, args) => {
+            const list = document.querySelector('.assign-list-scroll');
+            const source = args.get_postBackElement();
+            listScroll = source && ['assignMajor', 'assignStatus', 'assignSearch'].includes(source.id)
+                ? 0 : list ? list.scrollTop : 0;
+        });
+        Sys.Application.add_load(updateReview);
+    }
+    updateReview();
+    const saved = document.getElementById('assignSavedModal');
+    if (saved && window.bootstrap) bootstrap.Modal.getOrCreateInstance(saved).show();
 })();

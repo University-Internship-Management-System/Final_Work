@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
@@ -16,11 +15,17 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
 {
     public partial class ApplicationForm : System.Web.UI.Page
     {
-        private string StudentId => (string)(Session["dbRecordId"] ?? Session["userId"]);   // dbRecordId = the Students table key set by the login
-        private string OpportunityId => Request.QueryString["opportunityId"];
+        // key of the student in the Students table
+        private string StudentId
+        {
+            get { return (string)(Session["dbRecordId"] ?? Session["userId"]); }
+        }
 
-        // Firebase ids only use letters, digits, "-" and "_"
-        private bool HasValidOpportunityId => !string.IsNullOrEmpty(OpportunityId) && Regex.IsMatch(OpportunityId, "^[A-Za-z0-9_-]+$");
+        // from the url (?opportunityId=...)
+        private string OpportunityId
+        {
+            get { return Request.QueryString["opportunityId"]; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -30,7 +35,7 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
                 return;
             }
 
-            if (!HasValidOpportunityId)
+            if (!IsFirebaseId(OpportunityId))
             {
                 Response.Redirect("../Opportunities/Opportunities.aspx", false);
                 return;
@@ -46,7 +51,7 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
         {
             try
             {
-                var student = JsonConvert.DeserializeObject<Models.Student>(await ReadAsync("Students", StudentId));
+                Models.Student student = JsonConvert.DeserializeObject<Models.Student>(await ReadAsync("Students", StudentId));
                 Opportunity opportunity = await LoadOpportunityAsync(OpportunityId);
                 List<Application> myApplications = await LoadMyApplicationsAsync(StudentId);
 
@@ -62,23 +67,24 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
                         txtSkills.Text = string.Join(", ", student.SkillsList);
                     }
 
-                    // CV and portfolio come from the profile and cannot be changed here
+                    // cv and portfolio come from the profile, read only here
                     txtCvUrl.Text = student.CvUrl ?? "";
                     txtPortfolioUrl.Text = student.PortfolioUrl ?? "";
                 }
 
-                // Show which opportunity this application is for
+                // show which opportunity this is for
                 if (opportunity != null)
                 {
-                    string text = "Applying for <strong>" + HttpUtility.HtmlEncode(opportunity.Title) + "</strong> at " + HttpUtility.HtmlEncode(opportunity.CompanyName);
+                    string companyName = await CurrentCompanyNameAsync(opportunity);
+                    string text = "Applying for <strong>" + HttpUtility.HtmlEncode(opportunity.Title) + "</strong> at " + HttpUtility.HtmlEncode(companyName);
                     if (opportunity.ApplicationDeadline > 0)
                     {
-                        text += " &middot; Deadline " + DateTimeOffset.FromUnixTimeMilliseconds(opportunity.ApplicationDeadline).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        text += " &middot; Deadline " + FormatDate(opportunity.ApplicationDeadline);
                     }
                     lblOpportunity.Text = text;
                 }
 
-                // If the student cannot apply (typed URL of a closed opportunity, already applied, no CV...), say why and hide the form
+                // can't apply (closed, already applied, no cv...)? show why and hide the form
                 string reason = WhyCannotApply(student, opportunity, myApplications);
                 if (reason != null)
                 {
@@ -94,7 +100,7 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
             }
         }
 
-        // حدث زر تأكيد الطلب الحقيقي: all the rules are checked again here, because the browser checks can be skipped
+        // the rules are checked again here because the js checks can be skipped
         protected async void btnSubmit_Click(object sender, EventArgs e)
         {
             if (Session["userId"] == null)
@@ -103,13 +109,13 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
                 return;
             }
 
-            if (!HasValidOpportunityId)
+            if (!IsFirebaseId(OpportunityId))
             {
                 return;
             }
 
             string coverLetter = txtCoverLetter.Text.Trim();
-            if (coverLetter.Length == 0)
+            if (coverLetter == "")
             {
                 ShowMessage("Please fill out the motivation question (Cover Letter).");
                 return;
@@ -117,8 +123,8 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
 
             try
             {
-                // 1. جلب معلومات جديدة للطالب والفرصة وطلباته، والتأكد أن التقديم ما زال مسموحاً
-                var student = JsonConvert.DeserializeObject<Models.Student>(await ReadAsync("Students", StudentId));
+                // load everything again and make sure the student can still apply
+                Models.Student student = JsonConvert.DeserializeObject<Models.Student>(await ReadAsync("Students", StudentId));
                 Opportunity opportunity = await LoadOpportunityAsync(OpportunityId);
                 List<Application> myApplications = await LoadMyApplicationsAsync(StudentId);
 
@@ -130,26 +136,28 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
                     return;
                 }
 
-                // 2. إنشاء كائن Application مطابقة للـ Model الخاص بك (CV and portfolio from the student's own record)
+                string companyName = await CurrentCompanyNameAsync(opportunity);
+
+                // cv and portfolio are taken from the student record
                 var newApplication = new UniversityInternshipManagmentSystem.Models.Application(
                     studentId: StudentId,
                     opportunityId: OpportunityId,
                     companyId: opportunity.CompanyId,
                     opportunityTitle: opportunity.Title,
-                    companyName: opportunity.CompanyName,
+                    companyName: companyName,
                     cvUrl: student.CvUrl,
                     portfolioUrl: student.PortfolioUrl ?? "",
                     coverLetter: coverLetter,
                     appliedAt: DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                 );
 
-                // 3. حفظ الطلب في قاعدة بيانات Firebase تحت جدول "Applications"
+                // save it
                 var response = await FirebaseDb.Post("Applications", newApplication);
 
-                // 4. إظهار الـ Pop-up Modal (نجاح العملية)، and hide the form so it cannot be sent twice
+                // show the popup and hide the form so it can't be sent twice
                 if (response.IsSuccessStatusCode)
                 {
-                    Notify.ApplicationSubmitted(student.Name, student.Email, opportunity.Title, opportunity.CompanyName, opportunity.CompanyId);
+                    Notify.ApplicationSubmitted(student.Name, student.Email, opportunity.Title, companyName, opportunity.CompanyId);
                     ScriptManager.RegisterStartupScript(this, GetType(), "saved", "window.applicationSaved = true;", true);
                     pnlApply.Visible = false;
                     ShowMessage("Your application was submitted. You can track it in My Applications.", "alert-success");
@@ -166,18 +174,15 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
             }
         }
 
-        private void ShowMessage(string message, string style = "alert-warning")
-        {
-            lblMessage.Text = HttpUtility.HtmlEncode(message);
-            pnlMessage.CssClass = "alert " + style + " d-flex flex-wrap justify-content-between align-items-center gap-2";
-            pnlMessage.Visible = true;
-        }
-
-        // The reason this student cannot apply to this opportunity, or null when they can
+        // why the student can't apply to this opportunity, or null
         private static string WhyCannotApply(Models.Student student, Opportunity opportunity, List<Application> myApplications)
         {
             if (opportunity == null) return "This opportunity no longer exists.";
-            if (myApplications.Any(a => a.OpportunityId == opportunity.Id)) return "You have already applied to this opportunity. You can track it in My Applications.";
+
+            foreach (var app in myApplications)
+            {
+                if (app.OpportunityId == opportunity.Id) return "You have already applied to this opportunity. You can track it in My Applications.";
+            }
 
             string reason = WhyStudentCannotApply(student, myApplications);
             if (reason != null) return reason;
@@ -186,9 +191,57 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
             return opportunity.WhyClosed();   // closed, deadline passed or no seats left
         }
 
-        // ===== The helpers below are the same in Opportunities.aspx.cs (and MyApplications.aspx.cs): change them together =====
+        // the name from the company's profile (by CompanyId),
+        // if the profile can't be read we use the name saved in the opportunity
+        private static async Task<string> CurrentCompanyNameAsync(Opportunity opportunity)
+        {
+            try
+            {
+                if (IsFirebaseId(opportunity.CompanyId))
+                {
+                    CompanySupervisor company = JsonConvert.DeserializeObject<CompanySupervisor>(await ReadAsync("CompanySupervisors", opportunity.CompanyId));
+                    if (company != null && !string.IsNullOrWhiteSpace(company.CompanyName))
+                    {
+                        return company.CompanyName;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Could not read the company name: " + ex.Message);
+            }
+            return opportunity.CompanyName;
+        }
 
-        // FirebaseDb.Get returns null when Firebase refuses the request (for example an expired sign-in)
+        private void ShowMessage(string message, string style = "alert-warning")
+        {
+            lblMessage.Text = HttpUtility.HtmlEncode(message);
+            pnlMessage.CssClass = "alert " + style + " d-flex flex-wrap justify-content-between align-items-center gap-2";
+            pnlMessage.Visible = true;
+        }
+
+        // InvariantCulture so arabic browsers don't get hijri dates
+        private static string FormatDate(long millis)
+        {
+            return DateTimeOffset.FromUnixTimeMilliseconds(millis).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        }
+
+        // firebase keys only use letters, numbers, - and _
+        private static bool IsFirebaseId(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return false;
+
+            foreach (char c in id)
+            {
+                bool allowed = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-' || c == '_';
+                if (!allowed) return false;
+            }
+            return true;
+        }
+
+        // same helpers as in Opportunities and MyApplications
+
+        // Get returns null when firebase refuses the request (e.g. expired login)
         private static async Task<string> ReadAsync(string table, string id = null)
         {
             string json = await FirebaseDb.Get(table, id);
@@ -196,39 +249,49 @@ namespace UniversityInternshipManagmentSystem.Student.ApplicationForm
             return json;
         }
 
-        // One opportunity with its Id filled in, or null when it does not exist
+        // null if the opportunity doesn't exist
         private static async Task<Opportunity> LoadOpportunityAsync(string opportunityId)
         {
-            var opportunity = JsonConvert.DeserializeObject<Opportunity>(await ReadAsync("Opportunities", opportunityId));
-            if (opportunity != null) opportunity.Id = opportunityId;
+            Opportunity opportunity = JsonConvert.DeserializeObject<Opportunity>(await ReadAsync("Opportunities", opportunityId));
+            if (opportunity != null)
+            {
+                opportunity.Id = opportunityId;
+            }
             return opportunity;
         }
 
-        // All applications of this student, newest first
+        // this student's applications, newest first
         private static async Task<List<Application>> LoadMyApplicationsAsync(string studentId)
         {
-            // Firebase returns the text "null" when the table is empty
-            var all = JsonConvert.DeserializeObject<Dictionary<string, Application>>(await ReadAsync("Applications"))
-                      ?? new Dictionary<string, Application>();
-
+            // an empty table comes back as "null"
+            var all = JsonConvert.DeserializeObject<Dictionary<string, Application>>(await ReadAsync("Applications"));
             var mine = new List<Application>();
+            if (all == null) return mine;
+
             foreach (var pair in all)
             {
-                if (pair.Value == null || pair.Value.StudentId != studentId) continue;
-                pair.Value.Id = pair.Key;          // the key is the id
-                mine.Add(pair.Value);
+                if (pair.Value != null && pair.Value.StudentId == studentId)
+                {
+                    pair.Value.Id = pair.Key;
+                    mine.Add(pair.Value);
+                }
             }
             return mine.OrderByDescending(a => a.AppliedAt).ToList();
         }
 
-        // Placed = the coordinator assigned a company (same rule as the coordinator dashboard) or the student confirmed an offer
+        // placed = has a CompanyId or confirmed an offer
         private static bool IsPlaced(Models.Student student, List<Application> myApplications)
         {
-            return (student != null && !string.IsNullOrWhiteSpace(student.CompanyId))
-                || myApplications.Any(a => a.Status == ApplicationStatus.Confirmed);
+            if (student != null && !string.IsNullOrWhiteSpace(student.CompanyId)) return true;
+
+            foreach (var app in myApplications)
+            {
+                if (app.Status == ApplicationStatus.Confirmed) return true;
+            }
+            return false;
         }
 
-        // A reason that stops this student from applying to ANY opportunity, or null
+        // why the student can't apply to anything, or null
         private static string WhyStudentCannotApply(Models.Student student, List<Application> myApplications)
         {
             if (student == null) return "Your student profile could not be found. Please contact the coordinator.";
