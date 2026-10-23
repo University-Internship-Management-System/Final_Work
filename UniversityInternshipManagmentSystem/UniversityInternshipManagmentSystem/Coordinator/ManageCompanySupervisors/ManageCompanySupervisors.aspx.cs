@@ -204,14 +204,14 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             var person = new CompanySupervisor
             {
                 Name = supervisorName.Text.Trim(), Email = loginEmail.Text.Trim(),
-                CompanyName = companyName.Text.Trim(), CompEmail = companyEmail.Text.Trim(),
+                CompanyName = companyName.Text.Trim(), CompEmail = loginEmail.Text.Trim(),
                 Location = companyLocation.Text.Trim(), PhoneNumber = phoneNumber.Text.Trim(),
                 Role = "CompanySupervisor", FirstLogin = true, ProfilePicUrl = ""
             };
             if (person.Name.Length < 2 || person.Name.Length > 100 || person.CompanyName.Length < 2 || person.CompanyName.Length > 150
-                || person.Location.Length < 2 || person.Location.Length > 200 || !ValidEmail(person.Email) || !ValidEmail(person.CompEmail))
+                || person.Location.Length < 2 || person.Location.Length > 200 || !ValidEmail(person.Email))
             {
-                ShowMessage("Enter a name, company, location and valid email addresses.");
+                ShowMessage("Enter a name, company, location and a valid company email.");
                 return;
             }
             if (!Regex.IsMatch(person.PhoneNumber, @"\A07[0-9]{8}\z"))
