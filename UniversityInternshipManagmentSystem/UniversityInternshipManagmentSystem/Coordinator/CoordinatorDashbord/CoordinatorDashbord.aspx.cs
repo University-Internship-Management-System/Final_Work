@@ -1,10 +1,12 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Text;
+using System.Web;
 using System.Web.UI;
 using UniversityInternshipManagmentSystem.Config;
 
@@ -82,13 +84,17 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     bool alreadyCounted = false;
                     foreach (string savedName in companyNames)
                     {
-                        if (string.Equals(savedName, name, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(savedName, companyName, StringComparison.OrdinalIgnoreCase))
                         {
-                            found = true;
+                            alreadyCounted = true;
                             break;
                         }
                     }
-                    if (!found) companyNames.Add(name);
+                    if (!alreadyCounted)
+                    {
+                        companyNames.Add(companyName);
+                        companyCount++;
+                    }
                 }
 
                 int opportunityCount = 0;
@@ -270,6 +276,11 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             html.Append("</div></div></div>");
             return html.ToString();
+        }
+
+        private static string Encode(string value)
+        {
+            return HttpUtility.HtmlEncode(string.IsNullOrWhiteSpace(value) ? "—" : value);
         }
 
         private static void AddCount(Dictionary<string, int> counts, string name)

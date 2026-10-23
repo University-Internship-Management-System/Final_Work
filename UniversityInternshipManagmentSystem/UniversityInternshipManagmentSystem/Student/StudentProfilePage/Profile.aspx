@@ -1,4 +1,4 @@
-<%@ Page Title="My Profile" Language="C#" ResponseEncoding="utf-8" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" Async="true" AsyncTimeout="90" CodeBehind="Profile.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Student.StudentProfilePage.Profile" %>
+﻿<%@ Page Title="My Profile" Language="C#" ResponseEncoding="utf-8" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" Async="true" AsyncTimeout="90" CodeBehind="Profile.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Student.StudentProfilePage.Profile" %>
 <%@ Import Namespace="System.Linq" %>
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl("~/Student/Content/Student.css") %>" />
@@ -109,33 +109,6 @@
                         <div class="mb-3"><asp:Label runat="server" AssociatedControlID="NewPasswordInput" CssClass="form-label" Text="New password" /><asp:TextBox ID="NewPasswordInput" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="new-password" /><small class="sd-note">Use at least 6 characters.</small></div>
                         <div><asp:Label runat="server" AssociatedControlID="ConfirmPasswordInput" CssClass="form-label" Text="Confirm new password" /><asp:TextBox ID="ConfirmPasswordInput" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="new-password" /></div>
                     </div><div class="modal-footer"><button type="button" class="sp-button-quiet" data-bs-dismiss="modal">Cancel</button><asp:Button ID="ResetPasswordButton" runat="server" CssClass="sd-save-button sp-button-primary" Text="Update Password" OnClick="ResetPasswordButton_Click" CausesValidation="false" /></div>
-                </div></div>
-            </div>
-            <section class="sd-panel sd-security-panel mt-4" aria-labelledby="security-title">
-                <div class="sd-panel-head"><h2 id="security-title"><i class="bi bi-shield-lock" aria-hidden="true"></i> Account Security</h2></div>
-                <div class="sd-panel-body sd-security-body">
-                    <div><p class="mb-1">Keep your account secure by updating your password when needed.</p>
-                        <asp:Label ID="PasswordSuccess" runat="server" CssClass="sd-save-message sd-save-success" role="status" aria-live="polite" /></div>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">Reset Password</button>
-                </div>
-            </section>
-            <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
-                    <div class="modal-header"><h2 class="modal-title fs-5" id="resetPasswordTitle">Reset Password</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body">
-                        <p class="sd-note">Enter your current password, then choose a new password.</p>
-                        <asp:Label ID="PasswordError" runat="server" CssClass="sd-save-message sd-save-error" role="alert" />
-                        <div class="mb-3"><asp:Label runat="server" AssociatedControlID="CurrentPasswordInput" CssClass="form-label" Text="Current password" />
-                            <asp:TextBox ID="CurrentPasswordInput" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="current-password" /></div>
-                        <div class="mb-3"><asp:Label runat="server" AssociatedControlID="NewPasswordInput" CssClass="form-label" Text="New password" />
-                            <asp:TextBox ID="NewPasswordInput" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="new-password" />
-                            <small class="sd-note">Use at least 6 characters.</small></div>
-                        <div><asp:Label runat="server" AssociatedControlID="ConfirmPasswordInput" CssClass="form-label" Text="Confirm new password" />
-                            <asp:TextBox ID="ConfirmPasswordInput" runat="server" TextMode="Password" CssClass="form-control" MaxLength="128" autocomplete="new-password" /></div>
-                    </div>
-                    <div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <asp:Button ID="ResetPasswordButton" runat="server" CssClass="sd-save-button" Text="Update Password" OnClick="ResetPasswordButton_Click" CausesValidation="false" /></div>
                 </div></div>
             </div>
             <% } %>
