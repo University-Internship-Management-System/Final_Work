@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using System.Web;
+using System;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using UniversityInternshipManagmentSystem.Config;
 using StudentRecord = UniversityInternshipManagmentSystem.Models.Student;
 
@@ -14,7 +16,9 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
 {
     public partial class Profile : StudentPage
     {
-        private static readonly HttpClient PasswordClient = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
+        private static readonly HttpClient PasswordClient = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false }) { Timeout = TimeSpan.FromSeconds(15), MaxResponseContentBufferSize = 256 * 1024 };
+        private enum ProfileAction { None, Edit, Validate, Save, Cancel }
+        private ProfileAction requestedAction;
         protected StudentRecord Record => Workspace;
         protected bool IsEditing
         {
@@ -225,88 +229,7 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
             RegisterAsyncTask(new PageAsyncTask(ResetPasswordAsync));
         }
 
-        protected void ResetPasswordButton_Click(object sender, EventArgs e)
-        {
-            RegisterAsyncTask(new PageAsyncTask(ResetPasswordAsync));
-        }
-
         private async Task ResetPasswordAsync()
-        {
-            try
-            {
-                ValidateCsrf();
-                await LoadWorkspaceAsync();
-                if (Workspace == null || string.IsNullOrWhiteSpace(VerifiedStudentId))
-                    throw new UnauthorizedAccessException(DataError ?? "Student authorization is required.");
-
-                string currentPassword = CurrentPasswordInput.Text;
-                string newPassword = NewPasswordInput.Text;
-                if (string.IsNullOrEmpty(currentPassword) || string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(ConfirmPasswordInput.Text))
-                    throw new ArgumentException("Complete all password fields.");
-                if (newPassword.Length < 6 || newPassword.Length > 128)
-                    throw new ArgumentException("The new password must be between 6 and 128 characters.");
-                if (newPassword != ConfirmPasswordInput.Text)
-                    throw new ArgumentException("The new passwords do not match.");
-                if (newPassword == currentPassword)
-                    throw new ArgumentException("Choose a new password different from your current password.");
-
-                string uid = Session["userId"] as string;
-                string email = Record.Email;
-                if (string.IsNullOrWhiteSpace(uid) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(AppConfig.ApiKey))
-                    throw new UnauthorizedAccessException("Your account session is unavailable. Sign in again.");
-
-                JObject signIn;
-                using (var response = await PasswordClient.PostAsync(AppConfig.SignInUrl,
-                    new StringContent(JsonConvert.SerializeObject(new { email, password = currentPassword, returnSecureToken = true }), Encoding.UTF8, "application/json")))
-                {
-                    if (!response.IsSuccessStatusCode)
-                        throw new UnauthorizedAccessException("The current password is incorrect or the account cannot be verified.");
-                    signIn = JObject.Parse(await response.Content.ReadAsStringAsync());
-                }
-                if ((string)signIn["localId"] != uid || string.IsNullOrWhiteSpace((string)signIn["idToken"]))
-                    throw new UnauthorizedAccessException("The verified account does not match your student session.");
-
-                JObject updated;
-                using (var response = await PasswordClient.PostAsync(AppConfig.UpdateAccountUrl,
-                    new StringContent(JsonConvert.SerializeObject(new { idToken = (string)signIn["idToken"], password = newPassword, returnSecureToken = true }), Encoding.UTF8, "application/json")))
-                {
-                    if (!response.IsSuccessStatusCode)
-                        throw new InvalidOperationException("Firebase could not update the password. Please try again.");
-                    updated = JObject.Parse(await response.Content.ReadAsStringAsync());
-                }
-                string newToken = (string)updated["idToken"];
-                if (string.IsNullOrWhiteSpace(newToken) || (string)updated["localId"] != uid)
-                {
-                    AuthHelper.SignOut();
-                    Response.Redirect("~/login/Login.aspx?msg=" + Server.UrlEncode("Password updated. Please sign in again."), false);
-                    Context.ApplicationInstance.CompleteRequest();
-                    return;
-                }
-                Session["idToken"] = newToken;
-                PasswordSuccess.Text = "Your password was updated successfully.";
-            }
-            catch (ArgumentException ex) { ShowPasswordError(ex.Message); }
-            catch (UnauthorizedAccessException ex) { ShowPasswordError(ex.Message); }
-            catch (HttpRequestException) { ShowPasswordError("Could not reach Firebase. Please try again."); }
-            catch (TaskCanceledException) { ShowPasswordError("The request timed out. Please try again."); }
-            catch (JsonException) { ShowPasswordError("Firebase returned an invalid response. Please try again."); }
-            catch (InvalidOperationException ex) { ShowPasswordError(ex.Message); }
-            finally
-            {
-                CurrentPasswordInput.Text = "";
-                NewPasswordInput.Text = "";
-                ConfirmPasswordInput.Text = "";
-            }
-        }
-
-        private void ShowPasswordError(string message)
-        {
-            PasswordError.Text = HttpUtility.HtmlEncode(message);
-            ClientScript.RegisterStartupScript(GetType(), "resetPasswordError",
-                "document.addEventListener('DOMContentLoaded', function () { bootstrap.Modal.getOrCreateInstance(document.getElementById('resetPasswordModal')).show(); });", true);
-        }
-
-        protected void CancelButton_Click(object sender, EventArgs e)
         {
             try
             {
