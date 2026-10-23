@@ -36,7 +36,7 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
             try
             {
                 // فلترة الطلبات الخاصة بالطالب الحالي فقط (الأحدث أولاً)
-                ShowApplications(await LoadMyApplicationsAsync(StudentId));
+                await ShowApplicationsAsync(await LoadMyApplicationsAsync(StudentId));
             }
             catch (Exception ex)
             {
@@ -46,8 +46,10 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
         }
 
         // The table shows only when there are applications; otherwise the "No applications" panel shows
-        private void ShowApplications(List<Application> list)
+        private async Task ShowApplicationsAsync(List<Application> list)
         {
+            await UseCurrentOpportunityNamesAsync(list);
+
             rptApplications.DataSource = list;
             rptApplications.DataBind();
 
@@ -79,12 +81,42 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
                 }
 
                 ShowMessage(problem);
-                ShowApplications(myApplications);   // show the current statuses, so old buttons disappear
+                await ShowApplicationsAsync(myApplications);   // show the current statuses, so old buttons disappear
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Error processing application action: " + ex.Message);
                 ShowMessage("Something went wrong. Please refresh the page and try again.");
+            }
+        }
+
+        // An application keeps a copy of the title and company from the day it was sent.
+        // Show the opportunity's current ones instead (found by OpportunityId), so a company's edit shows here too.
+        // The saved copy is only shown when the opportunity was deleted or cannot be read.
+        private static async Task UseCurrentOpportunityNamesAsync(List<Application> list)
+        {
+            if (list.Count == 0) return;
+
+            try
+            {
+                // One request for all opportunities, instead of one request per application
+                var opportunities = JsonConvert.DeserializeObject<Dictionary<string, Opportunity>>(await ReadAsync("Opportunities"))
+                                    ?? new Dictionary<string, Opportunity>();
+
+                foreach (var app in list)
+                {
+                    Opportunity opportunity;
+                    if (app.OpportunityId != null && opportunities.TryGetValue(app.OpportunityId, out opportunity) && opportunity != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(opportunity.Title)) app.OpportunityTitle = opportunity.Title;
+                        if (!string.IsNullOrWhiteSpace(opportunity.CompanyName)) app.CompanyName = opportunity.CompanyName;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // The list still shows, with the saved copies
+                System.Diagnostics.Debug.WriteLine("Could not read the current opportunity names: " + ex.Message);
             }
         }
 
@@ -106,7 +138,9 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
                     Status = ApplicationStatus.Rejected,
                     RejectionReason = "Rejected by student."
                 });
-                return response.IsSuccessStatusCode ? null : "Could not reject the offer. Please try again.";
+                if (!response.IsSuccessStatusCode) return "Could not reject the offer. Please try again.";
+                Notify.OfferDeclined((string)Session["name"], offer.OpportunityTitle, offer.CompanyId);
+                return null;
             }
 
             if (command != "ConfirmApp") return "Unknown action.";
@@ -121,9 +155,12 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
             // A seat = one entry in ConfirmedStudents (SeatsLeft is calculated from it)
             if (opportunity.SeatsLeft <= 0) return "There are no seats left in this opportunity, so the offer cannot be confirmed.";
 
-            return await ConfirmOfferAsync(StudentId, offer, opportunity, myApplications)
-                ? null
-                : "Could not confirm the offer. Please try again.";
+            if (!await ConfirmOfferAsync(StudentId, offer, opportunity, myApplications))
+                return "Could not confirm the offer. Please try again.";
+
+            // Tell the student and the company (Config/Notify.cs does nothing when email is not set up)
+            Notify.OfferConfirmed(student.Name, student.Email, opportunity.Title, opportunity.CompanyName, opportunity.CompanyId);
+            return null;
         }
 
         // Saves the whole confirmation in ONE request to the database root, so Firebase stores all of it or none of it:

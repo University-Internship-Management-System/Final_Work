@@ -1,4 +1,4 @@
-<%@ Control Language="C#" %>
+﻿<%@ Control Language="C#" %>
 
 <footer class="uims-footer mt-auto py-3">
     <div class="container-fluid px-lg-4">
@@ -7,7 +7,7 @@
                 <span>&copy; <%: DateTime.Now.Year %> The University of Jordan &middot; King Abdullah II School of Information Technology (KASIT)</span>
             </div>
             <div class="d-flex align-items-center gap-3">
-                <a href="<%= ResolveUrl("~/Default.aspx") %>">Home</a>
+                <a href="<%= ResolveUrl("~/index.aspx") %>">Home</a>
                 <a href="<%= ResolveUrl("~/About.aspx") %>">About KASIT</a>
                 <a href="<%= ResolveUrl("~/Contact.aspx") %>">Contact Us</a>
                 <a href="<%= ResolveUrl("~/login/Login.aspx") %>">Login Portal</a>

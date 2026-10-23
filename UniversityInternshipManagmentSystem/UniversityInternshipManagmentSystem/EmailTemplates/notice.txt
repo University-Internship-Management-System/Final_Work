@@ -1,0 +1,13 @@
+{{TITLE}}
+
+Hello {{NAME}},
+
+{{MESSAGE}}
+<!--NOTE-->{{NOTE_LABEL}}: {{NOTE}}
+<!--/NOTE-->
+{{BUTTON_TEXT}}: {{BUTTON_URL}}
+
+--
+UIMS - University Internship Management System
+The University of Jordan, King Abdullah II School of Information Technology (KASIT)
+This is an automatic message. Please do not reply to it.

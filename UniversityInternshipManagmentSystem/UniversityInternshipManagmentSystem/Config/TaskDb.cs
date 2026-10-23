@@ -180,6 +180,14 @@ namespace UniversityInternshipManagmentSystem.Config
             return response.IsSuccessStatusCode;
         }
 
+
+        // Saves academic-only task feedback without overwriting the company's Feedback field.
+        public static async Task<bool> SaveAcademicFeedback(string submissionId, string feedback, string academicSupervisorId)
+        {
+            var data = new { AcademicFeedback = feedback, AcademicFeedbackAt = DateTime.UtcNow, AcademicFeedbackBy = academicSupervisorId };
+            HttpResponseMessage response = await FirebaseDb.Patch("TaskSubmissions", submissionId, data);
+            return response.IsSuccessStatusCode;
+        }
         // The supervisor's decision on one submission: Evaluated (with a score) or RevisionRequested
         public static async Task<bool> SaveEvaluation(string submissionId, SubmissionState status, double? score, string feedback)
         {

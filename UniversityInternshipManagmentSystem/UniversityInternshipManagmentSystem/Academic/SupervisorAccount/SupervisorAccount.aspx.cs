@@ -1,389 +1,370 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UniversityInternshipManagmentSystem.Config;
-using UniversityInternshipManagmentSystem.Models;
 
 namespace UniversityInternshipManagmentSystem.Academic.SupervisorAccount
 {
     public partial class SupervisorAccount : Page
     {
-        private const string TableAcademic = "AcademicSupervisors";
-
-        protected async void Page_Load(object sender, EventArgs e)
+        private string action;
+        protected string AccountCsrf => Session["Academic.Account.Csrf"] as string;
+        protected override void OnInit(EventArgs e)
         {
-            // Enforce Academic Supervisor or Coordinator authentication
-            AuthHelper.RequireAuth(this, AuthHelper.RoleAcademic, AuthHelper.RoleCoordinator);
-            if (Response.IsRequestBeingRedirected)
+            base.OnInit(e);
+            ViewStateUserKey = Session.SessionID;
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+            if (string.IsNullOrEmpty(AccountCsrf)) Session["Academic.Account.Csrf"] = Guid.NewGuid().ToString("N");
+            foreach (var input in new[] { txtFullName, txtPhoneNumber, txtProfilePicUrl })
             {
-                return;
+                input.EnableViewState = false;
+                input.ReadOnly = false;
             }
-
-            if (!IsPostBack)
-            {
-                await LoadSupervisorProfileAsync();
-            }
+            txtOfficeNumber.ReadOnly = true;
+            pnlAccountContent.Visible = false;
+            SetStatus("Loading your verified account...", "loading");
         }
 
-        #region Profile Loading & Binding
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            RegisterAsyncTask(new PageAsyncTask(LoadSupervisorProfileAsync));
+        }
 
-        /// <summary>
-        /// Loads the academic supervisor's profile data from Firebase RTDB or fallback model.
-        /// </summary>
+        internal static void RequireCsrf(string expected, string actual)
+        {
+            if (string.IsNullOrEmpty(expected) || !string.Equals(expected, actual, StringComparison.Ordinal))
+                throw new AccountAccessException(403, "Your form session has expired. Reload the account before trying again.");
+        }
+
         private async Task LoadSupervisorProfileAsync()
         {
-            ClearAlerts();
-
-            string userEmail = (AuthHelper.UserEmail ?? "").Trim().ToLowerInvariant();
-            string recordId = Session["dbRecordId"] as string;
-
-            Models.AcademicSupervisor supervisor = null;
-            string officeNumber = "KASIT, Room IT-304";
-
+            string name = txtFullName.Text, phone = txtPhoneNumber.Text, picture = txtProfilePicUrl.Text;
             try
             {
-                // 1. If record ID already resolved in session, query directly
-                if (!string.IsNullOrEmpty(recordId))
+                var session = new HttpSessionStateWrapper(Session);
+                var reader = new AcademicAccountReader();
+                JObject profile = await reader.LoadAsync(session);
+                BindSupervisorData(profile);
+                if (IsPostBack && action != "cancel")
                 {
-                    string json = await FirebaseDb.Get(TableAcademic, recordId);
-                    if (!string.IsNullOrEmpty(json) && json.Trim() != "null")
-                    {
-                        var obj = JObject.Parse(json);
-                        supervisor = ParseSupervisor(recordId, obj);
-                        officeNumber = obj["OfficeNumber"]?.ToString() ?? obj["officeNumber"]?.ToString() ?? obj["OfficeLocation"]?.ToString() ?? officeNumber;
-                    }
+                    txtFullName.Text = name;
+                    txtPhoneNumber.Text = phone;
+                    txtProfilePicUrl.Text = picture;
                 }
-
-                // 2. Otherwise scan the AcademicSupervisors table by email
-                if (supervisor == null)
+                pnlAccountContent.Visible = true;
+                SetStatus("Your verified account is loaded. Changes are restricted to your own account and Firebase permissions.", "loaded");
+                if (action == null) return;
+                RequireCsrf(AccountCsrf, Request.Form["AcademicAccountCsrf"]);
+                if (action == "cancel")
+                    SetStatus("Unsaved changes discarded. Your current account has been reloaded.", "loaded");
+                else if (action == "save")
                 {
-                    string allSupervisorsJson = await FirebaseDb.Get(TableAcademic);
-                    if (!string.IsNullOrEmpty(allSupervisorsJson) && allSupervisorsJson.Trim() != "null")
-                    {
-                        var allObj = JObject.Parse(allSupervisorsJson);
-                        foreach (var prop in allObj.Properties())
-                        {
-                            if (prop.Value is JObject item)
-                            {
-                                string email = (item["Email"]?.ToString() ?? "").Trim().ToLowerInvariant();
-                                string uniEmail = (item["UniversityEmail"]?.ToString() ?? item["UniEmail"]?.ToString() ?? "").Trim().ToLowerInvariant();
-
-                                if (email == userEmail || uniEmail == userEmail)
-                                {
-                                    supervisor = ParseSupervisor(prop.Name, item);
-                                    officeNumber = item["OfficeNumber"]?.ToString() ?? item["officeNumber"]?.ToString() ?? item["OfficeLocation"]?.ToString() ?? officeNumber;
-                                    Session["dbRecordId"] = prop.Name;
-                                    Session["dbTable"] = TableAcademic;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    var patch = AcademicAccountReader.ProfilePatch(name, phone, picture);
+                    BindSupervisorData(await reader.SaveAsync(session, patch));
+                    pnlProfileSuccess.Visible = true;
+                    litProfileSuccess.Text = "Your account details were saved and verified in Firebase.";
+                }
+                else if (action == "password")
+                {
+                    await reader.ChangePasswordAsync(session, txtCurrentPassword.Text, txtNewPassword.Text, txtConfirmPassword.Text);
+                    pnlPasswordSuccess.Visible = true;
+                    litPasswordSuccess.Text = "Your password was updated successfully.";
                 }
             }
-            catch
+            catch (ArgumentException ex) { ShowActionError(ex.Message); }
+            catch (AccountAccessException ex)
             {
-                // Proceed with fallback model if database read is unavailable
-            }
-
-            // 3. Fallback to default in-memory model if no database record found
-            if (supervisor == null)
-            {
-                supervisor = new Models.AcademicSupervisor
+                ShowActionError(ex.Message);
+                if (action == null || ex.StatusCode == 401)
                 {
-                    Id = !string.IsNullOrEmpty(recordId) ? recordId : "academic_test_001",
-                    Name = !string.IsNullOrWhiteSpace(AuthHelper.UserName) ? AuthHelper.UserName : "Dr. Academic Supervisor",
-                    Email = !string.IsNullOrWhiteSpace(AuthHelper.UserEmail) ? AuthHelper.UserEmail : "academic@ju.edu.jo",
-                    UniversityEmail = !string.IsNullOrWhiteSpace(AuthHelper.UserEmail) ? AuthHelper.UserEmail : "academic@ju.edu.jo",
-                    Major = "Computer Science",
-                    PhoneNumber = "0790000020",
-                    ProfilePicUrl = string.Empty,
-                    Role = "AcademicSupervisor"
-                };
-
-                Session["dbRecordId"] = supervisor.Id;
-                Session["dbTable"] = TableAcademic;
-            }
-
-            BindSupervisorData(supervisor, officeNumber);
-        }
-
-        private Models.AcademicSupervisor ParseSupervisor(string id, JObject obj)
-        {
-            return new Models.AcademicSupervisor
-            {
-                Id = id,
-                Name = obj["Name"]?.ToString() ?? obj["name"]?.ToString() ?? AuthHelper.UserName ?? "Academic Supervisor",
-                Email = obj["Email"]?.ToString() ?? obj["email"]?.ToString() ?? AuthHelper.UserEmail ?? "",
-                UniversityEmail = obj["UniversityEmail"]?.ToString() ?? obj["UniEmail"]?.ToString() ?? obj["Email"]?.ToString() ?? AuthHelper.UserEmail ?? "",
-                Major = obj["Major"]?.ToString() ?? obj["major"]?.ToString() ?? "Computer Science",
-                PhoneNumber = obj["PhoneNumber"]?.ToString() ?? obj["phoneNumber"]?.ToString() ?? "",
-                ProfilePicUrl = obj["ProfilePicUrl"]?.ToString() ?? obj["profilePicUrl"]?.ToString() ?? "",
-                Role = "AcademicSupervisor"
-            };
-        }
-
-        private void BindSupervisorData(Models.AcademicSupervisor supervisor, string officeNumber = null)
-        {
-            // Editable form fields
-            txtFullName.Text = supervisor.Name;
-            txtEmail.Text = !string.IsNullOrWhiteSpace(supervisor.UniversityEmail) ? supervisor.UniversityEmail : supervisor.Email;
-            txtPhoneNumber.Text = supervisor.PhoneNumber;
-            txtOfficeNumber.Text = !string.IsNullOrWhiteSpace(officeNumber) ? officeNumber : "";
-            txtProfilePicUrl.Text = supervisor.ProfilePicUrl;
-
-            // Department dropdown
-            if (ddlMajor.Items.FindByValue(supervisor.Major) != null)
-            {
-                ddlMajor.SelectedValue = supervisor.Major;
-            }
-            else if (!string.IsNullOrWhiteSpace(supervisor.Major))
-            {
-                ddlMajor.Items.Add(new System.Web.UI.WebControls.ListItem(supervisor.Major, supervisor.Major));
-                ddlMajor.SelectedValue = supervisor.Major;
-            }
-
-            // Left Overview Card
-            litProfileName.Text = Server.HtmlEncode(supervisor.Name);
-            litProfileRole.Text = "Academic Supervisor";
-            litProfileMajor.Text = Server.HtmlEncode(!string.IsNullOrWhiteSpace(supervisor.Major) ? supervisor.Major : "Computer Science");
-            litProfileEmail.Text = Server.HtmlEncode(txtEmail.Text);
-            litProfilePhone.Text = Server.HtmlEncode(!string.IsNullOrWhiteSpace(supervisor.PhoneNumber) ? supervisor.PhoneNumber : "Not provided");
-            litProfileOffice.Text = Server.HtmlEncode(!string.IsNullOrWhiteSpace(officeNumber) ? officeNumber : "Not specified");
-
-            // Avatar binding
-            if (!string.IsNullOrWhiteSpace(supervisor.ProfilePicUrl) && Uri.IsWellFormedUriString(supervisor.ProfilePicUrl, UriKind.Absolute))
-            {
-                pnlImageAvatar.Visible = true;
-                pnlInitialsAvatar.Visible = false;
-                imgAvatar.ImageUrl = supervisor.ProfilePicUrl;
-            }
-            else
-            {
-                pnlImageAvatar.Visible = false;
-                pnlInitialsAvatar.Visible = true;
-                litAvatarInitials.Text = Server.HtmlEncode(GetInitials(supervisor.Name));
-            }
-        }
-
-        private string GetInitials(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                return "AS";
-
-            string clean = name.Replace("Dr.", "").Replace("Prof.", "").Trim();
-            string[] parts = clean.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            if (parts.Length == 1)
-                return parts[0].Substring(0, Math.Min(2, parts[0].Length)).ToUpperInvariant();
-
-            return (parts[0][0].ToString() + parts[parts.Length - 1][0].ToString()).ToUpperInvariant();
-        }
-
-        #endregion
-
-        #region Actions
-
-        /// <summary>
-        /// Saves updated supervisor details to Firebase RTDB and refreshes the user session.
-        /// </summary>
-        protected async void btnSaveDetails_Click(object sender, EventArgs e)
-        {
-            ClearAlerts();
-
-            string fullName = txtFullName.Text.Trim();
-            string major = ddlMajor.SelectedValue;
-            string phone = txtPhoneNumber.Text.Trim();
-            string officeNumber = txtOfficeNumber.Text.Trim();
-            string profilePic = txtProfilePicUrl.Text.Trim();
-
-            if (string.IsNullOrEmpty(fullName))
-            {
-                ShowProfileError("Full Name is required and cannot be empty.");
-                return;
-            }
-
-            string recordId = Session["dbRecordId"] as string ?? "academic_test_001";
-
-            var patchPayload = new
-            {
-                Name = fullName,
-                Major = major,
-                PhoneNumber = phone,
-                OfficeNumber = officeNumber,
-                OfficeLocation = officeNumber,
-                ProfilePicUrl = profilePic
-            };
-
-            try
-            {
-                var response = await FirebaseDb.Patch(TableAcademic, recordId, patchPayload);
-
-                // Update active user session name
-                Session["name"] = fullName;
-
-                // Refresh overview panel
-                litProfileName.Text = Server.HtmlEncode(fullName);
-                litProfileMajor.Text = Server.HtmlEncode(major);
-                litProfilePhone.Text = Server.HtmlEncode(!string.IsNullOrWhiteSpace(phone) ? phone : "Not provided");
-                litProfileOffice.Text = Server.HtmlEncode(!string.IsNullOrWhiteSpace(officeNumber) ? officeNumber : "Not specified");
-
-                if (!string.IsNullOrWhiteSpace(profilePic) && Uri.IsWellFormedUriString(profilePic, UriKind.Absolute))
-                {
-                    pnlImageAvatar.Visible = true;
-                    pnlInitialsAvatar.Visible = false;
-                    imgAvatar.ImageUrl = profilePic;
+                    pnlAccountContent.Visible = false;
+                    Response.StatusCode = ex.StatusCode;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.SuppressFormsAuthenticationRedirect = true;
                 }
-                else
-                {
-                    pnlImageAvatar.Visible = false;
-                    pnlInitialsAvatar.Visible = true;
-                    litAvatarInitials.Text = Server.HtmlEncode(GetInitials(fullName));
-                }
-
-                ShowProfileSuccess("Your academic profile details have been saved successfully.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ShowProfileError("Failed to save changes: " + Server.HtmlEncode(ex.Message));
+                ShowActionError("The request could not be completed or confirmed. Reload your account before retrying.");
+                if (action == null) { pnlAccountContent.Visible = false; Response.StatusCode = 503; Response.TrySkipIisCustomErrors = true; }
             }
+            finally { txtCurrentPassword.Text = txtNewPassword.Text = txtConfirmPassword.Text = ""; }
         }
 
-        /// <summary>
-        /// Resets form changes back to current saved state.
-        /// </summary>
-        protected async void btnCancelDetails_Click(object sender, EventArgs e)
+        private void ShowActionError(string message)
         {
-            await LoadSupervisorProfileAsync();
+            SetStatus(message, "error");
+            if (action == "password") { pnlPasswordError.Visible = true; litPasswordError.Text = Server.HtmlEncode(message); }
+            else if (action == "save") { pnlProfileError.Visible = true; litProfileError.Text = Server.HtmlEncode(message); }
         }
 
-        /// <summary>
-        /// Updates the supervisor password in Firebase Auth REST.
-        /// </summary>
-        protected async void btnSavePassword_Click(object sender, EventArgs e)
+        private void SetStatus(string message, string state)
         {
-            ClearAlerts();
+            pnlAccountStatus.Attributes["data-state"] = state;
+            litAccountStatus.Text = Server.HtmlEncode(message);
+        }
 
-            string currentPassword = txtCurrentPassword.Text;
-            string newPassword = txtNewPassword.Text;
-            string confirmPassword = txtConfirmPassword.Text;
+        private void BindSupervisorData(JObject profile)
+        {
+            string name = AcademicAccountReader.Display(profile, "Name");
+            string major = AcademicAccountReader.Display(profile, "Major");
+            string email = AcademicAccountReader.Display(profile, "Email");
+            txtFullName.Text = AcademicAccountReader.StringValue(profile, "Name") ?? "";
+            txtPhoneNumber.Text = AcademicAccountReader.StringValue(profile, "PhoneNumber") ?? "";
+            txtOfficeNumber.Text = AcademicAccountReader.Display(profile, "UniversityEmail");
+            txtProfilePicUrl.Text = AcademicAccountReader.StringValue(profile, "ProfilePicUrl") ?? "";
+            litProfileName.Text = Server.HtmlEncode(name);
+            litProfileMajor.Text = Server.HtmlEncode(major);
+            litProfileRole.Text = Server.HtmlEncode(AcademicAccountReader.Display(profile, "Role"));
+            litProfileEmail.Text = Server.HtmlEncode(email);
+            litProfilePhone.Text = Server.HtmlEncode(AcademicAccountReader.Display(profile, "PhoneNumber"));
+            // Reuse the existing summary slot for actual optional UniversityEmail, not an invented office.
+            litProfileOffice.Text = Server.HtmlEncode(txtOfficeNumber.Text);
+            litFirstLogin.Text = profile["FirstLogin"] != null && profile["FirstLogin"].Type == JTokenType.Boolean
+                ? ((bool)profile["FirstLogin"] ? "Yes" : "No") : "Not provided";
+            Uri image;
+            string picture = AcademicAccountReader.StringValue(profile, "ProfilePicUrl");
+            bool safeImage = picture != null && picture.Length <= 2048
+                && Uri.TryCreate(picture, UriKind.Absolute, out image)
+                && image.Scheme == Uri.UriSchemeHttps && string.IsNullOrEmpty(image.UserInfo);
+            pnlImageAvatar.Visible = safeImage;
+            pnlInitialsAvatar.Visible = !safeImage;
+            if (safeImage) imgAvatar.ImageUrl = picture;
+            litAvatarInitials.Text = Server.HtmlEncode(string.IsNullOrWhiteSpace(AcademicAccountReader.StringValue(profile, "Name"))
+                ? "?" : name.Substring(0, 1).ToUpperInvariant());
+        }
 
-            if (string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(confirmPassword))
+        protected void btnSaveDetails_Click(object sender, EventArgs e) { action = "save"; }
+        protected void btnCancelDetails_Click(object sender, EventArgs e) { action = "cancel"; }
+        protected void btnSavePassword_Click(object sender, EventArgs e) { action = "password"; }
+    }
+
+    internal sealed class AccountAccessException : Exception
+    {
+        internal int StatusCode { get; private set; }
+        internal AccountAccessException(int status, string message) : base(message) { StatusCode = status; }
+    }
+
+    // Module-local own-account access. Reuses team configuration and the verified login session.
+    internal sealed class AcademicAccountReader
+    {
+        private static readonly HttpClient Client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false })
+        { Timeout = TimeSpan.FromSeconds(20) };
+        private readonly HttpClient client;
+        private readonly string databaseUrl;
+        private readonly string apiKey;
+        internal AcademicAccountReader() : this(Client, AppConfig.DbUrl, AppConfig.ApiKey) { }
+        internal AcademicAccountReader(HttpClient transport, string url, string key)
+        { client = transport; databaseUrl = url; apiKey = key; }
+
+        internal async Task<JObject> LoadAsync(HttpSessionStateBase session)
+        {
+            string uid = session == null ? null : session["userId"] as string;
+            string token = session == null ? null : session["idToken"] as string;
+            if (string.IsNullOrWhiteSpace(uid) || string.IsNullOrWhiteSpace(token))
+                throw new AccountAccessException(401, "Sign in through the team login to view your account.");
+            if (!string.Equals(session["role"] as string, "academic", StringComparison.Ordinal)
+                || !string.Equals(session["dbTable"] as string, "AcademicSupervisors", StringComparison.Ordinal)
+                || !string.Equals(session["dbRecordId"] as string, uid, StringComparison.Ordinal)
+                || uid.Length > 128 || uid.IndexOfAny(new[] { '.', '#', '$', '[', ']', '/', '\\' }) >= 0)
+                throw new AccountAccessException(403, "Account ownership could not be verified. Your AcademicSupervisors record key must match your Firebase UID and the team session mapping.");
+            if (token.Length > 16384)
+                throw new AccountAccessException(401, "Your sign-in session is invalid. Please sign in again.");
+
+            Uri database;
+            if (!Uri.TryCreate(databaseUrl, UriKind.Absolute, out database)
+                || database.Scheme != Uri.UriSchemeHttps || !string.IsNullOrEmpty(database.UserInfo)
+                || database.AbsolutePath != "/" || !string.IsNullOrEmpty(database.Query)
+                || !string.IsNullOrEmpty(database.Fragment) || !database.IsDefaultPort || string.IsNullOrWhiteSpace(apiKey))
+                throw new AccountAccessException(503, "The team's Firebase configuration is unavailable.");
+            var hostMatch = System.Text.RegularExpressions.Regex.Match(database.Host,
+                @"^([a-z0-9-]+)-default-rtdb(?:\.[a-z0-9-]+)?\.(?:firebaseio\.com|firebasedatabase\.app)$");
+            if (!hostMatch.Success)
+                throw new AccountAccessException(503, "The configured Firebase project could not be determined.");
+            string project = hostMatch.Groups[1].Value;
+
+            // Google verifies the signed token server-side. Decoded claims alone are never trusted.
+            using (var request = new HttpRequestMessage(HttpMethod.Post,
+                "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=" + Uri.EscapeDataString(apiKey)))
             {
-                ShowPasswordError("Please enter both the new password and its confirmation.");
-                return;
-            }
-
-            if (newPassword.Length < 6)
-            {
-                ShowPasswordError("New password must be at least 6 characters long.");
-                return;
-            }
-
-            if (newPassword != confirmPassword)
-            {
-                ShowPasswordError("New password and confirmation password do not match.");
-                return;
-            }
-
-            string idToken = AuthHelper.IdToken;
-
-            try
-            {
-                // Update password in Firebase Auth if live token is present
-                if (!string.IsNullOrEmpty(idToken))
+                request.Content = new StringContent(JsonConvert.SerializeObject(new { idToken = token }), Encoding.UTF8, "application/json");
+                using (var response = await client.SendAsync(request))
                 {
-                    var payload = new
-                    {
-                        idToken = idToken,
-                        password = newPassword,
-                        returnSecureToken = true
-                    };
-
-                    var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-                    var response = await FirebaseDb.client.PostAsync(AppConfig.UpdateAccountUrl, content);
-                    string responseJson = await response.Content.ReadAsStringAsync();
-
+                    if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.Unauthorized
+                        || response.StatusCode == HttpStatusCode.Forbidden)
+                        throw new AccountAccessException(401, "Firebase could not verify your sign-in session. Please sign in again.");
                     if (!response.IsSuccessStatusCode)
-                    {
-                        string rawError = responseJson;
-                        try
-                        {
-                            var errObj = JObject.Parse(responseJson);
-                            rawError = errObj["error"]?["message"]?.ToString() ?? responseJson;
-                        }
-                        catch { }
-
-                        ShowPasswordError(AuthHelper.GetFriendlyAuthError(rawError));
-                        return;
-                    }
-
-                    // Refresh token in session
-                    try
-                    {
-                        var authObj = JObject.Parse(responseJson);
-                        string newToken = authObj["idToken"]?.ToString();
-                        if (!string.IsNullOrEmpty(newToken))
-                        {
-                            Session["idToken"] = newToken;
-                        }
-                    }
-                    catch { }
+                        throw new AccountAccessException(503, "Firebase identity verification is temporarily unavailable.");
+                    JObject result = JObject.Parse(await response.Content.ReadAsStringAsync());
+                    var users = result["users"] as JArray;
+                    var user = users != null && users.Count == 1 ? users[0] as JObject : null;
+                    if (user == null || (string)user["localId"] != uid || (bool?)user["disabled"] == true)
+                        throw new AccountAccessException(401, "Firebase could not verify your account.");
+                    ValidateAcceptedToken(token, uid, project, (string)user["validSince"]);
                 }
-
-                // Clear input controls
-                txtCurrentPassword.Text = string.Empty;
-                txtNewPassword.Text = string.Empty;
-                txtConfirmPassword.Text = string.Empty;
-
-                ShowPasswordSuccess("Your password has been changed successfully.");
             }
-            catch (Exception ex)
+
+            string url = database.AbsoluteUri.TrimEnd('/') + "/AcademicSupervisors/" + Uri.EscapeDataString(uid) + ".json?auth=" + Uri.EscapeDataString(token);
+            using (var response = await client.GetAsync(url))
             {
-                ShowPasswordError("Error updating password: " + Server.HtmlEncode(ex.Message));
+                if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
+                    throw new AccountAccessException(403, "Firebase denied access to your account. Ask the Firebase owner to verify own-record read permissions.");
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                    throw new AccountAccessException(404, "Your Academic Supervisor record is unavailable.");
+                if (!response.IsSuccessStatusCode)
+                    throw new AccountAccessException(503, "Firebase account information is temporarily unavailable.");
+                JToken value = JToken.Parse(await response.Content.ReadAsStringAsync());
+                if (value.Type == JTokenType.Null)
+                    throw new AccountAccessException(404, "Your Academic Supervisor record is unavailable.");
+                var profile = value as JObject;
+                if (profile == null)
+                    throw new AccountAccessException(503, "The account record has an unsupported format.");
+                if (!string.Equals(StringValue(profile, "Role"), "AcademicSupervisor", StringComparison.Ordinal))
+                    throw new AccountAccessException(403, "The verified account is not an Academic Supervisor.");
+                return profile;
             }
         }
 
-        #endregion
-
-        #region Helpers
-
-        private void ClearAlerts()
+        internal static JObject ProfilePatch(string name, string phone, string picture)
         {
-            pnlProfileSuccess.Visible = false;
-            pnlProfileError.Visible = false;
-            pnlPasswordSuccess.Visible = false;
-            pnlPasswordError.Visible = false;
+            name = (name ?? "").Trim(); phone = (phone ?? "").Trim(); picture = (picture ?? "").Trim();
+            if (name.Length == 0 || name.Length > 100 || System.Text.RegularExpressions.Regex.IsMatch(name, @"[<>\p{Cc}]"))
+                throw new ArgumentException("Enter your full name (1–100 characters, without markup or control characters).");
+            if (phone.Length > 0 && !System.Text.RegularExpressions.Regex.IsMatch(phone, @"^(?=.{7,30}$)(?=.*[0-9])[0-9+() \-]+$"))
+                throw new ArgumentException("Enter a phone number using 7–30 digits, spaces, +, parentheses or hyphens.");
+            Uri image;
+            if (picture.Length > 0 && (picture.Length > 2048 || System.Text.RegularExpressions.Regex.IsMatch(picture, @"\p{Cc}")
+                || !Uri.TryCreate(picture, UriKind.Absolute, out image) || image.Scheme != Uri.UriSchemeHttps
+                || string.IsNullOrEmpty(image.Host) || !string.IsNullOrEmpty(image.UserInfo)))
+                throw new ArgumentException("Enter an absolute HTTPS profile picture URL without embedded credentials (up to 2048 characters), or leave it empty.");
+            return new JObject { { "Name", name }, { "PhoneNumber", phone }, { "ProfilePicUrl", picture } };
         }
 
-        private void ShowProfileSuccess(string message)
+        internal async Task<JObject> SaveAsync(HttpSessionStateBase session, JObject patch)
         {
-            pnlProfileSuccess.Visible = true;
-            litProfileSuccess.Text = message;
+            if (patch == null || patch.Count != 3 || patch["Name"]?.Type != JTokenType.String
+                || patch["PhoneNumber"]?.Type != JTokenType.String || patch["ProfilePicUrl"]?.Type != JTokenType.String)
+                throw new ArgumentException("Only name, phone number and profile picture can be updated.");
+            var validated = ProfilePatch((string)patch["Name"], (string)patch["PhoneNumber"], (string)patch["ProfilePicUrl"]);
+            await LoadAsync(session); // Revalidate token, role and record ownership before every write.
+            string uid = (string)session["userId"], token = (string)session["idToken"];
+            string url = databaseUrl.TrimEnd('/') + "/AcademicSupervisors/" + Uri.EscapeDataString(uid) + ".json?auth=" + Uri.EscapeDataString(token);
+            using (var request = new HttpRequestMessage(new HttpMethod("PATCH"), url))
+            {
+                request.Content = new StringContent(validated.ToString(Formatting.None), Encoding.UTF8, "application/json");
+                using (var response = await client.SendAsync(request))
+                {
+                    if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                        throw new AccountAccessException(403, "Firebase denied saving account details. The Firebase owner must approve own-account updates for Name, PhoneNumber and ProfilePicUrl. No permissions were changed.");
+                    if (!response.IsSuccessStatusCode)
+                        throw new AccountAccessException(503, "Firebase did not confirm saving your details. Reload your account before retrying.");
+                }
+            }
+            var saved = await LoadAsync(session);
+            foreach (var field in validated.Properties())
+                if (!JToken.DeepEquals(saved[field.Name], field.Value))
+                    throw new AccountAccessException(503, "Firebase accepted the request, but saved values could not be confirmed. Reload your account before retrying.");
+            return saved;
         }
 
-        private void ShowProfileError(string message)
+        internal static void ValidatePassword(string current, string password, string confirm)
         {
-            pnlProfileError.Visible = true;
-            litProfileError.Text = message;
+            if (string.IsNullOrEmpty(current) || current.Length > 128)
+                throw new ArgumentException("Enter your current password (up to 128 characters).");
+            if (string.IsNullOrEmpty(password) || password.Length < 6 || password.Length > 128)
+                throw new ArgumentException("The new password must contain 6–128 characters.");
+            if (password != confirm) throw new ArgumentException("The new passwords do not match.");
+            if (password == current) throw new ArgumentException("Choose a new password different from the current password.");
         }
 
-        private void ShowPasswordSuccess(string message)
+        internal async Task ChangePasswordAsync(HttpSessionStateBase session, string current, string password, string confirm)
         {
-            pnlPasswordSuccess.Visible = true;
-            litPasswordSuccess.Text = message;
+            ValidatePassword(current, password, confirm);
+            var profile = await LoadAsync(session);
+            string uid = (string)session["userId"], email = StringValue(profile, "Email");
+            if (string.IsNullOrWhiteSpace(email)) throw new AccountAccessException(403, "The verified account has no sign-in email. Contact the account administrator.");
+            JObject signIn = await AuthPostAsync("signInWithPassword", new JObject { { "email", email }, { "password", current }, { "returnSecureToken", true } });
+            if ((string)signIn["localId"] != uid || string.IsNullOrWhiteSpace((string)signIn["idToken"]))
+                throw new AccountAccessException(403, "The reauthenticated account does not match your verified supervisor account.");
+            var updated = await AuthPostAsync("update", new JObject { { "idToken", (string)signIn["idToken"] }, { "password", password }, { "returnSecureToken", true } });
+            string refreshed = (string)updated["idToken"];
+            if ((string)updated["localId"] != uid || string.IsNullOrWhiteSpace(refreshed))
+            {
+                session["idToken"] = null;
+                throw new AccountAccessException(401, "The password may have changed. Sign in again to verify your account.");
+            }
+            // Google issued this token over HTTPS; verify its project, subject and lifetime too.
+            string project = System.Text.RegularExpressions.Regex.Match(new Uri(databaseUrl).Host,
+                @"^([a-z0-9-]+)-default-rtdb").Groups[1].Value;
+            try { ValidateAcceptedToken(refreshed, uid, project, null); }
+            catch { session["idToken"] = null; throw; }
+            session["idToken"] = refreshed;
         }
 
-        private void ShowPasswordError(string message)
+        private async Task<JObject> AuthPostAsync(string operation, JObject data)
         {
-            pnlPasswordError.Visible = true;
-            litPasswordError.Text = message;
+            using (var request = new HttpRequestMessage(HttpMethod.Post,
+                "https://identitytoolkit.googleapis.com/v1/accounts:" + operation + "?key=" + Uri.EscapeDataString(apiKey)))
+            {
+                request.Content = new StringContent(data.ToString(Formatting.None), Encoding.UTF8, "application/json");
+                using (var response = await client.SendAsync(request))
+                {
+                    if (!response.IsSuccessStatusCode)
+                        throw new AccountAccessException(403, operation == "signInWithPassword"
+                            ? "The current password could not be verified. Check it and try again."
+                            : "Firebase refused the password change. Check the password policy or sign in again.");
+                    return JObject.Parse(await response.Content.ReadAsStringAsync());
+                }
+            }
         }
 
-        #endregion
+        private static void ValidateAcceptedToken(string token, string uid, string project, string validSince)
+        {
+            try
+            {
+                string[] parts = token.Split('.');
+                if (parts.Length != 3 || string.IsNullOrEmpty(parts[2])) throw new FormatException();
+                JObject header = Decode(parts[0]);
+                JObject claims = Decode(parts[1]);
+                long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                long? expires = (long?)claims["exp"], issued = (long?)claims["iat"], authenticated = (long?)claims["auth_time"];
+                long revokedBefore;
+                if ((string)header["alg"] != "RS256" || string.IsNullOrWhiteSpace((string)header["kid"])
+                    || (string)claims["sub"] != uid || (string)claims["aud"] != project
+                    || (string)claims["iss"] != "https://securetoken.google.com/" + project
+                    || !expires.HasValue || expires.Value <= now || !issued.HasValue || issued.Value > now
+                    || !authenticated.HasValue || authenticated.Value > now
+                    || issued.Value < 0 || authenticated.Value < 0 || expires.Value <= issued.Value
+                    || (long.TryParse(validSince, out revokedBefore) && authenticated.Value < revokedBefore))
+                    throw new FormatException();
+            }
+            catch (Exception)
+            {
+                throw new AccountAccessException(401, "Your Firebase session does not match the configured project or has expired. Please sign in again.");
+            }
+        }
+        private static JObject Decode(string part)
+        {
+            string value = part.Replace('-', '+').Replace('_', '/');
+            value = value.PadRight(value.Length + (4 - value.Length % 4) % 4, '=');
+            return JObject.Parse(Encoding.UTF8.GetString(Convert.FromBase64String(value)));
+        }
+        internal static string StringValue(JObject profile, string field)
+        {
+            JToken value = profile[field];
+            return value != null && value.Type == JTokenType.String ? (string)value : null;
+        }
+        internal static string Display(JObject profile, string field)
+        {
+            string value = StringValue(profile, field);
+            return string.IsNullOrWhiteSpace(value) ? "Not provided" : value;
+        }
     }
 }

@@ -67,7 +67,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 await LoadAccountStates();
                 BindCompanies();
                 if (!IsPostBack && Request.QueryString["saved"] == "1")
-                    ShowMessage("Company supervisor saved to Firebase successfully.");
+                    ShowMessage("Company supervisor saved to Firebase successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]));
             }
             catch
             {
@@ -150,6 +150,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 }
                 bool disable = !current[id];
                 await CompanyAccountAccess.SetDisabled(id, disable);
+                Notify.AccountStatusChanged(accounts[id].Name, accounts[id].Email, disable);
                 await LoadAccountStates();
                 BindCompanies();
                 ShowMessage(disable ? "Account deactivated. The supervisor cannot sign in."
@@ -218,6 +219,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
 
             string newAccountToken = null;
+            string verifyResult = null;
             try
             {
                 if (id == null)
@@ -231,6 +233,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     {
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                     }
+                    verifyResult = await EmailVerification.RequireAndSend("CompanySupervisors", id, newAccountToken);
+                    Notify.AccountCreated(name, "company", email, temporaryPassword.Text);
                 }
                 else
                 {
@@ -261,7 +265,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 return;
             }
             // Refresh only after the write succeeded; never delete a created login because a refresh failed.
-            Response.Redirect(Request.AppRelativeCurrentExecutionFilePath + "?saved=1", false);
+            Response.Redirect(Request.AppRelativeCurrentExecutionFilePath + "?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult), false);
             Context.ApplicationInstance.CompleteRequest();
         }
 

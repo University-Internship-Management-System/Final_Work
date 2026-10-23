@@ -25,11 +25,11 @@
                 <div class="row g-4 mt-2">
                     <div class="col-12"><section class="card admin-card chart-card p-4 h-100" aria-labelledby="majorChartHeading">
                         <div class="chart-heading"><span class="chart-icon" aria-hidden="true"><svg><use href="#i-student" /></svg></span><div><h2 id="majorChartHeading" class="section-title mb-1">Students by Major</h2><p class="chart-subtitle mb-0">Number of students enrolled in each major</p></div></div>
-                        <div id="majorChart"></div>
+                        <asp:Literal ID="litMajorChart" runat="server" />
                     </section></div>
                     <div class="col-12"><section class="card admin-card chart-card p-4 h-100" aria-labelledby="companyChartHeading">
                         <div class="chart-heading"><span class="chart-icon company" aria-hidden="true"><svg><use href="#i-building" /></svg></span><div><h2 id="companyChartHeading" class="section-title mb-1">Placed Students by Company</h2><p class="chart-subtitle mb-0">Students with a company assignment</p></div></div>
-                        <div id="companyChart" class="chart-list"></div>
+                        <div class="chart-list"><asp:Literal ID="litCompanyChart" runat="server" /></div>
                     </section></div>
                 </div>
                 <section class="card admin-card opportunity-section p-4 mt-4" aria-labelledby="opportunityStatsHeading">
@@ -40,7 +40,7 @@
                             <div class="opportunity-stat"><strong><asp:Literal ID="litOpenOpportunities" runat="server" /></strong><span>Open opportunities</span></div>
                             <div class="opportunity-stat"><strong><asp:Literal ID="litClosedOpportunities" runat="server" /></strong><span>Closed opportunities</span></div>
                         </div>
-                        <div class="opportunity-companies"><h3>Opportunities by Company</h3><p class="chart-subtitle">The columns show each company's opportunity count; the circle shows its share.</p><div id="opportunityCharts"></div></div>
+                        <div class="opportunity-companies"><h3>Opportunities by Company</h3><p class="chart-subtitle">The columns show each company's opportunity count; the circle shows its share.</p><asp:Literal ID="litOpportunityCompanies" runat="server" /></div>
                     </div>
                 </section>
             </asp:Panel>

@@ -243,6 +243,12 @@ namespace UniversityInternshipManagmentSystem.Company.ManageTasksPage
             }
 
             bool saved = await TaskDb.SetTaskStatus(task.TaskId, newStatus);
+            if (saved)
+            {
+                foreach (string id in task.StudentIds)
+                    if (_allStudents.ContainsKey(id))
+                        Notify.TaskNews(_allStudents[id].Name, _allStudents[id].Email, task.TaskName, newStatus == TaskState.Closed ? "was closed" : "was opened again");
+            }
 
             await LoadPage();               // reload so the card shows the new status
             lblMessage.Text = saved
@@ -419,6 +425,9 @@ namespace UniversityInternshipManagmentSystem.Company.ManageTasksPage
                 if (tooMany != null) { lblFormError.Text = tooMany; return; }
             }
 
+            // Who gets the "new task" email: everybody on a new task, only the added trainees when editing
+            List<string> newcomers = editing == null ? studentIds : studentIds.Where(id => !editing.StudentIds.Contains(id)).ToList();
+
             bool saved;
             if (editing == null)
             {
@@ -445,6 +454,18 @@ namespace UniversityInternshipManagmentSystem.Company.ManageTasksPage
             {
                 lblFormError.Text = "Could not save the task. Please try again.";
                 return;
+            }
+
+            foreach (string id in newcomers)
+            {
+                if (!_allStudents.ContainsKey(id)) continue;
+                Notify.TaskAssigned(_allStudents[id].Name, _allStudents[id].Email, name, week, deadline);
+            }
+            if (editing != null)
+            {
+                // The trainees who already had the task hear that it changed
+                foreach (string id in studentIds.Except(newcomers))
+                    if (_allStudents.ContainsKey(id)) Notify.TaskNews(_allStudents[id].Name, _allStudents[id].Email, name, "was updated");
             }
 
             pnlNew.Visible = false;

@@ -164,6 +164,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 {
                     if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                 }
+                Notify.SupervisorAssigned(ids, supervisorId);
                 Response.Redirect("AssignAcademicSupervisors.aspx?saved=1", false);
                 Context.ApplicationInstance.CompleteRequest();
             }
