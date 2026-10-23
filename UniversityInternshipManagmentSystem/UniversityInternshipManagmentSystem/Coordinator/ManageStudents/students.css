@@ -163,3 +163,33 @@
 .student-summary strong { display:block;font-size:30px;line-height:1.2;color:var(--uims-primary);font-weight:700; }
 .student-summary>p { margin:0;color:var(--uims-muted);font-size:13px;line-height:1.7; }
 @media(max-width:700px) { .student-summary { padding:18px;align-items:flex-start;flex-direction:column;gap:16px; } .student-summary strong { font-size:28px; } }
+
+/* CSV import uses the same colours and buttons as the account editor. */
+.student-heading-actions{display:flex;gap:12px;flex-wrap:wrap}
+.student-import-modal .modal-content{border:0;border-radius:20px;overflow:hidden}
+.student-import-modal .modal-header,.student-import-modal .modal-body{padding:24px 28px}
+.student-import-modal .modal-header{background:var(--uims-bg)}
+.student-import-modal .modal-title{font-size:25px;margin-bottom:8px}
+.student-import-modal .modal-header p,.student-import-modal .modal-body p{font-size:13px;line-height:1.7}
+.student-import-modal .modal-footer{padding:20px 28px 24px}
+.student-import-steps{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px;color:var(--uims-primary);font-size:13px}
+.student-import-steps b{display:inline-grid;place-items:center;width:28px;height:28px;margin-right:6px;background:var(--uims-mint);border-radius:50%}
+.student-import-guide{display:flex;gap:24px;align-items:center;justify-content:space-between;background:var(--uims-mint);border-radius:14px;padding:20px;margin-bottom:18px}
+.student-import-guide h3,.student-import-preview-title{font-size:18px;margin-bottom:8px}
+.student-import-guide p{margin:0;max-width:550px}
+.student-import-guide .btn{flex:none}
+.student-import-reference{border:1px solid var(--uims-border);border-radius:12px;padding:16px;margin-bottom:20px}
+.student-import-reference summary{font-size:13px;font-weight:600;cursor:pointer;color:var(--uims-primary)}
+.student-import-reference p{margin:14px 0}
+.student-import-upload{display:flex;gap:16px;align-items:flex-end;margin:22px 0}
+.student-import-upload>div{flex:1;min-width:0}
+.student-import-upload label{display:block;font-weight:600;font-size:13px;margin-bottom:8px}
+.student-import-table{overflow:auto;max-height:330px;border:1px solid var(--uims-border);border-radius:12px}
+.student-import-table .table{margin:0;font-size:13px;min-width:650px}
+.student-import-table th{position:sticky;top:0;background:var(--uims-bg);padding:14px}
+.student-import-table td{padding:14px;vertical-align:top}
+.student-import-table small{display:block;color:var(--uims-muted);margin-top:4px}
+.student-import-ready{color:var(--uims-primary)}
+.student-import-error{color:#b42318}
+.student-import-footnote{margin:20px 0 0;color:var(--uims-muted);border-top:1px solid var(--uims-border);padding-top:18px}
+@media(max-width:700px){.student-import-guide,.student-import-upload{align-items:stretch;flex-direction:column}.student-import-modal .modal-header,.student-import-modal .modal-body{padding:20px}.student-import-modal .modal-footer{padding:18px 20px 24px}.student-import-steps{gap:12px}}
