@@ -27,7 +27,7 @@
 .uims-opp-table tbody tr:hover {
     background-color: #fdfdfd;
 }
-/* تنسيق مربعات الاختيار للتخصصات لتظهر بشكل مرتب وجميل */
+/* majors checkboxes */
 .majors-checkbox-list label {
     margin-left: 8px;
     margin-right: 20px;

@@ -1,12 +1,12 @@
 ﻿// ManageOpportunities.js
 
-// "Add New Opportunity": an empty form, and forget any opportunity that was opened with Edit before
-// (otherwise Save would update that old opportunity instead of creating a new one)
+// Add New Opportunity: clear the form and the edit id,
+// otherwise save would update the last edited opportunity
 function resetModalForAdd() {
     document.getElementById('opportunityModalLabel').textContent = 'Add Opportunity';
     document.getElementById('hfEditingOpportunityId').value = '';
 
-    ['txtTitle', 'txtSeats', 'txtDeadline', 'txtDescription'].forEach(function (id) {
+    ['txtTitle', 'txtSeats', 'txtDeadline', 'txtStartDate', 'txtDescription'].forEach(function (id) {
         var box = document.getElementById(id);
         if (box) box.value = '';
     });
@@ -23,18 +23,18 @@ document.addEventListener('DOMContentLoaded', function() {
     var modalEl = document.getElementById('opportunityModal');
     var saveBtn = document.getElementById('btnSaveOpportunity');
 
-    // The server asks to open the form again: after Edit, or when a save was refused (the reason is shown inside it)
+    // the server asks to open the popup again (after Edit or a failed save)
     if (modalEl && window.opportunityModalMode) {
         document.getElementById('opportunityModalLabel').textContent =
             window.opportunityModalMode === 'edit' ? 'Edit Opportunity' : 'Add Opportunity';
         bootstrap.Modal.getOrCreateInstance(modalEl).show();
     }
 
-    // One click = one save: block a second click while the page is sending.
-    // It is disabled a moment later, so the server still knows that Save was the button pressed.
+    // stop double clicks while saving.
+    // disabled a bit later so the server still knows Save was clicked
     if (saveBtn) {
         saveBtn.addEventListener('click', function () {
-            if (!saveBtn.form.checkValidity()) return;      // the browser shows what is missing and sends nothing
+            if (!saveBtn.form.checkValidity()) return;      // browser shows what's missing
             setTimeout(function () { saveBtn.disabled = true; }, 0);
         });
     }

@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <%-- Why an action was refused, or why the list could not be loaded --%>
+                    <%-- error message --%>
                     <asp:Panel ID="pnlMessage" runat="server" Visible="false" EnableViewState="false" CssClass="alert alert-warning">
                         <asp:Label ID="lblMessage" runat="server" />
                     </asp:Panel>
@@ -46,7 +46,7 @@
                     <div class="card app-table-card">
                         <div class="card-body p-4">
 
-                            <%-- Count + status filter --%>
+                            <%-- count and status filter --%>
                             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                                 <asp:Label ID="lblCount" runat="server" CssClass="small-label" />
                                 <div class="d-flex align-items-center gap-2">
@@ -62,7 +62,7 @@
                                 </div>
                             </div>
 
-                            <%-- Applications table (Pending ones first) --%>
+                            <%-- applications table, pending first --%>
                             <asp:Repeater ID="rptApplications" runat="server" OnItemCommand="rptApplications_ItemCommand">
                                 <HeaderTemplate>
                                     <div class="table-responsive">
@@ -101,7 +101,7 @@
                                 </FooterTemplate>
                             </asp:Repeater>
 
-                            <%-- حالة عدم وجود طلبات --%>
+                            <%-- no applications --%>
                             <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="text-center py-5">
                                 <h5 class="text-muted mb-2">No applications to show</h5>
                                 <p class="text-muted small mb-0">When students apply to your opportunities, they will appear here.</p>
@@ -117,10 +117,10 @@
 
         </div>
 
-        <%-- The application that is open in the window (Accept / Reject use it) --%>
+        <%-- id of the application open in the popup --%>
         <asp:HiddenField ID="hfApplicationId" runat="server" />
 
-        <!-- Application Form window (opened by "View") -->
+        <!-- application popup (View button) -->
         <div class="modal fade" id="applicationModal" tabindex="-1" aria-labelledby="applicationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
@@ -130,7 +130,7 @@
                     </div>
                     <div class="modal-body">
 
-                        <%-- Why the last decision was refused --%>
+                        <%-- why the decision failed --%>
                         <asp:Panel ID="pnlModalError" runat="server" Visible="false" EnableViewState="false" CssClass="alert alert-danger">
                             <asp:Label ID="lblModalError" runat="server" />
                         </asp:Panel>
@@ -188,10 +188,10 @@
                             </div>
                         </div>
 
-                        <%-- Accepted / Confirmed / Rejected: what happens next --%>
+                        <%-- already answered --%>
                         <asp:Label ID="lblNextStep" runat="server" CssClass="d-block small fw-semibold" />
 
-                        <%-- Pending only: the company decides. Enter in the reason box presses Reject. --%>
+                        <%-- pending: accept or reject (enter in the reason box = reject) --%>
                         <asp:Panel ID="pnlDecision" runat="server" DefaultButton="btnReject" CssClass="app-decision border-top pt-3 mt-3">
                             <asp:Button ID="btnAccept" runat="server" Text="Accept" CssClass="btn btn-success"
                                 OnClick="btnAccept_Click" OnClientClick="return confirm('Accept this application?');" />

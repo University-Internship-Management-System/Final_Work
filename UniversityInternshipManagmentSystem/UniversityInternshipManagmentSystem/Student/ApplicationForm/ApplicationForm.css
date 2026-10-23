@@ -1,4 +1,4 @@
-﻿/* Application Form Page Styles */
+﻿/* Application Form page */
 
 .app-form-card {
     border: 1px solid var(--uims-border, #e5e7eb);
@@ -12,7 +12,7 @@
     color: var(--uims-primary, #07523e);
 }
 
-/* Modal Custom Styling */
+/* success popup */
 .modal-icon {
     width: 64px;
     height: 64px;
@@ -32,7 +32,7 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Highlight ReadOnly inputs */
+/* read only fields */
 .form-control[readonly] {
     background-color: #f8fafc;
     color: #64748b;

@@ -1,5 +1,4 @@
-﻿/* Student / Explore Opportunities page.
-   Uses the colors from Shared/uims.css (var(--uims-...)), so change colors there, not here. */
+﻿/* Explore Opportunities page, colors come from Shared/uims.css */
 
 .uims-page-head {
     display: flex;
@@ -11,7 +10,7 @@
 }
 
 
-/* تحسين مظهر التخصصات */
+/* majors badges */
 .opp-card .badge {
     font-size: 11px;
     font-weight: 500;
@@ -67,19 +66,19 @@
         font-size: 40px;
     }
 
-/* Cards hidden by the live filter (opportunities.js) */
+/* hidden by the search in Opportunities.js */
 .opp-hidden {
     display: none !important;
 }
 
-/* Message shown by opportunities.js when the live filter matches nothing */
+/* "no results" message */
 .opp-nomatch {
     text-align: center;
     padding: 40px 16px;
     color: var(--uims-muted);
 }
 
-/* Small screens: stack the page title and the counter */
+/* small screens */
 @media (max-width: 575px) {
     .uims-page-head {
         flex-direction: column;

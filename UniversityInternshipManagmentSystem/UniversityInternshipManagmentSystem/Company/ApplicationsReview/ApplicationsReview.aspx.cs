@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
@@ -16,8 +15,11 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
 {
     public partial class ApplicationsReview : System.Web.UI.Page
     {
-        // The company's key in CompanySupervisors (the same id ManageOpportunities saves as CompanyId)
-        private string CompanyId => (string)(Session["dbRecordId"] ?? Session["userId"]);
+        // key of the company in CompanySupervisors (same as CompanyId on its opportunities)
+        private string CompanyId
+        {
+            get { return (string)(Session["dbRecordId"] ?? Session["userId"]); }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -29,62 +31,52 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
 
             if (!IsPostBack)
             {
-                // The status filter is kept in the address (?status=Pending), so it stays after Accept / Reject
-                ListItem selected = ddlStatus.Items.FindByValue(Request.QueryString["status"] ?? "");
-                if (selected != null)
+                // the filter is kept in the url (?status=Pending) so it stays after accept / reject
+                string status = Request.QueryString["status"];
+                if (status != null && ddlStatus.Items.FindByValue(status) != null)
                 {
-                    ddlStatus.SelectedValue = selected.Value;
+                    ddlStatus.SelectedValue = status;
                 }
 
                 RegisterAsyncTask(new PageAsyncTask(LoadApplicationsAsync));
             }
         }
 
-        // The table: every application sent to this company's opportunities, with the chosen status
+        // fills the table with this company's applications for the chosen status
         private async Task LoadApplicationsAsync()
         {
             try
             {
-                // 1. This company's opportunities (id -> opportunity)
-                var allOpportunities = JsonConvert.DeserializeObject<Dictionary<string, Opportunity>>(await ReadAsync("Opportunities"))
-                                       ?? new Dictionary<string, Opportunity>();
+                // read opportunities, students (for the names) and applications
+                var opportunities = JsonConvert.DeserializeObject<Dictionary<string, Opportunity>>(await ReadAsync("Opportunities"));
+                var students = JsonConvert.DeserializeObject<Dictionary<string, Models.Student>>(await ReadAsync("Students"));
+                var applications = JsonConvert.DeserializeObject<Dictionary<string, Application>>(await ReadAsync("Applications"));
 
-                var myOpportunities = new Dictionary<string, Opportunity>();
-                foreach (var pair in allOpportunities)
-                {
-                    if (pair.Value != null && pair.Value.CompanyId == CompanyId)
-                    {
-                        myOpportunities[pair.Key] = pair.Value;
-                    }
-                }
+                // an empty table comes back as "null"
+                if (opportunities == null) opportunities = new Dictionary<string, Opportunity>();
+                if (students == null) students = new Dictionary<string, Models.Student>();
+                if (applications == null) applications = new Dictionary<string, Application>();
 
-                // 2. All students, to show each applicant's name and major (found by StudentId)
-                var students = JsonConvert.DeserializeObject<Dictionary<string, Models.Student>>(await ReadAsync("Students"))
-                               ?? new Dictionary<string, Models.Student>();
-
-                // 3. The applications for those opportunities (found by OpportunityId)
-                var applications = JsonConvert.DeserializeObject<Dictionary<string, Application>>(await ReadAsync("Applications"))
-                                   ?? new Dictionary<string, Application>();
-
+                // one row per application to this company's opportunities
                 var allRows = new List<ApplicationRow>();
                 foreach (var pair in applications)
                 {
                     Application app = pair.Value;
-                    if (app == null || app.OpportunityId == null || !myOpportunities.ContainsKey(app.OpportunityId))
-                    {
-                        continue;
-                    }
+                    if (app == null || app.OpportunityId == null || !opportunities.ContainsKey(app.OpportunityId)) continue;
+
+                    Opportunity opportunity = opportunities[app.OpportunityId];
+                    if (opportunity == null || opportunity.CompanyId != CompanyId) continue;     // not ours
 
                     Models.Student student = null;
-                    if (app.StudentId != null)
+                    if (app.StudentId != null && students.ContainsKey(app.StudentId))
                     {
-                        students.TryGetValue(app.StudentId, out student);
+                        student = students[app.StudentId];
                     }
 
-                    allRows.Add(MakeRow(pair.Key, app, myOpportunities[app.OpportunityId], student));
+                    allRows.Add(MakeRow(pair.Key, app, opportunity, student));
                 }
 
-                // 4. How many applications have each status (shown in the filter, e.g. "Pending (3)")
+                // count per status for the filter, e.g. "Pending (3)"
                 foreach (ListItem item in ddlStatus.Items)
                 {
                     int count = 0;
@@ -92,26 +84,33 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
                     {
                         if (item.Value == "" || row.Status == item.Value) count++;
                     }
-                    item.Text = (item.Value == "" ? "All" : item.Value) + " (" + count + ")";
+
+                    if (item.Value == "") item.Text = "All (" + count + ")";
+                    else item.Text = item.Value + " (" + count + ")";
                 }
 
-                // 5. Only the chosen status, Pending first (they need a decision), then the newest
+                // chosen status only, pending first, then newest
+                var newestFirst = allRows.OrderByDescending(r => r.AppliedAt).ToList();
                 var rows = new List<ApplicationRow>();
-                foreach (var row in allRows)
+                foreach (var row in newestFirst)
                 {
-                    if (ddlStatus.SelectedValue == "" || row.Status == ddlStatus.SelectedValue)
-                    {
-                        rows.Add(row);
-                    }
+                    if (row.IsPending && IsChosenStatus(row.Status)) rows.Add(row);
                 }
-                rows = rows.OrderBy(r => r.IsPending ? 0 : 1).ThenByDescending(r => r.AppliedAt).ToList();
+                foreach (var row in newestFirst)
+                {
+                    if (!row.IsPending && IsChosenStatus(row.Status)) rows.Add(row);
+                }
 
                 rptApplications.DataSource = rows;
                 rptApplications.DataBind();
-                rptApplications.Visible = rows.Count > 0;       // no empty table header
+                rptApplications.Visible = (rows.Count > 0);       // no empty table header
                 pnlEmpty.Visible = (rows.Count == 0);
 
-                int pending = allRows.Count(r => r.IsPending);
+                int pending = 0;
+                foreach (var row in allRows)
+                {
+                    if (row.IsPending) pending++;
+                }
                 lblCount.Text = pending + " waiting for a decision";
             }
             catch (Exception ex)
@@ -121,12 +120,18 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             }
         }
 
-        // Everything the table and the application window show
+        // true if the filter is All or this status
+        private bool IsChosenStatus(string status)
+        {
+            return ddlStatus.SelectedValue == "" || ddlStatus.SelectedValue == status;
+        }
+
+        // everything the table and the popup need
         private static ApplicationRow MakeRow(string id, Application app, Opportunity opportunity, Models.Student student)
         {
             var row = new ApplicationRow();
             row.Id = id;
-            row.OpportunityTitle = opportunity.Title;          // the current title, found by OpportunityId
+            row.OpportunityTitle = opportunity.Title;          // current title (by OpportunityId)
             row.Status = app.Status;
             row.IsPending = (app.Status == ApplicationStatus.Pending);
             row.RejectionReason = app.RejectionReason;
@@ -134,28 +139,38 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             row.AppliedAt = app.AppliedAt;
             row.AppliedDate = FormatDate(app.AppliedAt);
 
-            // The CV and portfolio the student sent with this application
+            // cv and portfolio sent with this application
             row.CvLink = WebLink(app.CvUrl);
             row.PortfolioLink = WebLink(app.PortfolioUrl);
 
-            if (student != null)
-            {
-                row.StudentName = student.Name;
-                row.Major = student.Major;
-                row.Gpa = student.GPA > 0 ? student.GPA.ToString("0.00", CultureInfo.InvariantCulture) : "-";
-                row.Email = string.IsNullOrWhiteSpace(student.UniEmail) ? student.Email : student.UniEmail;
-                row.Phone = student.PhoneNumber;
-                row.Skills = student.SkillsList == null ? "" : string.Join(", ", student.SkillsList);
-            }
-            else
+            if (student == null)
             {
                 row.StudentName = "Unknown student";
+                return row;
             }
 
+            row.StudentName = student.Name;
+            row.Major = student.Major;
+            row.Gpa = "-";
+            if (student.GPA > 0)
+            {
+                row.Gpa = student.GPA.ToString("0.00", CultureInfo.InvariantCulture);
+            }
+            row.Email = student.UniEmail;
+            if (string.IsNullOrWhiteSpace(row.Email))
+            {
+                row.Email = student.Email;
+            }
+            row.Phone = student.PhoneNumber;
+            row.Skills = "";
+            if (student.SkillsList != null)
+            {
+                row.Skills = string.Join(", ", student.SkillsList);
+            }
             return row;
         }
 
-        // Filter changed: open the page again with the chosen status in the address
+        // reload with the new status in the url
         protected void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
             string url = "ApplicationsReview.aspx";
@@ -168,7 +183,7 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             Context.ApplicationInstance.CompleteRequest();
         }
 
-        // "View" button in the table: show that application in the window
+        // View button
         protected async void rptApplications_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (Session["userId"] == null)
@@ -181,12 +196,17 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
 
             try
             {
-                // Read the application again, so the window shows its current status
-                string applicationId = Convert.ToString(e.CommandArgument);
+                // read it again to get the current status
+                string applicationId = e.CommandArgument.ToString();
                 Application app = await LoadApplicationAsync(applicationId);
-                Opportunity opportunity = app == null ? null : await LoadOpportunityAsync(app.OpportunityId);
 
-                // Only applications for this company's own opportunities
+                Opportunity opportunity = null;
+                if (app != null)
+                {
+                    opportunity = await LoadOpportunityAsync(app.OpportunityId);
+                }
+
+                // only this company's applications
                 if (app == null || opportunity == null || opportunity.CompanyId != CompanyId)
                 {
                     ShowMessage("This application was not found in your company's list.");
@@ -208,7 +228,7 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             }
         }
 
-        // Fills the application window and opens it
+        // fill the popup and open it
         private void ShowApplication(ApplicationRow row)
         {
             hfApplicationId.Value = row.Id;
@@ -226,17 +246,20 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             litSkills.Text = Dash(row.Skills);
             litCover.Text = Dash(row.CoverLetter);
 
-            // A link only when it is a real web address
+            // only link real web addresses
             lnkCv.NavigateUrl = row.CvLink;
-            lnkCv.Text = row.CvLink != null ? "Open CV" : "No CV link";
-            lnkPortfolio.NavigateUrl = row.PortfolioLink;
-            lnkPortfolio.Text = row.PortfolioLink != null ? "Open portfolio" : "No portfolio link";
+            lnkCv.Text = "No CV link";
+            if (row.CvLink != null) lnkCv.Text = "Open CV";
 
-            // What happens next, for an application that was already answered
+            lnkPortfolio.NavigateUrl = row.PortfolioLink;
+            lnkPortfolio.Text = "No portfolio link";
+            if (row.PortfolioLink != null) lnkPortfolio.Text = "Open portfolio";
+
+            // already answered, show what happens next
             lblNextStep.Text = HttpUtility.HtmlEncode(NextStep(row));
             lblNextStep.Visible = (lblNextStep.Text != "");
 
-            // Accept / Reject only while the application is Pending
+            // accept / reject only while pending
             pnlDecision.Visible = row.IsPending;
             txtReason.Text = "";
 
@@ -245,16 +268,13 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
 
         private static string NextStep(ApplicationRow row)
         {
-            switch (row.Status)
-            {
-                case "Accepted": return "Waiting for the student to confirm or decline the offer.";
-                case "Confirmed": return "The student confirmed. They are now your trainee.";
-                case "Rejected": return "Reason for rejection: " + row.RejectionReason;
-                default: return "";
-            }
+            if (row.Status == "Accepted") return "Waiting for the student to confirm or decline the offer.";
+            if (row.Status == "Confirmed") return "The student confirmed. They are now your trainee.";
+            if (row.Status == "Rejected") return "Reason for rejection: " + row.RejectionReason;
+            return "";
         }
 
-        // Accept button in the window
+        // Accept button
         protected async void btnAccept_Click(object sender, EventArgs e)
         {
             if (Session["userId"] == null)
@@ -266,7 +286,7 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             await DecideAsync(true, "");
         }
 
-        // Reject button in the window
+        // Reject button
         protected async void btnReject_Click(object sender, EventArgs e)
         {
             if (Session["userId"] == null)
@@ -275,9 +295,9 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
                 return;
             }
 
-            // Reject needs a reason (the student sees it on My Applications)
+            // reject needs a reason, the student sees it in My Applications
             string reason = txtReason.Text.Trim();
-            if (reason.Length == 0)
+            if (reason == "")
             {
                 ShowModalError("Please write the reason for rejection.");
                 return;
@@ -291,21 +311,21 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             await DecideAsync(false, reason);
         }
 
-        // Saves the decision for the application open in the window, then reloads the page
+        // save the decision for the open application and reload
         private async Task DecideAsync(bool accept, string reason)
         {
             try
             {
                 string problem = await SaveDecisionAsync(hfApplicationId.Value, accept, reason);
-                if (problem == null)
+                if (problem != null)
                 {
-                    // Reload the page (the same filter) to show the new status
-                    Response.Redirect(Request.RawUrl, false);
-                    Context.ApplicationInstance.CompleteRequest();
+                    ShowModalError(problem);
                     return;
                 }
 
-                ShowModalError(problem);
+                // reload with the same filter
+                Response.Redirect(Request.RawUrl, false);
+                Context.ApplicationInstance.CompleteRequest();
             }
             catch (Exception ex)
             {
@@ -314,24 +334,24 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             }
         }
 
-        // Saves Accepted or Rejected. Returns null when it worked, otherwise why it was refused.
+        // returns null if it worked, otherwise the error message
         private async Task<string> SaveDecisionAsync(string applicationId, bool accept, string reason)
         {
-            // Read the application again: it may have changed since the page was opened
+            // read it again, it may have changed since the page was opened
             Application app = await LoadApplicationAsync(applicationId);
             if (app == null)
             {
                 return "This application no longer exists.";
             }
 
-            // Only applications for this company's own opportunities (the id comes from the browser)
+            // only this company's applications (the id comes from the browser)
             Opportunity opportunity = await LoadOpportunityAsync(app.OpportunityId);
             if (opportunity == null || opportunity.CompanyId != CompanyId)
             {
                 return "This application is not for one of your opportunities.";
             }
 
-            // A decision is made once, while the application is still Pending
+            // only pending applications can be answered
             if (app.Status != ApplicationStatus.Pending)
             {
                 return "This application was already answered (" + app.Status + ").";
@@ -342,13 +362,13 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
 
             if (accept)
             {
-                // Students take the seats when they confirm. With no seat left, an accepted offer could never be confirmed.
+                // no seats left means the student could never confirm, so don't accept
                 if (opportunity.SeatsLeft <= 0)
                 {
                     return "There are no seats left in \"" + opportunity.Title + "\". Add seats in Manage Opportunities, or reject the application.";
                 }
 
-                // PATCH changes only these fields of the application
+                // patch only these fields
                 response = await FirebaseDb.Patch("Applications", applicationId, new
                 {
                     Status = ApplicationStatus.Accepted,
@@ -372,7 +392,7 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             return null;
         }
 
-        // Badge color for each status
+        // badge color per status
         protected string StatusBadgeClass(object status)
         {
             switch (Convert.ToString(status))
@@ -384,14 +404,14 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             }
         }
 
-        // تنسيق التاريخ من ميللي ثانية إلى تاريخ مقروء (always Gregorian)
+        // InvariantCulture so arabic browsers don't get hijri dates
         private static string FormatDate(long millis)
         {
             if (millis <= 0) return "-";
             return DateTimeOffset.FromUnixTimeMilliseconds(millis).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         }
 
-        // "www.site.com" becomes "https://www.site.com". Anything that is not a web link gives null, so no link is shown.
+        // "www.site.com" becomes "https://www.site.com", null if it's not a link
         private static string WebLink(string url)
         {
             if (string.IsNullOrWhiteSpace(url)) return null;
@@ -403,17 +423,18 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             }
 
             Uri uri;
-            if (Uri.TryCreate(url, UriKind.Absolute, out uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            if (Uri.TryCreate(url, UriKind.Absolute, out uri) && (uri.Scheme == "http" || uri.Scheme == "https"))
             {
                 return uri.AbsoluteUri;
             }
             return null;
         }
 
-        // "-" instead of an empty field
+        // "-" for empty fields
         private static string Dash(string value)
         {
-            return string.IsNullOrWhiteSpace(value) ? "-" : value;
+            if (string.IsNullOrWhiteSpace(value)) return "-";
+            return value;
         }
 
         private void ShowMessage(string message)
@@ -422,7 +443,7 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             pnlMessage.Visible = true;
         }
 
-        // Shows the reason inside the application window and opens it again
+        // show the error inside the popup and open it again
         private void ShowModalError(string message)
         {
             lblModalError.Text = HttpUtility.HtmlEncode(message);
@@ -430,13 +451,13 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             OpenModal();
         }
 
-        // ApplicationsReview.js opens the window when the page has loaded (Bootstrap is loaded after this script)
+        // ApplicationsReview.js opens it after the page loads
         private void OpenModal()
         {
             ClientScript.RegisterStartupScript(GetType(), "OpenApplicationModal", "window.openApplicationModal = true;", true);
         }
 
-        // FirebaseDb.Get returns null when Firebase refuses the request
+        // Get returns null when firebase refuses the request
         private static async Task<string> ReadAsync(string table, string id = null)
         {
             string json = await FirebaseDb.Get(table, id);
@@ -444,10 +465,17 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
             return json;
         }
 
-        // Firebase ids only use letters, digits, "-" and "_"
+        // firebase keys only use letters, numbers, - and _
         private static bool IsFirebaseId(string id)
         {
-            return !string.IsNullOrEmpty(id) && Regex.IsMatch(id, "^[A-Za-z0-9_-]+$");
+            if (string.IsNullOrEmpty(id)) return false;
+
+            foreach (char c in id)
+            {
+                bool allowed = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-' || c == '_';
+                if (!allowed) return false;
+            }
+            return true;
         }
 
         private static async Task<Application> LoadApplicationAsync(string id)
@@ -463,7 +491,7 @@ namespace UniversityInternshipManagmentSystem.Company.ApplicationsReview
         }
     }
 
-    // One application, with only what the table and the window show
+    // one row of the table
     public class ApplicationRow
     {
         public string Id { get; set; }

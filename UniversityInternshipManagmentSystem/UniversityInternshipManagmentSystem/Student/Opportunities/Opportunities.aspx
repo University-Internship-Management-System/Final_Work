@@ -37,12 +37,12 @@
                         <asp:Label ID="lblCount" runat="server" ClientIDMode="Static" CssClass="small-label" />
                     </div>
 
-                    <%-- Why the student cannot apply, or why the list could not be loaded --%>
+                    <%-- why the student can't apply, or a load error --%>
                     <asp:Panel ID="pnlNotice" runat="server" Visible="false" CssClass="alert alert-warning">
                         <asp:Label ID="lblNotice" runat="server" />
                     </asp:Panel>
 
-                    <%-- Search / filter --%>
+                    <%-- search and company filter --%>
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="row g-3 align-items-end">
@@ -64,9 +64,8 @@
                         </div>
                     </div>
 
-                    <%-- Opportunity cards container (Modified for direct C# InnerHtml injection) --%>
+                    <%-- the cards are added here from the code behind --%>
                     <div class="row g-4" id="oppGrid" runat="server" clientidmode="Static">
-                        <!-- سيتم إضافة البطاقات هنا برمجياً من ملف الـ C# -->
                     </div>
 
                     <div id="oppNoMatch" class="card opp-hidden"><div class="opp-nomatch">No opportunities match what you typed.</div></div>
