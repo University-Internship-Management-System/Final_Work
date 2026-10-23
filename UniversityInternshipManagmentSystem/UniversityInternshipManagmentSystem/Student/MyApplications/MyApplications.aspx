@@ -38,12 +38,12 @@
                         </div>
                     </div>
 
-                    <%-- Why an action was refused, or why the list could not be loaded --%>
+                    <%-- error message --%>
                     <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="alert alert-warning">
                         <asp:Label ID="lblMessage" runat="server" />
                     </asp:Panel>
 
-                    <!-- Applications Card -->
+                    <!-- applications table -->
                     <div class="card app-table-card">
                         <div class="card-body p-4">
                             
@@ -79,19 +79,19 @@
                                                 </span>
                                             </td>
                                             <td class="text-end">
-                                                <%-- حالة 1: Pending --%>
+                                                <%-- Pending --%>
                                                 <asp:Panel runat="server" Visible='<%# Convert.ToString(Eval("Status")) == "Pending" %>'>
                                                     <span class="text-muted small">Under Review</span>
                                                 </asp:Panel>
 
-                                                <%-- حالة 2: Rejected (عرض سبب الرفض) --%>
+                                                <%-- Rejected, show the reason --%>
                                                 <asp:Panel runat="server" Visible='<%# Convert.ToString(Eval("Status")) == "Rejected" %>'>
                                                     <span class="text-danger small fw-semibold">
                                                         Reason: <%#: string.IsNullOrEmpty(Convert.ToString(Eval("RejectionReason"))) ? "No reason specified" : Convert.ToString(Eval("RejectionReason")) %>
                                                     </span>
                                                 </asp:Panel>
 
-                                                <%-- حالة 3: Accepted (موافقة أو رفض العرض) --%>
+                                                <%-- Accepted, the student confirms or rejects --%>
                                                 <asp:Panel runat="server" Visible='<%# Convert.ToString(Eval("Status")) == "Accepted" %>'>
                                                     <div class="d-inline-flex gap-2">
                                                         <asp:Button ID="btnConfirm" runat="server" Text="Confirm" CommandName="ConfirmApp" CommandArgument='<%# Eval("Id") %>' CssClass="btn btn-sm btn-success btn-confirm-action" />
@@ -99,7 +99,7 @@
                                                     </div>
                                                 </asp:Panel>
 
-                                                <%-- حالة 4: Confirmed --%>
+                                                <%-- Confirmed --%>
                                                 <asp:Panel runat="server" Visible='<%# Convert.ToString(Eval("Status")) == "Confirmed" %>'>
                                                     <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1">
                                                         Confirmed Training
@@ -115,7 +115,7 @@
                                 </FooterTemplate>
                             </asp:Repeater>
 
-                            <!-- حالة عدم وجود طلبات -->
+                            <!-- no applications yet -->
                             <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="text-center py-5">
                                 <h5 class="text-muted mb-2">No applications submitted yet</h5>
                                 <p class="text-muted small mb-3">Explore available opportunities and apply to get started.</p>

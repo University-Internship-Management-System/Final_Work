@@ -24,6 +24,9 @@ namespace UniversityInternshipManagmentSystem.Models
 
         public long ApplicationDeadline { get; set; }
 
+        // 0 = not set (older opportunities don't have it)
+        public long TrainingStartDate { get; set; }
+
         public Dictionary<string, bool> ConfirmedStudents { get; set; } = new Dictionary<string, bool>();
 
         public Opportunity() { }

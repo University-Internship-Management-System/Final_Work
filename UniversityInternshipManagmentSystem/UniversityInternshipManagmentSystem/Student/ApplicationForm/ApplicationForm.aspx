@@ -38,83 +38,75 @@
                         </div>
                     </div>
 
-                    <%-- Why the student cannot apply, a server check that failed, or the "submitted" note --%>
+                    <%-- error or "submitted" message --%>
                     <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="alert alert-warning">
                         <asp:Label ID="lblMessage" runat="server" />
                         <a href="../Opportunities/Opportunities.aspx" class="btn btn-sm btn-outline-secondary">Back to Opportunities</a>
                     </asp:Panel>
 
-                    <!-- Application Form Card -->
+                    <!-- form card -->
                     <div class="card app-form-card">
                         <div class="card-body p-4">
                             
-                            <!-- Student Auto-filled Info Header -->
+                            <!-- student info from the profile -->
                             <h5 class="form-section-title mb-3">Applicant Information</h5>
                             
                             <div class="row g-3 mb-4">
-                                <!-- 1. Name -->
                                 <div class="col-md-6">
                                     <label class="form-label small-label" for="txtName">Full Name</label>
                                     <asp:TextBox ID="txtName" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" />
                                 </div>
 
-                                <!-- 2. Major -->
                                 <div class="col-md-6">
                                     <label class="form-label small-label" for="txtMajor">Major</label>
                                     <asp:TextBox ID="txtMajor" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" />
                                 </div>
 
-                                <!-- 3. Email -->
                                 <div class="col-md-6">
                                     <label class="form-label small-label" for="txtEmail">Email Address</label>
                                     <asp:TextBox ID="txtEmail" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" />
                                 </div>
 
-                                <!-- 4. Phone -->
                                 <div class="col-md-6">
                                     <label class="form-label small-label" for="txtPhone">Phone Number</label>
                                     <asp:TextBox ID="txtPhone" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" />
                                 </div>
 
-                                <!-- 5. Skills -->
                                 <div class="col-12">
                                     <label class="form-label small-label" for="txtSkills">Skills</label>
                                     <asp:TextBox ID="txtSkills" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" TextMode="MultiLine" Rows="2" />
                                 </div>
                             </div>
 
-                            <%-- Hidden when the student cannot apply, and after the application is saved --%>
+                            <%-- hidden if the student can't apply or after saving --%>
                             <asp:Panel ID="pnlApply" runat="server">
                             <hr class="my-4" />
 
-                            <!-- Dynamic Links & Motivation -->
+                            <!-- links and cover letter -->
                             <h5 class="form-section-title mb-3">Application Details</h5>
 
                             <div class="row g-3">
-                                <!-- 6. CV URL -->
                                 <div class="col-md-6">
                                     <label class="form-label small-label" for="txtCvUrl">CV URL (from your profile)</label>
                                     <asp:TextBox ID="txtCvUrl" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" />
                                 </div>
 
-                                <!-- 7. Portfolio URL -->
                                 <div class="col-md-6">
                                     <label class="form-label small-label" for="txtPortfolioUrl">Portfolio URL (from your profile, optional)</label>
                                     <asp:TextBox ID="txtPortfolioUrl" runat="server" ClientIDMode="Static" CssClass="form-control" ReadOnly="true" />
                                 </div>
 
-                                <!-- 8. Cover Letter (Motivation) -->
                                 <div class="col-12">
                                     <label class="form-label small-label" for="txtCoverLetter">Why are you interested in this internship? (Cover Letter) <span class="text-danger">*</span></label>
                                     <asp:TextBox ID="txtCoverLetter" runat="server" ClientIDMode="Static" TextMode="MultiLine" Rows="4" CssClass="form-control" placeholder="Describe your motivations, learning goals, and relevant experiences for this role..." Required="true" />
                                 </div>
                             </div>
 
-                            <!-- Submit Action -->
+                            <!-- buttons -->
                             <div class="d-flex justify-content-end gap-2 mt-4">
                                 <a href="../Opportunities/Opportunities.aspx" class="btn btn-outline-secondary">Cancel</a>
                                 <button type="button" id="btnSubmitApp" class="btn btn-primary px-4">Confirm Application</button>
-                                <%-- Hidden server button: the Confirm button above clicks it after the checks pass, and it saves the application --%>
+                                <%-- hidden button, ApplicationForm.js clicks it after the checks --%>
                                 <asp:Button ID="btnSubmit" runat="server" ClientIDMode="Static" OnClick="btnSubmit_Click" Text="Submit" style="display:none" />
                             </div>
                             </asp:Panel>
@@ -129,7 +121,7 @@
 
         </div>
 
-        <!-- Success Modal (Pop-up) -->
+        <!-- success popup -->
         <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content text-center p-4">
