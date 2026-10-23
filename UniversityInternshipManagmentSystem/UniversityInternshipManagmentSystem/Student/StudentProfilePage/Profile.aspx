@@ -2,7 +2,7 @@
 <%@ Import Namespace="System.Linq" %>
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl("~/Student/Content/Student.css") %>" />
-    <link rel="stylesheet" href="<%= ResolveUrl("~/Student/StudentProfilePage/Profile.css?v=2eb15d3cdc8b") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Student/StudentProfilePage/Profile.css?v=659912de1c05") %>" />
 </asp:Content>
 <asp:Content ID="ProfileContent" ContentPlaceHolderID="MainContent" runat="server">
     <div class="student-dashboard student-profile" data-editing="<%: IsEditing ? "true" : "false" %>">
@@ -12,7 +12,7 @@
         <div id="page-content" tabindex="-1">
             <div class="sp-page-heading">
                 <div><a class="sp-back-link" href="<%= ResolveUrl("~/Student/StudentDashboardPage/Dashboard.aspx") %>"><i class="bi bi-arrow-left" aria-hidden="true"></i> Student workspace</a>
-                    <h1>My profile<span class="sp-title-dot" aria-hidden="true">.</span></h1><p>Your academic details and professional profile, together.</p></div>
+                    <h1>My profile<span class="sp-title-dot" aria-hidden="true">.</span></h1><p>Your academic details & professional profile, together.</p></div>
                 <span class="sp-account-state<%: Workspace == null ? " sp-account-unavailable" : "" %>"><span class="sp-state-dot" aria-hidden="true"></span><%: ModeLabel %></span>
             </div>
             <input type="hidden" name="StudentCsrf" value="<%: CsrfToken %>" />
@@ -38,14 +38,6 @@
                     </div>
                     <div class="sp-identity-copy"><span class="sp-eyebrow">A UNIVERSITY OF JORDAN STUDENT</span><h2 id="profile-name"><%: DisplayName %></h2><p class="sp-major"><i class="bi bi-mortarboard" aria-hidden="true"></i><%: Show(Record.Major) %></p>
                         <div class="sp-university-line"><i class="bi bi-building" aria-hidden="true"></i><span>The University of Jordan <span class="sp-university-ar" lang="ar">&#1575;&#1604;&#1580;&#1575;&#1605;&#1593;&#1577; &#1575;&#1604;&#1571;&#1585;&#1583;&#1606;&#1610;&#1577;</span></span></div>
-                    </div>
-                    <div class="sp-hero-actions"><span class="sp-mode-label"><i class="bi bi-person-badge" aria-hidden="true"></i><%: IsEditing ? "Editing your profile" : "Your student identity" %></span>
-                        <div class="sd-profile-actions" aria-label="Profile actions">
-                            <asp:Button ID="EditButton" runat="server" CssClass="sd-save-button sp-button-primary" Text="Edit Profile" OnClick="EditButton_Click" CausesValidation="false" />
-                            <asp:Button ID="ValidateButton" runat="server" CssClass="sd-save-button sp-button-secondary" Text="Validate Changes" OnClick="ValidateButton_Click" CausesValidation="false" />
-                            <asp:Button ID="SaveButton" runat="server" CssClass="sd-save-button sp-button-primary" Text="Save Changes" OnClick="SaveButton_Click" CausesValidation="false" aria-describedby="save-policy" />
-                            <asp:Button ID="CancelButton" runat="server" CssClass="sd-cancel-button sp-button-quiet" Text="Cancel" OnClick="CancelButton_Click" CausesValidation="false" />
-                        </div>
                     </div>
                 </div>
                 <div id="avatar-preview-panel" class="sp-photo-panel" hidden>
@@ -100,6 +92,14 @@
             <section class="sd-panel sp-card sp-security-card" aria-labelledby="security-title">
                 <div class="sp-security-layout"><span class="sp-security-icon"><i class="bi bi-shield-lock" aria-hidden="true"></i></span><div class="sp-security-copy"><h2 id="security-title">Account Security</h2><p>Keep your account protected with a strong password.</p><asp:Label ID="PasswordSuccess" runat="server" CssClass="sd-save-message sd-save-success" role="status" aria-live="polite" /></div><button type="button" class="sp-button-secondary" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">Reset Password<i class="bi bi-arrow-up-right" aria-hidden="true"></i></button></div>
             </section>
+                    <div class="sp-profile-footer"><span class="sp-mode-label"><i class="bi bi-person-badge" aria-hidden="true"></i><%: IsEditing ? "Review your changes before saving" : "Manage your profile" %></span>
+                        <div class="sd-profile-actions" aria-label="Profile actions">
+                            <asp:Button ID="EditButton" runat="server" CssClass="sd-save-button sp-button-primary" Text="Edit Profile" OnClick="EditButton_Click" CausesValidation="false" />
+                            <asp:Button ID="ValidateButton" runat="server" CssClass="sd-save-button sp-button-secondary" Text="Validate Changes" OnClick="ValidateButton_Click" CausesValidation="false" />
+                            <asp:Button ID="SaveButton" runat="server" CssClass="sd-save-button sp-button-primary" Text="Save Changes" OnClick="SaveButton_Click" CausesValidation="false" aria-describedby="save-policy" />
+                            <asp:Button ID="CancelButton" runat="server" CssClass="sd-cancel-button sp-button-quiet" Text="Cancel" OnClick="CancelButton_Click" CausesValidation="false" />
+                        </div>
+                    </div>
             <p class="sp-page-footnote"><i class="bi bi-lock" aria-hidden="true"></i>Personal to you. Connected to your university journey.</p>
             <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered"><div class="modal-content">

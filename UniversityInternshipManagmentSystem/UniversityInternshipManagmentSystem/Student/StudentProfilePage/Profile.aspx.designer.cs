@@ -13,14 +13,6 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
 
     public partial class Profile
     {
-        protected global::System.Web.UI.WebControls.Button EditButton;
-        protected global::System.Web.UI.WebControls.Button ValidateButton;
-        protected global::System.Web.UI.WebControls.Label PhoneError;
-        protected global::System.Web.UI.WebControls.Label SkillsError;
-        protected global::System.Web.UI.WebControls.Label CvError;
-        protected global::System.Web.UI.WebControls.Label PortfolioError;
-        protected global::System.Web.UI.WebControls.Label LinkedInError;
-        protected global::System.Web.UI.WebControls.TextBox LinkedInInput;
 
         /// <summary>
         /// SaveMessage control.
@@ -32,40 +24,22 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         protected global::System.Web.UI.WebControls.Label SaveMessage;
 
         /// <summary>
-        /// PhoneNumberInput control.
+        /// EditButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox PhoneNumberInput;
+        protected global::System.Web.UI.WebControls.Button EditButton;
 
         /// <summary>
-        /// SkillsInput control.
+        /// ValidateButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox SkillsInput;
-
-        /// <summary>
-        /// CvInput control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox CvInput;
-
-        /// <summary>
-        /// PortfolioInput control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox PortfolioInput;
+        protected global::System.Web.UI.WebControls.Button ValidateButton;
 
         /// <summary>
         /// SaveButton control.
@@ -85,11 +59,148 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button CancelButton;
 
+        /// <summary>
+        /// PhoneNumberInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox PhoneNumberInput;
+
+        /// <summary>
+        /// PhoneError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label PhoneError;
+
+        /// <summary>
+        /// SkillsInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox SkillsInput;
+
+        /// <summary>
+        /// SkillsError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label SkillsError;
+
+        /// <summary>
+        /// CvInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox CvInput;
+
+        /// <summary>
+        /// CvError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label CvError;
+
+        /// <summary>
+        /// PortfolioInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox PortfolioInput;
+
+        /// <summary>
+        /// PortfolioError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label PortfolioError;
+
+        /// <summary>
+        /// LinkedInInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox LinkedInInput;
+
+        /// <summary>
+        /// LinkedInError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LinkedInError;
+
+        /// <summary>
+        /// PasswordSuccess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.Label PasswordSuccess;
+
+        /// <summary>
+        /// PasswordError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.Label PasswordError;
+
+        /// <summary>
+        /// CurrentPasswordInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox CurrentPasswordInput;
+
+        /// <summary>
+        /// NewPasswordInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox NewPasswordInput;
+
+        /// <summary>
+        /// ConfirmPasswordInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox ConfirmPasswordInput;
+
+        /// <summary>
+        /// ResetPasswordButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.Button ResetPasswordButton;
     }
 }
