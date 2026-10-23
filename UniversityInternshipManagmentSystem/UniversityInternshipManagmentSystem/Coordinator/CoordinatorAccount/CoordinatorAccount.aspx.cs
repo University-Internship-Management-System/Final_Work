@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -18,8 +22,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         protected Panel workspace, noticePanel, imagePanel, initialsPanel, passwordNoticePanel;
         protected Literal notice, displayName, displayEmail, initials, passwordNotice;
         protected Image avatar;
-        protected TextBox fullName, email, phone, pictureUrl, currentPassword, newPassword, confirmPassword;
+        protected TextBox fullName, email, phone, currentPassword, newPassword, confirmPassword;
         protected HiddenField openPassword;
+        protected FileUpload profilePhoto;
         private Admin admin;
         private string recordId;
         private bool allowed;
@@ -27,6 +32,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         protected void Page_Init(object sender, EventArgs e)
         {
             ViewStateUserKey = Session.SessionID;
+            Form.Enctype = "multipart/form-data";
         }
 
         protected async void Page_Load(object sender, EventArgs e)
@@ -89,14 +95,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             string savedPhone = admin.PhoneNumber ?? "";
             phone.Text = savedPhone.StartsWith("+9627") && savedPhone.Length == 13
                 ? "0" + savedPhone.Substring(4) : savedPhone;
-            pictureUrl.Text = admin.ProfilePicUrl;
         }
 
         protected async void SaveProfile(object sender, EventArgs e)
         {
             if (!allowed) return;
-            string name = fullName.Text.Trim(), number = phone.Text.Trim(), photo = pictureUrl.Text.Trim();
-            Uri photoUri;
+            string name = fullName.Text.Trim(), number = phone.Text.Trim();
+            string photo = admin.ProfilePicUrl, uploadedId = null;
             if (name.Length < 2 || name.Length > 100)
             {
                 ShowMessage("Enter a full name between 2 and 100 characters.", true);
@@ -107,13 +112,23 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 ShowMessage("Enter a 10-digit mobile number starting with 07, for example 0791234567.", true);
                 return;
             }
-            if (photo != "" && (!Uri.TryCreate(photo, UriKind.Absolute, out photoUri) || photoUri.Scheme != "https"))
-            {
-                ShowMessage("Use an HTTPS image link, or leave the image field blank.", true);
-                return;
-            }
             try
             {
+                if (profilePhoto.HasFile)
+                {
+                    byte[] imageBytes;
+                    try { imageBytes = ReadPhoto(); }
+                    catch
+                    {
+                        ShowMessage("Choose a valid JPG or PNG image up to 2 MB.", true);
+                        return;
+                    }
+                    uploadedId = "uims/coordinator-profiles/" + Guid.NewGuid().ToString("N");
+                    var uploaded = await CloudinaryRequest("upload", uploadedId, imageBytes);
+                    photo = (string)uploaded["secure_url"];
+                    Uri photoUri;
+                    if (!Uri.TryCreate(photo, UriKind.Absolute, out photoUri) || photoUri.Scheme != "https") throw new Exception();
+                }
                 using (var response = await FirebaseDb.Patch("Admins", recordId,
                     new { Name = name, PhoneNumber = number, ProfilePicUrl = photo }))
                 {
@@ -126,7 +141,64 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             catch
             {
-                ShowMessage("Changes were not saved. Check the connection and try again.", true);
+                if (uploadedId != null)
+                {
+                    try { await CloudinaryRequest("destroy", uploadedId); }
+                    catch { /* The current profile stays unchanged if saving fails. */ }
+                }
+                ShowMessage("Changes were not saved. Check your connection and the local image-upload settings, then select the image again.", true);
+            }
+        }
+
+        private byte[] ReadPhoto()
+        {
+            string extension = Path.GetExtension(profilePhoto.FileName).ToLowerInvariant();
+            if (profilePhoto.PostedFile.ContentLength > 2 * 1024 * 1024
+                || (extension != ".jpg" && extension != ".jpeg" && extension != ".png")) throw new Exception();
+            byte[] bytes = profilePhoto.FileBytes;
+            bool png = bytes.Length >= 8 && bytes.Take(8).SequenceEqual(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
+            bool jpeg = bytes.Length >= 3 && bytes[0] == 255 && bytes[1] == 216 && bytes[2] == 255;
+            if (!png && !jpeg) throw new Exception();
+            return bytes;
+        }
+
+        private async Task<JObject> CloudinaryRequest(string action, string publicId, byte[] image = null)
+        {
+            string path = Environment.GetEnvironmentVariable("UIMS_CLOUDINARY_CREDENTIALS", EnvironmentVariableTarget.User)
+                ?? Environment.GetEnvironmentVariable("UIMS_CLOUDINARY_CREDENTIALS");
+            var settings = JObject.Parse(File.ReadAllText(path));
+            string cloud = ((string)settings["cloud_name"] ?? "").Trim();
+            string key = ((string)settings["api_key"] ?? "").Trim();
+            string secret = ((string)settings["api_secret"] ?? "").Trim();
+            if (String.IsNullOrWhiteSpace(cloud) || !Regex.IsMatch(cloud, @"\A[a-zA-Z0-9_-]+\z")
+                || String.IsNullOrWhiteSpace(key) || String.IsNullOrWhiteSpace(secret)) throw new Exception();
+            string timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture);
+            string parameters = "public_id=" + publicId + "&timestamp=" + timestamp;
+            if (image != null) parameters = "allowed_formats=jpg,png&" + parameters + "&transformation=c_limit,h_512,w_512";
+            string signature;
+            using (var hash = SHA256.Create())
+                signature = BitConverter.ToString(hash.ComputeHash(Encoding.UTF8.GetBytes(
+                    parameters + secret))).Replace("-", "").ToLowerInvariant();
+            using (var body = new MultipartFormDataContent())
+            {
+                body.Add(new StringContent(publicId), "public_id");
+                body.Add(new StringContent(timestamp), "timestamp");
+                body.Add(new StringContent(key), "api_key");
+                body.Add(new StringContent(signature), "signature");
+                if (image != null)
+                {
+                    body.Add(new StringContent("jpg,png"), "allowed_formats");
+                    body.Add(new StringContent("c_limit,h_512,w_512"), "transformation");
+                    bool png = image[0] == 137;
+                    var file = new ByteArrayContent(image);
+                    file.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(png ? "image/png" : "image/jpeg");
+                    body.Add(file, "file", png ? "profile.png" : "profile.jpg");
+                }
+                using (var response = await FirebaseDb.client.PostAsync("https://api.cloudinary.com/v1_1/" + cloud + "/image/" + action, body))
+                {
+                    if (!response.IsSuccessStatusCode) throw new Exception();
+                    return JObject.Parse(await response.Content.ReadAsStringAsync());
+                }
             }
         }
 

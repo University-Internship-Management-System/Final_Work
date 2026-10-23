@@ -2,4 +2,6 @@
 
 .ca-fields input[readonly]{background:var(--uims-bg);color:var(--uims-muted)}
 .ca-modal{background:var(--uims-white,white);color:var(--uims-text)}
-color-profile=red;
+
+
+.ca-fields .ca-file{height:auto;min-height:44px;padding:8px;font-size:13px}.ca-file::file-selector-button{border:0;border-radius:7px;background:var(--uims-mint);color:var(--uims-primary);font-size:12px;font-weight:600;padding:7px 12px;margin-right:12px}

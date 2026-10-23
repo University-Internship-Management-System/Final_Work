@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,23 +18,17 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 {
     public partial class ManageCompanySupervisorsPage : Page
     {
-        protected Panel messagePanel, workspace, emptyDirectory, passwordSection, editorPanel;
-        protected Literal message, companyCount, editorHeading;
+        protected Panel workspace, messagePanel, emptyDirectory, editorPanel, editorNotice, passwordSection, savedPanel, confirmPanel;
+        protected Literal message, companyCount, editorHeading, editorMessage, savedMessage, confirmMessage, pageSummary;
         protected Repeater companies;
-        protected TextBox companySearch, supervisorName, loginEmail, phoneNumber;
-        protected TextBox companyName, companyEmail, companyLocation, temporaryPassword;
+        protected TextBox companySearch, supervisorName, loginEmail, phoneNumber, companyName, companyEmail, companyLocation, temporaryPassword;
         protected Button saveButton, searchButton;
-        protected LinkButton addCompany;
-
+        protected HyperLink addCompany, previousPage, nextPage;
+        protected HiddenField openEditor;
         private Dictionary<string, CompanySupervisor> accounts;
-        private bool allowed;
-        private bool canManageLogins;
-        private Dictionary<string, bool> disabledAccounts = new Dictionary<string, bool>();
-        private string EditingId
-        {
-            get { return ViewState["EditingId"] as string; }
-            set { ViewState["EditingId"] = value; }
-        }
+        private Dictionary<string, bool> disabledAccounts;
+        private string EditingId { get; set; }
+        private bool allowed, resetPage;
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -49,10 +44,12 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             AuthHelper.RequireAuth(this, AuthHelper.RoleCoordinator);
             if (Response.IsRequestBeingRedirected) return;
-
+            EditingId = Request.QueryString["edit"];
+            openEditor.Value = "0";
+            messagePanel.Visible = editorNotice.Visible = false;
             if (String.IsNullOrWhiteSpace(AuthHelper.IdToken) || AuthHelper.IdToken == "mock-token")
             {
-                ShowMessage("Use a real coordinator account to manage Firebase accounts.", true);
+                ShowMessage("Sign in with a real coordinator account.");
                 return;
             }
             try
@@ -62,223 +59,208 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 accounts = JsonConvert.DeserializeObject<Dictionary<string, CompanySupervisor>>(json)
                     ?? new Dictionary<string, CompanySupervisor>();
                 foreach (var item in accounts) item.Value.Id = item.Key;
-                allowed = true;
-                workspace.Visible = addCompany.Visible = true;
+                allowed = workspace.Visible = addCompany.Visible = true;
+                // Reuse this page's status snapshot while typing; a status change is checked again in Authentication.
+                disabledAccounts = ViewState["LoginStates"] as Dictionary<string, bool>;
+                if (IsPostBack) return;
                 await LoadAccountStates();
-                BindCompanies();
-                if (!IsPostBack && Request.QueryString["saved"] == "1")
-                    ShowMessage("Company supervisor saved to Firebase successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]));
+                companySearch.Text = Request.QueryString["q"] ?? "";
+                if (EditingId != null || Request.QueryString["add"] == "1") OpenEditor();
+                string toggleId = Request.QueryString["toggle"];
+                if (toggleId != null && accounts.ContainsKey(toggleId) && CanToggle(toggleId))
+                {
+                    confirmPanel.Visible = true;
+                    confirmMessage.Text = (Request.QueryString["disable"] == "1" ? "Deactivate " : "Activate ")
+                        + accounts[toggleId].Name + "? Inactive accounts cannot sign in.";
+                }
+                if (Request.QueryString["saved"] == "1")
+                    ShowSuccess("Company supervisor saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]));
+                if (Request.QueryString["status"] == "inactive") ShowSuccess("Account deactivated. The supervisor cannot sign in.");
+                if (Request.QueryString["status"] == "active") ShowSuccess("Account activated. The supervisor can sign in again.");
             }
             catch
             {
-                ShowMessage("Could not load company accounts. Sign in again or check the database connection and permissions.", true);
+                allowed = workspace.Visible = addCompany.Visible = editorPanel.Visible = false;
+                ShowMessage("Could not load company accounts. Check the connection or sign in again.");
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            BindCompanies();
+            addCompany.NavigateUrl = "ManageCompanySupervisors.aspx?add=1&q=" + Server.UrlEncode(companySearch.Text);
+            // This event requests a partial update. The filtering below runs in C#.
+            companySearch.Attributes["oninput"] = "clearTimeout(window.companySearchTimer);window.companySearchTimer=setTimeout(function(){__doPostBack('"
+                + companySearch.UniqueID + "','');},300);";
         }
 
         private void BindCompanies()
         {
+            var rows = new List<CompanySupervisor>();
             string query = companySearch.Text.Trim();
-            var filtered = accounts.Values.Where(person => String.IsNullOrEmpty(query)
-                || (person.Name ?? "").IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0
-                || (person.CompanyName ?? "").IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0
-                || (person.Email ?? "").IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0
-                || (person.CompEmail ?? "").IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
-                .OrderBy(person => person.CompanyName).ToList();
-            companies.DataSource = filtered.Select(person => new
+            foreach (var person in accounts.Values.OrderBy(item => item.CompanyName))
             {
-                person.Id, person.CompanyName, person.Location, person.Name,
-                person.Email, person.CompEmail, person.PhoneNumber,
-                StatusText = !canManageLogins ? "Not checked" : !disabledAccounts.ContainsKey(person.Id)
-                    ? "No login linked" : disabledAccounts[person.Id] ? "Inactive" : "Active",
-                StatusClass = !canManageLogins || !disabledAccounts.ContainsKey(person.Id) ? "badge badge-pending"
-                    : disabledAccounts[person.Id] ? "badge badge-rejected" : "badge badge-approved",
-                CanToggle = canManageLogins && disabledAccounts.ContainsKey(person.Id),
-                ToggleText = !canManageLogins || !disabledAccounts.ContainsKey(person.Id) ? "Unavailable"
-                    : disabledAccounts[person.Id] ? "Activate" : "Deactivate",
-                ToggleClass = "btn btn-sm " + (disabledAccounts.ContainsKey(person.Id) && !disabledAccounts[person.Id]
-                    ? "company-disable" : "btn-outline-primary")
-            });
+                string text = String.Join(" ", person.Name, person.CompanyName, person.Email, person.CompEmail);
+                if (text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0) rows.Add(person);
+            }
+            int page;
+            Int32.TryParse(Request.QueryString["page"], out page);
+            page = resetPage ? 1 : Math.Max(1, Math.Min(page, (rows.Count + 7) / 8));
+            companies.DataSource = rows.Skip((page - 1) * 8).Take(8);
             companies.DataBind();
             companyCount.Text = accounts.Count.ToString();
-            emptyDirectory.Visible = filtered.Count == 0;
+            emptyDirectory.Visible = rows.Count == 0;
+            pageSummary.Text = rows.Count == 0 ? "0 results" : "Page " + page + " of " + ((rows.Count + 7) / 8) + " · " + rows.Count + " results";
+            previousPage.Visible = page > 1;
+            nextPage.Visible = page * 8 < rows.Count;
+            previousPage.NavigateUrl = "ManageCompanySupervisors.aspx?page=" + (page - 1) + "&q=" + Server.UrlEncode(companySearch.Text);
+            nextPage.NavigateUrl = "ManageCompanySupervisors.aspx?page=" + (page + 1) + "&q=" + Server.UrlEncode(companySearch.Text);
         }
 
-        protected void SearchClick(object sender, EventArgs e)
+        protected void SearchChanged(object sender, EventArgs e) { resetPage = true; }
+
+        protected string AccountStatus(string id)
         {
-            if (!allowed) return;
-            BindCompanies();
-            companySearch.Focus();
+            if (disabledAccounts == null) return "Not checked";
+            if (!disabledAccounts.ContainsKey(id)) return "No login linked";
+            return disabledAccounts[id] ? "Inactive" : "Active";
         }
 
-        protected void AddClick(object sender, EventArgs e)
+        protected bool CanToggle(string id) { return disabledAccounts != null && disabledAccounts.ContainsKey(id); }
+
+        protected string AccountUrl(string id, bool toggle)
         {
-            if (!allowed) return;
-            CancelClick(sender, e);
-            editorPanel.Visible = true;
-            supervisorName.Focus();
+            if (toggle && !CanToggle(id)) return "";
+            return "ManageCompanySupervisors.aspx?" + (toggle ? "toggle=" : "edit=") + Server.UrlEncode(id)
+                + (toggle ? "&disable=" + (disabledAccounts[id] ? "0" : "1") : "") + "&q=" + Server.UrlEncode(companySearch.Text);
         }
 
         private async Task LoadAccountStates()
         {
-            canManageLogins = false;
-            if (!CompanyAccountAccess.IsConfigured)
-            {
-                ShowMessage("Account activation needs the Firebase admin key configured on this computer.");
-                return;
-            }
             try
             {
+                if (!CompanyAccountAccess.IsConfigured) throw new InvalidOperationException();
                 disabledAccounts = await CompanyAccountAccess.GetDisabledAccounts(accounts.Keys.ToArray());
-                canManageLogins = true;
+                ViewState["LoginStates"] = disabledAccounts;
             }
-            catch
-            {
-                ShowMessage("Sign-in status could not be checked. Verify the admin key and its Authentication permissions.", true);
-            }
+            catch { ShowMessage("Sign-in status is unavailable. Check the Firebase admin key on this computer."); }
         }
 
-        private async Task ToggleAccount(string id)
+        private void OpenEditor()
         {
-            if (!allowed || !accounts.ContainsKey(id) || !CompanyAccountAccess.IsConfigured) return;
-            try
-            {
-                var current = await CompanyAccountAccess.GetDisabledAccounts(new[] { id });
-                if (!current.ContainsKey(id))
-                {
-                    ShowMessage("No Authentication account is linked to this record.", true);
-                    return;
-                }
-                bool disable = !current[id];
-                await CompanyAccountAccess.SetDisabled(id, disable);
-                Notify.AccountStatusChanged(accounts[id].Name, accounts[id].Email, disable);
-                await LoadAccountStates();
-                BindCompanies();
-                ShowMessage(disable ? "Account deactivated. The supervisor cannot sign in."
-                    : "Account activated. The supervisor can sign in again.");
-            }
-            catch
-            {
-                ShowMessage("Account status could not be updated. Reload the directory to check its current status.", true);
-            }
-        }
-
-        protected void CompaniesCommand(object sender, RepeaterCommandEventArgs e)
-        {
-            if (!allowed) return;
-            if (e.CommandName == "ToggleLogin")
-            {
-                RegisterAsyncTask(new PageAsyncTask(() => ToggleAccount(Convert.ToString(e.CommandArgument))));
-                return;
-            }
-            if (e.CommandName != "EditCompany") return;
-            CompanySupervisor person;
-            if (!accounts.TryGetValue(Convert.ToString(e.CommandArgument), out person)) return;
+            if (EditingId != null && !accounts.ContainsKey(EditingId)) { ShowMessage("This account no longer exists."); return; }
             editorPanel.Visible = true;
-            EditingId = person.Id;
+            openEditor.Value = "1";
+            if (EditingId == null) { GeneratePassword(null, EventArgs.Empty); return; }
+            var person = accounts[EditingId];
             supervisorName.Text = person.Name;
             loginEmail.Text = person.Email;
             loginEmail.ReadOnly = true;
-            phoneNumber.Text = person.PhoneNumber;
+            string phone = person.PhoneNumber ?? "";
+            phoneNumber.Text = phone.StartsWith("+9627") && phone.Length == 13 ? "0" + phone.Substring(4) : phone;
             companyName.Text = person.CompanyName;
             companyEmail.Text = person.CompEmail;
             companyLocation.Text = person.Location;
             passwordSection.Visible = false;
             editorHeading.Text = "Edit company supervisor";
             saveButton.Text = "Save changes";
-            supervisorName.Focus();
+        }
+
+        protected void GeneratePassword(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            byte[] bytes = new byte[12];
+            using (var random = RandomNumberGenerator.Create()) random.GetBytes(bytes);
+            temporaryPassword.Text = "Ua7!" + Convert.ToBase64String(bytes);
+            openEditor.Value = "1";
+        }
+
+        protected async void ConfirmToggle(object sender, EventArgs e)
+        {
+            confirmPanel.Visible = false;
+            string id = Request.QueryString["toggle"];
+            if (!allowed || id == null || !accounts.ContainsKey(id) || !CompanyAccountAccess.IsConfigured) return;
+            try
+            {
+                var current = await CompanyAccountAccess.GetDisabledAccounts(new[] { id });
+                if (!current.ContainsKey(id)) { ShowMessage("No Authentication account is linked to this record."); return; }
+                bool disable = Request.QueryString["disable"] == "1";
+                if (current[id] != disable)
+                {
+                    await CompanyAccountAccess.SetDisabled(id, disable);
+                    Notify.AccountStatusChanged(accounts[id].Name, accounts[id].Email, disable);
+                }
+                Response.Redirect("ManageCompanySupervisors.aspx?status=" + (disable ? "inactive" : "active"), false);
+                Context.ApplicationInstance.CompleteRequest();
+            }
+            catch { ShowMessage("Account status could not be updated. Reload the directory to check its current status."); }
         }
 
         protected async void SaveClick(object sender, EventArgs e)
         {
             if (!allowed) return;
-            string name = supervisorName.Text.Trim(), email = loginEmail.Text.Trim();
-            string company = companyName.Text.Trim(), contactEmail = companyEmail.Text.Trim();
-            string location = companyLocation.Text.Trim(), phone = phoneNumber.Text.Trim();
-            if (name.Length < 2 || name.Length > 100 || company.Length < 2 || company.Length > 150
-                || location.Length < 2 || location.Length > 200 || !ValidEmail(email) || !ValidEmail(contactEmail)
-                || !Regex.IsMatch(phone, @"^\+?[0-9 ()-]{7,25}$"))
+            openEditor.Value = "1";
+            var person = new CompanySupervisor
             {
-                ShowMessage("Enter a name, company, location, valid emails and phone number.", true);
+                Name = supervisorName.Text.Trim(), Email = loginEmail.Text.Trim(),
+                CompanyName = companyName.Text.Trim(), CompEmail = companyEmail.Text.Trim(),
+                Location = companyLocation.Text.Trim(), PhoneNumber = phoneNumber.Text.Trim(),
+                Role = "CompanySupervisor", FirstLogin = true, ProfilePicUrl = ""
+            };
+            if (person.Name.Length < 2 || person.Name.Length > 100 || person.CompanyName.Length < 2 || person.CompanyName.Length > 150
+                || person.Location.Length < 2 || person.Location.Length > 200 || !ValidEmail(person.Email) || !ValidEmail(person.CompEmail))
+            {
+                ShowMessage("Enter a name, company, location and valid email addresses.");
+                return;
+            }
+            if (!Regex.IsMatch(person.PhoneNumber, @"\A07[0-9]{8}\z"))
+            {
+                ShowMessage("Enter a 10-digit mobile number starting with 07, for example 0791234567.");
                 return;
             }
             string id = EditingId;
-            if (id != null && !accounts.ContainsKey(id))
+            if (id != null && !accounts.ContainsKey(id)) { ShowMessage("This account no longer exists."); return; }
+            if (accounts.Any(item => item.Key != id && String.Equals(item.Value.Email, person.Email, StringComparison.OrdinalIgnoreCase)))
             {
-                ShowMessage("This account no longer exists. Reload the directory.", true);
+                ShowMessage("A supervisor with this login email already exists.");
                 return;
             }
-            if (accounts.Any(item => item.Key != id && String.Equals(item.Value.Email, email, StringComparison.OrdinalIgnoreCase)))
-            {
-                ShowMessage("A supervisor with this login email already exists.", true);
-                return;
-            }
-            if (id == null && temporaryPassword.Text.Length < 12)
-            {
-                ShowMessage("Use a temporary password of at least 12 characters.", true);
-                return;
-            }
-
-            string newAccountToken = null;
-            string verifyResult = null;
+            string newAccountToken = null, verifyResult = null;
             try
             {
                 if (id == null)
                 {
-                    var data = new { email = email, password = temporaryPassword.Text, returnSecureToken = true };
-                    var auth = await AuthenticationRequest(AppConfig.SignUpUrl, data);
+                    if (temporaryPassword.Text.Length < 12) { ShowMessage("Generate a temporary password before saving."); return; }
+                    var auth = await AuthenticationRequest(AppConfig.SignUpUrl,
+                        new { email = person.Email, password = temporaryPassword.Text, returnSecureToken = true });
                     id = (string)auth["localId"];
                     newAccountToken = (string)auth["idToken"];
-                    var person = new CompanySupervisor(name, email, true, phone, "", company, contactEmail, location);
                     using (var response = await FirebaseDb.Put("CompanySupervisors", id, person))
-                    {
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
-                    }
                     verifyResult = await EmailVerification.RequireAndSend("CompanySupervisors", id, newAccountToken);
-                    Notify.AccountCreated(name, "company", email, temporaryPassword.Text);
+                    Notify.AccountCreated(person.Name, "company", person.Email, temporaryPassword.Text);
                 }
                 else
                 {
-                    // Patch only editable fields; preserve role, FirstLogin and other teammates' fields.
-                    var changes = new { Name = name, PhoneNumber = phone, CompanyName = company, CompEmail = contactEmail, Location = location };
+                    // Preserve the role, FirstLogin and fields maintained by other pages.
+                    var changes = new { person.Name, person.PhoneNumber, person.CompanyName, person.CompEmail, person.Location };
                     using (var response = await FirebaseDb.Patch("CompanySupervisors", id, changes))
-                    {
                         if (!response.IsSuccessStatusCode) throw new HttpRequestException();
-                    }
                 }
             }
             catch
             {
                 if (newAccountToken != null)
                 {
-                    try
-                    {
-                        await AuthenticationRequest("https://identitytoolkit.googleapis.com/v1/accounts:delete?key=" + AppConfig.ApiKey,
-                            new { idToken = newAccountToken });
-                    }
-                    catch
-                    {
-                        ShowMessage("Login account created, but the profile could not be confirmed. Check Firebase Authentication before retrying.", true);
-                        return;
-                    }
+                    try { await AuthenticationRequest("https://identitytoolkit.googleapis.com/v1/accounts:delete?key=" + AppConfig.ApiKey, new { idToken = newAccountToken }); }
+                    catch { ShowMessage("Login created, but the profile could not be confirmed. Check Authentication before retrying."); return; }
                 }
-                ShowMessage("Could not save the account. Check email availability, the password policy and Firebase permissions.", true);
+                ShowMessage("Could not save the account. Check email availability and Firebase permissions.");
                 return;
             }
-            // Refresh only after the write succeeded; never delete a created login because a refresh failed.
-            Response.Redirect(Request.AppRelativeCurrentExecutionFilePath + "?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult), false);
+            Response.Redirect("ManageCompanySupervisors.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult), false);
             Context.ApplicationInstance.CompleteRequest();
-        }
-
-        protected void CancelClick(object sender, EventArgs e)
-        {
-            if (!allowed) return;
-            editorPanel.Visible = false;
-            EditingId = null;
-            supervisorName.Text = loginEmail.Text = phoneNumber.Text = companyName.Text = companyEmail.Text = companyLocation.Text = temporaryPassword.Text = "";
-            loginEmail.ReadOnly = false;
-            passwordSection.Visible = true;
-            editorHeading.Text = "Add company supervisor";
-            saveButton.Text = "Create account";
         }
 
         private static bool ValidEmail(string value)
@@ -289,19 +271,19 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
         private static async Task<JObject> AuthenticationRequest(string url, object data)
         {
-            string json = JsonConvert.SerializeObject(data);
-            using (var response = await FirebaseDb.client.PostAsync(url, new StringContent(json, Encoding.UTF8, "application/json")))
+            using (var response = await FirebaseDb.client.PostAsync(url, new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json")))
             {
                 if (!response.IsSuccessStatusCode) throw new HttpRequestException();
                 return JObject.Parse(await response.Content.ReadAsStringAsync());
             }
         }
 
-        private void ShowMessage(string text, bool error = false)
+        private void ShowMessage(string text)
         {
-            messagePanel.Visible = true;
-            messagePanel.CssClass = error ? "company-preview company-error" : "company-preview";
-            message.Text = text;
+            if (openEditor.Value == "1" && editorPanel.Visible) { editorNotice.Visible = true; editorMessage.Text = text; }
+            else { messagePanel.Visible = true; message.Text = text; }
         }
+
+        private void ShowSuccess(string text) { savedPanel.Visible = true; savedMessage.Text = text; }
     }
 }
