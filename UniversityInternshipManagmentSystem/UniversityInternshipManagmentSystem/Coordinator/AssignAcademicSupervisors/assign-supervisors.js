@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
     'use strict';
     const review = document.getElementById('assignReviewModal');
     let listScroll = 0;
@@ -18,7 +18,7 @@
         Sys.WebForms.PageRequestManager.getInstance().add_beginRequest((sender, args) => {
             const list = document.querySelector('.assign-list-scroll');
             const source = args.get_postBackElement();
-            listScroll = source && ['assignMajor', 'assignStatus', 'assignSearch'].includes(source.id)
+            listScroll = source && ['assignMajor', 'assignSearch'].includes(source.id)
                 ? 0 : list ? list.scrollTop : 0;
         });
         Sys.Application.add_load(updateReview);

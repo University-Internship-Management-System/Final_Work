@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -29,12 +29,14 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         private Dictionary<string, bool> disabledAccounts;
         private string EditingId { get; set; }
         private bool allowed, resetPage;
+        private const string PageUrl = "ManageCompanySupervisors.aspx";
 
         protected void Page_Init(object sender, EventArgs e)
         {
             ViewStateUserKey = Session.SessionID;
         }
 
+        // Check coordinator access and load company supervisors from Firebase.
         protected async void Page_Load(object sender, EventArgs e)
         {
             if (Session["userId"] == null)
@@ -89,12 +91,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             BindCompanies();
-            addCompany.NavigateUrl = "ManageCompanySupervisors.aspx?add=1&q=" + Server.UrlEncode(companySearch.Text);
+            addCompany.NavigateUrl = DirectoryUrl() + "&add=1";
             // This event requests a partial update. The filtering below runs in C#.
             companySearch.Attributes["oninput"] = "clearTimeout(window.companySearchTimer);window.companySearchTimer=setTimeout(function(){__doPostBack('"
                 + companySearch.UniqueID + "','');},300);";
         }
 
+        // Search the loaded accounts, then show eight results per page.
         private void BindCompanies()
         {
             var rows = new List<CompanySupervisor>();
@@ -106,16 +109,18 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             int page;
             Int32.TryParse(Request.QueryString["page"], out page);
-            page = resetPage ? 1 : Math.Max(1, Math.Min(page, (rows.Count + 7) / 8));
+            int totalPages = (int)Math.Ceiling(rows.Count / 8.0);
+            if (page > totalPages) page = totalPages;
+            if (page < 1 || resetPage) page = 1;
             companies.DataSource = rows.Skip((page - 1) * 8).Take(8);
             companies.DataBind();
             companyCount.Text = accounts.Count.ToString();
             emptyDirectory.Visible = rows.Count == 0;
-            pageSummary.Text = rows.Count == 0 ? "0 results" : "Page " + page + " of " + ((rows.Count + 7) / 8) + " · " + rows.Count + " results";
+            pageSummary.Text = rows.Count == 0 ? "0 results" : "Page " + page + " of " + totalPages + " · " + rows.Count + " results";
             previousPage.Visible = page > 1;
             nextPage.Visible = page * 8 < rows.Count;
-            previousPage.NavigateUrl = "ManageCompanySupervisors.aspx?page=" + (page - 1) + "&q=" + Server.UrlEncode(companySearch.Text);
-            nextPage.NavigateUrl = "ManageCompanySupervisors.aspx?page=" + (page + 1) + "&q=" + Server.UrlEncode(companySearch.Text);
+            previousPage.NavigateUrl = DirectoryUrl() + "&page=" + (page - 1);
+            nextPage.NavigateUrl = DirectoryUrl() + "&page=" + (page + 1);
         }
 
         protected void SearchChanged(object sender, EventArgs e) { resetPage = true; }
@@ -129,11 +134,19 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
         protected bool CanToggle(string id) { return disabledAccounts != null && disabledAccounts.ContainsKey(id); }
 
+        // Edit opens the form; Activate/Deactivate opens the confirmation window.
         protected string AccountUrl(string id, bool toggle)
         {
-            if (toggle && !CanToggle(id)) return "";
-            return "ManageCompanySupervisors.aspx?" + (toggle ? "toggle=" : "edit=") + Server.UrlEncode(id)
-                + (toggle ? "&disable=" + (disabledAccounts[id] ? "0" : "1") : "") + "&q=" + Server.UrlEncode(companySearch.Text);
+            if (!toggle) return DirectoryUrl() + "&edit=" + Server.UrlEncode(id);
+            if (!CanToggle(id)) return "";
+            string disable = disabledAccounts[id] ? "0" : "1";
+            return DirectoryUrl() + "&toggle=" + Server.UrlEncode(id) + "&disable=" + disable;
+        }
+
+        // Keep the search when opening a form or moving between result pages.
+        private string DirectoryUrl()
+        {
+            return PageUrl + "?q=" + Server.UrlEncode(companySearch.Text);
         }
 
         private async Task LoadAccountStates()
@@ -147,6 +160,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             catch { ShowMessage("Sign-in status is unavailable. Check the Firebase admin key on this computer."); }
         }
 
+        // Add generates a password; Edit fills the same form with saved details.
         private void OpenEditor()
         {
             if (EditingId != null && !accounts.ContainsKey(EditingId)) { ShowMessage("This account no longer exists."); return; }
@@ -158,7 +172,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             loginEmail.Text = person.Email;
             loginEmail.ReadOnly = true;
             string phone = person.PhoneNumber ?? "";
-            phoneNumber.Text = phone.StartsWith("+9627") && phone.Length == 13 ? "0" + phone.Substring(4) : phone;
+            if (phone.StartsWith("+9627") && phone.Length == 13) phone = "0" + phone.Substring(4);
+            phoneNumber.Text = phone;
             companyName.Text = person.CompanyName;
             companyEmail.Text = person.CompEmail;
             companyLocation.Text = person.Location;
@@ -197,6 +212,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             catch { ShowMessage("Account status could not be updated. Reload the directory to check its current status."); }
         }
 
+        // Read the form, validate it, then use the existing create/update flow.
         protected async void SaveClick(object sender, EventArgs e)
         {
             if (!allowed) return;
@@ -208,24 +224,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 Location = companyLocation.Text.Trim(), PhoneNumber = phoneNumber.Text.Trim(),
                 Role = "CompanySupervisor", FirstLogin = true, ProfilePicUrl = ""
             };
-            if (person.Name.Length < 2 || person.Name.Length > 100 || person.CompanyName.Length < 2 || person.CompanyName.Length > 150
-                || person.Location.Length < 2 || person.Location.Length > 200 || !ValidEmail(person.Email))
-            {
-                ShowMessage("Enter a name, company, location and a valid company email.");
-                return;
-            }
-            if (!Regex.IsMatch(person.PhoneNumber, @"\A07[0-9]{8}\z"))
-            {
-                ShowMessage("Enter a 10-digit mobile number starting with 07, for example 0791234567.");
-                return;
-            }
             string id = EditingId;
-            if (id != null && !accounts.ContainsKey(id)) { ShowMessage("This account no longer exists."); return; }
-            if (accounts.Any(item => item.Key != id && String.Equals(item.Value.Email, person.Email, StringComparison.OrdinalIgnoreCase)))
-            {
-                ShowMessage("A supervisor with this login email already exists.");
-                return;
-            }
+            string error = ValidateCompany(person, id);
+            if (error != null) { ShowMessage(error); return; }
             string newAccountToken = null, verifyResult = null, mailResult = null;
             try
             {
@@ -261,6 +262,26 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             Response.Redirect("ManageCompanySupervisors.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult) + (mailResult == null ? "" : "&mail=" + mailResult), false);
             Context.ApplicationInstance.CompleteRequest();
+        }
+
+        // Check the form before creating or updating any account.
+        private string ValidateCompany(CompanySupervisor person, string id)
+        {
+            string detailsError = "Enter a name, company, location and a valid company email.";
+            if (person.Name.Length < 2 || person.Name.Length > 100) return detailsError;
+            if (person.CompanyName.Length < 2 || person.CompanyName.Length > 150) return detailsError;
+            if (person.Location.Length < 2 || person.Location.Length > 200) return detailsError;
+            if (!ValidEmail(person.Email)) return detailsError;
+            if (!Regex.IsMatch(person.PhoneNumber, @"\A07[0-9]{8}\z"))
+                return "Enter a 10-digit mobile number starting with 07, for example 0791234567.";
+            if (id != null && !accounts.ContainsKey(id)) return "This account no longer exists.";
+            foreach (var account in accounts)
+            {
+                if (account.Key == id) continue;
+                if (String.Equals(account.Value.Email, person.Email, StringComparison.OrdinalIgnoreCase))
+                    return "A supervisor with this login email already exists.";
+            }
+            return null;
         }
 
         private static bool ValidEmail(string value)

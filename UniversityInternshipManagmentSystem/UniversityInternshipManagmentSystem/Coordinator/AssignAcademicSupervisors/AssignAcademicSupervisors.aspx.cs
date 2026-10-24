@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -15,7 +15,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
     {
         protected Panel messagePanel, workspace, reviewPanel, reviewNotice, emptyStudents, savedPanel;
         protected Literal message, groupCaption, supervisorHelp, reviewSummary, selectedCount, reviewError;
-        protected DropDownList assignMajor, assignStatus, assignSupervisor;
+        protected DropDownList assignMajor, assignSupervisor;
         protected TextBox assignSearch;
         protected Repeater students, reviewStudents;
         protected CheckBox selectAll;
@@ -83,17 +83,16 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 + assignSearch.UniqueID + "','');},300);";
         }
 
+        // Show students from the chosen major, filtered by name or university email.
         private void BindStudents()
         {
             var rows = new List<StudentModel>();
+            string query = assignSearch.Text.Trim();
             foreach (var student in records.Values.OrderBy(item => item.Name))
             {
                 if (student.Major != assignMajor.SelectedValue) continue;
-                bool assigned = !String.IsNullOrEmpty(student.AcademicSupervisorId);
-                if (assignStatus.SelectedValue == "Assigned" && !assigned) continue;
-                if (assignStatus.SelectedValue == "Unassigned" && assigned) continue;
                 string text = String.Join(" ", student.Name, student.UniEmail);
-                if (text.IndexOf(assignSearch.Text.Trim(), StringComparison.OrdinalIgnoreCase) >= 0) rows.Add(student);
+                if (text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0) rows.Add(student);
             }
             students.DataSource = rows;
             students.DataBind();
@@ -105,15 +104,19 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 ScriptManager.GetCurrent(this).RegisterAsyncPostBackControl(checkbox);
             }
             selectAll.Enabled = rows.Count > 0;
-            selectAll.Checked = rows.Count > 0 && rows.All(student => SelectedIds.Contains(student.Id));
+            selectAll.Checked = rows.Count > 0;
+            foreach (var student in rows)
+                if (!SelectedIds.Contains(student.Id)) { selectAll.Checked = false; break; }
             emptyStudents.Visible = rows.Count == 0;
-            groupCaption.Text = assignMajor.SelectedValue == "" ? "Choose a major to display students."
-                : rows.Count + " student(s) shown · " + assignMajor.SelectedValue;
+            if (assignMajor.SelectedValue == "") groupCaption.Text = "Choose a major to display students.";
+            else groupCaption.Text = rows.Count + " student(s) shown · " + assignMajor.SelectedValue;
         }
 
         protected string SupervisorName(string id)
         {
-            return supervisors.ContainsKey(id ?? "") ? supervisors[id].Name : "Not assigned";
+            AcademicSupervisor person;
+            if (supervisors.TryGetValue(id ?? "", out person)) return person.Name;
+            return "Not assigned";
         }
 
         private void PopulateSupervisors()
@@ -124,12 +127,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 if (item.Value.Major == assignMajor.SelectedValue)
                     assignSupervisor.Items.Add(new ListItem(item.Value.Name, item.Key));
             assignSupervisor.Enabled = assignMajor.SelectedValue != "" && assignSupervisor.Items.Count > 1;
-            supervisorHelp.Text = assignMajor.SelectedValue == "" ? "Choose a major first."
-                : assignSupervisor.Enabled ? "Only supervisors with the same major are listed."
-                : "No supervisors are available for this major. Create one before assigning students.";
+            if (assignMajor.SelectedValue == "") supervisorHelp.Text = "Choose a major first.";
+            else if (assignSupervisor.Enabled) supervisorHelp.Text = "Only supervisors with the same major are listed.";
+            else supervisorHelp.Text = "No supervisors are available for this major. Create one before assigning students.";
         }
 
-        protected void FiltersChanged(object sender, EventArgs e)
+        // Changing the major clears the previous group and supervisor.
+        protected void MajorChanged(object sender, EventArgs e)
         {
             if (!allowed) return;
             SelectedIds.Clear();
@@ -170,18 +174,26 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             InvalidateReview();
         }
 
+        // Any selection change requires a new review before saving.
         private void InvalidateReview()
         {
             reviewPanel.Visible = false;
             ViewState.Remove("ReviewIds");
         }
 
+        // Every selected student and the new supervisor must have the same major.
         private bool ValidAssignment(string[] ids, string supervisorId, string major)
         {
-            if (ids == null || ids.Length == 0 || major == "" || !supervisors.ContainsKey(supervisorId)) return false;
-            if (supervisors[supervisorId].Major != major) return false;
+            if (ids == null || ids.Length == 0 || major == "") return false;
+            AcademicSupervisor person;
+            if (!supervisors.TryGetValue(supervisorId, out person)) return false;
+            if (person.Major != major) return false;
             foreach (string id in ids)
-                if (!records.ContainsKey(id) || records[id].Major != major) return false;
+            {
+                StudentModel student;
+                if (!records.TryGetValue(id, out student)) return false;
+                if (student.Major != major) return false;
+            }
             return true;
         }
 
@@ -199,7 +211,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             ViewState["Major"] = assignMajor.SelectedValue;
             reviewSummary.Text = SelectedIds.Count + " student(s) in " + assignMajor.SelectedValue
                 + " will be assigned to " + supervisors[assignSupervisor.SelectedValue].Name + ".";
-            reviewStudents.DataSource = SelectedIds.Select(id => records[id]);
+            var reviewedStudents = new List<StudentModel>();
+            foreach (string id in SelectedIds) reviewedStudents.Add(records[id]);
+            reviewStudents.DataSource = reviewedStudents;
             reviewStudents.DataBind();
             reviewPanel.Visible = true;
             openReview.Value = "1";

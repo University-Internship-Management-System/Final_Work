@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -19,15 +19,21 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 {
     public partial class CoordinatorAccountPage : Page
     {
-        protected Panel workspace, noticePanel, imagePanel, initialsPanel, passwordNoticePanel;
+        protected Panel workspace, noticePanel, imagePanel, initialsPanel, passwordNoticePanel, profileEditor, photoEditor;
         protected Literal notice, displayName, displayEmail, initials, passwordNotice;
         protected Image avatar;
         protected TextBox fullName, email, phone, currentPassword, newPassword, confirmPassword;
         protected HiddenField openPassword;
         protected FileUpload profilePhoto;
+        protected Button editProfile, saveProfile, cancelProfile;
         private Admin admin;
         private string recordId;
         private bool allowed;
+        private bool EditingProfile
+        {
+            get { return (bool)(ViewState["EditingProfile"] ?? false); }
+            set { ViewState["EditingProfile"] = value; }
+        }
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -75,12 +81,15 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
         }
 
+        // Show profile details, using the first two initials when no HTTPS photo is available.
         private void BindOverview()
         {
             displayName.Text = admin.Name;
             displayEmail.Text = admin.Email;
-            initials.Text = String.Concat((admin.Name ?? "Coordinator").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                .Take(2).Select(part => part.Substring(0, 1).ToUpperInvariant()));
+            string[] names = (admin.Name ?? "Coordinator").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            initials.Text = "";
+            for (int index = 0; index < names.Length && index < 2; index++)
+                initials.Text += names[index].Substring(0, 1).ToUpperInvariant();
             Uri imageUri;
             bool hasImage = Uri.TryCreate(admin.ProfilePicUrl, UriKind.Absolute, out imageUri) && imageUri.Scheme == "https";
             imagePanel.Visible = hasImage;
@@ -88,18 +97,20 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             if (hasImage) avatar.ImageUrl = admin.ProfilePicUrl;
         }
 
+        // Fill the editable fields from the saved coordinator record.
         private void BindForm()
         {
             fullName.Text = admin.Name;
             email.Text = admin.Email;
             string savedPhone = admin.PhoneNumber ?? "";
-            phone.Text = savedPhone.StartsWith("+9627") && savedPhone.Length == 13
-                ? "0" + savedPhone.Substring(4) : savedPhone;
+            if (savedPhone.StartsWith("+9627") && savedPhone.Length == 13)
+                savedPhone = "0" + savedPhone.Substring(4);
+            phone.Text = savedPhone;
         }
 
         protected async void SaveProfile(object sender, EventArgs e)
         {
-            if (!allowed) return;
+            if (!allowed || !EditingProfile) return;
             string name = fullName.Text.Trim(), number = phone.Text.Trim();
             string photo = admin.ProfilePicUrl, uploadedId = null;
             if (name.Length < 2 || name.Length > 100)
@@ -203,9 +214,18 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
         }
 
+        protected void EditProfile(object sender, EventArgs e)
+        {
+            if (!allowed) return;
+            EditingProfile = true;
+            BindForm();
+        }
+
         protected void CancelChanges(object sender, EventArgs e)
         {
-            if (allowed) BindForm();
+            if (!allowed) return;
+            EditingProfile = false;
+            BindForm();
         }
 
         private async Task VerifyPassword(string password)
@@ -227,29 +247,20 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
         }
 
+        // Check the password fields, then use the existing Firebase password flow.
         protected async void ChangePassword(object sender, EventArgs e)
         {
             if (!allowed) return;
             openPassword.Value = "1";
             passwordNoticePanel.Visible = true;
-            if (String.IsNullOrEmpty(currentPassword.Text))
+            string error = null;
+            if (String.IsNullOrEmpty(currentPassword.Text)) error = "Enter your current password.";
+            else if (newPassword.Text.Length < 6) error = "Your new password must be at least 6 characters.";
+            else if (newPassword.Text != confirmPassword.Text) error = "The new password and confirmation do not match.";
+            else if (newPassword.Text == currentPassword.Text) error = "Choose a password different from your current password.";
+            if (error != null)
             {
-                passwordNotice.Text = "Enter your current password.";
-                return;
-            }
-            if (newPassword.Text.Length < 6)
-            {
-                passwordNotice.Text = "Your new password must be at least 6 characters.";
-                return;
-            }
-            if (newPassword.Text != confirmPassword.Text)
-            {
-                passwordNotice.Text = "The new password and confirmation do not match.";
-                return;
-            }
-            if (newPassword.Text == currentPassword.Text)
-            {
-                passwordNotice.Text = "Choose a password different from your current password.";
+                passwordNotice.Text = error;
                 return;
             }
             try
@@ -272,13 +283,22 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         private void ShowMessage(string text, bool error = false)
         {
             noticePanel.Visible = true;
-            noticePanel.CssClass = "ca-notice" + (error ? " ca-error" : "");
+            noticePanel.CssClass = "ca-notice";
+            if (error) noticePanel.CssClass += " ca-error";
             notice.Text = text;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (allowed && !IsPostBack && Request.QueryString["saved"] == "1") ShowMessage("Your profile has been updated successfully.");
+            if (!allowed) return;
+            // Start in view mode. Edit unlocks the form; Save and Cancel return to view mode.
+            fullName.ReadOnly = phone.ReadOnly = !EditingProfile;
+            profilePhoto.Enabled = EditingProfile;
+            photoEditor.Visible = EditingProfile;
+            editProfile.Visible = !EditingProfile;
+            saveProfile.Visible = cancelProfile.Visible = EditingProfile;
+            profileEditor.DefaultButton = EditingProfile ? "saveProfile" : "editProfile";
+            if (!IsPostBack && Request.QueryString["saved"] == "1") ShowMessage("Your profile has been updated successfully.");
         }
     }
 }
