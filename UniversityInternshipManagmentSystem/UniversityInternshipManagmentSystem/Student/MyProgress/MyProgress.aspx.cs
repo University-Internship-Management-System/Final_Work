@@ -26,6 +26,10 @@ namespace UniversityInternshipManagmentSystem.Student
 
         protected bool TrainingWeeksFinished { get; private set; }
 
+        private readonly HashSet<int> completedTrainingWeeks = new HashSet<int>();
+
+        protected int CompletedTrainingWeekCount { get { return completedTrainingWeeks.Count; } }
+
         public class WeekProgress
         {
             public int WeekNumber { get; set; }
@@ -123,9 +127,9 @@ namespace UniversityInternshipManagmentSystem.Student
                         task.WeekNumber <= TotalWeeks)
                     .ToList();
 
-                CalculateTrainingWeek(studentTasks);
+                completedTrainingWeeks.Clear();
 
-                var studentSubmissions = allSubmissions
+var studentSubmissions = allSubmissions
                     .Where(item =>
                         item.Value != null &&
                         item.Value.StudentId == studentId &&
@@ -197,6 +201,8 @@ namespace UniversityInternshipManagmentSystem.Student
                     });
                 }
 
+                CalculateTrainingWeek(weeks);
+
                 rptWeeks.DataSource = weeks;
                 rptWeeks.DataBind();
 
@@ -212,6 +218,7 @@ namespace UniversityInternshipManagmentSystem.Student
                 CertificateDownloadUrl = string.Empty;
                 CurrentTrainingWeek = null;
                 TrainingWeeksFinished = false;
+                completedTrainingWeeks.Clear();
 
                 pnlError.Visible = true;
 
@@ -361,79 +368,45 @@ namespace UniversityInternshipManagmentSystem.Student
         }
     
 
-        private void CalculateTrainingWeek(
-            List<Tasks> studentTasks)
+        private void CalculateTrainingWeek(List<WeekProgress> weeks)
         {
-            var datedTasks = studentTasks
-                .Where(task =>
-                    task.StartDate != DateTime.MinValue)
-                .ToList();
-
-            if (datedTasks.Count == 0)
+            completedTrainingWeeks.Clear();
+            foreach (WeekProgress week in weeks)
             {
-                CurrentTrainingWeek = null;
-                TrainingWeeksFinished = false;
-                return;
+                // Use exact task counts, not the rounded percentage or elapsed time.
+                if (week.TaskCount > 0 && week.SubmittedCount == week.TaskCount)
+                    completedTrainingWeeks.Add(week.WeekNumber);
             }
 
-            // Temporary basis already used in TaskViews.cs:
-            // earliest assigned task start date = training start.
-            DateTime startDate = datedTasks
-                .Min(task => task.StartDate)
-                .Date;
+            TrainingWeeksFinished = completedTrainingWeeks.Count == TotalWeeks;
+            WeekProgress nextWeek = weeks
+                .Where(week => week.TaskCount > 0 && !IsJourneyWeekComplete(week.WeekNumber))
+                .OrderBy(week => week.WeekNumber)
+                .FirstOrDefault();
+            CurrentTrainingWeek = nextWeek == null ? (int?)null : nextWeek.WeekNumber;
+        }
 
-            int elapsedDays =
-                (DateTime.Today - startDate).Days;
-
-            if (elapsedDays < 0)
-            {
-                CurrentTrainingWeek = null;
-                TrainingWeeksFinished = false;
-                return;
-            }
-
-            TrainingWeeksFinished =
-                elapsedDays >= TotalWeeks * 7;
-
-            CurrentTrainingWeek = Math.Min(
-                TotalWeeks,
-                elapsedDays / 7 + 1);
+        protected bool IsJourneyWeekComplete(int week)
+        {
+            return completedTrainingWeeks.Contains(week);
         }
 
         protected string GetJourneyWeekClass(int week)
         {
-            if (TrainingWeeksFinished ||
-                (CurrentTrainingWeek.HasValue &&
-                 week < CurrentTrainingWeek.Value))
-            {
+            if (IsJourneyWeekComplete(week))
                 return "mp-step mp-step-done";
-            }
-
-            if (CurrentTrainingWeek.HasValue &&
-                week == CurrentTrainingWeek.Value)
-            {
+            if (CurrentTrainingWeek.HasValue && week == CurrentTrainingWeek.Value)
                 return "mp-step mp-step-current";
-            }
-
             return "mp-step";
         }
 
         protected string GetJourneyWeekStatus(int week)
         {
-            if (TrainingWeeksFinished ||
-                (CurrentTrainingWeek.HasValue &&
-                 week < CurrentTrainingWeek.Value))
-            {
+            if (IsJourneyWeekComplete(week))
                 return "Completed";
-            }
-
-            if (CurrentTrainingWeek.HasValue &&
-                week == CurrentTrainingWeek.Value)
-            {
-                return "Current week";
-            }
-
-            return "Upcoming";
+            if (CurrentTrainingWeek.HasValue && week == CurrentTrainingWeek.Value)
+                return "In progress";
+            return "Pending";
         }
 
         protected string GetCertificateDownloadUrl()

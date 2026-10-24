@@ -43,8 +43,29 @@
                         <asp:Label ID="lblMessage" runat="server" />
                     </asp:Panel>
 
+                    <%-- the confirmed training, on top --%>
+                    <asp:Panel ID="pnlConfirmed" runat="server" Visible="false" CssClass="confirmed-card">
+                        <div class="confirmed-icon">&#10003;</div>
+                        <div class="confirmed-body">
+                            <div class="confirmed-eyebrow">Your training</div>
+                            <h3 class="confirmed-title"><asp:Literal ID="litConfirmedTitle" runat="server" Mode="Encode" /></h3>
+                            <div class="confirmed-company"><asp:Literal ID="litConfirmedCompany" runat="server" Mode="Encode" /></div>
+                            <%-- only when the opportunity has a training start date --%>
+                            <asp:Panel ID="pnlTrainingStart" runat="server" Visible="false" CssClass="confirmed-chip">
+                                Training starts <strong><asp:Literal ID="litTrainingStart" runat="server" Mode="Encode" /></strong>
+                            </asp:Panel>
+                        </div>
+                        <span class="confirmed-pill">Confirmed</span>
+                    </asp:Panel>
+
+                    <%-- after a confirmed training the other applications are only history --%>
+                    <asp:Panel ID="pnlHistoryHead" runat="server" Visible="false" CssClass="history-head">
+                        <h5 class="mb-1">Application history</h5>
+                        <p class="text-muted small mb-0">Your other applications. They are closed now that you have a confirmed training.</p>
+                    </asp:Panel>
+
                     <!-- applications table -->
-                    <div class="card app-table-card">
+                    <asp:Panel ID="pnlList" runat="server" CssClass="card app-table-card">
                         <div class="card-body p-4">
                             
                             <asp:Repeater ID="rptApplications" runat="server" OnItemCommand="rptApplications_ItemCommand">
@@ -123,7 +144,7 @@
                             </asp:Panel>
 
                         </div>
-                    </div>
+                    </asp:Panel>
                 </main>
 
                 <!-- Footer -->

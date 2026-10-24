@@ -27,7 +27,7 @@ namespace UniversityInternshipManagmentSystem.Models
             profilePic)
         {
             CompanyName = companyName;
-            CompEmail = compEmail;
+            CompEmail = email;
             Location = location;
         }
     }

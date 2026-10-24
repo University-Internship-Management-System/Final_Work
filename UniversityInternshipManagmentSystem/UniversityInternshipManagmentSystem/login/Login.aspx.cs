@@ -100,14 +100,6 @@ namespace UniversityInternshipManagmentSystem.login
 
             try
             {
-                // Our own email (full UIMS design) when it is set up; otherwise Firebase sends its default email.
-                if (await SendOwnResetEmail(email))
-                {
-                    DisplayRecoveryResult("If this email has an account, a password reset link was sent to it. Please check your inbox or spam folder.", true);
-                    txtRecoveryEmail.Text = string.Empty;
-                    return;
-                }
-
                 var payload = new
                 {
                     requestType = "PASSWORD_RESET",
@@ -135,22 +127,6 @@ namespace UniversityInternshipManagmentSystem.login
             }
         }
 
-        // Creates the reset link with the service account and sends it with our own email design.
-        // Returns false when it is not set up or something failed, so the caller uses Firebase's email.
-        private async Task<bool> SendOwnResetEmail(string email)
-        {
-            if (!FirebaseAdmin.IsConfigured || !EmailSender.IsConfigured) return false;
-            try
-            {
-                string link = await FirebaseAdmin.CreateResetLink(email);
-                if (link != "") await EmailSender.SendPasswordReset(email, link);   // "" = no account, send nothing
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
 
         #endregion
 
@@ -193,6 +169,13 @@ namespace UniversityInternshipManagmentSystem.login
                 // Retrieve Profile metadata from Firebase Realtime Database
                 var userProfile = await FetchUserProfileAsync(localId, returnedEmail, idToken);
                 long profileMs = timer.ElapsedMilliseconds - passwordMs;
+
+                // A Firebase account that has no profile record in our database is not a UIMS user: do not let it in as a student
+                if (string.IsNullOrEmpty(userProfile.Table) || string.IsNullOrEmpty(userProfile.RecordId))
+                {
+                    DisplayError("Your account is not registered in UIMS. Please contact the internship coordinator.");
+                    return;
+                }
 
                 // A new account must confirm its email first (Config/EmailVerification.cs). Nothing is signed in until then.
                 if (await EmailVerification.IsBlocked(userProfile.Table, userProfile.RecordId, idToken))
@@ -247,7 +230,7 @@ namespace UniversityInternshipManagmentSystem.login
 
         /// <summary>
         /// Queries the Realtime Database tables to locate the user's name, role, and firstLogin flag.
-        /// Searches first by UID key, then scans records by Email / UniEmail / CompEmail.
+        /// Searches first by UID key, then scans records by their Email.
         /// </summary>
         private async Task<(string Name, string Role, bool FirstLogin, string RecordId, string Table)> FetchUserProfileAsync(string uid, string email, string idToken)
         {
@@ -272,7 +255,7 @@ namespace UniversityInternshipManagmentSystem.login
                 }
             }
 
-            // 2. Scan tables to match record by email fields (e.g. student_001, company_001), also all tables at the same time
+            // 2. Scan tables to match the record by its Email (e.g. student_001, company_001), also all tables at the same time
             var tables = await Task.WhenAll(databaseTables.Select(table => TryReadAsync(table, null, idToken)));
             for (int t = 0; t < databaseTables.Length; t++)
             {
@@ -290,10 +273,8 @@ namespace UniversityInternshipManagmentSystem.login
                         if (prop.Value is JObject item)
                         {
                             string itemEmail = (item["Email"]?.ToString() ?? "").Trim().ToLowerInvariant();
-                            string itemUniEmail = (item["UniEmail"]?.ToString() ?? item["UniversityEmail"]?.ToString() ?? "").Trim().ToLowerInvariant();
-                            string itemCompEmail = (item["CompEmail"]?.ToString() ?? "").Trim().ToLowerInvariant();
 
-                            if (itemEmail == normalizedEmail || itemUniEmail == normalizedEmail || itemCompEmail == normalizedEmail)
+                            if (itemEmail == normalizedEmail)
                             {
                                 string name = item["Name"]?.ToString() ?? item["name"]?.ToString() ?? "";
                                 string rawRole = item["Role"]?.ToString() ?? item["role"]?.ToString() ?? "";
@@ -347,9 +328,18 @@ namespace UniversityInternshipManagmentSystem.login
 
         private static string ResolveRoleFromTable(string table, string rawRole)
         {
+            // The role is decided by the TABLE the record is in (Students, CompanySupervisors, ...), never by a "Role" field inside
+            // the record: a person who can edit his own record must not be able to make himself a coordinator.
+            if (table.Contains("Student")) return AuthHelper.RoleStudent;
+            if (table.Contains("Company")) return AuthHelper.RoleCompany;
+            if (table.Contains("Academic")) return AuthHelper.RoleAcademic;
+            if (table.Contains("Admin") || table.Contains("Coordinator")) return AuthHelper.RoleCoordinator;
+
+            // Any other table (for example "Users"): the Role field may name a student, company or academic role, but never the coordinator
             if (!string.IsNullOrEmpty(rawRole))
             {
-                return AuthHelper.NormalizeRole(rawRole);
+                string role = AuthHelper.NormalizeRole(rawRole);
+                return role == AuthHelper.RoleCoordinator ? AuthHelper.RoleStudent : role;
             }
 
             if (table.Contains("Student")) return AuthHelper.RoleStudent;

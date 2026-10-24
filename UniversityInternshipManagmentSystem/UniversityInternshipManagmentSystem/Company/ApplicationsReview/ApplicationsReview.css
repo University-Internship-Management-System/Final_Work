@@ -1,5 +1,10 @@
 ﻿/* ApplicationsReview.css */
 
+/* space between the page title and the table */
+.uims-page-head {
+    margin-bottom: 24px;
+}
+
 .app-table-card {
     border: 1px solid var(--uims-border);
     border-radius: 16px;

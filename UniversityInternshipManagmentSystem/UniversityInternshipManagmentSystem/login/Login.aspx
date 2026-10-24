@@ -766,13 +766,12 @@
               <span><asp:Literal ID="litSuccessMsg" runat="server" /></span>
             </asp:Panel>
 
-            <div class="form-group">
-              <div class="form-label-row">
-                <label for="txtEmail" class="form-label">Email address</label>
-              </div>
-              <div class="uims-input-group" id="emailGroup">
-                <div class="uims-input-addon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <!-- Email Address Field -->
+            <div class="mb-3">
+                <label class="form-label" for="txtEmail">Email address</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="form-control" placeholder="name@ju.edu.jo" required="required" ClientIDMode="Static" />
                 </div>
                 <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="uims-input" placeholder="name@example.com" autocomplete="username" autocapitalize="none" spellcheck="false" inputmode="email" aria-describedby="officialAlertBox" ClientIDMode="Static" required="required" />
               </div>

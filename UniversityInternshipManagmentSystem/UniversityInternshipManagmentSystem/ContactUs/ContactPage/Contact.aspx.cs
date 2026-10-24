@@ -15,6 +15,13 @@ namespace UniversityInternshipManagmentSystem.ContactModule
             repository = ContactRepository.ForSignedInUser(new HttpSessionStateWrapper(Session));
             base.OnInit(e);
         }
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+            // Contact-only presentation: leave the shared master and all other pages unchanged.
+            var navigation = Master == null ? null : Master.FindControl("StandardPublicNavigation");
+            if (navigation != null) navigation.Visible = false;
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             Response.Cache.SetCacheability(HttpCacheability.NoCache);

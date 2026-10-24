@@ -140,10 +140,10 @@ var monitorStudents = monitorData.Students || [];
                 field('Email', supervisor.Email);
                 field('Phone', supervisor.PhoneNumber);
                 if (academic) {
-                    field('University email', supervisor.UniversityEmail);
+                    if (supervisor.UniversityEmail !== supervisor.Email) field('University email', supervisor.UniversityEmail);
                     field('Major', supervisor.Major);
                 } else {
-                    field('Company email', supervisor.CompEmail);
+                    if (supervisor.CompEmail !== supervisor.Email) field('Company email', supervisor.CompEmail);
                     field('Company', supervisor.CompanyName);
                     field('Location', supervisor.Location);
                 }
@@ -248,7 +248,7 @@ var monitorStudents = monitorData.Students || [];
             function renderRecord(record) {
                 var html = '<section data-detail-section="overview"><div class="drawer-section"><h3>Student information</h3><div class="row student-detail">';
                 html += detail('Student ID', record.Id) + detail('Name', record.Name) + detail('Major', record.Major);
-                html += detail('Email', record.Email) + detail('University email', record.UniversityEmail);
+                html += detail('Email', record.Email) + (record.UniversityEmail !== record.Email ? detail('University email', record.UniversityEmail) : '');
                 html += detail('Phone', record.Phone) + detail('GPA', record.Gpa);
                 html += detail('Skills', Array.isArray(record.Skills) ? record.Skills.join(', ') : null);
                 html += linkDetail('CV', record.CvUrl) + linkDetail('Portfolio', record.PortfolioUrl);

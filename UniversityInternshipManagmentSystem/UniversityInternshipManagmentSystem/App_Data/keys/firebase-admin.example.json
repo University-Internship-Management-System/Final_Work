@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "universityinternship-f96ef",
+  "private_key_id": "6ffcd4284136f17cefc4543ce5068909dd7a49d2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDD71kAza8KSNQ0\nYXgoGuw75QnLRjjOcJIOaieFIYkFFmxQtmTDrY9fsgNEjZmXFMWjyuhokTYSaObv\nwLKtqwnGn5OJi9zsA3kTLe7Aw8D6DOTfg5Qt275onUBdwKDzyqpDI5IUc0JgMgkC\nOhoxJYubw2a7Gb+eZt/RYsT5a8nHDkqdtpxouyVKqABNzuGDPF+c6unV5guOat5r\n9PqocrZuL2z/clDPgPDxX+w2mgLDqBs/TbP4AAQHukGGq2g4FtBUTyfh/ioWTnwW\nPByej+KlZpbOpXizy1a2FHErC9UKA+5q47bypICCBEzAyw8pyIh2wz0tNbQLh6bd\nTzSJmA7HAgMBAAECggEAJGDkHYoS3c332GHgdVHKWrSDxQIcufecpqB/BfDcB93J\n7pJu0wX+gL4EbU39Hlf0+hxKWl/bsj9X4Vvd0PDYt9AZDIizU/6xFCaLFa9CvSp3\ntCgx8vHBwJqxwLZrK9iNFDoefT2JLWMc2RUAl+9opFr7T/HP6hEfrTixab3hkNt7\nOTW9qtjeN64DoD1NEhdNLJM1kvoV04M/zrAKsoEk53jjM0GWzM22T002mXouj7TA\naaXiIS0Xqz/RY58RRg4yLkFq7oYrrn7n7cq/t7r6uLaXjKzb3jlwiIshC0xW4WnC\nNwdtQo1GiNBBztCrXFyPzuUiRc1y/Y0xNhixHFVDQQKBgQDnbN7aiTycWm6iGuaK\nsRDTVBwn3NsF7EeKMjmd5+1pR+k3iT/iWQOLgmWomhblFjXtsK7gCGO68k4gtnad\ndZ5dE3HCLgELu6LwlyeFqzlxfeXOYqpHRmeSDLutClzUj3MZMQw+BySv/aIGvk5n\nVlR39T+WhCQv6ZQG+j8O1XyjRQKBgQDYvbLArrcQlcCess3Nfhddv8uDvHVgkktR\nJ7nRgX3ofKn16+nYs1K/itfN/XFGM1nwU2k5yJQwVbpLfeSSxdkOLGxvonYWWG14\ntxJJI5YDAG1r82DXUQB9wtpU6FrNBenK8UPxOF0epz/iDYsVoHT8kpPz2mOiiJ37\nCr6IkHWkmwKBgQDjUm7JbVrLHo1j0Fa6z1j+rLUHdwrxk3lmRxWPhT0QWGG+eqP0\n+4je5dRjvBBXMO0CMLZmO/dysAaMXY6/9sP7G1l36uZ+Fu7jsyZQR7OiRo+Qnhwy\n7PZZYQaM4Av1g38EtMgYub2Q3evlAdRT71oDhzTR7bT6F0+fVvrP4GaQnQKBgQCL\nLn4sd8W9E71m68F3FWKh5Dkndo0Vn7xX+B++Zt5Yvj1SW9WGP9mCgQGGGRt1jiJS\nTu4Cmkh3JYYFVmnCyuRQ0rwrj/Mu9EgQPdezOfPqJ4scyGRGwJCFMeyMm807XXG9\nzeLoc15xAcvnOPU4xRp62xHBhVt4Ey0H+eVSwxmYwwKBgQCemQ6rC7nLMcggR401\n1eurv4aBblvKDOQrr1Gvx2m/873H75mXmuV46t3L6yeXSI2i0SGJcWrA+Fmvm8PS\nIUrV0HqeBmlSbx781g63zKtsX9rXs4S0oDX1jCxsaGwNOJemq9J3LtvgvSb9UESx\nn0CleM+XspBrZKv1NpYjoqWeOw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@universityinternship-f96ef.iam.gserviceaccount.com",
+  "client_id": "108530751476998271200",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40universityinternship-f96ef.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

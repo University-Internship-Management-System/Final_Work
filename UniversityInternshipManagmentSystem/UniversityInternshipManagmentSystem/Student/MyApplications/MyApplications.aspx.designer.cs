@@ -42,6 +42,69 @@ namespace UniversityInternshipManagmentSystem.Student.MyApplications
         protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
+        /// pnlConfirmed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlConfirmed;
+
+        /// <summary>
+        /// litConfirmedTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litConfirmedTitle;
+
+        /// <summary>
+        /// litConfirmedCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litConfirmedCompany;
+
+        /// <summary>
+        /// pnlTrainingStart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlTrainingStart;
+
+        /// <summary>
+        /// litTrainingStart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litTrainingStart;
+
+        /// <summary>
+        /// pnlHistoryHead control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlHistoryHead;
+
+        /// <summary>
+        /// pnlList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlList;
+
+        /// <summary>
         /// rptApplications control.
         /// </summary>
         /// <remarks>

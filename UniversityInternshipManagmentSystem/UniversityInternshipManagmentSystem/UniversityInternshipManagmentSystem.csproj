@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -98,6 +98,7 @@
     <Content Include="About.aspx" />
     <Content Include="Academic\Dashboard.aspx" />
     <Content Include="Academic\Dashboard.css" />
+    <Content Include="App_Data\email-log.txt" />
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
     <Content Include="Assets\images\uj-logo.svg" />
@@ -245,6 +246,12 @@
     <Content Include="bin\roslyn\vbc.rsp" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <Content Include="bin\UniversityInternshipManagmentSystem.dll.config" />
+    <Content Include="App_Data\keys\cloudinary.json" />
+    <Content Include="App_Data\keys\firebase-admin.json" />
+    <Content Include="App_Data\keys\README.md" />
+    <Content Include="App_Data\completion-awaiting-admin-pass.test.json" />
+    <Content Include="App_Data\keys\firebase-admin.example.json" />
+    <Content Include="App_Data\keys\cloudinary.example.json" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -399,7 +406,10 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx.cs"><DependentUpon>CoordinatorAccount.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
+    <Compile Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx.cs">
+      <DependentUpon>CoordinatorAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Academic\FinalEvaluation\FinalEvaluation.aspx.cs">
       <DependentUpon>FinalEvaluation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -469,6 +479,8 @@
       <DependentUpon>SupervisorAccount.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\EmailSender.cs" />
+    <Compile Include="Config\TeamKeys.cs" />
+    <Compile Include="Config\DeadlineReminders.cs" />
     <Compile Include="Config\Notify.cs" />
     <Compile Include="Config\EmailVerification.cs" />
     <Compile Include="Config\FirebaseAdmin.cs" />
@@ -676,6 +688,7 @@
     <Content Include="Student\Tests\Verify-EditProfile.ps1" />
     <Content Include="Student\Tests\Verify-StudentAuthentication.ps1" />
     <Content Include="Student\Tests\Verify-StudentModule.ps1" />
+    <Content Include="secrets.config.example" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -741,4 +754,26 @@
     <Compile Include="ContactUs\ContactPage\ContactService.cs" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="PoweredBy\images\abdallah.jpg" />
+    <Content Include="PoweredBy\images\alaa.jpg" />
+    <Content Include="PoweredBy\images\lujain.png" />
+    <Content Include="PoweredBy\images\marwa.jpg" />
+    <Content Include="PoweredBy\images\omar.jpg" />
+    <Content Include="PoweredBy\images\orange-logo.svg" />
+    <Content Include="PoweredBy\images\portrait-placeholder.svg" />
+    <Content Include="PoweredBy\images\university-logo.png" />
+    <Content Include="PoweredBy\images\wadea.jpg" />
+    <Content Include="PoweredBy\PoweredBy.aspx" />
+    <Content Include="PoweredBy\styles.css" />
+    <Content Include="PoweredBy\system-bootstrap.css" />
+    <Content Include="PoweredBy\system-shell.css" />
+    <Content Include="PoweredBy\system-shell.js" />
+    <Content Include="PoweredBy\team.js" />
+    <Content Include="PoweredBy\uims-theme.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\index-text-reveal.css" />
+    <Content Include="Scripts\index-text-reveal.js" />
+  </ItemGroup>
 </Project>
