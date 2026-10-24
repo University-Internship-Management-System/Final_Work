@@ -107,11 +107,7 @@
                 </div>
 
                 <span class="mp-state">
-                    <%: TrainingWeeksFinished
-                                ? "Awaiting university approval"
-                                : CurrentTrainingWeek.HasValue
-                                    ? "Week " + CurrentTrainingWeek.Value + " of 6"
-                                    : "Training schedule pending" %>
+                    <%: CompletedTrainingWeekCount + " of 6 weeks completed" %>
                 </span>
 
             </div>
@@ -135,9 +131,7 @@
 
                         <span class="mp-week-node">
                             <%:
-                                            TrainingWeeksFinished ||
-                                            (CurrentTrainingWeek.HasValue &&
-                                             week < CurrentTrainingWeek.Value)
+                                            IsJourneyWeekComplete(week)
                                                 ? "✓"
                                                 : week.ToString() %>
                         </span>
@@ -158,8 +152,8 @@
 
             <p class="mp-journey-note">
                 <%: TrainingWeeksFinished
-                            ? "Your training weeks are complete. Your result is awaiting approval from the university training coordinator."
-                            : "Your pass confirmation and certificate will appear after the university training coordinator approves your completion." %>
+                            ? "All assigned tasks for all six weeks have been submitted. Your pass confirmation still requires approval from the university training coordinator."
+                            : "A week is completed when all its assigned tasks are submitted. Your pass confirmation and certificate require university training coordinator approval." %>
             </p>
 
             <% } %>
