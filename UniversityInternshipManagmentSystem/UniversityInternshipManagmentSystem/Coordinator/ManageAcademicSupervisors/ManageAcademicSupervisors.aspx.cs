@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -30,12 +30,14 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         private Dictionary<string, AcademicSupervisor> records;
         private string EditingId { get; set; }
         private bool allowed, resetPage;
+        private const string PageUrl = "ManageAcademicSupervisors.aspx";
 
         protected void Page_Init(object sender, EventArgs e)
         {
             ViewStateUserKey = Session.SessionID;
         }
 
+        // Check coordinator access and load academic supervisors from Firebase.
         protected async void Page_Load(object sender, EventArgs e)
         {
             if (Session["userId"] == null)
@@ -46,6 +48,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             AuthHelper.RequireAuth(this, AuthHelper.RoleCoordinator);
             if (Response.IsRequestBeingRedirected) return;
             EditingId = Request.QueryString["edit"];
+            universityEmail.ReadOnly = EditingId != null;
             openEditor.Value = "0";
             notice.Visible = editorNotice.Visible = false;
             if (String.IsNullOrWhiteSpace(AuthHelper.IdToken) || AuthHelper.IdToken == "mock-token")
@@ -81,12 +84,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             BindDirectory();
-            addSupervisor.NavigateUrl = "ManageAcademicSupervisors.aspx?add=1&q=" + Server.UrlEncode(supervisorSearch.Text);
+            addSupervisor.NavigateUrl = DirectoryUrl() + "&add=1";
             // Request a partial update while typing. The filtering runs below in C#.
             supervisorSearch.Attributes["oninput"] = "clearTimeout(window.academicSearchTimer);window.academicSearchTimer=setTimeout(function(){__doPostBack('"
                 + supervisorSearch.UniqueID + "','');},300);";
         }
 
+        // Search the loaded records and show eight supervisors per page.
         private void BindDirectory()
         {
             var rows = new List<AcademicSupervisor>();
@@ -98,25 +102,34 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             int page;
             Int32.TryParse(Request.QueryString["page"], out page);
-            page = resetPage ? 1 : Math.Max(1, Math.Min(page, (rows.Count + 7) / 8));
+            int totalPages = (int)Math.Ceiling(rows.Count / 8.0);
+            if (page > totalPages) page = totalPages;
+            if (page < 1 || resetPage) page = 1;
             directory.DataSource = rows.Skip((page - 1) * 8).Take(8);
             directory.DataBind();
             total.Text = records.Count.ToString();
             emptyDirectory.Visible = rows.Count == 0;
-            pageSummary.Text = rows.Count == 0 ? "0 results" : "Page " + page + " of " + ((rows.Count + 7) / 8) + " · " + rows.Count + " results";
+            pageSummary.Text = rows.Count == 0 ? "0 results" : "Page " + page + " of " + totalPages + " · " + rows.Count + " results";
             previousPage.Visible = page > 1;
             nextPage.Visible = page * 8 < rows.Count;
-            previousPage.NavigateUrl = "ManageAcademicSupervisors.aspx?page=" + (page - 1) + "&q=" + Server.UrlEncode(supervisorSearch.Text);
-            nextPage.NavigateUrl = "ManageAcademicSupervisors.aspx?page=" + (page + 1) + "&q=" + Server.UrlEncode(supervisorSearch.Text);
+            previousPage.NavigateUrl = DirectoryUrl() + "&page=" + (page - 1);
+            nextPage.NavigateUrl = DirectoryUrl() + "&page=" + (page + 1);
         }
 
         protected void SearchChanged(object sender, EventArgs e) { resetPage = true; }
 
         protected string EditUrl(string id)
         {
-            return "ManageAcademicSupervisors.aspx?edit=" + Server.UrlEncode(id) + "&q=" + Server.UrlEncode(supervisorSearch.Text);
+            return DirectoryUrl() + "&edit=" + Server.UrlEncode(id);
         }
 
+        // Keep the search when opening Add, Edit or another results page.
+        private string DirectoryUrl()
+        {
+            return PageUrl + "?q=" + Server.UrlEncode(supervisorSearch.Text);
+        }
+
+        // Add generates a password; Edit fills the same form with existing details.
         private void OpenEditor()
         {
             if (EditingId != null && !records.ContainsKey(EditingId)) { Tell("This supervisor no longer exists."); return; }
@@ -127,9 +140,10 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             fullName.Text = person.Name;
             email.Text = person.Email;
             email.ReadOnly = true;
-            universityEmail.Text = person.UniversityEmail;
+            universityEmail.Text = person.Email;
             string number = person.PhoneNumber ?? "";
-            phone.Text = number.StartsWith("+9627") && number.Length == 13 ? "0" + number.Substring(4) : number;
+            if (number.StartsWith("+9627") && number.Length == 13) number = "0" + number.Substring(4);
+            phone.Text = number;
             if (major.Items.FindByValue(person.Major) == null && !String.IsNullOrWhiteSpace(person.Major))
                 major.Items.Add(new ListItem(person.Major, person.Major));
             major.SelectedValue = person.Major ?? "";
@@ -147,34 +161,25 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             openEditor.Value = "1";
         }
 
+        // Read the form, check the details and duplicates, then save.
         protected async void SaveClick(object sender, EventArgs e)
         {
             if (!allowed) return;
             openEditor.Value = "1";
+            if (EditingId == null && !String.Equals(email.Text.Trim(), universityEmail.Text.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                Tell("The email addresses do not match. Re-enter the same email address.");
+                return;
+            }
             var person = new AcademicSupervisor
             {
                 Name = fullName.Text.Trim(), Email = email.Text.Trim(),
                 UniversityEmail = email.Text.Trim(), Major = major.SelectedValue,
                 PhoneNumber = phone.Text.Trim(), Role = "AcademicSupervisor", FirstLogin = true, ProfilePicUrl = ""
             };
-            if (person.Name.Length < 2 || person.Name.Length > 100 || !ValidEmail(person.Email) || person.Major == "")
-            {
-                Tell("Enter a name, a valid university email, and select a major.");
-                return;
-            }
-            if (!Regex.IsMatch(person.PhoneNumber, @"\A07[0-9]{8}\z"))
-            {
-                Tell("Enter a 10-digit mobile number starting with 07, for example 0791234567.");
-                return;
-            }
             string id = EditingId;
-            if (id != null && !records.ContainsKey(id)) { Tell("This supervisor no longer exists."); return; }
-            if (records.Any(item => item.Key != id && (String.Equals(item.Value.Email, person.Email, StringComparison.OrdinalIgnoreCase)
-                || String.Equals(item.Value.UniversityEmail, person.UniversityEmail, StringComparison.OrdinalIgnoreCase))))
-            {
-                Tell("A supervisor with this login or university email already exists.");
-                return;
-            }
+            string error = ValidateSupervisor(person, id);
+            if (error != null) { Tell(error); return; }
             string createdToken = null, verifyResult = null, mailResult = null;
             try
             {
@@ -223,6 +228,26 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             Response.Redirect("ManageAcademicSupervisors.aspx?saved=1" + (verifyResult == null ? "" : "&verify=" + verifyResult) + (mailResult == null ? "" : "&mail=" + mailResult), false);
             Context.ApplicationInstance.CompleteRequest();
+        }
+
+        // Check the form before creating or updating a supervisor.
+        private string ValidateSupervisor(AcademicSupervisor person, string id)
+        {
+            string detailsError = "Enter a name, a valid university email, and select a major.";
+            if (person.Name.Length < 2 || person.Name.Length > 100) return detailsError;
+            if (!ValidEmail(person.Email) || person.Major == "") return detailsError;
+            if (!Regex.IsMatch(person.PhoneNumber, @"\A07[0-9]{8}\z"))
+                return "Enter a 10-digit mobile number starting with 07, for example 0791234567.";
+            if (id != null && !records.ContainsKey(id)) return "This supervisor no longer exists.";
+            foreach (var existing in records)
+            {
+                if (existing.Key == id) continue;
+                bool loginUsed = String.Equals(existing.Value.Email, person.Email, StringComparison.OrdinalIgnoreCase);
+                bool universityUsed = String.Equals(existing.Value.UniversityEmail, person.UniversityEmail, StringComparison.OrdinalIgnoreCase);
+                if (loginUsed || universityUsed)
+                    return "A supervisor with this login or university email already exists.";
+            }
+            return null;
         }
 
         private static bool ValidEmail(string value)

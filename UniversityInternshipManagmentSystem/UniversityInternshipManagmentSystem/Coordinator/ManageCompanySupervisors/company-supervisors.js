@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
     'use strict';
     const editor = document.getElementById('companyModal');
     function showEditor() {
@@ -14,12 +14,5 @@
     ['companySavedModal', 'companyConfirmModal'].forEach(id => {
         const modal = document.getElementById(id);
         if (modal && window.bootstrap) bootstrap.Modal.getOrCreateInstance(modal).show();
-    });
-    // "Confirmed email" is read-only and always shows the login email while it is typed
-    document.addEventListener('input', event => {
-        const id = event.target.id || '';
-        if (id !== 'loginEmail' && !id.endsWith('_loginEmail')) return;
-        const confirmedBox = document.querySelector('input[id$="companyEmail"]');
-        if (confirmedBox) confirmedBox.value = event.target.value.trim();
     });
 })();

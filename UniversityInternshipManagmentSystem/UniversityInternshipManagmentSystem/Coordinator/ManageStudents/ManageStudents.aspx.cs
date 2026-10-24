@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.IO;
-using System.Web;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Security.Cryptography;
@@ -32,6 +31,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         protected DropDownList majorFilter, studentMajor, academicSupervisor, phoneCountry;
         protected Button saveButton, searchButton;
         protected HiddenField openEditor;
+        // Loaded Firebase records, indexed by their IDs.
         private Dictionary<string, StudentModel> records;
         private Dictionary<string, AcademicSupervisor> supervisors;
         protected FileUpload importFile;
@@ -45,11 +45,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         private string EditingId { get; set; }
         private bool resetPage;
 
+        // Keep posted forms tied to the current session.
         protected void Page_Init(object sender, EventArgs e)
         {
             ViewStateUserKey = Session.SessionID;
         }
 
+        // Check access, load Firebase records, then open Add, Edit or Import.
         protected async void Page_Load(object sender, EventArgs e)
         {
             if (Session["userId"] == null)
@@ -65,6 +67,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 return;
             }
             EditingId = Request.QueryString["edit"];
+            universityEmail.ReadOnly = EditingId != null;
             openEditor.Value = "0";
             openImport.Value = "0";
             importNotice.Visible = false;
@@ -85,19 +88,17 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 foreach (var item in records) item.Value.Id = item.Key;
                 foreach (var item in supervisors) item.Value.Id = item.Key;
                 allowed = workspace.Visible = addStudent.Visible = true;
-                if (!IsPostBack && Request.QueryString["import"] == "1") openImport.Value = "1";
-                if (!IsPostBack)
+                if (IsPostBack) return;
+                if (Request.QueryString["import"] == "1") openImport.Value = "1";
+                studentSearch.Text = Request.QueryString["q"] ?? "";
+                string major = Request.QueryString["major"] ?? "";
+                if (majorFilter.Items.FindByValue(major) != null) majorFilter.SelectedValue = major;
+                if (EditingId != null) EditStudent(EditingId);
+                else if (Request.QueryString["add"] == "1") AddClick(sender, e);
+                if (Request.QueryString["saved"] == "1")
                 {
-                    studentSearch.Text = Request.QueryString["q"] ?? "";
-                    if (majorFilter.Items.FindByValue(Request.QueryString["major"] ?? "") != null)
-                        majorFilter.SelectedValue = Request.QueryString["major"] ?? "";
-                    if (EditingId != null) EditStudent(EditingId);
-                    else if (Request.QueryString["add"] == "1") AddClick(sender, e);
-                    if (Request.QueryString["saved"] == "1")
-                    {
-                        savedPanel.Visible = true;
-                        savedMessage.Text = "Student saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]) + Notify.AccountMailMessage(Request.QueryString["mail"]);
-                    }
+                    savedPanel.Visible = true;
+                    savedMessage.Text = "Student saved successfully." + EmailVerification.MessageFor(Request.QueryString["verify"]) + Notify.AccountMailMessage(Request.QueryString["mail"]);
                 }
             }
             catch
@@ -107,6 +108,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
         }
 
+        // Refresh controls after the button events have finished.
         protected void Page_PreRender(object sender, EventArgs e)
         {
             if (!allowed) return;
@@ -115,8 +117,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             importSupervisors.DataBind();
             phoneNumber.MaxLength = Int32.Parse(phoneCountry.SelectedItem.Attributes["data-length"]);
             phoneHelp.Text = "Enter " + phoneCountry.SelectedItem.Attributes["data-digits"] + " digits, without the country code or leading zero.";
-            addStudent.NavigateUrl = "ManageStudents.aspx?add=1&q=" + Server.UrlEncode(studentSearch.Text)
-                + "&major=" + Server.UrlEncode(majorFilter.SelectedValue);
+            addStudent.NavigateUrl = DirectoryUrl() + "&add=1";
             // The input starts a partial postback; filtering itself stays in C#.
             studentSearch.Attributes["oninput"] = "clearTimeout(window.studentSearchTimer);window.studentSearchTimer=setTimeout(function(){__doPostBack('"
                 + studentSearch.UniqueID + "','');},300);";
@@ -137,10 +138,12 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             int page;
             Int32.TryParse(Request.QueryString["page"], out page);
-            page = resetPage ? 1 : Math.Max(1, Math.Min(page, (rows.Count + 7) / 8));
+            int totalPages = (int)Math.Ceiling(rows.Count / 8.0);
+            if (page > totalPages) page = totalPages;
+            if (page < 1 || resetPage) page = 1;
             students.DataSource = rows.Skip((page - 1) * 8).Take(8);
-            pageSummary.Text = rows.Count == 0 ? "0 results" : "Page " + page + " of " + ((rows.Count + 7) / 8) + " · " + rows.Count + " results";
-            string filter = "ManageStudents.aspx?q=" + Server.UrlEncode(studentSearch.Text) + "&major=" + Server.UrlEncode(majorFilter.SelectedValue);
+            pageSummary.Text = rows.Count == 0 ? "0 results" : "Page " + page + " of " + totalPages + " · " + rows.Count + " results";
+            string filter = DirectoryUrl();
             previousPage.NavigateUrl = filter + "&page=" + (page - 1);
             nextPage.NavigateUrl = filter + "&page=" + (page + 1);
             previousPage.Visible = page > 1;
@@ -157,15 +160,24 @@ namespace UniversityInternshipManagmentSystem.Coordinator
 
         protected string SupervisorName(string id)
         {
-            return supervisors.ContainsKey(id ?? "") ? supervisors[id].Name : "Not assigned";
+            AcademicSupervisor person;
+            if (supervisors.TryGetValue(id ?? "", out person)) return person.Name;
+            return "Not assigned";
         }
 
         protected string EditUrl(string id)
         {
-            return "ManageStudents.aspx?edit=" + Server.UrlEncode(id)
-                + "&q=" + Server.UrlEncode(studentSearch.Text) + "&major=" + Server.UrlEncode(majorFilter.SelectedValue);
+            return DirectoryUrl() + "&edit=" + Server.UrlEncode(id);
         }
 
+        // Keep the current search and major when opening Add, Edit or another page.
+        private string DirectoryUrl()
+        {
+            return "ManageStudents.aspx?q=" + Server.UrlEncode(studentSearch.Text)
+                + "&major=" + Server.UrlEncode(majorFilter.SelectedValue);
+        }
+
+        // The selected major decides which academic supervisors are listed.
         private void PopulateSupervisors()
         {
             string selected = academicSupervisor.SelectedValue;
@@ -176,9 +188,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     academicSupervisor.Items.Add(new ListItem(person.Name, person.Id));
             if (academicSupervisor.Items.FindByValue(selected) != null) academicSupervisor.SelectedValue = selected;
             academicSupervisor.Enabled = studentMajor.SelectedValue != "" && academicSupervisor.Items.Count > 1;
-            supervisorHelp.Text = studentMajor.SelectedValue == "" ? "Choose a major first."
-                : academicSupervisor.Enabled ? "Only supervisors with the same major are listed."
-                : "No matching supervisor is available. Create one before saving the student.";
+            if (studentMajor.SelectedValue == "") supervisorHelp.Text = "Choose a major first.";
+            else if (academicSupervisor.Enabled) supervisorHelp.Text = "Only supervisors with the same major are listed.";
+            else supervisorHelp.Text = "No matching supervisor is available. Create one before saving the student.";
         }
 
         protected void PhoneCountryChanged(object sender, EventArgs e)
@@ -193,6 +205,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             openEditor.Value = "1";
         }
 
+        // Open an empty form for a new student.
         protected void AddClick(object sender, EventArgs e)
         {
             if (!allowed) return;
@@ -214,6 +227,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             openEditor.Value = "1";
         }
 
+        // Fill the same form with an existing student.
         private void EditStudent(string id)
         {
             StudentModel student;
@@ -227,9 +241,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             studentName.Text = student.Name;
             loginEmail.Text = student.Email;
             loginEmail.ReadOnly = true;
-            universityEmail.Text = student.UniEmail;
+            universityEmail.Text = student.Email;
             string phone = Regex.Replace(student.PhoneNumber ?? "", @"[ ()-]", "");
-            var country = phoneCountry.Items.Cast<ListItem>().FirstOrDefault(item => phone.StartsWith(item.Value));
+            ListItem country = FindCountry(phone);
             if (country != null) phoneCountry.SelectedValue = country.Value;
             if (country != null) phone = phone.Substring(country.Value.Length);
             else if (phone.StartsWith("0")) phone = phone.Substring(1);
@@ -251,13 +265,20 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             openEditor.Value = "1";
-            double grade;
-            if (!Double.TryParse(gpa.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out grade)) grade = Double.NaN;
+            if (EditingId == null && !String.Equals(loginEmail.Text.Trim(), universityEmail.Text.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                ShowMessage("The email addresses do not match. Re-enter the same email address.");
+                return;
+            }
             var student = new StudentModel
             {
-                Name = studentName.Text.Trim(), Email = loginEmail.Text.Trim(), UniEmail = universityEmail.Text.Trim(),
+                Name = studentName.Text.Trim(),
+                Email = loginEmail.Text.Trim(),
+                UniEmail = loginEmail.Text.Trim(),
                 PhoneNumber = phoneCountry.SelectedValue + Regex.Replace(phoneNumber.Text.Trim(), @"[ ()-]", ""),
-                Major = studentMajor.SelectedValue, AcademicSupervisorId = academicSupervisor.SelectedValue, GPA = grade
+                Major = studentMajor.SelectedValue,
+                AcademicSupervisorId = academicSupervisor.SelectedValue,
+                GPA = ReadGpa(gpa.Text)
             };
             string error = ValidateStudent(student, EditingId);
             if (error != null) { ShowMessage(error); return; }
@@ -284,27 +305,40 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             Context.ApplicationInstance.CompleteRequest();
         }
 
-
-        // Both the form and the CSV import use these same rules.
+        // Check details, phone, major/supervisor and duplicate emails for both Add and Import.
         private string ValidateStudent(StudentModel student, string editingId = null)
         {
-            if (student.Name.Length < 2 || student.Name.Length > 100 || !ValidEmail(student.Email) || !ValidEmail(student.UniEmail)
-                || !(student.GPA >= 0 && student.GPA <= 4))
-                return "Enter a name, valid emails, and a GPA between 0 and 4.";
-            ListItem country = phoneCountry.Items.Cast<ListItem>().FirstOrDefault(item => student.PhoneNumber.StartsWith(item.Value));
-            if (country == null || !Regex.IsMatch(student.PhoneNumber.Substring(country.Value.Length),
-                @"\A(?:" + country.Attributes["data-pattern"] + @")\z"))
-                return "Enter a valid mobile number with a supported country code and no leading zero after the code.";
+            string detailsError = "Enter a name, a valid email, and a GPA between 0 and 4.";
+            if (student.Name.Length < 2 || student.Name.Length > 100) return detailsError;
+            if (!ValidEmail(student.Email)) return detailsError;
+            if (Double.IsNaN(student.GPA) || student.GPA < 0 || student.GPA > 4) return detailsError;
+            ListItem country = FindCountry(student.PhoneNumber);
+            string phoneError = "Enter a valid mobile number with a supported country code and no leading zero after the code.";
+            if (country == null) return phoneError;
+            string localNumber = student.PhoneNumber.Substring(country.Value.Length);
+            string pattern = @"\A(?:" + country.Attributes["data-pattern"] + @")\z";
+            if (!Regex.IsMatch(localNumber, pattern)) return phoneError;
             AcademicSupervisor supervisor;
             if (studentMajor.Items.FindByValue(student.Major) == null || student.Major == ""
                 || !supervisors.TryGetValue(student.AcademicSupervisorId ?? "", out supervisor)
                 || !String.Equals(supervisor.Major, student.Major, StringComparison.OrdinalIgnoreCase))
                 return "Choose an academic supervisor with the same major.";
             if (editingId != null && !records.ContainsKey(editingId)) return "Student no longer exists.";
-            if (records.Any(item => item.Key != editingId && (SameEmail(item.Value.Email, student.Email)
-                || SameEmail(item.Value.UniEmail, student.UniEmail) || SameEmail(item.Value.Email, student.UniEmail)
-                || SameEmail(item.Value.UniEmail, student.Email))))
-                return "A student with this login or university email already exists.";
+            foreach (var existing in records)
+            {
+                if (existing.Key == editingId) continue;
+                string[] storedEmails = { existing.Value.Email, existing.Value.UniEmail };
+                foreach (string email in storedEmails)
+                    if (SameEmail(email, student.Email))
+                        return "A student with this login or university email already exists.";
+            }
+            return null;
+        }
+
+        private ListItem FindCountry(string phone)
+        {
+            foreach (ListItem country in phoneCountry.Items)
+                if (phone.StartsWith(country.Value)) return country;
             return null;
         }
 
@@ -404,6 +438,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             if (!downloadingTemplate) base.Render(writer);
         }
 
+        // Read the file and check each row. This step creates no accounts.
         protected void PreviewImport(object sender, EventArgs e)
         {
             if (!allowed) return;
@@ -427,13 +462,17 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 {
                     string[] cells = lines[index];
                     if (cells.Length != 8) throw new FormatException("Row " + (index + 1) + ": expected 8 columns. Use the template.");
-                    double grade;
-                    if (!Double.TryParse(cells[6], NumberStyles.Number, CultureInfo.InvariantCulture, out grade)) grade = Double.NaN;
-                    var matches = supervisors.Values.Where(person => SameEmail(person.Email, cells[7]) || SameEmail(person.UniversityEmail, cells[7])).ToList();
-                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[2],
-                        PhoneNumber = (cells[3].StartsWith("+") ? cells[3] : "+" + cells[3]) + cells[4], Major = cells[5], GPA = grade,
+                    var matches = new List<AcademicSupervisor>();
+                    foreach (var person in supervisors.Values)
+                        if (SameEmail(person.Email, cells[7]) || SameEmail(person.UniversityEmail, cells[7])) matches.Add(person);
+                    string countryCode = cells[3];
+                    if (!countryCode.StartsWith("+")) countryCode = "+" + countryCode;
+                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[1],
+                        PhoneNumber = countryCode + cells[4], Major = cells[5], GPA = ReadGpa(cells[6]),
                         AcademicSupervisorId = matches.Count == 1 ? matches[0].Id : "" };
                     string error = ValidateStudent(student);
+                    if (error == null && !SameEmail(cells[1], cells[2]))
+                        error = "ConfirmedEmail is required and must match UniversityEmail.";
                     if (matches.Count != 1) error = "Supervisor email must match exactly one existing academic supervisor.";
                     if (emails.Contains(student.Email) || emails.Contains(student.UniEmail)) error = "Email is repeated in this file.";
                     emails.Add(student.Email);
@@ -451,6 +490,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             catch { ImportMessage("Could not read this file. Use the CSV template and try again."); }
         }
 
+        // Recheck the saved preview, then create each student using the existing account method.
         protected async void ConfirmImport(object sender, EventArgs e)
         {
             if (!allowed) return;
@@ -485,8 +525,10 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             importRows.DataSource = rows;
             importRows.DataBind();
             int failed = rows.Count(row => row.Error != null);
-            importSummary.Text = completed ? (rows.Count - failed) + " created · " + failed + " not created. Do not re-import successful rows."
-                : rows.Count + " students · " + failed + " rows need correction. No accounts have been created yet.";
+            if (completed)
+                importSummary.Text = (rows.Count - failed) + " created · " + failed + " not created. Do not re-import successful rows.";
+            else
+                importSummary.Text = rows.Count + " students · " + failed + " rows need correction. No accounts have been created yet.";
             confirmImport.Visible = !completed && failed == 0;
         }
 
@@ -508,6 +550,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             for (int index = 0; index < text.Length; index++)
             {
                 char letter = text[index];
+                // Quoted cells may contain commas or line breaks.
                 if (quoted)
                 {
                     if (letter != '"') field.Append(letter);
@@ -516,6 +559,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     continue;
                 }
                 if (letter == '"' && field.Length == 0 && !closedQuote) { quoted = true; continue; }
+                // Outside quotes, finish the cell or row.
                 if (letter == separator || letter == '\r' || letter == '\n')
                 {
                     cells.Add(field.ToString().Trim());
@@ -536,6 +580,14 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             }
             if (quoted) throw new FormatException("A quoted CSV field was not closed.");
             return rows;
+        }
+
+        // Add and CSV import use the same GPA conversion.
+        private static double ReadGpa(string text)
+        {
+            double grade;
+            if (Double.TryParse(text, NumberStyles.Number, CultureInfo.InvariantCulture, out grade)) return grade;
+            return Double.NaN;
         }
 
         private static bool ValidEmail(string value)

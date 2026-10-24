@@ -32,7 +32,7 @@
       "PortfolioUrl": "",
       "ProfilePicUrl": "",
       "Role": "Student",
-      "UniEmail": "2021902134@gmail.com"
+      "UniEmail": "batool@gmail.com"
     },
     "IIGF9MnxxDUrka0w52ceUEHJ4ij1": {
       "AcademicSupervisorId": "z4ihiWQDGPMdESGPUIVUae18i3B3",
@@ -68,7 +68,7 @@
         "ASP.NET",
         "SQL"
       ],
-      "UniEmail": "wadea@ju.edu.jo"
+      "UniEmail": "wadea@example.com"
     },
     "student_test_001": {
       "AcademicSupervisorId": "QWXBdWr67Na9px8LdfXQkUO9fZp1",
@@ -88,7 +88,7 @@
         "JavaScript",
         "SQL"
       ],
-      "UniEmail": "student1@ju.edu.jo"
+      "UniEmail": "student1@test.com"
     },
     "student_test_002": {
       "AcademicSupervisorId": "academic_test_001",
@@ -107,7 +107,7 @@
         "Java",
         "HTML"
       ],
-      "UniEmail": "student2@ju.edu.jo"
+      "UniEmail": "student2@test.com"
     },
     "student_test_003": {
       "AcademicSupervisorId": "academic_test_001",
@@ -126,7 +126,7 @@
         "Python",
         "SQL"
       ],
-      "UniEmail": "student3@ju.edu.jo"
+      "UniEmail": "student3@test.com"
     },
     "student_test_004": {
       "AcademicSupervisorId": "academic_test_002",
@@ -145,7 +145,7 @@
         "R",
         "Excel"
       ],
-      "UniEmail": "student4@ju.edu.jo"
+      "UniEmail": "student4@test.com"
     },
     "student_test_005": {
       "AcademicSupervisorId": "academic_test_002",
@@ -164,7 +164,7 @@
         "Dart",
         "Flutter"
       ],
-      "UniEmail": "student5@ju.edu.jo"
+      "UniEmail": "student5@test.com"
     },
     "student_test_006": {
       "AcademicSupervisorId": "academic_test_002",
@@ -183,7 +183,7 @@
         "Java",
         "Git"
       ],
-      "UniEmail": "student6@ju.edu.jo"
+      "UniEmail": "student6@test.com"
     },
     "student_test_007": {
       "AcademicSupervisorId": "Ux24MXb3Bqay2XzY7iilDemc8I62",
@@ -203,7 +203,7 @@
         "Testing",
         "Spring"
       ],
-      "UniEmail": "dalia.7@ju.edu.jo"
+      "UniEmail": "dalia.7@test.com"
     },
     "student_test_008": {
       "AcademicSupervisorId": "aTkDKaIFPLhOml5gQZo1Ntjhop82",
@@ -223,7 +223,7 @@
         "UML",
         "Testing"
       ],
-      "UniEmail": "ali.8@ju.edu.jo"
+      "UniEmail": "ali.8@test.com"
     },
     "student_test_009": {
       "AcademicSupervisorId": "academic_test_001",
@@ -243,7 +243,7 @@
         "Embedded",
         "C"
       ],
-      "UniEmail": "fares.9@ju.edu.jo"
+      "UniEmail": "fares.9@test.com"
     },
     "student_test_010": {
       "AcademicSupervisorId": "QWXBdWr67Na9px8LdfXQkUO9fZp1",
@@ -263,7 +263,7 @@
         "Embedded",
         "C"
       ],
-      "UniEmail": "bilal.10@ju.edu.jo"
+      "UniEmail": "bilal.10@test.com"
     },
     "student_test_011": {
       "AcademicSupervisorId": "academic_test_002",
@@ -283,7 +283,7 @@
         "JavaScript",
         "SQL"
       ],
-      "UniEmail": "nour.11@ju.edu.jo"
+      "UniEmail": "nour.11@test.com"
     },
     "student_test_012": {
       "AcademicSupervisorId": "academic_test_003",
@@ -303,7 +303,7 @@
         "Embedded",
         "Linux"
       ],
-      "UniEmail": "maya.12@ju.edu.jo"
+      "UniEmail": "maya.12@test.com"
     },
     "student_test_013": {
       "AcademicSupervisorId": "academic_test_004",
@@ -323,7 +323,7 @@
         "R",
         "Excel"
       ],
-      "UniEmail": "hamza.13@ju.edu.jo"
+      "UniEmail": "hamza.13@test.com"
     },
     "student_test_014": {
       "AcademicSupervisorId": "Ux24MXb3Bqay2XzY7iilDemc8I62",
@@ -343,7 +343,7 @@
         "Power BI",
         "ERP"
       ],
-      "UniEmail": "sara.14@ju.edu.jo"
+      "UniEmail": "sara.14@test.com"
     },
     "student_test_015": {
       "AcademicSupervisorId": "aTkDKaIFPLhOml5gQZo1Ntjhop82",
@@ -363,7 +363,7 @@
         "SQL",
         "ERP"
       ],
-      "UniEmail": "rami.15@ju.edu.jo"
+      "UniEmail": "rami.15@test.com"
     },
     "student_test_016": {
       "AcademicSupervisorId": "academic_test_001",
@@ -383,7 +383,7 @@
         "Power BI",
         "SQL"
       ],
-      "UniEmail": "nour.16@ju.edu.jo"
+      "UniEmail": "nour.16@test.com"
     },
     "student_test_017": {
       "AcademicSupervisorId": "QWXBdWr67Na9px8LdfXQkUO9fZp1",
@@ -403,7 +403,7 @@
         "C",
         "Embedded"
       ],
-      "UniEmail": "ruba.17@ju.edu.jo"
+      "UniEmail": "ruba.17@test.com"
     },
     "student_test_018": {
       "AcademicSupervisorId": "academic_test_002",
@@ -423,7 +423,7 @@
         "JavaScript",
         "Python"
       ],
-      "UniEmail": "abeer.18@ju.edu.jo"
+      "UniEmail": "abeer.18@test.com"
     },
     "student_test_019": {
       "AcademicSupervisorId": "academic_test_003",
@@ -443,7 +443,7 @@
         "Python",
         "Git"
       ],
-      "UniEmail": "lina.19@ju.edu.jo"
+      "UniEmail": "lina.19@test.com"
     },
     "student_test_020": {
       "AcademicSupervisorId": "academic_test_004",
@@ -463,7 +463,7 @@
         "Python",
         "Networking"
       ],
-      "UniEmail": "noor.20@ju.edu.jo"
+      "UniEmail": "noor.20@test.com"
     },
     "student_test_021": {
       "AcademicSupervisorId": "Ux24MXb3Bqay2XzY7iilDemc8I62",
@@ -483,7 +483,7 @@
         "Embedded",
         "Networking"
       ],
-      "UniEmail": "nour.21@ju.edu.jo"
+      "UniEmail": "nour.21@test.com"
     },
     "student_test_022": {
       "AcademicSupervisorId": "aTkDKaIFPLhOml5gQZo1Ntjhop82",
@@ -503,7 +503,7 @@
         "Power BI",
         "Excel"
       ],
-      "UniEmail": "sami.22@ju.edu.jo"
+      "UniEmail": "sami.22@test.com"
     },
     "student_test_023": {
       "AcademicSupervisorId": "academic_test_001",
@@ -523,7 +523,7 @@
         "Testing",
         "UML"
       ],
-      "UniEmail": "hadi.23@ju.edu.jo"
+      "UniEmail": "hadi.23@test.com"
     },
     "student_test_024": {
       "AcademicSupervisorId": "QWXBdWr67Na9px8LdfXQkUO9fZp1",
@@ -543,7 +543,7 @@
         "Python",
         "JavaScript"
       ],
-      "UniEmail": "fadi.24@ju.edu.jo"
+      "UniEmail": "fadi.24@test.com"
     },
     "student_test_025": {
       "AcademicSupervisorId": "academic_test_002",
@@ -563,7 +563,7 @@
         "Git",
         "C#"
       ],
-      "UniEmail": "hiba.25@ju.edu.jo"
+      "UniEmail": "hiba.25@test.com"
     },
     "student_test_026": {
       "AcademicSupervisorId": "academic_test_003",
@@ -583,7 +583,7 @@
         "Excel",
         "Pandas"
       ],
-      "UniEmail": "tala.26@ju.edu.jo"
+      "UniEmail": "tala.26@test.com"
     },
     "student_test_027": {
       "AcademicSupervisorId": "academic_test_004",
@@ -603,7 +603,7 @@
         "Git",
         "SQL"
       ],
-      "UniEmail": "maya.27@ju.edu.jo"
+      "UniEmail": "maya.27@test.com"
     },
     "student_test_028": {
       "AcademicSupervisorId": "Ux24MXb3Bqay2XzY7iilDemc8I62",
@@ -623,7 +623,7 @@
         "C",
         "Linux"
       ],
-      "UniEmail": "nour.28@ju.edu.jo"
+      "UniEmail": "nour.28@test.com"
     },
     "student_test_029": {
       "AcademicSupervisorId": "aTkDKaIFPLhOml5gQZo1Ntjhop82",
@@ -643,7 +643,7 @@
         "Python",
         "Git"
       ],
-      "UniEmail": "ziad.29@ju.edu.jo"
+      "UniEmail": "ziad.29@test.com"
     },
     "student_test_030": {
       "AcademicSupervisorId": "academic_test_001",
@@ -663,7 +663,7 @@
         "SQL",
         "C#"
       ],
-      "UniEmail": "layla.30@ju.edu.jo"
+      "UniEmail": "layla.30@test.com"
     },
     "student_test_031": {
       "AcademicSupervisorId": "QWXBdWr67Na9px8LdfXQkUO9fZp1",
@@ -683,7 +683,7 @@
         "ERP",
         "Excel"
       ],
-      "UniEmail": "salma.31@ju.edu.jo"
+      "UniEmail": "salma.31@test.com"
     },
     "student_test_032": {
       "AcademicSupervisorId": "z4ihiWQDGPMdESGPUIVUae18i3B3",
@@ -703,7 +703,7 @@
         "C#",
         "SQL"
       ],
-      "UniEmail": "abeer.32@ju.edu.jo"
+      "UniEmail": "abeer.32@test.com"
     },
     "student_test_033": {
       "AcademicSupervisorId": "academic_test_003",
@@ -723,7 +723,7 @@
         "C#",
         "JavaScript"
       ],
-      "UniEmail": "sami.33@ju.edu.jo"
+      "UniEmail": "sami.33@test.com"
     },
     "student_test_034": {
       "AcademicSupervisorId": "academic_test_004",
@@ -743,7 +743,7 @@
         "Git",
         "UML"
       ],
-      "UniEmail": "adam.34@ju.edu.jo"
+      "UniEmail": "adam.34@test.com"
     },
     "student_test_035": {
       "AcademicSupervisorId": "Ux24MXb3Bqay2XzY7iilDemc8I62",
@@ -763,7 +763,7 @@
         "Excel",
         "Python"
       ],
-      "UniEmail": "khaled.35@ju.edu.jo"
+      "UniEmail": "khaled.35@test.com"
     },
     "student_test_036": {
       "AcademicSupervisorId": "aTkDKaIFPLhOml5gQZo1Ntjhop82",
@@ -783,7 +783,7 @@
         "UML",
         "Git"
       ],
-      "UniEmail": "noor.36@ju.edu.jo"
+      "UniEmail": "noor.36@test.com"
     },
     "student_test_037": {
       "AcademicSupervisorId": "academic_test_001",
@@ -803,7 +803,7 @@
         "Embedded",
         "Networking"
       ],
-      "UniEmail": "jana.37@ju.edu.jo"
+      "UniEmail": "jana.37@test.com"
     },
     "student_test_038": {
       "AcademicSupervisorId": "QWXBdWr67Na9px8LdfXQkUO9fZp1",
@@ -823,7 +823,7 @@
         "Wireshark",
         "Networking"
       ],
-      "UniEmail": "lubna.38@ju.edu.jo"
+      "UniEmail": "lubna.38@test.com"
     },
     "student_test_039": {
       "AcademicSupervisorId": "academic_test_002",
@@ -843,7 +843,7 @@
         "Python",
         "R"
       ],
-      "UniEmail": "mira.39@ju.edu.jo"
+      "UniEmail": "mira.39@test.com"
     },
     "student_test_040": {
       "AcademicSupervisorId": "academic_test_003",
@@ -863,7 +863,7 @@
         "Git",
         "Spring"
       ],
-      "UniEmail": "layla.40@ju.edu.jo"
+      "UniEmail": "layla.40@test.com"
     },
     "student_test_041": {
       "AcademicSupervisorId": "academic_test_004",
@@ -883,7 +883,7 @@
         "UML",
         "Testing"
       ],
-      "UniEmail": "layla.41@ju.edu.jo"
+      "UniEmail": "layla.41@test.com"
     },
     "student_test_042": {
       "AcademicSupervisorId": "Ux24MXb3Bqay2XzY7iilDemc8I62",
@@ -903,7 +903,7 @@
         "JavaScript",
         "Python"
       ],
-      "UniEmail": "rami.42@ju.edu.jo"
+      "UniEmail": "rami.42@test.com"
     },
     "student_test_043": {
       "AcademicSupervisorId": "aTkDKaIFPLhOml5gQZo1Ntjhop82",
@@ -923,7 +923,7 @@
         "JavaScript",
         "Git"
       ],
-      "UniEmail": "fares.43@ju.edu.jo"
+      "UniEmail": "fares.43@test.com"
     },
     "student_test_044": {
       "AcademicSupervisorId": "academic_test_001",
@@ -943,7 +943,7 @@
         "UML",
         "Java"
       ],
-      "UniEmail": "tala.44@ju.edu.jo"
+      "UniEmail": "tala.44@test.com"
     },
     "student_test_045": {
       "AcademicSupervisorId": "z4ihiWQDGPMdESGPUIVUae18i3B3",
@@ -963,7 +963,7 @@
         "Excel",
         "SQL"
       ],
-      "UniEmail": "ruba.45@ju.edu.jo"
+      "UniEmail": "ruba.45@test.com"
     },
     "student_test_046": {
       "AcademicSupervisorId": "academic_test_002",
@@ -983,7 +983,7 @@
         "Excel",
         "SQL"
       ],
-      "UniEmail": "layla.46@ju.edu.jo"
+      "UniEmail": "layla.46@test.com"
     },
     "student_test_047": {
       "AcademicSupervisorId": "academic_test_003",
@@ -1003,7 +1003,7 @@
         "C#",
         "JavaScript"
       ],
-      "UniEmail": "shahd.47@ju.edu.jo"
+      "UniEmail": "shahd.47@test.com"
     },
     "student_test_048": {
       "AcademicSupervisorId": "academic_test_004",
@@ -1023,7 +1023,7 @@
         "Spring",
         "Testing"
       ],
-      "UniEmail": "zaid.48@ju.edu.jo"
+      "UniEmail": "zaid.48@test.com"
     },
     "student_test_049": {
       "AcademicSupervisorId": "Ux24MXb3Bqay2XzY7iilDemc8I62",
@@ -1043,7 +1043,7 @@
         "Power BI",
         "Excel"
       ],
-      "UniEmail": "noor.49@ju.edu.jo"
+      "UniEmail": "noor.49@test.com"
     },
     "tpwnmAxdbyPbGNXpkRYrTX5nlTS2": {
       "AcademicSupervisorId": "z4ihiWQDGPMdESGPUIVUae18i3B3",
@@ -1071,7 +1071,7 @@
       "FirstLogin": false,
       "PhoneNumber": "0791100050",
       "ProfilePicUrl": "",
-      "UniEmail": "ola.50@ju.edu.jo",
+      "UniEmail": "ola.50@test.com",
       "Major": "Computer Science",
       "CompanyId": "EbzaQRhbhYWO8acjrEXxX6Qa0Y92",
       "AcademicSupervisorId": "QWXBdWr67Na9px8LdfXQkUO9fZp1",
@@ -1091,7 +1091,7 @@
       "FirstLogin": false,
       "PhoneNumber": "0791100051",
       "ProfilePicUrl": "",
-      "UniEmail": "nizar.51@ju.edu.jo",
+      "UniEmail": "nizar.51@test.com",
       "Major": "Computer Science",
       "CompanyId": "EbzaQRhbhYWO8acjrEXxX6Qa0Y92",
       "AcademicSupervisorId": "QWXBdWr67Na9px8LdfXQkUO9fZp1",
@@ -1111,7 +1111,7 @@
       "FirstLogin": false,
       "PhoneNumber": "0791100052",
       "ProfilePicUrl": "",
-      "UniEmail": "dina.52@ju.edu.jo",
+      "UniEmail": "dina.52@test.com",
       "Major": "Computer Science",
       "CompanyId": "EbzaQRhbhYWO8acjrEXxX6Qa0Y92",
       "AcademicSupervisorId": "academic_test_004",
@@ -1131,7 +1131,7 @@
       "FirstLogin": false,
       "PhoneNumber": "0791100053",
       "ProfilePicUrl": "",
-      "UniEmail": "marah.53@ju.edu.jo",
+      "UniEmail": "marah.53@test.com",
       "Major": "Computer Science",
       "CompanyId": "o5OYxljgbxdPciDOX7lLnXmxsQB3",
       "AcademicSupervisorId": "academic_test_002",
@@ -1151,7 +1151,7 @@
       "FirstLogin": false,
       "PhoneNumber": "0791100054",
       "ProfilePicUrl": "",
-      "UniEmail": "lamis.54@ju.edu.jo",
+      "UniEmail": "lamis.54@test.com",
       "Major": "Software Engineering",
       "CompanyId": "o5OYxljgbxdPciDOX7lLnXmxsQB3",
       "AcademicSupervisorId": "academic_test_002",
@@ -1171,7 +1171,7 @@
       "FirstLogin": false,
       "PhoneNumber": "0791100055",
       "ProfilePicUrl": "",
-      "UniEmail": "rima.55@ju.edu.jo",
+      "UniEmail": "rima.55@test.com",
       "Major": "Information Systems",
       "CompanyId": "o5OYxljgbxdPciDOX7lLnXmxsQB3",
       "AcademicSupervisorId": "academic_test_002",
@@ -1187,7 +1187,7 @@
   },
   "CompanySupervisors": {
     "EbzaQRhbhYWO8acjrEXxX6Qa0Y92": {
-      "CompEmail": "lugainstest@gmail.com",
+      "CompEmail": "lugain@gmail.com",
       "CompanyName": "lugain'stest",
       "Email": "lugain@gmail.com",
       "FirstLogin": true,
@@ -1198,7 +1198,7 @@
       "Role": "CompanySupervisor"
     },
     "ZiObpSpX11ewgTuXYo4Ep3WG0h23": {
-      "CompEmail": "jafarsolutions@gmail.com",
+      "CompEmail": "jafar@gmail.com",
       "CompanyName": "jafar's solutions",
       "Email": "jafar@gmail.com",
       "FirstLogin": false,
@@ -1210,7 +1210,7 @@
       "firstLogin": false
     },
     "company_test_001": {
-      "CompEmail": "info@orange.example",
+      "CompEmail": "supervisor@orange.example",
       "CompanyName": "Orange Jordan",
       "Email": "supervisor@orange.example",
       "FirstLogin": false,
@@ -1221,7 +1221,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_002": {
-      "CompEmail": "info@zain.example",
+      "CompEmail": "supervisor@zain.example",
       "CompanyName": "Zain Jordan",
       "Email": "supervisor@zain.example",
       "FirstLogin": false,
@@ -1232,7 +1232,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_003": {
-      "CompEmail": "info@umniah.example",
+      "CompEmail": "supervisor@umniah.example",
       "CompanyName": "Umniah",
       "Email": "supervisor@umniah.example",
       "FirstLogin": false,
@@ -1243,7 +1243,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_004": {
-      "CompEmail": "info@aramex.example",
+      "CompEmail": "supervisor@aramex.example",
       "CompanyName": "Aramex",
       "Email": "supervisor@aramex.example",
       "FirstLogin": false,
@@ -1254,7 +1254,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_005": {
-      "CompEmail": "info@arabbank.example",
+      "CompEmail": "supervisor@arabbank.example",
       "CompanyName": "Arab Bank",
       "Email": "supervisor@arabbank.example",
       "FirstLogin": false,
@@ -1265,7 +1265,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_006": {
-      "CompEmail": "info@jpmc.example",
+      "CompEmail": "supervisor@jpmc.example",
       "CompanyName": "Jordan Phosphate",
       "Email": "supervisor@jpmc.example",
       "FirstLogin": false,
@@ -1276,7 +1276,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_008": {
-      "CompEmail": "info@estarta.example",
+      "CompEmail": "supervisor@estarta.example",
       "CompanyName": "Estarta Solutions",
       "Email": "supervisor@estarta.example",
       "FirstLogin": false,
@@ -1287,7 +1287,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_009": {
-      "CompEmail": "info@brightlabs.example",
+      "CompEmail": "supervisor@brightlabs.example",
       "CompanyName": "Bright Labs",
       "Email": "supervisor@brightlabs.example",
       "FirstLogin": false,
@@ -1298,7 +1298,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_010": {
-      "CompEmail": "info@petradigital.example",
+      "CompEmail": "supervisor@petradigital.example",
       "CompanyName": "Petra Digital",
       "Email": "supervisor@petradigital.example",
       "FirstLogin": false,
@@ -1309,7 +1309,7 @@
       "Role": "CompanySupervisor"
     },
     "company_test_011": {
-      "CompEmail": "info@levant.example",
+      "CompEmail": "supervisor@levant.example",
       "CompanyName": "Levant Logistics",
       "Email": "supervisor@levant.example",
       "FirstLogin": false,
@@ -1320,7 +1320,7 @@
       "Role": "CompanySupervisor"
     },
     "o5OYxljgbxdPciDOX7lLnXmxsQB3": {
-      "CompEmail": "omar@gamil.com",
+      "CompEmail": "omar@gmail.com",
       "CompanyName": "gggg",
       "Email": "omar@gmail.com",
       "FirstLogin": false,
@@ -1332,7 +1332,7 @@
       "firstLogin": false
     },
     "zjpce3sukhgtLMppf63SkVZtsYI2": {
-      "CompEmail": "info@islamicbank.example",
+      "CompEmail": "supervisor@islamicbank.example",
       "CompanyName": "islamic bank",
       "Email": "supervisor@islamicbank.example",
       "FirstLogin": false,
@@ -1373,7 +1373,7 @@
       "PhoneNumber": "0790000000",
       "ProfilePicUrl": "",
       "Role": "AcademicSupervisor",
-      "UniversityEmail": "acasup1@orange.com",
+      "UniversityEmail": "acasup1@gmail.com",
       "firstLogin": false
     },
     "academic_test_001": {
@@ -1434,7 +1434,7 @@
       "PhoneNumber": "0790000000",
       "ProfilePicUrl": "",
       "Role": "AcademicSupervisor",
-      "UniversityEmail": "ahmad@ju.edu.jo"
+      "UniversityEmail": "ahmad@example.com"
     }
   },
   "Admins": {

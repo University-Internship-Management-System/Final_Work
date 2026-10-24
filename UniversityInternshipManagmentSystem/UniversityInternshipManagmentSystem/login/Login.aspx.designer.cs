@@ -15,6 +15,15 @@ namespace UniversityInternshipManagmentSystem.login
     {
 
         /// <summary>
+        /// form1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+
+        /// <summary>
         /// pnlError control.
         /// </summary>
         /// <remarks>
@@ -78,15 +87,6 @@ namespace UniversityInternshipManagmentSystem.login
         protected global::System.Web.UI.WebControls.Button btnLogin;
 
         /// <summary>
-        /// txtRecoveryEmail control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtRecoveryEmail;
-
-        /// <summary>
         /// pnlRecoveryResult control.
         /// </summary>
         /// <remarks>
@@ -103,6 +103,15 @@ namespace UniversityInternshipManagmentSystem.login
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litRecoveryMsg;
+
+        /// <summary>
+        /// txtRecoveryEmail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtRecoveryEmail;
 
         /// <summary>
         /// btnSendRecovery control.
