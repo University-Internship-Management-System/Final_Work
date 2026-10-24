@@ -1,4 +1,4 @@
-<%@ Page Title="Academic supervisors" Language="C#" Async="true" AutoEventWireup="true" ViewStateEncryptionMode="Always" CodeBehind="ManageAcademicSupervisors.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.CoordinatorAcademicAccounts" MasterPageFile="~/Shared/Dashboard.Master" %>
+﻿<%@ Page Title="Academic supervisors" Language="C#" Async="true" AutoEventWireup="true" ViewStateEncryptionMode="Always" CodeBehind="ManageAcademicSupervisors.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Coordinator.CoordinatorAcademicAccounts" MasterPageFile="~/Shared/Dashboard.Master" %>
 <asp:Content ID="head" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="academic-supervisors.css?v=20261023-1" />
 </asp:Content>
@@ -36,7 +36,7 @@
                     <fieldset class="academic-fields"><legend><span>1</span> Supervisor details</legend><div class="academic-form-grid">
                         <div><asp:Label runat="server" AssociatedControlID="fullName" Text="Full name *" /><asp:TextBox ID="fullName" runat="server" CssClass="form-control" MaxLength="100" autocomplete="name" /></div>
                         <div><asp:Label runat="server" AssociatedControlID="email" Text="University email *" /><asp:TextBox ID="email" runat="server" CssClass="form-control" MaxLength="254" inputmode="email" /><small>Fixed after account creation.</small></div>
-                        <div><asp:Label runat="server" AssociatedControlID="universityEmail" Text="Confirmed email *" /><asp:TextBox ID="universityEmail" runat="server" ReadOnly="true" CssClass="form-control" MaxLength="254" inputmode="email" /></div>
+                        <div><asp:Label runat="server" AssociatedControlID="universityEmail" Text="Confirm email *" /><asp:TextBox ID="universityEmail" runat="server" autocomplete="off" placeholder="Re-enter the email address" CssClass="form-control" MaxLength="254" inputmode="email" /></div>
                         <div><asp:Label runat="server" AssociatedControlID="phone" Text="Jordanian mobile number *" /><asp:TextBox ID="phone" runat="server" CssClass="form-control" TextMode="Phone" MaxLength="10" placeholder="0791234567" inputmode="numeric" /><small>10 digits, starting with 07.</small></div>
                     </div></fieldset>
                     <fieldset class="academic-fields"><legend><span>2</span> Academic specialization</legend><div class="academic-form-grid"><div><asp:Label runat="server" AssociatedControlID="major" Text="Major *" /><asp:DropDownList ID="major" runat="server" CssClass="form-select"><asp:ListItem Value="">Select a major</asp:ListItem><asp:ListItem>Computer Science</asp:ListItem><asp:ListItem>Cybersecurity</asp:ListItem><asp:ListItem>Computer Information Systems</asp:ListItem><asp:ListItem>Business Information Technology</asp:ListItem><asp:ListItem>Data Science</asp:ListItem><asp:ListItem>Artificial Intelligence</asp:ListItem></asp:DropDownList></div><div class="academic-major-note"><i class="bi bi-mortarboard" aria-hidden="true"></i><p>One major per supervisor. Reassign their students before changing their specialization.</p></div></div></fieldset>
@@ -47,5 +47,5 @@
         </ContentTemplate><Triggers><asp:AsyncPostBackTrigger ControlID="generatePassword" EventName="Click" /><asp:AsyncPostBackTrigger ControlID="save" EventName="Click" /></Triggers></asp:UpdatePanel>
     </div></div></div>
     <asp:Panel ID="savedPanel" runat="server" Visible="false"><div class="modal fade academic-result-modal" id="academicSavedModal" tabindex="-1" aria-labelledby="savedTitle"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-body"><span class="academic-result-icon"><i class="bi bi-check-lg" aria-hidden="true"></i></span><h2 id="savedTitle">Supervisor saved</h2><p><asp:Literal ID="savedMessage" runat="server" Mode="Encode" /></p><button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button></div></div></div></div></asp:Panel>
-    <script src="<%= ResolveUrl("~/Coordinator/ManageAcademicSupervisors/academic-supervisors.js?v=20261023-1") %>" defer></script>
+    <script src="<%= ResolveUrl("~/Coordinator/ManageAcademicSupervisors/academic-supervisors.js?v=20261024-confirm-email") %>" defer></script>
 </asp:Content>

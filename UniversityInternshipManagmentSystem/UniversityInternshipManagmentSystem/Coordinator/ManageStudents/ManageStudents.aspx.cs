@@ -67,6 +67,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 return;
             }
             EditingId = Request.QueryString["edit"];
+            universityEmail.ReadOnly = EditingId != null;
             openEditor.Value = "0";
             openImport.Value = "0";
             importNotice.Visible = false;
@@ -264,11 +265,16 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             openEditor.Value = "1";
+            if (EditingId == null && !String.Equals(loginEmail.Text.Trim(), universityEmail.Text.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                ShowMessage("The email addresses do not match. Re-enter the same email address.");
+                return;
+            }
             var student = new StudentModel
             {
                 Name = studentName.Text.Trim(),
                 Email = loginEmail.Text.Trim(),
-                UniEmail = loginEmail.Text.Trim(),   // "Confirmed email" is read-only: it always equals the login email
+                UniEmail = loginEmail.Text.Trim(),
                 PhoneNumber = phoneCountry.SelectedValue + Regex.Replace(phoneNumber.Text.Trim(), @"[ ()-]", ""),
                 Major = studentMajor.SelectedValue,
                 AcademicSupervisorId = academicSupervisor.SelectedValue,
@@ -465,8 +471,8 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                         PhoneNumber = countryCode + cells[4], Major = cells[5], GPA = ReadGpa(cells[6]),
                         AcademicSupervisorId = matches.Count == 1 ? matches[0].Id : "" };
                     string error = ValidateStudent(student);
-                    if (error == null && cells[2].Trim() != "" && !SameEmail(cells[1], cells[2]))
-                        error = "ConfirmedEmail must be the same as UniversityEmail (or empty).";
+                    if (error == null && !SameEmail(cells[1], cells[2]))
+                        error = "ConfirmedEmail is required and must match UniversityEmail.";
                     if (matches.Count != 1) error = "Supervisor email must match exactly one existing academic supervisor.";
                     if (emails.Contains(student.Email) || emails.Contains(student.UniEmail)) error = "Email is repeated in this file.";
                     emails.Add(student.Email);

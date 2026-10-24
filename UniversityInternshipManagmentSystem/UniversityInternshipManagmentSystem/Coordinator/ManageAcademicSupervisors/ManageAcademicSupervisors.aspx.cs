@@ -48,6 +48,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             AuthHelper.RequireAuth(this, AuthHelper.RoleCoordinator);
             if (Response.IsRequestBeingRedirected) return;
             EditingId = Request.QueryString["edit"];
+            universityEmail.ReadOnly = EditingId != null;
             openEditor.Value = "0";
             notice.Visible = editorNotice.Visible = false;
             if (String.IsNullOrWhiteSpace(AuthHelper.IdToken) || AuthHelper.IdToken == "mock-token")
@@ -165,6 +166,11 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             openEditor.Value = "1";
+            if (EditingId == null && !String.Equals(email.Text.Trim(), universityEmail.Text.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                Tell("The email addresses do not match. Re-enter the same email address.");
+                return;
+            }
             var person = new AcademicSupervisor
             {
                 Name = fullName.Text.Trim(), Email = email.Text.Trim(),
