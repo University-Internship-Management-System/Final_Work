@@ -266,13 +266,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             openEditor.Value = "1";
             var student = new StudentModel
             {
-<<<<<<< HEAD
-                Name = studentName.Text.Trim(), Email = loginEmail.Text.Trim(), UniEmail = loginEmail.Text.Trim(),   // "Confirmed email" is read-only: it always equals the login email
-=======
                 Name = studentName.Text.Trim(),
                 Email = loginEmail.Text.Trim(),
-                UniEmail = loginEmail.Text.Trim(), // Confirmed email follows the read-only field's login email.
->>>>>>> ef0e76fed6f7b4a0fc0edb5a59781a349d43a990
+                UniEmail = loginEmail.Text.Trim(),   // "Confirmed email" is read-only: it always equals the login email
                 PhoneNumber = phoneCountry.SelectedValue + Regex.Replace(phoneNumber.Text.Trim(), @"[ ()-]", ""),
                 Major = studentMajor.SelectedValue,
                 AcademicSupervisorId = academicSupervisor.SelectedValue,
@@ -306,18 +302,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         // Check details, phone, major/supervisor and duplicate emails for both Add and Import.
         private string ValidateStudent(StudentModel student, string editingId = null)
         {
-<<<<<<< HEAD
-            if (student.Name.Length < 2 || student.Name.Length > 100 || !ValidEmail(student.Email)
-                || !(student.GPA >= 0 && student.GPA <= 4))
-                return "Enter a name, a valid email, and a GPA between 0 and 4.";
-            ListItem country = phoneCountry.Items.Cast<ListItem>().FirstOrDefault(item => student.PhoneNumber.StartsWith(item.Value));
-            if (country == null || !Regex.IsMatch(student.PhoneNumber.Substring(country.Value.Length),
-                @"\A(?:" + country.Attributes["data-pattern"] + @")\z"))
-                return "Enter a valid mobile number with a supported country code and no leading zero after the code.";
-=======
-            string detailsError = "Enter a name, valid emails, and a GPA between 0 and 4.";
+            string detailsError = "Enter a name, a valid email, and a GPA between 0 and 4.";
             if (student.Name.Length < 2 || student.Name.Length > 100) return detailsError;
-            if (!ValidEmail(student.Email) || !ValidEmail(student.UniEmail)) return detailsError;
+            if (!ValidEmail(student.Email)) return detailsError;
             if (Double.IsNaN(student.GPA) || student.GPA < 0 || student.GPA > 4) return detailsError;
             ListItem country = FindCountry(student.PhoneNumber);
             string phoneError = "Enter a valid mobile number with a supported country code and no leading zero after the code.";
@@ -325,24 +312,18 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             string localNumber = student.PhoneNumber.Substring(country.Value.Length);
             string pattern = @"\A(?:" + country.Attributes["data-pattern"] + @")\z";
             if (!Regex.IsMatch(localNumber, pattern)) return phoneError;
->>>>>>> ef0e76fed6f7b4a0fc0edb5a59781a349d43a990
             AcademicSupervisor supervisor;
             if (studentMajor.Items.FindByValue(student.Major) == null || student.Major == ""
                 || !supervisors.TryGetValue(student.AcademicSupervisorId ?? "", out supervisor)
                 || !String.Equals(supervisor.Major, student.Major, StringComparison.OrdinalIgnoreCase))
                 return "Choose an academic supervisor with the same major.";
             if (editingId != null && !records.ContainsKey(editingId)) return "Student no longer exists.";
-<<<<<<< HEAD
-            if (records.Any(item => item.Key != editingId && (SameEmail(item.Value.Email, student.Email)
-                || SameEmail(item.Value.UniEmail, student.Email))))
-                return "A student with this login or university email already exists.";
-=======
             foreach (var existing in records)
             {
                 if (existing.Key == editingId) continue;
                 string[] storedEmails = { existing.Value.Email, existing.Value.UniEmail };
                 foreach (string email in storedEmails)
-                    if (SameEmail(email, student.Email) || SameEmail(email, student.UniEmail))
+                    if (SameEmail(email, student.Email))
                         return "A student with this login or university email already exists.";
             }
             return null;
@@ -352,7 +333,6 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             foreach (ListItem country in phoneCountry.Items)
                 if (phone.StartsWith(country.Value)) return country;
->>>>>>> ef0e76fed6f7b4a0fc0edb5a59781a349d43a990
             return null;
         }
 
@@ -476,21 +456,13 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 {
                     string[] cells = lines[index];
                     if (cells.Length != 8) throw new FormatException("Row " + (index + 1) + ": expected 8 columns. Use the template.");
-<<<<<<< HEAD
-                    double grade;
-                    if (!Double.TryParse(cells[6], NumberStyles.Number, CultureInfo.InvariantCulture, out grade)) grade = Double.NaN;
-                    var matches = supervisors.Values.Where(person => SameEmail(person.Email, cells[7]) || SameEmail(person.UniversityEmail, cells[7])).ToList();
-                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[1],
-                        PhoneNumber = (cells[3].StartsWith("+") ? cells[3] : "+" + cells[3]) + cells[4], Major = cells[5], GPA = grade,
-=======
                     var matches = new List<AcademicSupervisor>();
                     foreach (var person in supervisors.Values)
                         if (SameEmail(person.Email, cells[7]) || SameEmail(person.UniversityEmail, cells[7])) matches.Add(person);
                     string countryCode = cells[3];
                     if (!countryCode.StartsWith("+")) countryCode = "+" + countryCode;
-                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[2],
+                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[1],
                         PhoneNumber = countryCode + cells[4], Major = cells[5], GPA = ReadGpa(cells[6]),
->>>>>>> ef0e76fed6f7b4a0fc0edb5a59781a349d43a990
                         AcademicSupervisorId = matches.Count == 1 ? matches[0].Id : "" };
                     string error = ValidateStudent(student);
                     if (error == null && cells[2].Trim() != "" && !SameEmail(cells[1], cells[2]))
