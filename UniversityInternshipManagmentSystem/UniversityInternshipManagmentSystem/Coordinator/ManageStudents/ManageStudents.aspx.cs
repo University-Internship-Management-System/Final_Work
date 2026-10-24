@@ -268,7 +268,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             {
                 Name = studentName.Text.Trim(),
                 Email = loginEmail.Text.Trim(),
-                UniEmail = loginEmail.Text.Trim(), // Confirmed email follows the read-only field's login email.
+                UniEmail = loginEmail.Text.Trim(),   // "Confirmed email" is read-only: it always equals the login email
                 PhoneNumber = phoneCountry.SelectedValue + Regex.Replace(phoneNumber.Text.Trim(), @"[ ()-]", ""),
                 Major = studentMajor.SelectedValue,
                 AcademicSupervisorId = academicSupervisor.SelectedValue,
@@ -302,9 +302,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         // Check details, phone, major/supervisor and duplicate emails for both Add and Import.
         private string ValidateStudent(StudentModel student, string editingId = null)
         {
-            string detailsError = "Enter a name, valid emails, and a GPA between 0 and 4.";
+            string detailsError = "Enter a name, a valid email, and a GPA between 0 and 4.";
             if (student.Name.Length < 2 || student.Name.Length > 100) return detailsError;
-            if (!ValidEmail(student.Email) || !ValidEmail(student.UniEmail)) return detailsError;
+            if (!ValidEmail(student.Email)) return detailsError;
             if (Double.IsNaN(student.GPA) || student.GPA < 0 || student.GPA > 4) return detailsError;
             ListItem country = FindCountry(student.PhoneNumber);
             string phoneError = "Enter a valid mobile number with a supported country code and no leading zero after the code.";
@@ -323,7 +323,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 if (existing.Key == editingId) continue;
                 string[] storedEmails = { existing.Value.Email, existing.Value.UniEmail };
                 foreach (string email in storedEmails)
-                    if (SameEmail(email, student.Email) || SameEmail(email, student.UniEmail))
+                    if (SameEmail(email, student.Email))
                         return "A student with this login or university email already exists.";
             }
             return null;
@@ -461,10 +461,12 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                         if (SameEmail(person.Email, cells[7]) || SameEmail(person.UniversityEmail, cells[7])) matches.Add(person);
                     string countryCode = cells[3];
                     if (!countryCode.StartsWith("+")) countryCode = "+" + countryCode;
-                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[2],
+                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[1],
                         PhoneNumber = countryCode + cells[4], Major = cells[5], GPA = ReadGpa(cells[6]),
                         AcademicSupervisorId = matches.Count == 1 ? matches[0].Id : "" };
                     string error = ValidateStudent(student);
+                    if (error == null && cells[2].Trim() != "" && !SameEmail(cells[1], cells[2]))
+                        error = "ConfirmedEmail must be the same as UniversityEmail (or empty).";
                     if (matches.Count != 1) error = "Supervisor email must match exactly one existing academic supervisor.";
                     if (emails.Contains(student.Email) || emails.Contains(student.UniEmail)) error = "Email is repeated in this file.";
                     emails.Add(student.Email);

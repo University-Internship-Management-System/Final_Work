@@ -230,7 +230,7 @@ namespace UniversityInternshipManagmentSystem.login
 
         /// <summary>
         /// Queries the Realtime Database tables to locate the user's name, role, and firstLogin flag.
-        /// Searches first by UID key, then scans records by Email / UniEmail / CompEmail.
+        /// Searches first by UID key, then scans records by their Email.
         /// </summary>
         private async Task<(string Name, string Role, bool FirstLogin, string RecordId, string Table)> FetchUserProfileAsync(string uid, string email, string idToken)
         {
@@ -255,7 +255,7 @@ namespace UniversityInternshipManagmentSystem.login
                 }
             }
 
-            // 2. Scan tables to match record by email fields (e.g. student_001, company_001), also all tables at the same time
+            // 2. Scan tables to match the record by its Email (e.g. student_001, company_001), also all tables at the same time
             var tables = await Task.WhenAll(databaseTables.Select(table => TryReadAsync(table, null, idToken)));
             for (int t = 0; t < databaseTables.Length; t++)
             {
@@ -273,10 +273,8 @@ namespace UniversityInternshipManagmentSystem.login
                         if (prop.Value is JObject item)
                         {
                             string itemEmail = (item["Email"]?.ToString() ?? "").Trim().ToLowerInvariant();
-                            string itemUniEmail = (item["UniEmail"]?.ToString() ?? item["UniversityEmail"]?.ToString() ?? "").Trim().ToLowerInvariant();
-                            string itemCompEmail = (item["CompEmail"]?.ToString() ?? "").Trim().ToLowerInvariant();
 
-                            if (itemEmail == normalizedEmail || itemUniEmail == normalizedEmail || itemCompEmail == normalizedEmail)
+                            if (itemEmail == normalizedEmail)
                             {
                                 string name = item["Name"]?.ToString() ?? item["name"]?.ToString() ?? "";
                                 string rawRole = item["Role"]?.ToString() ?? item["role"]?.ToString() ?? "";
