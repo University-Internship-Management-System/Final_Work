@@ -72,6 +72,33 @@
         color: var(--uims-text);
     }
 
+/* company logo (or its first letter) next to the company name */
+.opp-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.opp-logo {
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid var(--uims-border);
+    background: #fff;
+    object-fit: contain;
+}
+
+.opp-logo-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #E8F3EE;
+    color: var(--uims-primary);
+    font-size: 20px;
+    font-weight: 700;
+}
+
 .opp-company {
     font-size: 12px;
     font-weight: 700;

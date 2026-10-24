@@ -135,7 +135,7 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
             txtEmail.Text = !string.IsNullOrWhiteSpace(supervisor.CompEmail) ? supervisor.CompEmail : supervisor.Email;
             txtPhoneNumber.Text = supervisor.PhoneNumber;
             txtLocation.Text = supervisor.Location;
-            txtProfilePicUrl.Text = supervisor.ProfilePicUrl;
+            ViewState["logo"] = supervisor.ProfilePicUrl;   // stays as it is unless a new file is chosen
 
             // Left Overview Card
             litProfileName.Text = Server.HtmlEncode(supervisor.Name);
@@ -190,7 +190,8 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
             string companyName = txtCompanyName.Text.Trim();
             string phone = txtPhoneNumber.Text.Trim();
             string location = txtLocation.Text.Trim();
-            string profilePic = txtProfilePicUrl.Text.Trim();
+            string profilePic = ViewState["logo"] as string ?? "";
+            string uploadedId = null;
 
             if (string.IsNullOrEmpty(fullName))
             {
@@ -212,23 +213,33 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
                 return;
             }
 
-            var patchPayload = new
-            {
-                Name = fullName,
-                CompanyName = companyName,
-                Location = location,
-                PhoneNumber = phone,
-                ProfilePicUrl = profilePic
-            };
-
             try
             {
+                if (fuLogo.HasFile)
+                {
+                    byte[] image;
+                    try { image = Cloudinary.ReadImage(fuLogo); }
+                    catch (FormatException ex) { ShowProfileError(ex.Message); return; }
+                    uploadedId = "uims/company-logos/" + Guid.NewGuid().ToString("N");
+                    profilePic = await Cloudinary.Upload(image, uploadedId);
+                }
+
+                var patchPayload = new
+                {
+                    Name = fullName,
+                    CompanyName = companyName,
+                    Location = location,
+                    PhoneNumber = phone,
+                    ProfilePicUrl = profilePic
+                };
                 var response = await FirebaseDb.Patch(TableCompany, recordId, patchPayload);
                 if (!response.IsSuccessStatusCode)
                 {
+                    if (uploadedId != null) await Cloudinary.Delete(uploadedId);
                     ShowProfileError("Firebase did not accept the changes, so nothing was saved. Please try again.");
                     return;
                 }
+                ViewState["logo"] = profilePic;
 
                 // Update active user session
                 Session["name"] = fullName;
@@ -258,6 +269,7 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
             }
             catch (Exception ex)
             {
+                if (uploadedId != null) await Cloudinary.Delete(uploadedId);
                 ShowProfileError("Failed to save changes: " + Server.HtmlEncode(ex.Message));
             }
         }

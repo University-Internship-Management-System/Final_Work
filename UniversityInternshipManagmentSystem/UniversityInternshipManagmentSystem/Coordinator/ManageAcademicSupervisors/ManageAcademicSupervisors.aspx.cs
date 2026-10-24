@@ -139,7 +139,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             fullName.Text = person.Name;
             email.Text = person.Email;
             email.ReadOnly = true;
-            universityEmail.Text = person.UniversityEmail;
+            universityEmail.Text = person.Email;
             string number = person.PhoneNumber ?? "";
             if (number.StartsWith("+9627") && number.Length == 13) number = "0" + number.Substring(4);
             phone.Text = number;

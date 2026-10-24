@@ -11,6 +11,11 @@ namespace UniversityInternshipManagmentSystem.Models
         public string Id { get; set; }
         public string CompanyId { get; set; }
         public string CompanyName { get; set; }
+
+        // the company's logo, read from its profile when the student browses (not saved in the opportunity)
+        [JsonIgnore]
+        public string CompanyLogoUrl { get; set; }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }

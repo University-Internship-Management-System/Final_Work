@@ -147,7 +147,7 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
             }
         }
 
-        // takes the name and location from the company's profile (by CompanyId),
+        // takes the name, location and logo from the company's profile (by CompanyId),
         // if the profile can't be read (or a field is empty) the saved one stays
         private static async Task UseCurrentCompanyInfoAsync(List<Opportunity> opportunities)
         {
@@ -165,6 +165,7 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
 
                     if (!string.IsNullOrWhiteSpace(company.CompanyName)) opp.CompanyName = company.CompanyName;
                     if (!string.IsNullOrWhiteSpace(company.Location)) opp.Location = company.Location;
+                    if (ProfileValidation.IsSafeUrl(company.ProfilePicUrl)) opp.CompanyLogoUrl = company.ProfilePicUrl;
                 }
             }
             catch (Exception ex)
@@ -235,6 +236,18 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                     startHtml = "<div class='mb-2 text-muted small'><i class='bi bi-calendar-check'></i> Training starts: <strong>" + start + "</strong></div>";
                 }
 
+                // the company logo, or the first letter of the company name when it has no logo
+                string logoHtml;
+                if (!string.IsNullOrEmpty(opp.CompanyLogoUrl))
+                {
+                    logoHtml = $"<img class='opp-logo' src='{Encode(opp.CompanyLogoUrl)}' alt='{Encode(opp.CompanyName)} logo' loading='lazy' />";
+                }
+                else
+                {
+                    string name = (opp.CompanyName ?? "").Trim();
+                    logoHtml = $"<span class='opp-logo opp-logo-letter'>{Encode(name.Length > 0 ? name.Substring(0, 1).ToUpperInvariant() : "?")}</span>";
+                }
+
                 // used by Opportunities.js for the search and the company filter
                 string companyKey = Encode((opp.CompanyName ?? "").Trim().ToLowerInvariant());
                 // the search box only looks at the title, the description and the location
@@ -245,9 +258,12 @@ namespace UniversityInternshipManagmentSystem.Student.Opportunities
                     <div class='card opp-card h-100 p-3'>
                         <div class='card-body d-flex flex-column'>
 
-                            <div class='mb-2'>
-                                <span class='opp-company d-block fw-bold'>{Encode(opp.CompanyName)}</span>
-                                <small class='text-muted'><i class='bi bi-geo-alt'></i> {Encode(opp.Location)}</small>
+                            <div class='opp-head mb-2'>
+                                {logoHtml}
+                                <div>
+                                    <span class='opp-company d-block fw-bold'>{Encode(opp.CompanyName)}</span>
+                                    <small class='text-muted'><i class='bi bi-geo-alt'></i> {Encode(opp.Location)}</small>
+                                </div>
                             </div>
 
                             <h5 class='card-title mt-1'>{Encode(opp.Title)}</h5>

@@ -480,6 +480,7 @@
     </Compile>
     <Compile Include="Config\EmailSender.cs" />
     <Compile Include="Config\TeamKeys.cs" />
+    <Compile Include="Config\Cloudinary.cs" />
     <Compile Include="Config\DeadlineReminders.cs" />
     <Compile Include="Config\Notify.cs" />
     <Compile Include="Config\EmailVerification.cs" />

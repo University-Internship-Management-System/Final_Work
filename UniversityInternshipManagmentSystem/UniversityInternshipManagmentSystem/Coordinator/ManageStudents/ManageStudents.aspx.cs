@@ -240,7 +240,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             studentName.Text = student.Name;
             loginEmail.Text = student.Email;
             loginEmail.ReadOnly = true;
-            universityEmail.Text = student.UniEmail;
+            universityEmail.Text = student.Email;
             string phone = Regex.Replace(student.PhoneNumber ?? "", @"[ ()-]", "");
             ListItem country = FindCountry(phone);
             if (country != null) phoneCountry.SelectedValue = country.Value;

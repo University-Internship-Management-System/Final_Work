@@ -175,7 +175,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             if (phone.StartsWith("+9627") && phone.Length == 13) phone = "0" + phone.Substring(4);
             phoneNumber.Text = phone;
             companyName.Text = person.CompanyName;
-            companyEmail.Text = person.CompEmail;
+            companyEmail.Text = person.Email;
             companyLocation.Text = person.Location;
             passwordSection.Visible = false;
             editorHeading.Text = "Edit company supervisor";
