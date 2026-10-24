@@ -766,12 +766,13 @@
               <span><asp:Literal ID="litSuccessMsg" runat="server" /></span>
             </asp:Panel>
 
-            <!-- Email Address Field -->
-            <div class="mb-3">
-                <label class="form-label" for="txtEmail">Email address</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                    <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="form-control" placeholder="name@ju.edu.jo" required="required" ClientIDMode="Static" />
+            <div class="form-group">
+              <div class="form-label-row">
+                <label for="txtEmail" class="form-label">Email address</label>
+              </div>
+              <div class="uims-input-group" id="emailGroup">
+                <div class="uims-input-addon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 </div>
                 <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="uims-input" placeholder="name@example.com" autocomplete="username" autocapitalize="none" spellcheck="false" inputmode="email" aria-describedby="officialAlertBox" ClientIDMode="Static" required="required" />
               </div>
@@ -835,24 +836,24 @@
     <div class="modal-overlay" id="forgotModal" role="dialog" aria-modal="true" aria-labelledby="forgotTitle">
       <div class="modal-card">
         <div class="modal-head">
-          <span id="forgotTitle" class="font-arabic">Ø§Ø³ØªØ¹Ø§Ø¯Ø© ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±</span>
+          <span id="forgotTitle" class="font-arabic">استعادة كلمة المرور</span>
           <button type="button" id="closeForgotModalBtn" aria-label="Close" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">&times;</button>
         </div>
         <div class="modal-body font-arabic" dir="rtl" lang="ar">
           <p style="margin-bottom:12px;font-size:14px;color:#334155;line-height:1.6;">
-            Ø£Ø¯Ø®Ù„ Ø¨Ø±ÙŠØ¯Ùƒ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ Ø§Ù„Ù…Ø³Ø¬Ù„ ÙÙŠ Ø§Ù„Ù†Ø¸Ø§Ù… Ù„ÙŠØªÙ… Ø¥Ø±Ø³Ø§Ù„ Ø±Ø§Ø¨Ø· Ø§Ø³ØªØ¹Ø§Ø¯Ø© ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±.
+            أدخل بريدك الإلكتروني المسجل في النظام ليتم إرسال رابط استعادة كلمة المرور.
           </p>
           <asp:Panel ID="pnlRecoveryResult" runat="server" Visible="false">
             <asp:Literal ID="litRecoveryMsg" runat="server" />
           </asp:Panel>
           <div class="form-group" style="margin-top:14px;">
-            <label class="form-label" for="txtRecoveryEmail" style="display:block;margin-bottom:6px;font-size:13px;font-weight:700;color:#183B31;">Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ:</label>
+            <label class="form-label" for="txtRecoveryEmail" style="display:block;margin-bottom:6px;font-size:13px;font-weight:700;color:#183B31;">البريد الإلكتروني:</label>
             <asp:TextBox ID="txtRecoveryEmail" runat="server" TextMode="Email" CssClass="uims-input" placeholder="name@example.com" style="width:100%;height:44px;padding:0 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;background:#fff;" ClientIDMode="Static" />
           </div>
         </div>
         <div class="modal-foot" style="display:flex;justify-content:space-between;gap:10px;">
-          <button type="button" id="cancelForgotBtn" class="nav-link-btn font-arabic" style="background:#f1f5f9;color:#475569;padding:6px 16px;border-radius:8px;border:none;cursor:pointer;">Ø¥Ù„ØºØ§Ø¡</button>
-          <asp:Button ID="btnSendRecovery" runat="server" Text="Ø¥Ø±Ø³Ø§Ù„ Ø±Ø§Ø¨Ø· Ø§Ù„Ø§Ø³ØªØ¹Ø§Ø¯Ø©" OnClick="btnSendRecovery_Click" CssClass="nav-portal-btn font-arabic" style="background-color:#0b5c2c;color:#fff;padding:6px 18px;border-radius:8px;border:none;cursor:pointer;" ClientIDMode="Static" />
+          <button type="button" id="cancelForgotBtn" class="nav-link-btn font-arabic" style="background:#f1f5f9;color:#475569;padding:6px 16px;border-radius:8px;border:none;cursor:pointer;">إلغاء</button>
+          <asp:Button ID="btnSendRecovery" runat="server" Text="إرسال رابط الاستعادة" OnClick="btnSendRecovery_Click" CssClass="nav-portal-btn font-arabic" style="background-color:#0b5c2c;color:#fff;padding:6px 18px;border-radius:8px;border:none;cursor:pointer;" ClientIDMode="Static" />
         </div>
       </div>
     </div>
@@ -1205,8 +1206,8 @@
   if (navAbout) {
     navAbout.addEventListener('click', function() {
       showModal(
-        'Ø¹Ù† Ù†Ø¸Ø§Ù… Ø§Ù„ØªØ¯Ø±ÙŠØ¨ Ø§Ù„Ù…ÙŠØ¯Ø§Ù†ÙŠ (UIMS)',
-        '<p>Ù…Ù†ØµØ© Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ© Ø±Ø³Ù…ÙŠØ© ØªØ§Ø¨Ø¹Ø© Ù„ÙƒÙ„ÙŠØ© Ø§Ù„Ù…Ù„Ùƒ Ø¹Ø¨Ø¯Ø§Ù„Ù„Ù‡ Ø§Ù„Ø«Ø§Ù†ÙŠ Ù„ØªÙƒÙ†ÙˆÙ„ÙˆØ¬ÙŠØ§ Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª (KASIT) ÙÙŠ Ø§Ù„Ø¬Ø§Ù…Ø¹Ø© Ø§Ù„Ø£Ø±Ø¯Ù†ÙŠØ© Ù„Ø¥Ø¯Ø§Ø±Ø© ÙˆÙ…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ØªØ¯Ø±ÙŠØ¨ Ø§Ù„Ù…ÙŠØ¯Ø§Ù†ÙŠ Ù„Ù„Ø·Ù„Ø¨Ø©.</p>'
+        'عن نظام التدريب الميداني (UIMS)',
+        '<p>منصة إلكترونية رسمية تابعة لكلية الملك عبدالله الثاني لتكنولوجيا المعلومات (KASIT) في الجامعة الأردنية لإدارة ومتابعة التدريب الميداني للطلبة.</p>'
       );
     });
   }
@@ -1215,8 +1216,8 @@
   if (navContact) {
     navContact.addEventListener('click', function() {
       showModal(
-        'ØªÙˆØ§ØµÙ„ Ù…Ø¹Ù†Ø§ - ÙƒÙ„ÙŠØ© KASIT',
-        '<p><strong>Ø§Ù„Ø¬Ø§Ù…Ø¹Ø© Ø§Ù„Ø£Ø±Ø¯Ù†ÙŠØ© - Ø¹Ù…Ù‘Ø§Ù†ØŒ Ø§Ù„Ø£Ø±Ø¯Ù†</strong><br>Ù‡Ø§ØªÙ: <span dir="ltr">+962 6 5355000</span></p>'
+        'تواصل معنا - كلية KASIT',
+        '<p><strong>الجامعة الأردنية - عمّان، الأردن</strong><br>هاتف: <span dir="ltr">+962 6 5355000</span></p>'
       );
     });
   }
