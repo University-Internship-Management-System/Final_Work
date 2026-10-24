@@ -2,7 +2,7 @@
 
 - **GitHub Repository:** [University Internship Management System](https://github.com/University-Internship-Management-System/University-Internship-Management-System-)
 - **Trello Board:** [Project Planning & Task Management](https://trello.com/b/oyIBEBfI/university-internship-management-system)
-- **Figma Design:** [UIMS UI/UX Design](https://www.figma.com/design/RBLEoeaYzvcFmyHMug7jbw/UIMS?node-id=0-1)
+- **Figma Design:** [UIMS UI/UX Design](https://www.figma.com/design/yGEcZwNwcLNDdSBNeLai7i/UIMS-—-Wireframes--Mockups---Prototype?node-id=65-13990&t=xDOKa1f6c3XZha8v-1)
 - **Live Demo:** [Live Demo](https://wadea7-001-site1.dtempurl.com/)
 
 # University Internship Management System — UIMS
