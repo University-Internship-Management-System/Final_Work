@@ -35,7 +35,7 @@ namespace UniversityInternshipManagmentSystem.Company.SupervisorAccount
         protected global::System.Web.UI.WebControls.TextBox txtEmail;
         protected global::System.Web.UI.WebControls.TextBox txtPhoneNumber;
         protected global::System.Web.UI.WebControls.TextBox txtLocation;
-        protected global::System.Web.UI.WebControls.TextBox txtProfilePicUrl;
+        protected global::System.Web.UI.WebControls.FileUpload fuLogo;
         protected global::System.Web.UI.WebControls.Button btnSaveDetails;
         protected global::System.Web.UI.WebControls.Button btnCancelDetails;
         protected global::System.Web.UI.WebControls.TextBox txtCurrentPassword;

@@ -44,7 +44,7 @@
                 <div class="uims-card profile-overview-card">
                     <div class="profile-avatar-wrapper">
                         <asp:Panel ID="pnlImageAvatar" runat="server" Visible="false">
-                            <asp:Image ID="imgAvatar" runat="server" CssClass="profile-avatar-image" AlternateText="Supervisor Avatar" />
+                            <asp:Image ID="imgAvatar" runat="server" CssClass="profile-avatar-image" AlternateText="Company logo" />
                         </asp:Panel>
                         <asp:Panel ID="pnlInitialsAvatar" runat="server" Visible="true">
                             <div class="profile-avatar-circle">
@@ -181,11 +181,11 @@
                             </div>
 
                             <div class="col-12">
-                                <label for="<%= txtProfilePicUrl.ClientID %>" class="form-label">
-                                    Profile Picture URL
+                                <label for="<%= fuLogo.ClientID %>" class="form-label">
+                                    Company Logo
                                 </label>
-                                <asp:TextBox ID="txtProfilePicUrl" runat="server" CssClass="form-control" placeholder="https://example.com/company-logo.jpg" MaxLength="500" />
-                                <span class="input-hint">Enter an image URL or leave blank to display your supervisor initials.</span>
+                                <asp:FileUpload ID="fuLogo" runat="server" CssClass="form-control" accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+                                <span class="input-hint">JPG or PNG, up to 2 MB. Students see it on the opportunity cards. Leave empty to keep the current logo.</span>
                             </div>
                         </div>
 

@@ -69,7 +69,8 @@ namespace UniversityInternshipManagmentSystem.Config
         // than the last one we told the person about. This also covers the Firebase reset page, which our website never sees.
         public static void AfterSignIn(string table, string recordId, string name, string role, string email, string idToken)
         {
-            if (!EmailSender.IsConfigured || string.IsNullOrEmpty(table) || string.IsNullOrEmpty(recordId)) return;
+            if (!EmailSender.IsConfigured) { EmailSender.Log("SKIPPED | sign-in check of " + email + " | the mail settings (SMTP) are not set on this computer"); return; }
+            if (string.IsNullOrEmpty(table) || string.IsNullOrEmpty(recordId)) return;
             var site = Here(idToken);
             // In the background: the person must not wait for these checks (they need several calls to Firebase)
             HostingEnvironment.QueueBackgroundWorkItem(token => CheckAfterSignIn(site, table, recordId, name, role, email, idToken));
@@ -119,7 +120,8 @@ namespace UniversityInternshipManagmentSystem.Config
         // It also remembers the time of this password change, so the "password changed" email does not follow it.
         public static void WelcomeAfterFirstPassword(string table, string recordId, string name, string role, string email, string idToken)
         {
-            if (!EmailSender.IsConfigured || string.IsNullOrEmpty(table) || string.IsNullOrEmpty(recordId)) return;
+            if (!EmailSender.IsConfigured) { EmailSender.Log("SKIPPED | Welcome to UIMS | " + email + " | the mail settings (SMTP) are not set on this computer"); return; }
+            if (string.IsNullOrEmpty(table) || string.IsNullOrEmpty(recordId)) return;
             var site = Here(idToken);
             HostingEnvironment.QueueBackgroundWorkItem(async token =>
             {
@@ -132,7 +134,7 @@ namespace UniversityInternshipManagmentSystem.Config
                     if (passwordTime.HasValue)
                         await FirebaseDb.Patch(table, recordId, new JObject { { "PasswordUpdatedAt", passwordTime.Value } }, idToken);
 
-                    if (IsTrue(record["WelcomeEmailSent"])) return;
+                    if (IsTrue(record["WelcomeEmailSent"])) { EmailSender.Log("SKIPPED | Welcome to UIMS | " + email + " | it was already sent before"); return; }
                     string tips = WelcomeTips(role);
                     await Mail(email, "Welcome to UIMS", "WELCOME", "Welcome to UIMS", name,
                         "Your password is set and your account is ready. UIMS is the University Internship Management System of the King Abdullah II School of Information Technology, "
