@@ -47,6 +47,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             AuthHelper.RequireAuth(this, AuthHelper.RoleCoordinator);
             if (Response.IsRequestBeingRedirected) return;
             EditingId = Request.QueryString["edit"];
+            companyEmail.ReadOnly = EditingId != null;
             openEditor.Value = "0";
             messagePanel.Visible = editorNotice.Visible = false;
             if (String.IsNullOrWhiteSpace(AuthHelper.IdToken) || AuthHelper.IdToken == "mock-token")
@@ -217,6 +218,11 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         {
             if (!allowed) return;
             openEditor.Value = "1";
+            if (EditingId == null && !String.Equals(loginEmail.Text.Trim(), companyEmail.Text.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                ShowMessage("The email addresses do not match. Re-enter the same email address.");
+                return;
+            }
             var person = new CompanySupervisor
             {
                 Name = supervisorName.Text.Trim(), Email = loginEmail.Text.Trim(),
