@@ -255,7 +255,7 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             if (!Double.TryParse(gpa.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out grade)) grade = Double.NaN;
             var student = new StudentModel
             {
-                Name = studentName.Text.Trim(), Email = loginEmail.Text.Trim(), UniEmail = universityEmail.Text.Trim(),
+                Name = studentName.Text.Trim(), Email = loginEmail.Text.Trim(), UniEmail = loginEmail.Text.Trim(),   // "Confirmed email" is read-only: it always equals the login email
                 PhoneNumber = phoneCountry.SelectedValue + Regex.Replace(phoneNumber.Text.Trim(), @"[ ()-]", ""),
                 Major = studentMajor.SelectedValue, AcademicSupervisorId = academicSupervisor.SelectedValue, GPA = grade
             };
@@ -288,9 +288,9 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         // Both the form and the CSV import use these same rules.
         private string ValidateStudent(StudentModel student, string editingId = null)
         {
-            if (student.Name.Length < 2 || student.Name.Length > 100 || !ValidEmail(student.Email) || !ValidEmail(student.UniEmail)
+            if (student.Name.Length < 2 || student.Name.Length > 100 || !ValidEmail(student.Email)
                 || !(student.GPA >= 0 && student.GPA <= 4))
-                return "Enter a name, valid emails, and a GPA between 0 and 4.";
+                return "Enter a name, a valid email, and a GPA between 0 and 4.";
             ListItem country = phoneCountry.Items.Cast<ListItem>().FirstOrDefault(item => student.PhoneNumber.StartsWith(item.Value));
             if (country == null || !Regex.IsMatch(student.PhoneNumber.Substring(country.Value.Length),
                 @"\A(?:" + country.Attributes["data-pattern"] + @")\z"))
@@ -302,7 +302,6 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 return "Choose an academic supervisor with the same major.";
             if (editingId != null && !records.ContainsKey(editingId)) return "Student no longer exists.";
             if (records.Any(item => item.Key != editingId && (SameEmail(item.Value.Email, student.Email)
-                || SameEmail(item.Value.UniEmail, student.UniEmail) || SameEmail(item.Value.Email, student.UniEmail)
                 || SameEmail(item.Value.UniEmail, student.Email))))
                 return "A student with this login or university email already exists.";
             return null;
@@ -430,10 +429,12 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                     double grade;
                     if (!Double.TryParse(cells[6], NumberStyles.Number, CultureInfo.InvariantCulture, out grade)) grade = Double.NaN;
                     var matches = supervisors.Values.Where(person => SameEmail(person.Email, cells[7]) || SameEmail(person.UniversityEmail, cells[7])).ToList();
-                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[2],
+                    var student = new StudentModel { Name = cells[0], Email = cells[1], UniEmail = cells[1],
                         PhoneNumber = (cells[3].StartsWith("+") ? cells[3] : "+" + cells[3]) + cells[4], Major = cells[5], GPA = grade,
                         AcademicSupervisorId = matches.Count == 1 ? matches[0].Id : "" };
                     string error = ValidateStudent(student);
+                    if (error == null && cells[2].Trim() != "" && !SameEmail(cells[1], cells[2]))
+                        error = "ConfirmedEmail must be the same as UniversityEmail (or empty).";
                     if (matches.Count != 1) error = "Supervisor email must match exactly one existing academic supervisor.";
                     if (emails.Contains(student.Email) || emails.Contains(student.UniEmail)) error = "Email is repeated in this file.";
                     emails.Add(student.Email);
