@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -12,7 +11,6 @@ namespace UniversityInternshipManagmentSystem.Config
 {
     // Talks to Firebase as the project (admin), using the Firebase admin key file (see Config/TeamKeys.cs).
     // Used for things that happen without a signed-in person: the deadline alert emails read the database with it.
-    // It can also create a password reset link (not used now: Firebase sends the reset email).
     public static class FirebaseAdmin
     {
         const string IdentityScope = "https://www.googleapis.com/auth/identitytoolkit";
@@ -39,27 +37,10 @@ namespace UniversityInternshipManagmentSystem.Config
             return await GetAccessToken(JObject.Parse(File.ReadAllText(KeyFile)), DatabaseScope);
         }
 
-        // Returns the password reset link of the account, or "" when no account has this email.
-        // Throws when Firebase can not be reached or refuses the request.
-        public static async Task<string> CreateResetLink(string email)
+        // A token that lets the server read and change the Firebase Authentication accounts (for example: deactivate a company's sign-in).
+        public static async Task<string> AccountToken()
         {
-            var key = JObject.Parse(File.ReadAllText(KeyFile));
-            string token = await GetAccessToken(key, IdentityScope);
-
-            var request = new HttpRequestMessage(HttpMethod.Post,
-                "https://identitytoolkit.googleapis.com/v1/projects/" + (string)key["project_id"] + "/accounts:sendOobCode");
-            request.Headers.Add("Authorization", "Bearer " + token);
-            request.Content = new StringContent(
-                JsonConvert.SerializeObject(new { requestType = "PASSWORD_RESET", email = email, returnOobLink = true }),
-                Encoding.UTF8, "application/json");
-
-            using (var response = await Http.SendAsync(request))
-            {
-                string json = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode) return (string)JObject.Parse(json)["oobLink"];
-                if (json.Contains("EMAIL_NOT_FOUND")) return "";
-                throw new HttpRequestException("Firebase refused the reset link request.");
-            }
+            return await GetAccessToken(JObject.Parse(File.ReadAllText(KeyFile)), IdentityScope);
         }
 
         // Google gives an access token to whoever proves they own the service account:
@@ -82,7 +63,7 @@ namespace UniversityInternshipManagmentSystem.Config
                 iat = now,
                 exp = now + 3600
             })));
-            string jwt = header + "." + claims + "." + Base64Url(Sign(header + "." + claims, (string)key["private_key"]));
+            string jwt = header + "." + claims + "." + Base64Url(ServiceAccountSigning.Sign(header + "." + claims, (string)key["private_key"]));
 
             var form = new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -102,15 +83,6 @@ namespace UniversityInternshipManagmentSystem.Config
                 }
                 return token;
             }
-        }
-
-        // The private key in the key file is a PEM text; turn it into bytes and sign with RSA + SHA256.
-        static byte[] Sign(string text, string pem)
-        {
-            string base64 = pem.Replace("-----BEGIN PRIVATE KEY-----", "").Replace("-----END PRIVATE KEY-----", "")
-                .Replace("\r", "").Replace("\n", "").Trim();
-            using (var rsa = new RSACng(CngKey.Import(Convert.FromBase64String(base64), CngKeyBlobFormat.Pkcs8PrivateBlob)))
-                return rsa.SignData(Encoding.UTF8.GetBytes(text), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         }
 
         static string Base64Url(byte[] bytes)

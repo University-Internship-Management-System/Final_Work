@@ -68,7 +68,7 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
@@ -98,6 +98,7 @@
     <Content Include="About.aspx" />
     <Content Include="Academic\Dashboard.aspx" />
     <Content Include="Academic\Dashboard.css" />
+    <Content Include="Academic\StudentProgress\StudentProgress.aspx" />
     <Content Include="App_Data\email-log.txt" />
     <Content Include="Assets\css\uims-theme.css" />
     <Content Include="Assets\images\uj-logo.png" />
@@ -252,11 +253,11 @@
     <Content Include="App_Data\completion-awaiting-admin-pass.test.json" />
     <Content Include="App_Data\keys\firebase-admin.example.json" />
     <Content Include="App_Data\keys\cloudinary.example.json" />
-    <None Include="Scripts\jquery-3.7.0.intellisense.js" />
-    <Content Include="Scripts\jquery-3.7.0.js" />
-    <Content Include="Scripts\jquery-3.7.0.min.js" />
-    <Content Include="Scripts\jquery-3.7.0.slim.js" />
-    <Content Include="Scripts\jquery-3.7.0.slim.min.js" />
+    <None Include="Scripts\jquery-3.7.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.7.1.js" />
+    <Content Include="Scripts\jquery-3.7.1.min.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />
@@ -358,6 +359,11 @@
     <Content Include="Academic\SupervisorAccount\css\supervisor-account.css" />
     <Content Include="Academic\SupervisorAccount\javascript\supervisor-account.js" />
     <Content Include="Coordinator\ContactMessages\ContactMessages.aspx" />
+    <!-- CodeFile page: the source file is published as Content (not Compile), the server compiles it -->
+    <Content Include="Coordinator\ContactMessages\ContactMessages.aspx.cs">
+      <DependentUpon>ContactMessages.aspx</DependentUpon>
+    </Content>
+    <Content Include="Coordinator\ContactMessages\ContactMessages.css" />
     <Content Include="Coordinator\CoordinatorAccount\CoordinatorAccount.aspx" />
     <Content Include="Coordinator\CoordinatorAccount\coordinator-account.css" />
     <Content Include="Coordinator\CoordinatorAccount\coordinator-account.js" />
@@ -400,8 +406,6 @@
     <Content Include="Academic\FinalEvaluation\EvaluateTrainee.aspx" />
     <Content Include="EmailTemplates\notice.html" />
     <Content Include="EmailTemplates\notice.txt" />
-    <Content Include="EmailTemplates\password-reset.html" />
-    <Content Include="EmailTemplates\password-reset.txt" />
     <None Include="secrets.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -485,6 +489,7 @@
     <Compile Include="Config\Notify.cs" />
     <Compile Include="Config\EmailVerification.cs" />
     <Compile Include="Config\FirebaseAdmin.cs" />
+    <Compile Include="Config\ServiceAccountSigning.cs" />
     <Compile Include="Config\FirebaseDb.cs" />
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
@@ -682,8 +687,8 @@
     <Content Include="Scripts\bootstrap.esm.js.map" />
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
-    <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
-    <Content Include="Scripts\jquery-3.7.0.min.map" />
+    <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.7.1.min.map" />
     <Content Include="Site.Mobile.Master" />
     <Content Include="Student\Tests\Start-StudentLocalTest.ps1" />
     <Content Include="Student\Tests\Verify-EditProfile.ps1" />

@@ -74,14 +74,6 @@ namespace UniversityInternshipManagmentSystem.Config
             }
         }
 
-        // Sends the password reset email with our design (needs the service account key, see FirebaseAdmin.cs).
-        // Throws when the mail can not be sent.
-        public static Task SendPasswordReset(string email, string link)
-        {
-            var values = new Dictionary<string, string> { { "EMAIL", email }, { "LINK", link } };
-            return Send(email, "Reset your UIMS password", "password-reset", values);
-        }
-
         // Builds the email and sends it. It ALWAYS finishes: when the mail server does not answer in SmtpTimeoutSeconds (20 by default)
         // the send is given up and an error is thrown, so a page or a sign-in can never wait for ever.
         //   port 465 = secure from the first byte ("implicit TLS"): our own small sender below (the built-in SmtpClient can not do it)

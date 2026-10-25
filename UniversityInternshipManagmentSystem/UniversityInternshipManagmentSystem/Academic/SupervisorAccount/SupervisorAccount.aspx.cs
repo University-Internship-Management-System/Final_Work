@@ -339,8 +339,8 @@ namespace UniversityInternshipManagmentSystem.Academic.SupervisorAccount
                 if ((string)header["alg"] != "RS256" || string.IsNullOrWhiteSpace((string)header["kid"])
                     || (string)claims["sub"] != uid || (string)claims["aud"] != project
                     || (string)claims["iss"] != "https://securetoken.google.com/" + project
-                    || !expires.HasValue || expires.Value <= now || !issued.HasValue || issued.Value > now
-                    || !authenticated.HasValue || authenticated.Value > now
+                    || !expires.HasValue || expires.Value <= now || !issued.HasValue || issued.Value > now + 300
+                    || !authenticated.HasValue || authenticated.Value > now + 300
                     || issued.Value < 0 || authenticated.Value < 0 || expires.Value <= issued.Value
                     || (long.TryParse(validSince, out revokedBefore) && authenticated.Value < revokedBefore))
                     throw new FormatException();

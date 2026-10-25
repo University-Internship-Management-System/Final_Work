@@ -158,7 +158,11 @@ namespace UniversityInternshipManagmentSystem.Coordinator
                 disabledAccounts = await CompanyAccountAccess.GetDisabledAccounts(accounts.Keys.ToArray());
                 ViewState["LoginStates"] = disabledAccounts;
             }
-            catch { ShowMessage("Sign-in status is unavailable. Check the Firebase admin key on this computer."); }
+            catch (Exception error)
+            {
+                string step = error.Data["Step"] as string;
+                ShowMessage("Sign-in status is unavailable" + (step == null ? "" : " (failed while " + step + ")") + ". Check the Firebase admin key on this computer.");
+            }
         }
 
         // Add generates a password; Edit fills the same form with saved details.

@@ -306,13 +306,6 @@ namespace UniversityInternshipManagmentSystem.Student.StudentProfilePage
                 "document.addEventListener('DOMContentLoaded', function () { bootstrap.Modal.getOrCreateInstance(document.getElementById('resetPasswordModal')).show(); });", true);
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            string query = Request.Url.Query ?? "";
-            Response.Redirect("~/login/FirstLogin.aspx" + query, false);
-            Context.ApplicationInstance.CompleteRequest();
-        }
-
         protected void EditButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Edit; }
         protected void ValidateButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Validate; }
         protected void SaveButton_Click(object sender, EventArgs e) { requestedAction = ProfileAction.Save; }

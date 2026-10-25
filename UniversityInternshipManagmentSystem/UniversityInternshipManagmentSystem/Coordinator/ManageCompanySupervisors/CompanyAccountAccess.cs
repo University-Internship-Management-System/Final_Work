@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -49,62 +48,41 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             await Send("update", new { localId = id, disableUser = disabled });
         }
 
+        // Asks Firebase Authentication. When it fails, error.Data["Step"] says which step (the page shows it to the coordinator).
         private static async Task<JObject> Send(string action, object data)
         {
-            if (!IsConfigured) throw new InvalidOperationException("Firebase admin credentials are not configured.");
-            var key = JObject.Parse(File.ReadAllText(CredentialsPath));
-            string projectId = (string)key["project_id"];
-            string host = new Uri(AppConfig.DbUrl).Host;
-            if (String.IsNullOrWhiteSpace(projectId)
-                || !(host.StartsWith(projectId + "-", StringComparison.OrdinalIgnoreCase)
-                     || host.StartsWith(projectId + ".", StringComparison.OrdinalIgnoreCase)))
-                throw new InvalidOperationException("The admin key does not belong to the configured Firebase project.");
+            string step = "reading the admin key file";
+            try
+            {
+                if (!IsConfigured) throw new InvalidOperationException("The Firebase admin key file was not found.");
+                string projectId = (string)JObject.Parse(File.ReadAllText(CredentialsPath))["project_id"];
+                string host = new Uri(AppConfig.DbUrl).Host;
+                if (String.IsNullOrWhiteSpace(projectId)
+                    || !(host.StartsWith(projectId + "-", StringComparison.OrdinalIgnoreCase)
+                         || host.StartsWith(projectId + ".", StringComparison.OrdinalIgnoreCase)))
+                    throw new InvalidOperationException("The admin key does not belong to the configured Firebase project.");
 
-            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            string header = Encode(Encoding.UTF8.GetBytes("{\"alg\":\"RS256\",\"typ\":\"JWT\"}"));
-            string claims = JsonConvert.SerializeObject(new
-            {
-                iss = (string)key["client_email"],
-                scope = "https://www.googleapis.com/auth/identitytoolkit",
-                aud = "https://oauth2.googleapis.com/token",
-                iat = now,
-                exp = now + 3600
-            });
-            string unsigned = header + "." + Encode(Encoding.UTF8.GetBytes(claims));
-            string pem = ((string)key["private_key"]).Replace("-----BEGIN PRIVATE KEY-----", "")
-                .Replace("-----END PRIVATE KEY-----", "");
-            byte[] signature;
-            using (var privateKey = CngKey.Import(Convert.FromBase64String(pem), CngKeyBlobFormat.Pkcs8PrivateBlob))
-            using (var rsa = new RSACng(privateKey))
-                signature = rsa.SignData(Encoding.UTF8.GetBytes(unsigned), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                step = "getting a Google token with the admin key";
+                string accessToken = await FirebaseAdmin.AccountToken();
 
-            string accessToken;
-            using (var body = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer" },
-                { "assertion", unsigned + "." + Encode(signature) }
-            }))
-            using (var response = await FirebaseDb.client.PostAsync("https://oauth2.googleapis.com/token", body))
-            {
-                if (!response.IsSuccessStatusCode) throw new HttpRequestException("Firebase admin authorization failed.");
-                accessToken = (string)JObject.Parse(await response.Content.ReadAsStringAsync())["access_token"];
-            }
-            string url = "https://identitytoolkit.googleapis.com/v1/projects/" + Uri.EscapeDataString(projectId) + "/accounts:" + action;
-            using (var request = new HttpRequestMessage(HttpMethod.Post, url))
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                request.Content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-                using (var response = await FirebaseDb.client.SendAsync(request))
+                step = "asking Firebase Authentication";
+                string url = "https://identitytoolkit.googleapis.com/v1/projects/" + Uri.EscapeDataString(projectId) + "/accounts:" + action;
+                using (var request = new HttpRequestMessage(HttpMethod.Post, url))
                 {
-                    if (!response.IsSuccessStatusCode) throw new HttpRequestException("Firebase account administration failed.");
-                    return JObject.Parse(await response.Content.ReadAsStringAsync());
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                    request.Content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                    using (var response = await FirebaseDb.client.SendAsync(request))
+                    {
+                        if (!response.IsSuccessStatusCode) throw new HttpRequestException("Firebase account administration failed.");
+                        return JObject.Parse(await response.Content.ReadAsStringAsync());
+                    }
                 }
             }
-        }
-
-        private static string Encode(byte[] bytes)
-        {
-            return Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+            catch (Exception error)
+            {
+                error.Data["Step"] = step;
+                throw;
+            }
         }
     }
 }

@@ -22,8 +22,14 @@ namespace UniversityInternshipManagmentSystem.Config
         // The full path of the key file, or null when there is none on this PC
         public static string FindFile(string variableName, string teamFileName)
         {
-            string fromVariable = Environment.GetEnvironmentVariable(variableName, EnvironmentVariableTarget.User)
-                ?? Environment.GetEnvironmentVariable(variableName);
+            // On a hosting server the website may not be allowed to read the Windows user settings, so the normal variable comes first
+            string fromVariable = Environment.GetEnvironmentVariable(variableName);
+            if (string.IsNullOrWhiteSpace(fromVariable))
+            {
+                try { fromVariable = Environment.GetEnvironmentVariable(variableName, EnvironmentVariableTarget.User); }
+                catch (System.Security.SecurityException) { }
+                catch (UnauthorizedAccessException) { }
+            }
             if (!string.IsNullOrWhiteSpace(fromVariable) && File.Exists(fromVariable)) return fromVariable;
 
             string teamFile = HostingEnvironment.MapPath("~/App_Data/keys/" + teamFileName);
