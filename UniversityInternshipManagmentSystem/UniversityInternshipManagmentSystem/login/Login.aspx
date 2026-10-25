@@ -1,655 +1,631 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="UniversityInternshipManagmentSystem.login.Login" Async="true" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="UniversityInternshipManagmentSystem.login.Login" Async="true" %>
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Field Training System (UIMS) - Unified Login Portal | The University of Jordan</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#123F32" />
+  <title>Sign in to UIMS | The University of Jordan</title>
   <style>
-:root {
-      --uj-green-deep: #032211;
-      --uj-green-dark: #064e27;
-      --uj-green: #0b5c2c;
-      --uj-shield-green: #009639;
-      --uj-emerald: #10b981;
-      --uj-gold: #d4af37;
-      --uj-red: #e60000;
-      --slate-900: #0f172a;
-      --slate-800: #1e293b;
-      --slate-700: #334155;
-      --slate-600: #475569;
-      --slate-500: #64748b;
-      --slate-200: #e2e8f0;
-      --slate-100: #f1f5f9;
-      --slate-50: #f8fafc;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      height: 100vh;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #0a4a3a;
-      background-image:
-        radial-gradient(900px 700px at 8% 12%, #1d6a56 0, transparent 65%),
-        radial-gradient(800px 650px at 100% 100%, #44803f 0, transparent 65%),
-        radial-gradient(600px 500px at 100% 0%, #3c6a45 0, transparent 60%),
-        radial-gradient(1000px 600px at 45% 108%, #032f23 0, transparent 70%),
-        linear-gradient(135deg, #14594a 0%, #0a4a3a 50%, #0d5a42 100%);
-      background-attachment: fixed;
-      color: var(--slate-800);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .font-arabic {
-      font-family: 'Cairo', Tahoma, sans-serif;
-    }
-
-    .skip-link {
-      position: absolute;
-      top: -100px;
-      left: 16px;
-      background: #064e27;
-      color: #fff;
-      padding: 8px 14px;
-      border-radius: 6px;
-      z-index: 999;
-      font-weight: 600;
-      text-decoration: none;
-      transition: top 0.2s ease;
-    }
-    .skip-link:focus {
-      top: 12px;
-    }
-
-    /* Fixed Interactive Canvas & Lines */
-    #bgCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .uims-bg {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .uims-bg-dots {
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1.2px, transparent 1.2px);
-      background-size: 32px 32px;
-    }
-
-    .uims-bg-lines {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      fill: none;
-      stroke: #fff;
-      stroke-width: 1.5;
-      stroke-opacity: .09;
-      scale: 1.05;
-      --depth: 1;
-      translate: calc(var(--mx, 0) * -14px * var(--depth)) calc(var(--my, 0) * -10px * var(--depth));
-      animation: bgDrift 24s ease-in-out infinite alternate, bgBreathe 9s ease-in-out infinite alternate;
-    }
-
-    @keyframes bgDrift {
-      from { transform: translate3d(-2.2%, 1.6%, 0) rotate(-1deg); }
-      to   { transform: translate3d(2.2%, -1.6%, 0) rotate(1deg); }
-    }
-
-    @keyframes bgBreathe {
-      from { opacity: .5; }
-      to   { opacity: .95; }
-    }
-
-    /* Form1 full height flex container */
-    #form1 {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100%;
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* Main Stage */
-    .main-stage {
-      position: relative;
-      z-index: 10;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 0;
-      padding: clamp(6px, 1.5vh, 16px) 24px;
-      width: 100%;
-    }
-
-    .split-login-card {
-      width: 100%;
-      max-width: 1020px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: clamp(16px, 2.5vw, 36px);
-      margin: 0 auto;
-    }
-
-    /* Left Panel: Emblem & Animations */
-    .shield-showcase-panel {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      background: transparent;
-      border: 0;
-      overflow: visible;
-    }
-
-    .uj-shield-viewport {
-      position: relative;
-      z-index: 5;
-      width: 100%;
-      max-width: 440px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 800px;
-    }
-
-    #grandUjLogoSvg {
-      width: 100%;
-      height: clamp(310px, 47vh, 430px);
-      max-height: 440px;
-      overflow: visible;
-      filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.55));
-      transition: filter 0.35s ease;
-      will-change: transform;
-    }
-
-    .orbit-ring-cw {
-      transform-box: view-box;
-      transform-origin: 200px 225px;
-      animation: spinCW 28s linear infinite;
-    }
-
-    .orbit-ring-ccw {
-      transform-box: view-box;
-      transform-origin: 200px 225px;
-      animation: spinCCW 20s linear infinite;
-    }
-
-    @keyframes spinCW {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    @keyframes spinCCW {
-      from { transform: rotate(360deg); }
-      to   { transform: rotate(0deg); }
-    }
-
-    #shieldProgressRing {
-      transition: stroke-dashoffset 0.25s ease, stroke 0.3s ease;
-    }
-
-    #flameGlowCircle {
-      transform-box: fill-box;
-      transform-origin: center;
-      opacity: .5;
-      transition: transform .2s ease, opacity .2s ease;
-    }
-    #flameGlowCircle.pulse {
-      transform: scale(1.4);
-      opacity: 1;
-    }
-
-    #torchFlameGroup {
-      transform-origin: 200px 145px;
-      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
-    }
-
-    /* Right Panel: Sign-In Card */
-    .login-form-panel {
-      background: #F8FAF9;
-      border-radius: 18px;
-      border-top: 5px solid var(--uj-green);
-      box-shadow: 0 25px 65px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.16);
-      padding: clamp(16px, 2.5vh, 28px) clamp(20px, 2.8vw, 36px);
-      width: 100%;
-      max-width: 420px;
-      margin: 0 auto;
-      transition: box-shadow .35s ease, border-top-color .35s ease;
-      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
-    }
-
-    .split-login-card.state-email .login-form-panel {
-      border-top-color: var(--uj-emerald);
-      box-shadow: 0 28px 75px rgba(16,185,129,.26), 0 0 0 1.5px rgba(16,185,129,.4);
-    }
-    .split-login-card.state-password .login-form-panel {
-      border-top-color: var(--uj-gold);
-      box-shadow: 0 28px 75px rgba(212,175,55,.28), 0 0 0 1.5px rgba(212,175,55,.45);
-    }
-    .split-login-card.state-error .login-form-panel {
-      border-top-color: var(--uj-red);
-      box-shadow: 0 0 0 1.5px rgba(239, 68, 68, .7), 0 0 90px 22px rgba(239, 68, 68, .6), 0 25px 65px rgba(0, 0, 0, .45);
-      animation: cardShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both, uimsErrGlow .9s ease-out;
-    }
-
-    @keyframes cardShake {
-      10%, 90% { transform: translate3d(-3px, 0, 0); }
-      20%, 80% { transform: translate3d(5px, 0, 0); }
-      30%, 50%, 70% { transform: translate3d(-7px, 0, 0); }
-      40%, 60% { transform: translate3d(7px, 0, 0); }
-    }
-
-    @keyframes uimsErrGlow {
-      0%   { box-shadow: 0 0 0 3px rgba(239, 68, 68, .9), 0 0 120px 30px rgba(239, 68, 68, .85), 0 25px 65px rgba(0, 0, 0, .45); }
-      100% { box-shadow: 0 0 0 1.5px rgba(239, 68, 68, .7), 0 0 90px 22px rgba(239, 68, 68, .6), 0 25px 65px rgba(0, 0, 0, .45); }
-    }
-
-    .login-form-inner {
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    .portal-heading-box {
-      text-align: center;
-      margin-bottom: clamp(8px, 1.4vh, 14px);
-    }
-
-    .fp-logo {
-      width: 54px;
-      height: 54px;
-      margin: 0 auto 6px;
-      border-radius: 50%;
-      background: #fff;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 0 0 5px rgba(23,133,104,.10), 0 6px 14px rgba(7,82,62,.16);
-    }
-    .fp-logo img {
-      height: 36px;
-      width: auto;
-      display: block;
-    }
-
-    .fp-pill {
-      display: inline-block;
-      background: #EAF4EF;
-      color: #178568;
-      font-weight: 700;
-      font-size: 10.5px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 999px;
-    }
-
-    .login-form-panel .portal-main-title {
-      margin: 6px 0 3px;
-      font-size: clamp(20px, 2.3vh, 24px);
-      font-weight: 800;
-      color: #07523E;
-      letter-spacing: -.02em;
-    }
-
-    .login-form-panel .portal-sub-title {
-      margin: 0;
-      font-size: 12px;
-      line-height: 1.45;
-      color: #65756E;
-      font-weight: 400;
-    }
-
-    /* Form Fields */
-    .form-group {
-      margin-bottom: clamp(7px, 1.2vh, 11px);
-    }
-
-    .form-label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-
-    .login-form-panel .form-label {
-      font-weight: 700;
-      font-size: 12.5px;
-      color: #183B31;
-    }
-
-    .login-form-panel .domain-badge {
-      font-size: 11px;
-      font-weight: 600;
-      color: #64748b;
-    }
-
-    .login-form-panel .forgot-link {
-      font-weight: 700;
-      font-size: 12px;
-      color: #178568;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .login-form-panel .uims-input-group {
-      height: clamp(40px, 4.8vh, 46px);
-      border: 1px solid #E2E8E5;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #EEF2FF;
-      box-shadow: none;
-      transition: border-color .2s, box-shadow .2s;
-      display: flex;
-      align-items: center;
-    }
-
-    .login-form-panel .uims-input-group:focus-within {
-      border-color: #178568;
-      box-shadow: 0 0 0 3px rgba(23,133,104,.25);
-    }
-    .login-form-panel .uims-input-group.input-invalid {
-      border-color: #dc2626;
-      box-shadow: 0 0 0 3px rgba(220,38,38,.15);
-    }
-
-    .login-form-panel .uims-input-addon {
-      width: 40px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #EAF4EF;
-      color: #178568;
-      border: 0;
-      flex: none;
-    }
-
-    .login-form-panel .uims-input {
-      flex: 1;
-      height: 100%;
-      background: transparent;
-      border: none;
-      padding: 0 10px;
-      font-size: 14px;
-      color: #183B31;
-      font-family: inherit;
-      outline: none;
-    }
-
-    .login-form-panel .uims-eye-btn {
-      width: 40px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #EAF4EF;
-      color: #65756E;
-      border: 0;
-      cursor: pointer;
-      flex: none;
-    }
-
-    .login-form-panel .sign-in-btn {
-      width: 100%;
-      height: clamp(42px, 5.0vh, 48px);
-      border-radius: 14px;
-      font-size: 15.5px;
-      font-weight: 800;
-      background: linear-gradient(90deg, #07523E, #178568);
-      box-shadow: 0 10px 20px rgba(7,82,62,.24);
-      font-family: inherit;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      margin-top: 4px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .official-alert {
-      padding: 7px 11px;
-      border-radius: 9px;
-      margin-bottom: 8px;
-      font-size: 12.5px;
-      gap: 7px;
-      align-items: center;
-      display: flex;
-    }
-    .alert-error {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #991b1b;
-    }
-    .alert-success {
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      color: #065f46;
-    }
-
-    .fp-secure {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      margin-top: clamp(6px, 1.0vh, 10px);
-      font-size: 11.5px;
-      color: #65756E;
-    }
-    .fp-secure svg {
-      color: #178568;
-      flex: none;
-    }
-
-    /* Clean Full-Width Bottom Footer */
-    .fp-footer {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px 24px;
-      padding: 8px 48px;
-      background: rgba(2, 30, 22, .68);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-top: 1px solid rgba(255,255,255,.08);
-      color: #dbe8e1;
-      font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
-      font-size: 12.5px;
-      font-weight: 500;
-      flex-shrink: 0;
-      width: 100%;
-    }
-
-    .fp-footer-nav {
-      display: flex;
-      gap: 24px;
-    }
-
-    .fp-footer-link {
-      background: none;
-      border: 0;
-      padding: 3px 0;
-      cursor: pointer;
-      color: #fff;
-      font: inherit;
-      font-weight: 600;
-    }
-    .fp-footer-link:hover {
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
-
-    /* Modals */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(4px);
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .modal-overlay.show {
-      display: flex !important;
-    }
-    .modal-card {
-      background: #fff;
-      border-radius: 14px;
-      width: 100%;
-      max-width: 440px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-    .modal-head {
-      background: #064e27;
-      color: #fff;
-      padding: 12px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-    }
-    .modal-body {
-      padding: 18px;
-      font-size: 13.5px;
-      line-height: 1.6;
-      color: #334155;
-    }
-    .modal-foot {
-      padding: 10px 18px;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: flex-end;
-    }
-    .nav-portal-btn {
-      background-color: var(--uj-green);
-      color: #ffffff;
-      border: none;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 6px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 860px) {
-      html, body {
-        height: auto;
-        min-height: 100vh;
-        overflow-y: auto;
-      }
-      #form1 {
-        height: auto;
-        min-height: 100vh;
-        overflow-y: auto;
-      }
-      .split-login-card {
-        grid-template-columns: 1fr;
-        max-width: 440px;
-        padding-top: 14px;
-      }
-      .fp-footer {
-        padding: 12px 20px;
-        justify-content: center;
-        text-align: center;
-      }
-      #grandUjLogoSvg {
-        height: 220px;
-        max-height: 220px;
-      }
-    }
-      /* ===== Error: spin the UJ emblem and show a red lock over it ===== */
-    #authenticShieldBody {
-      transform-box: view-box;
-      transform-origin: 200px 230px;
-    }
-    .split-login-card.state-error #authenticShieldBody {
-      animation: ujLogoErrorFlip 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-    @keyframes ujLogoErrorFlip {
-      0%   { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
-    }
-    #errorRedLockOverlay {
-      opacity: 0;
-      transform-box: view-box;
-      transform-origin: 200px 230px;
-      transform: scale(0.75);
-      transition: opacity 0.25s ease, transform 0.32s cubic-bezier(0.25, 1, 0.5, 1);
-      pointer-events: none;
-    }
-    .split-login-card.state-error #errorRedLockOverlay {
-      opacity: 1;
-      transform: scale(1);
-    }
+    :root {
+      color-scheme: light;
+      --green: #123f32; --forest: #092b24; --ivory: #f6f3ea;
+      --cream: #eae6d9; --gold: #c4a66a; --ink: #17231f;
+      --muted: #59675e; --white: #fafaf6; --border: #d7d9ce;
+      --ease-entrance: cubic-bezier(.22, 1, .36, 1);
+      --motion-micro: 220ms; --motion-reveal: 900ms;
+      --motion-form: 500ms; --motion-curtain-delay: 60ms; --motion-frame: 1100ms;
+      --motion-stagger: 45ms; --motion-start: 100ms;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { background: var(--ivory); }
+    body { margin: 0; color: var(--ink); background: var(--ivory); font: 15px/1.6 "Segoe UI", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    button, input { font: inherit; }
+    button, a, input { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { color: var(--green); }
+    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #977a3d; outline-offset: 4px; }
+    [hidden] { display: none !important; }
+    .skip-link { position: fixed; top: 12px; left: 20px; z-index: 20; padding: 10px 18px; color: white; background: var(--forest); transform: translateY(-160%); }
+    .skip-link:focus { transform: none; }
+    .entrance { display: grid; grid-template-columns: 57% 43%; min-height: 100vh; min-height: 100svh; }
+    .campus { position: relative; isolation: isolate; min-height: 800px; overflow: hidden; background: var(--forest); color: var(--white); }
+    .campus-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 43%; }
+    .campus::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9,43,36,.46), rgba(9,43,36,.13) 25%, rgba(9,43,36,.69) 57%, rgba(9,43,36,.97)); }
+    .campus-photo { z-index: -2; }
+    .campus-frame { position: absolute; inset: 28px; border: 1px solid rgba(246,243,234,.28); pointer-events: none; }
+    .campus-frame::before, .campus-frame::after { content: ""; position: absolute; width: 42px; height: 42px; border-color: var(--gold); border-style: solid; }
+    .campus-frame::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .campus-frame::after { right: -1px; bottom: -1px; border-width: 0 2px 2px 0; }
+    .campus-inner { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: inherit; height: 100%; padding: 64px clamp(48px, 5.2vw, 100px) 58px; }
+    .campus-wordmark { display: flex; align-items: center; gap: 15px; font-size: 12px; font-weight: 600; letter-spacing: .17em; line-height: 1.6; }
+    .campus-wordmark img { width: 35px; height: 45px; object-fit: contain; }
+    .campus-wordmark small { display: block; margin-top: 3px; color: #e0e5d6; font-size: 10px; font-weight: 400; letter-spacing: .15em; }
+    .campus-story { padding-top: 140px; padding-bottom: 55px; }
+    .eyebrow { margin: 0 0 25px; display: flex; align-items: center; gap: 13px; color: #e5d1a6; font-size: 10px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 32px; height: 1px; background: var(--gold); }
+    .campus h1 { margin: 0; font: normal clamp(56px, 5vw, 94px)/1.04 Georgia, "Times New Roman", serif; letter-spacing: -.045em; }
+    .text-mask { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+    .text-mask > span { display: block; }
+    .campus h1 em { font-weight: normal; color: #e5d1a6; }
+    .campus-description { max-width: 330px; margin: 26px 0 0; color: #e1e7dd; font-size: 15px; line-height: 1.8; }
+    .campus-caption { display: flex; align-items: end; justify-content: space-between; gap: 20px; border-top: 1px solid rgba(246,243,234,.24); padding-top: 20px; color: #dce3d9; font-size: 11px; }
+    .campus-caption strong { display: block; color: var(--white); font-weight: 500; font-size: 12px; }
+    .caption-mark { font-family: Georgia, serif; font-size: 22px; letter-spacing: .05em; color: #e5d1a6; }
+    .login-panel { display: flex; flex-direction: column; min-width: 0; padding: 48px clamp(32px, 4.3vw, 84px) 26px; }
+    .panel-top { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+    .back-link { font-size: 12px; text-decoration: none; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; }
+    .back-link:hover { color: var(--green); }
+    .back-link svg { width: 15px; height: 15px; }
+    .form-wrap { width: 100%; max-width: 400px; margin: auto; padding: 60px 0 48px; }
+    .identity { display: flex; align-items: center; gap: 15px; margin-bottom: 49px; }
+    .identity img { width: 43px; height: 55px; object-fit: contain; flex-shrink: 0; }
+    .identity-name { display: block; color: var(--green); font-size: 14px; font-weight: 650; letter-spacing: -.01em; }
+    .identity-system { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; margin-top: 3px; }
+    .section-label { margin: 0 0 12px; font-size: 10px; font-weight: 600; letter-spacing: .2em; color: #6b715f; text-transform: uppercase; }
+    .welcome { margin: 0; font: normal clamp(42px, 3.5vw, 58px)/1.15 Georgia, "Times New Roman", serif; color: var(--green); letter-spacing: -.045em; }
+    .welcome .period { color: #a68c53; }
+    .intro { margin: 14px 0 32px; color: var(--muted); font-size: 14px; }
+    .field { margin-bottom: 23px; }
+    .label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+    label { color: #34473c; font-size: 12px; font-weight: 600; }
+    .forgot-link { padding: 0; background: none; border: 0; color: var(--green); font-size: 11px; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: #b8c3b7; }
+    .input-shell { display: flex; align-items: center; min-height: 58px; background: rgba(250,250,246,.65); border: 1px solid var(--border); border-radius: 5px; transition: border-color var(--motion-micro), box-shadow var(--motion-micro), background var(--motion-micro); }
+    .input-shell:focus-within { background: var(--white); border-color: #587666; box-shadow: 0 0 0 3px rgba(18,63,50,.09); }
+    .input-icon { width: 18px; height: 18px; margin-left: 18px; flex-shrink: 0; color: #6b7a6c; transition: color var(--motion-micro); }
+    .input-shell:focus-within .input-icon { color: var(--green); }
+    .login-input { display: block; width: 100%; min-width: 0; height: 56px; border: 0; border-radius: inherit; color: var(--ink); background: transparent; padding: 0 14px; font-size: 14px; outline: none !important; }
+    .login-input::placeholder { color: #7b8379; opacity: 1; }
+    .login-input:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px var(--ivory) inset; -webkit-text-fill-color: var(--ink); }
+    .visibility-button { width: 48px; height: 52px; flex-shrink: 0; display: grid; place-items: center; border: 0; background: none; color: #596f60; }
+    .visibility-button svg { grid-area: 1/1; width: 18px; height: 18px; transition: opacity var(--motion-micro); }
+    .visibility-button [data-eye-open] { opacity: 0; }
+    .visibility-button[aria-pressed="true"] [data-eye-open] { opacity: 1; }
+    .visibility-button[aria-pressed="true"] [data-eye-closed] { opacity: 0; }
+    .input-shell.input-invalid { border-color: #a0473d; }
+    .field-error { margin: 6px 0 0; color: #963f36; font-size: 12px; }
+    .submit-shell { position: relative; overflow: hidden; border-radius: 5px; margin-top: 29px; background: var(--green); transition: background var(--motion-micro), box-shadow var(--motion-micro), transform var(--motion-micro); }
+    .submit-shell::before { content: ""; pointer-events: none; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.08), transparent 75%); transform: translateX(-110%); transition: transform 650ms var(--ease-entrance); }
+    .submit-shell:hover::before { transform: translateX(110%); }
+    .submit-shell:hover { background: var(--forest); box-shadow: 0 6px 18px rgba(9,43,36,.13); }
+    .submit-shell:active { transform: translateY(1px); }
+    .sign-in-button { width: 100%; height: 58px; border: 0; background: transparent; color: var(--white); font-size: 14px; font-weight: 600; text-align: left; padding: 0 24px; cursor: pointer; }
+    .submit-arrow { position: absolute; top: 20px; right: 23px; width: 20px; height: 20px; pointer-events: none; transition: transform var(--motion-micro); color: #ded2b5; }
+    .submit-shell:hover .submit-arrow { transform: translateX(3px); }
+    .submit-progress { position: absolute; inset: 0; pointer-events: none; display: none; align-items: center; justify-content: center; gap: 12px; color: var(--white); font-size: 13px; }
+    .spinner { width: 17px; height: 17px; border: 2px solid rgba(255,255,255,.3); border-top-color: white; border-radius: 50%; animation: spin 800ms linear infinite; }
+    .submit-shell.is-loading .submit-progress { display: flex; }
+    .submit-shell.is-loading .sign-in-button { color: transparent; }
+    .submit-shell.is-loading .submit-arrow { opacity: 0; }
+    .security-note { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 18px 0 0; font-size: 11px; color: var(--muted); }
+    .security-note svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .form-divider { display: flex; align-items: center; gap: 13px; margin-top: 36px; color: #6b756a; font-size: 10px; letter-spacing: .04em; }
+    .form-divider::before, .form-divider::after { content: ""; height: 1px; flex: 1; background: #d9d9cc; }
+    .role-note { margin: 13px 0 0; color: var(--muted); text-align: center; font-size: 11px; line-height: 1.8; }
+    .official-alert { border: 1px solid #dfc6bf; background: #fbefeb; color: #853d33; border-radius: 5px; padding: 12px 15px; margin: 0 0 22px; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+    .alert-success { background: #eaf1e8; color: var(--green); border-color: #c5d7c5; }
+    .panel-footer { width: 100%; max-width: 400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: start; gap: 20px; border-top: 1px solid #dbddcf; padding-top: 19px; }
+    .panel-footer p { margin: 0; font-size: 10px; color: var(--muted); line-height: 1.8; }
+    .footer-link { padding: 0; border: 0; background: none; font-size: 11px; color: var(--green); white-space: nowrap; }
+    .footer-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .modal-overlay { position: fixed; z-index: 50; inset: 0; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(9,43,36,.72); overflow: auto; }
+    .modal-overlay.show { display: flex; }
+    .modal-card { width: 100%; max-width: 450px; max-height: calc(100svh - 48px); overflow-y: auto; padding: 31px; border-radius: 8px; background: var(--ivory); box-shadow: 0 24px 80px rgba(0,0,0,.2); }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+    .modal-head h2 { margin: 0; color: var(--green); font: normal 28px/1.25 Georgia, serif; letter-spacing: -.03em; }
+    .modal-close { flex-shrink: 0; background: transparent; color: var(--green); border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; font-size: 22px; line-height: 1; }
+    .modal-body p { color: var(--muted); font-size: 14px; }
+    .modal-body .label-row { margin-top: 24px; }
+    .modal-foot { display: flex; justify-content: flex-end; align-items: center; gap: 14px; margin-top: 24px; }
+    .secondary-button, .recovery-button { padding: 11px 17px; border-radius: 4px; border: 1px solid var(--border); background: transparent; color: var(--green); font-size: 12px; cursor: pointer; }
+    .recovery-button { color: var(--white); background: var(--green); border-color: var(--green); }
+    .alert { padding: 12px; margin: 18px 0; font-size: 13px; border-radius: 5px; }
+    .alert-danger { color: #853d33; background: #fbefeb; }
+    body.modal-open { overflow: hidden; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    /* A single opening sequence: doors, architectural frame, typography, then form. */
+    .frame-stroke { position: absolute; display: block; background: rgba(229,209,166,.65); }
+    .frame-stroke.top, .frame-stroke.bottom { width: 100%; height: 1px; left: 0; }
+    .frame-stroke.top { top: 0; transform-origin: left; }
+    .frame-stroke.bottom { bottom: 0; transform-origin: right; }
+    .frame-stroke.left, .frame-stroke.right { height: 100%; width: 1px; top: 0; }
+    .frame-stroke.left { left: 0; transform-origin: bottom; }
+    .frame-stroke.right { right: 0; transform-origin: top; }
+    .campus-frame { border-color: transparent; }
+    .identity { position: relative; }
+    .identity::after { content: ""; position: absolute; left: 58px; bottom: -16px; height: 1px; width: 48px; background: var(--gold); transform-origin: left; }
+    .input-shell { position: relative; }
+    .input-shell::after { content: ""; position: absolute; bottom: -1px; left: 15px; right: 15px; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 400ms var(--ease-entrance); pointer-events: none; }
+    .input-shell:focus-within::after { transform: scaleX(1); }
+    .input-icon { transition: color var(--motion-micro), transform var(--motion-micro); }
+    .input-shell:focus-within .input-icon { transform: scale(1.12); }
+    .submit-shell::after { content: ""; position: absolute; pointer-events: none; left: var(--press-x, 50%); top: var(--press-y, 50%); width: 24px; height: 24px; background: rgba(229,209,166,.28); border-radius: 50%; opacity: 0; transform: translate(-50%, -50%) scale(0); }
+    .submit-shell.is-pressed::after { animation: button-ripple 650ms var(--ease-entrance); }
+    .campus-frame { transition: filter 400ms var(--ease-entrance); }
+    body:has(.input-shell:focus-within) .campus-frame { filter: brightness(1.3); }
+    @keyframes architectural-reveal { from { clip-path: inset(0 28%); filter: brightness(.65); } to { clip-path: inset(0); filter: brightness(1); } }
+    @keyframes text-reveal { from { opacity: 0; transform: translateY(16px); clip-path: inset(0 0 100% 0); } to { opacity: 1; transform: translateY(0); clip-path: inset(0); } }
+    @keyframes form-reveal { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes stroke-horizontal { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @keyframes stroke-vertical { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes button-ripple { 0% { opacity: .7; transform: translate(-50%, -50%) scale(0); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(36); } }
+    @keyframes dialog-reveal { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+    @keyframes feedback-reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: no-preference) {
+      [data-animate="true"] .campus-photo { animation: architectural-reveal var(--motion-reveal) var(--ease-entrance) both; }
+      [data-animate="true"] .frame-stroke.top, [data-animate="true"] .frame-stroke.bottom { animation: stroke-horizontal var(--motion-frame) var(--ease-entrance) 200ms both; }
+      [data-animate="true"] .frame-stroke.left, [data-animate="true"] .frame-stroke.right { animation: stroke-vertical var(--motion-frame) var(--ease-entrance) 200ms both; }
+      [data-animate="true"] .campus-wordmark { animation: form-reveal var(--motion-form) var(--ease-entrance) 400ms both; }
+      [data-animate="true"] .text-mask > span { animation: text-reveal 650ms var(--ease-entrance) 300ms both; }
+      [data-animate="true"] .text-mask:nth-child(2) > span { animation-delay: 420ms; }
+      [data-animate="true"] .text-mask:nth-child(3) > span { animation-delay: 540ms; }
+      [data-animate="true"] .eyebrow::before, [data-animate="true"] .identity::after { animation: stroke-horizontal 650ms var(--ease-entrance) 650ms both; }
+      [data-animate="true"] .campus-description, [data-animate="true"] .campus-caption { animation: form-reveal var(--motion-form) var(--ease-entrance) 850ms both; }
+      [data-animate="true"] .entrance-item { animation: form-reveal var(--motion-form) var(--ease-entrance) both; animation-delay: calc(var(--motion-start) + var(--step, 0) * var(--motion-stagger)); }
+      [data-animate="true"] .entrance-item:focus-within { animation: none; }
+      .modal-overlay.show .modal-card { animation: dialog-reveal 280ms var(--ease-entrance); }
+      .official-alert:not([hidden]), .field-error:not([hidden]) { animation: feedback-reveal 250ms var(--ease-entrance); }
+    }
+    @media (min-width: 1600px) { .form-wrap { max-width: 430px; } .panel-footer { max-width: 430px; } .campus-inner { padding-top: 70px; padding-bottom: 65px; } }
+    @media (max-width: 1100px) {
+      .entrance { grid-template-columns: 51% 49%; }
+      .campus-inner { padding: 48px 45px 42px; }
+      .campus-frame { inset: 20px; }
+      .campus h1 { font-size: 58px; }
+      .login-panel { padding: 36px 34px 24px; }
+      .identity { margin-bottom: 36px; }
+      .campus-wordmark { letter-spacing: .1em; font-size: 11px; }
+    }
+    @media (max-width: 800px) {
+      .entrance { grid-template-columns: 1fr; }
+      .campus { min-height: 270px; }
+      .campus-photo { object-position: 50% 25%; }
+      .campus::after { background: linear-gradient(90deg, rgba(9,43,36,.88), rgba(9,43,36,.4)); }
+      .campus-inner { padding: 30px 40px; }
+      .campus-frame { inset: 12px; }
+      .campus-wordmark img { width: 25px; height: 32px; }
+      .campus-wordmark { font-size: 10px; }
+      .campus-wordmark small { display: none; }
+      .campus-story { padding: 26px 0 0; }
+      .campus h1 { font-size: 38px; line-height: 1.1; }
+      .text-mask { display: inline; overflow: visible; }
+      .text-mask > span { display: inline-block; }
+      .eyebrow, .campus-description, .campus-caption { display: none; }
+      .login-panel { padding: 26px 32px; }
+      .form-wrap { padding: 30px 0 38px; }
+      .identity { margin-bottom: 30px; }
+      .welcome { font-size: 44px; }
+    }
+    @media (max-width: 420px) {
+      .campus { min-height: 235px; }
+      .campus-inner { padding: 26px 28px; }
+      .campus h1 { font-size: 34px; }
+      .login-panel { padding: 22px 25px; }
+      .identity-name { font-size: 13px; }
+      .identity-system { font-size: 10px; }
+      .modal-overlay { padding: 15px; }
+      .modal-card { padding: 23px; }
+      .modal-foot { gap: 9px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+    /* Interactive emblem: pointer depth, email-format arc, private password reactions. */
+    .campus { --scene-x: 0; --scene-y: 0; --spot-x: 50%; --spot-y: 30%; --scene-accent: #dfc692; --email-offset: 100; perspective: 1000px; }
+    .campus-story { padding-top: 175px; }
+    .campus-spotlight { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(440px circle at var(--spot-x) var(--spot-y), rgba(228,204,152,.18), transparent 75%); opacity: 0; transition: opacity 500ms; }
+    body.is-pointing .campus-spotlight { opacity: 1; }
+    .crest-scene { position: absolute; top: 118px; left: 50%; width: 210px; height: 210px; margin-left: -105px; perspective: 800px; z-index: 1; }
+    .crest-depth { position: relative; width: 100%; height: 100%; transform: rotateX(calc(var(--scene-y) * -9deg)) rotateY(calc(var(--scene-x) * 12deg)) translate3d(calc(var(--scene-x) * 9px), calc(var(--scene-y) * 7px), 0); transition: transform 200ms ease-out; transform-style: preserve-3d; }
+    .crest-orbit { position: absolute; inset: 2px; border: 1px solid rgba(229,209,166,.4); border-radius: 50%; pointer-events: none; transition: transform 650ms var(--ease-entrance), border-color 400ms; }
+    .orbit-outer { transform: rotateX(55deg) rotateZ(calc(-20deg + var(--scene-x) * 22deg)); }
+    .orbit-inner { inset: 18px; border-color: rgba(250,250,246,.3); transform: rotateY(48deg) rotateZ(calc(28deg + var(--scene-y) * 28deg)); }
+    .crest-track { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform: rotate(-90deg); }
+    .crest-track circle { fill: none; stroke-width: 1; }
+    .track-base { stroke: rgba(246,243,234,.26); }
+    .crest-track .track-value { stroke: var(--scene-accent); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: var(--email-offset); transition: stroke-dashoffset 500ms var(--ease-entrance), stroke 350ms; }
+    .crest-disc { position: absolute; inset: 44px; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(229,209,166,.6); border-radius: 50%; background: linear-gradient(145deg, rgba(246,243,234,.97), rgba(234,230,217,.91)); box-shadow: 0 20px 55px rgba(0,0,0,.3), inset 0 0 0 7px rgba(18,63,50,.04); transform: translateZ(24px); transition: box-shadow 400ms; }
+    .crest-disc img { position: relative; width: 75px; height: 96px; object-fit: contain; filter: drop-shadow(0 3px 2px rgba(9,43,36,.1)); }
+    .crest-reflection { position: absolute; inset: -50%; background: linear-gradient(110deg, transparent 40%, rgba(255,255,255,.65) 50%, transparent 60%); transform: translateX(calc(var(--scene-x) * 35%)); pointer-events: none; }
+    .crest-node { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--scene-accent); box-shadow: 0 0 0 4px rgba(229,209,166,.12); transition: transform 650ms var(--ease-entrance), background 350ms; }
+    .node-one { top: 13px; left: 63px; transform: translate(calc(var(--scene-x) * 10px), calc(var(--scene-y) * 6px)); }
+    .node-two { right: 20px; bottom: 32px; transform: translate(calc(var(--scene-x) * -12px), calc(var(--scene-y) * -9px)); }
+    .crest-mode { position: absolute; bottom: 36px; right: 36px; width: 39px; height: 39px; border-radius: 50%; display: grid; place-items: center; background: var(--forest); color: var(--scene-accent); border: 1px solid var(--scene-accent); transform: translateZ(35px) scale(.8); opacity: 0; transition: opacity 250ms, transform 450ms var(--ease-entrance), color 350ms; }
+    .crest-mode svg { width: 19px; height: 19px; grid-area: 1/1; transition: opacity 220ms, transform 450ms var(--ease-entrance); }
+    .mode-lock { opacity: 0; transform: translateY(6px); }
+    .lock-shackle { transition: transform 350ms var(--ease-entrance); }
+    .crest-message { display: block; position: absolute; top: 100%; left: -35px; right: -35px; text-align: center; color: #f0e7d4; font-size: 10px; line-height: 1.2; letter-spacing: .04em; padding-top: 0; }
+    .interaction-hint { color: var(--muted); font-size: 10px; }
+    .crest-ripple { position: absolute; inset: 38px; border: 1px solid var(--scene-accent); border-radius: 50%; opacity: 0; pointer-events: none; }
+    body[data-field="email"] .campus { --scene-accent: #86dfbd; }
+    body[data-field="password"] .campus { --scene-accent: #e6c786; --email-offset: 35; }
+    body[data-field] .crest-mode { opacity: 1; transform: translateZ(35px) scale(1); }
+    body[data-field="password"] .mode-email { opacity: 0; transform: translateY(-6px); }
+    body[data-field="password"] .mode-lock { opacity: 1; transform: translateY(0); }
+    body.password-visible .lock-shackle { transform: translate(3px, -3px); }
+    body[data-field="password"] .orbit-inner { transform: rotateY(10deg) rotateZ(-15deg); }
+    body.scene-error .campus { --scene-accent: #f0a69a; }
+    body.scene-pending .crest-track { animation: spin 1800ms linear infinite; }
+    @keyframes crest-wave { from { opacity: .7; transform: scale(.85); } to { opacity: 0; transform: scale(1.52); } }
+    @keyframes crest-tap { 0%, 100% { filter: brightness(1); } 35% { filter: brightness(1.16); } }
+    @media (prefers-reduced-motion: no-preference) {
+      .crest-scene.is-typing .ripple-one { animation: crest-wave 800ms var(--ease-entrance); }
+      .crest-scene.is-typing .ripple-two { animation: crest-wave 800ms var(--ease-entrance) 100ms; }
+      .crest-scene.is-typing .crest-disc { animation: crest-tap 450ms ease-out; }
+    }
+    @media (max-width: 1100px) and (min-width: 801px) { .crest-scene { top: 120px; width: 210px; height: 210px; margin-left: -105px; } .campus-story { padding-top: 210px; } }
+    @media (max-width: 800px) {
+      .crest-scene { top: 67px; left: auto; right: 20px; width: 125px; height: 125px; margin: 0; }
+      .crest-disc { inset: 25px; }
+      .crest-disc img { width: 39px; height: 50px; }
+      .crest-mode { right: 16px; bottom: 16px; width: 25px; height: 25px; }
+      .crest-mode svg { width: 13px; height: 13px; }
+      .crest-ripple { inset: 22px; }
+      .crest-message, .crest-node { display: none; }
+      .campus-story { padding-top: 34px; padding-right: 110px; }
+      .campus h1 { font-size: 30px; }
+    }
+    @media (max-width: 420px) { .crest-scene { right: 17px; top: 80px; width: 106px; height: 106px; } .crest-disc { inset: 21px; } .crest-disc img { width: 32px; height: 41px; } .campus-story { padding-top: 27px; padding-right: 88px; } .campus h1 { font-size: 27px; } .interaction-hint { font-size: 9px; max-width: 85px; } }
+    @media (prefers-reduced-motion: reduce) {
+      .crest-depth, .orbit-outer, .orbit-inner, .crest-reflection, .crest-node { transform: none !important; }
+      .campus-spotlight { display: none; }
+    }
+    /* University Green: a balanced emblem-led composition, with the existing interaction system. */
+    :root { --ivory: #f8f7f1; --cream: #e9ecdf; --gold: #c9b27c; --green: #104b38; --forest: #062e24; }
+    html { background: #072f25; }
+    body { background: radial-gradient(ellipse at 21% 38%, rgba(31,109,75,.5), transparent 54%), radial-gradient(ellipse at 100% 100%, rgba(19,82,60,.45), transparent 55%), linear-gradient(125deg, #0b3d2d, #05291f); }
+    body::before { content: ""; position: fixed; inset: 20px; border: 1px solid rgba(207,226,202,.1); border-radius: 16px; pointer-events: none; }
+    .entrance { width: min(1190px, calc(100% - 112px)); max-width: 1190px; margin: 48px auto; min-height: calc(100svh - 96px); grid-template-columns: minmax(0, 1fr) minmax(390px, 470px); gap: clamp(45px, 6vw, 100px); align-items: center; }
+    .campus { min-height: 735px; height: 100%; background: transparent; overflow: visible; }
+    .campus::after, .campus-frame { display: none; }
+    .campus-inner { height: 100%; min-height: 735px; padding: 16px 0 8px; align-items: center; justify-content: flex-start; }
+    .campus-wordmark { order: 0; justify-content: center; width: 100%; text-align: center; font-size: 11px; letter-spacing: .22em; color: #f0f3e9; gap: 0; }
+    .campus-wordmark img { display: none; }
+    .campus-wordmark small { margin-top: 6px; font-size: 9px; color: #b4ccb8; letter-spacing: .22em; }
+    .crest-scene { order: 1; position: relative; left: auto; right: auto; top: auto; width: 310px; height: 310px; flex: 0 0 310px; margin: 30px 0 42px; }
+    .crest-disc { inset: 40px; background: radial-gradient(circle, rgba(81,138,88,.18), transparent 72%); border: 0; box-shadow: none; overflow: visible; }
+    .crest-disc img { width: 230px; height: 230px; object-fit: contain; filter: drop-shadow(0 18px 18px rgba(0,0,0,.28)); }
+    .crest-reflection { inset: -10%; border-radius: 50%; background: radial-gradient(ellipse at 45% 30%, rgba(255,241,191,.1), transparent 65%); }
+    .crest-orbit { border-color: rgba(205,187,136,.45); }
+    .orbit-inner { border-color: rgba(182,214,177,.3); }
+    .track-base { stroke: rgba(200,221,189,.18); }
+    .crest-mode { right: 48px; bottom: 35px; width: 43px; height: 43px; box-shadow: 0 5px 16px rgba(0,0,0,.15); }
+    .crest-message { left: -20px; right: -20px; top: calc(100% + 8px); color: #c9dac8; font-size: 11px; letter-spacing: .02em; }
+    .campus-spotlight { inset: 0; background: radial-gradient(350px circle at var(--spot-x) var(--spot-y), rgba(195,182,117,.1), transparent 75%); }
+    .campus-story { order: 2; width: 100%; padding: 4px 0 28px; text-align: center; }
+    .eyebrow { justify-content: center; margin-bottom: 18px; color: #c9b98b; font-size: 9px; letter-spacing: .23em; }
+    .eyebrow::before { width: 24px; opacity: .8; }
+    .campus h1 { max-width: 540px; margin: 0 auto; font-size: clamp(40px, 3.8vw, 56px); line-height: 1.13; letter-spacing: -.035em; color: #f7f7ee; }
+    .text-mask { display: inline; overflow: visible; }
+    .text-mask > span { display: inline-block; }
+    .campus h1 em { color: #d8c491; }
+    .campus-description { max-width: 340px; margin: 20px auto 0; color: #bfd2c1; font-size: 13px; line-height: 1.9; }
+    .campus-caption { order: 3; width: 100%; max-width: 420px; margin-top: auto; padding-top: 21px; border-color: rgba(192,215,187,.18); color: #a5c1ae; font-size: 10px; }
+    .campus-caption strong { color: #dce6d7; font-size: 11px; font-weight: 400; margin-bottom: 2px; }
+    .caption-mark { color: #c9b98b; font-size: 23px; }
+    .login-panel { position: relative; width: 100%; max-width: 470px; padding: 29px 39px 25px; background: var(--ivory); border: 1px solid rgba(255,255,255,.6); border-radius: 17px; box-shadow: 0 30px 85px rgba(0,15,10,.28), 0 0 0 7px rgba(206,222,194,.025); }
+    .login-panel::before { content: ""; position: absolute; top: -1px; left: 39px; width: 46px; height: 2px; background: #c9b27c; }
+    .panel-top { gap: 8px; }
+    .interaction-hint { color: #6a786b; font-size: 9px; }
+    .back-link { font-size: 10px; }
+    .back-link svg { width: 12px; height: 12px; }
+    .form-wrap { padding: 31px 0 25px; max-width: none; }
+    .identity { gap: 12px; margin-bottom: 32px; }
+    .identity img { width: 34px; height: 44px; }
+    .identity::after { left: 46px; bottom: -12px; width: 35px; }
+    .identity-name { font-size: 13px; }
+    .identity-system { font-size: 10px; }
+    .section-label { font-size: 9px; letter-spacing: .17em; margin-bottom: 8px; }
+    .welcome { font-size: 48px; line-height: 1.12; letter-spacing: -.035em; }
+    .intro { font-size: 12px; margin: 12px 0 27px; }
+    .field { margin-bottom: 19px; }
+    .label-row { margin-bottom: 8px; }
+    .input-shell { min-height: 54px; border-radius: 7px; border-color: #d8dfd1; background: #f2f4ed; }
+    .login-input { height: 52px; font-size: 13px; }
+    .input-icon { width: 16px; height: 16px; margin-left: 16px; }
+    .visibility-button { height: 50px; width: 43px; }
+    .submit-shell { margin-top: 25px; border-radius: 7px; }
+    .sign-in-button { height: 54px; font-size: 13px; }
+    .submit-arrow { top: 17px; }
+    .security-note { margin-top: 15px; font-size: 10px; }
+    .form-divider { margin-top: 26px; font-size: 8px; letter-spacing: .08em; }
+    .role-note { margin-top: 10px; font-size: 10px; }
+    .panel-footer { padding-top: 17px; border-color: #dce2d5; max-width: none; gap: 12px; }
+    .panel-footer p { font-size: 9px; }
+    .footer-link { font-size: 10px; }
+    @media (min-width: 1600px) { .entrance { width: min(1320px, calc(100% - 160px)); max-width: 1320px; grid-template-columns: minmax(0, 1fr) 490px; gap: 110px; } .login-panel { max-width: 490px; padding: 35px 44px 29px; } .form-wrap { padding-top: 38px; } .crest-scene { width: 350px; height: 350px; flex-basis: 350px; } .crest-disc { inset: 47px; } .crest-disc img { width: 256px; height: 256px; } .campus h1 { font-size: 60px; } }
+    @media (max-width: 1100px) and (min-width: 801px) { .entrance { width: calc(100% - 72px); grid-template-columns: minmax(0, 1fr) minmax(360px, 420px); gap: 35px; margin: 32px auto; } .login-panel { padding: 26px 29px 24px; } .crest-scene { width: 270px; height: 270px; flex-basis: 270px; margin-top: 40px; } .crest-disc { inset: 35px; } .crest-disc img { width: 200px; height: 200px; } .campus h1 { font-size: 40px; } .campus-story { padding: 4px 0 26px; } .campus-caption { align-items: center; } .campus-wordmark { font-size: 9px; } .crest-mode { right: 40px; bottom: 32px; } .campus-inner { min-height: 720px; } }
+    @media (max-width: 800px) {
+      body::before { inset: 12px; border-radius: 12px; }
+      .entrance { width: min(480px, calc(100% - 44px)); display: flex; flex-direction: column; gap: 26px; margin: 30px auto; min-height: auto; }
+      .campus { min-height: 0; height: auto; width: 100%; }
+      .campus-inner { min-height: 0; height: auto; padding: 0 10px; }
+      .campus-wordmark { font-size: 10px; }
+      .campus-wordmark small { display: block; font-size: 8px; margin-top: 3px; }
+      .crest-scene { position: relative; top: auto; right: auto; left: auto; width: 175px; height: 175px; flex: 0 0 175px; margin: 19px 0 8px; }
+      .crest-disc { inset: 24px; }
+      .crest-disc img { width: 127px; height: 127px; }
+      .crest-mode { right: 24px; bottom: 20px; width: 28px; height: 28px; }
+      .crest-mode svg { width: 14px; height: 14px; }
+      .crest-message { display: none; }
+      .crest-ripple { inset: 25px; }
+      .crest-node { display: block; width: 4px; height: 4px; }
+      .node-one { left: 42px; top: 8px; }
+      .node-two { right: 13px; bottom: 28px; }
+      .campus-story { padding: 8px 0 0; }
+      .campus h1 { font-size: 32px; max-width: 350px; line-height: 1.15; }
+      .eyebrow, .campus-description, .campus-caption { display: none; }
+      .login-panel { max-width: 480px; padding: 26px 30px 24px; border-radius: 14px; }
+      .form-wrap { padding-top: 29px; }
+      .identity { margin-bottom: 30px; }
+      .welcome { font-size: 44px; }
+      .campus-spotlight { inset: 0; }
+    }
+    @media (max-width: 420px) { .entrance { width: calc(100% - 36px); margin-top: 26px; gap: 23px; } .login-panel { padding: 24px 23px 22px; } .campus h1 { font-size: 29px; } .crest-scene { width: 155px; height: 155px; flex-basis: 155px; margin-top: 15px; } .crest-disc { inset: 21px; } .crest-disc img { width: 113px; height: 113px; } .crest-mode { right: 21px; bottom: 17px; width: 25px; height: 25px; } .interaction-hint { max-width: none; font-size: 8px; } .back-link { font-size: 9px; } .welcome { font-size: 40px; } .panel-footer { gap: 10px; } }
+    @media (max-width: 420px) {
+      .campus-wordmark small { display: none; }
+      .crest-scene { width: 118px; height: 118px; flex-basis: 118px; margin: 13px 0 7px; }
+      .crest-disc { inset: 16px; }
+      .crest-disc img { width: 86px; height: 86px; }
+      .crest-mode { width: 22px; height: 22px; right: 14px; bottom: 12px; }
+      .crest-mode svg { width: 12px; height: 12px; }
+      .crest-ripple { inset: 18px; }
+      .crest-node { width: 3px; height: 3px; }
+      .node-one { left: 32px; top: 6px; }
+      .node-two { right: 10px; bottom: 20px; }
+      .campus-story { padding-top: 0; }
+      .campus h1 { font-size: 26px; max-width: 280px; }
+      .entrance { gap: 20px; }
+    }
+    /* Original emblem-first concept: no promotional copy beside the login. */
+    .campus { min-height: 600px; }
+    .campus-inner { min-height: 600px; padding: 0; justify-content: center; }
+    .crest-message { display: none; }
+    .crest-scene { width: min(100%, 480px); height: auto; aspect-ratio: 1; flex: 0 0 auto; margin: 0; }
+    .crest-depth { position: absolute; inset: 0; }
+    .crest-disc { inset: 11%; }
+    .crest-disc img { width: 100%; height: 100%; object-fit: contain; }
+    .crest-mode { right: 14%; bottom: 12%; width: 48px; height: 48px; }
+    .crest-mode svg { width: 22px; height: 22px; }
+    .crest-ripple { inset: 13%; }
+    .crest-orbit { border-color: rgba(196,213,176,.3); }
+    .orbit-inner { border-color: rgba(210,185,123,.38); }
+    .node-one { top: 8%; left: 25%; }
+    .node-two { right: 8%; bottom: 20%; }
+    .interaction-hint { display: none; }
+    .panel-top { justify-content: flex-end; }
+    body::after { content: ""; position: fixed; z-index: 0; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 25% 45%, rgba(83,145,97,.12), transparent 50%); }
+    .entrance { position: relative; z-index: 1; }
+    .campus::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(42vw, 620px); aspect-ratio: 1; border: 1px solid rgba(185,214,172,.075); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 0 65px rgba(178,208,165,.025), 0 0 0 130px rgba(178,208,165,.018); pointer-events: none; }
+    @keyframes orbit-life { from { rotate: -8deg; } to { rotate: 8deg; } }
+    @keyframes orbit-breath { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+    @keyframes green-atmosphere { from { opacity: .25; } to { opacity: .85; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .orbit-outer { animation: orbit-life 14s ease-in-out infinite alternate, orbit-breath 7s ease-in-out infinite; }
+      .orbit-inner { animation: orbit-life 18s ease-in-out -5s infinite alternate-reverse, orbit-breath 9s ease-in-out -3s infinite; }
+      body::after { animation: green-atmosphere 10s ease-in-out infinite alternate; }
+    }
+    body.motion-paused *, body.motion-paused::after { animation-play-state: paused !important; }
+    @media (min-width: 1600px) { .crest-scene { width: 540px; } }
+    @media (max-width: 1100px) and (min-width: 801px) {
+      .campus, .campus-inner { min-height: 560px; }
+      .crest-scene { width: 100%; margin: 0; }
+      .crest-disc { inset: 10%; }
+      .crest-disc img { width: 100%; height: 100%; }
+      .crest-mode { width: 38px; height: 38px; }
+    }
+    @media (max-width: 800px) {
+      .campus, .campus-inner { min-height: 0; }
+      .campus-inner { padding: 0; }
+      .crest-scene { width: 200px; height: 200px; flex-basis: 200px; margin: 0; }
+      .crest-disc { inset: 10%; }
+      .crest-disc img { width: 100%; height: 100%; }
+      .crest-mode { width: 29px; height: 29px; right: 13%; bottom: 11%; }
+      .crest-mode svg { width: 15px; height: 15px; }
+      .campus::before { width: 230px; box-shadow: 0 0 0 30px rgba(178,208,165,.018); }
+      .entrance { gap: 24px; margin-top: 25px; }
+    }
+    @media (max-width: 420px) { .crest-scene { width: 165px; height: 165px; flex-basis: 165px; } .crest-mode { width: 25px; height: 25px; } .campus::before { width: 190px; } .entrance { gap: 20px; margin-top: 22px; } }
+    @media (prefers-reduced-motion: reduce) { .orbit-outer, .orbit-inner, body::after { animation: none !important; } }
+    /* Compact, soft email field; invalid feedback belongs to the field only. */
+    #emailGroup { min-height: 46px; border-radius: 11px; background: #f0f3ec; border-color: #dce3d7; }
+    #txtEmail { height: 44px; padding-right: 13px; font-size: 12.5px; }
+    #emailGroup .input-icon { width: 15px; height: 15px; margin-left: 14px; }
+    .input-shell.input-invalid { border-color: #c5544c !important; background: #fff0ed !important; box-shadow: 0 0 0 3px rgba(186,69,60,.09); }
+    .input-shell.input-invalid .input-icon { color: #b73f37; }
+    .input-shell.input-invalid::after { background: #c5544c; }
+    .crest-torch { position: absolute; left: 14%; bottom: 12%; width: 44px; height: 56px; color: #d8be81; filter: drop-shadow(0 0 10px rgba(223,176,76,.25)); transform: translateZ(32px); pointer-events: none; }
+    .crest-torch svg { width: 100%; height: 100%; overflow: visible; }
+    .torch-fire { transform-box: fill-box; transform-origin: 50% 100%; }
+    .torch-core { fill: #fff0b5; }
+    @keyframes candle-life { 0%,100% { transform: scale(.96,1) rotate(-3deg); opacity: .8; } 45% { transform: scale(1.06,.94) rotate(2deg); opacity: 1; } 70% { transform: scale(.97,1.06) rotate(-1deg); } }
+    @keyframes candle-response { 0%,100% { transform: scale(1); } 35% { transform: scale(1.16,1.27); } }
+    @keyframes field-reject { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-4px); } 40%,80% { transform: translateX(4px); } }
+    @media (prefers-reduced-motion: no-preference) {
+      .torch-fire { animation: candle-life 2200ms ease-in-out infinite; }
+      .crest-scene.is-typing .torch-fire { animation: candle-response 500ms var(--ease-entrance), candle-life 2200ms ease-in-out 500ms infinite; }
+      .input-shell.reject-motion { animation: field-reject 360ms ease-out; }
+    }
+    @media (max-width: 800px) { .crest-torch { width: 27px; height: 35px; } }
+    @media (max-width: 420px) { .crest-torch { width: 23px; height: 30px; } }
+    @media (prefers-reduced-motion: reduce) { .torch-fire, .input-shell.reject-motion { animation: none !important; } }
+    /* A slightly smaller sign-in card, with the original whole-card error response. */
+    .login-panel { max-width: 440px; justify-self: center; padding: 25px 32px 22px; transition: border-color 220ms ease, box-shadow 300ms ease; }
+    .form-wrap { padding: 25px 0 21px; }
+    .identity { margin-bottom: 28px; }
+    .welcome { font-size: 44px; }
+    .intro { margin-bottom: 23px; }
+    .field { margin-bottom: 17px; }
+    .form-divider { margin-top: 22px; }
+    body.scene-error .login-panel { border-color: #e3746c; box-shadow: 0 0 0 1px rgba(225,90,80,.55), 0 0 32px 7px rgba(216,57,48,.28), 0 22px 65px rgba(40,0,0,.24); }
+    body.scene-error .login-panel::before { background: #dc625a; }
+    .input-shell.reject-motion { animation: none !important; }
+    @keyframes card-reject { 0%,100% { transform: translateX(0); } 15%,45%,75% { transform: translateX(-6px); } 30%,60%,90% { transform: translateX(6px); } }
+    @media (prefers-reduced-motion: no-preference) { .login-panel.card-reject-motion { animation: card-reject 420ms ease-out; } }
+    @media (min-width: 1600px) { .login-panel { max-width: 460px; padding: 29px 36px 25px; } }
+    @media (max-width: 1100px) and (min-width: 801px) { .login-panel { max-width: 400px; padding: 24px 26px 21px; } }
+    @media (max-width: 800px) { .login-panel { max-width: 440px; padding: 25px 28px 22px; } }
+    @media (max-width: 420px) { .login-panel { padding: 23px 21px 20px; } .welcome { font-size: 38px; } }
+    @media (prefers-reduced-motion: reduce) { .login-panel.card-reject-motion { animation: none !important; } }
+    /* Compact sign-in card: substantially smaller without scaling text or hit targets. */
+    .login-panel { width: 100%; max-width: 350px; padding: 20px 24px 18px; border-radius: 13px; }
+    .login-panel::before { left: 24px; width: 34px; }
+    .form-wrap { padding: 19px 0 16px; }
+    .back-link { font-size: 9px; }
+    .identity { gap: 10px; margin-bottom: 21px; }
+    .identity img { width: 29px; height: 37px; }
+    .identity-name { font-size: 11px; }
+    .identity-system { font-size: 9px; line-height: 1.45; }
+    .identity::after { left: 39px; bottom: -9px; width: 28px; }
+    .section-label { font-size: 8px; letter-spacing: .13em; margin-bottom: 6px; }
+    .welcome { font-size: 35px; line-height: 1.12; }
+    .intro { margin: 9px 0 18px; font-size: 11px; line-height: 1.65; }
+    .field { margin-bottom: 14px; }
+    .label-row { margin-bottom: 6px; }
+    .label-row label { font-size: 11px; }
+    .forgot-link { font-size: 10px; }
+    .input-shell, #emailGroup { min-height: 44px; border-radius: 8px; }
+    .login-input, #txtEmail { height: 42px; font-size: 12px; padding-left: 11px; }
+    .input-icon, #emailGroup .input-icon { width: 14px; height: 14px; margin-left: 12px; }
+    .visibility-button { height: 42px; width: 40px; }
+    .visibility-button svg { width: 16px; height: 16px; }
+    .submit-shell { margin-top: 18px; }
+    .sign-in-button { height: 46px; padding-left: 17px; font-size: 12px; }
+    .submit-arrow { top: 14px; right: 17px; width: 18px; height: 18px; }
+    .security-note { margin-top: 12px; font-size: 9px; gap: 5px; }
+    .security-note svg { width: 12px; height: 12px; }
+    .form-divider { margin-top: 19px; font-size: 7px; gap: 8px; }
+    .role-note { margin-top: 8px; font-size: 9px; line-height: 1.7; }
+    .panel-footer { padding-top: 12px; gap: 8px; }
+    .panel-footer p { font-size: 8px; line-height: 1.7; }
+    .footer-link { font-size: 9px; }
+    .official-alert { font-size: 11px; padding: 9px 11px; margin-bottom: 16px; }
+    .field-error { font-size: 11px; margin-top: 5px; }
+    @media (min-width: 1600px) { .login-panel { max-width: 370px; padding: 23px 27px 20px; } .welcome { font-size: 37px; } }
+    @media (max-width: 1100px) and (min-width: 801px) { .login-panel { max-width: 340px; padding: 20px 23px 18px; } }
+    @media (max-width: 800px) { .login-panel { max-width: 350px; padding: 21px 24px 19px; } .entrance { gap: 20px; } }
+    @media (max-width: 420px) { .login-panel { max-width: 330px; padding: 20px 21px 18px; } .welcome { font-size: 33px; } }
+    /* Bring the compact card slightly closer to the university emblem. */
+    @media (min-width: 801px) { .login-panel { position: relative; left: -80px; } }
+    @media (min-width: 801px) and (max-width: 1100px) { .login-panel { left: -48px; } }
+    /* Warm illumination aligned with the torch printed in the original crest. */
+    .crest-disc::after { content: ""; position: absolute; z-index: 2; left: 50%; top: 27.4%; width: 23%; height: 20%; pointer-events: none; border-radius: 50%; background: radial-gradient(ellipse at 50% 65%, rgba(255,229,141,.68) 0%, rgba(255,147,55,.42) 24%, rgba(255,69,37,.22) 46%, transparent 73%); mix-blend-mode: screen; opacity: .65; transform: translate(-50%, -50%); filter: blur(1.5px); }
+    @keyframes crest-flame-light { 0%,100% { opacity: .48; transform: translate(-50%, -50%) scale(.95,1); } 24% { opacity: .76; transform: translate(-50%, -51%) scale(1.04,1.08); } 43% { opacity: .58; transform: translate(-50%, -50%) scale(.98,1.02); } 72% { opacity: .85; transform: translate(-49%, -51%) scale(1.08,1.12); } }
+    @keyframes crest-flame-response { 0%,100% { opacity: .65; transform: translate(-50%, -50%) scale(1); } 35% { opacity: 1; transform: translate(-50%, -53%) scale(1.2,1.3); } }
+    @media (prefers-reduced-motion: no-preference) {
+      .crest-disc::after { animation: crest-flame-light 2600ms ease-in-out infinite; }
+      .crest-scene.is-typing .crest-disc::after { animation: crest-flame-response 700ms var(--ease-entrance), crest-flame-light 2600ms ease-in-out 700ms infinite; }
+    }
+    body.motion-paused .crest-disc::after { animation-play-state: paused !important; }
+    @media (prefers-reduced-motion: reduce) { .crest-disc::after { animation: none !important; opacity: .55; } }
+    @media (forced-colors: active) { .crest-disc::after { display: none; } }
+    /* Match the supplied original login: green stage, crest left, clean card right. */
+    :root { --green: #07523e; --forest: #04382d; --gold: #c8ad46; --ivory: #f8faf9; }
+    body { font-family: "Segoe UI", Arial, sans-serif; background: radial-gradient(ellipse at 13% 24%, #216b58 0%, transparent 62%), radial-gradient(ellipse at 100% 85%, #39723f 0%, transparent 63%), linear-gradient(125deg, #155b4b, #0a4a3a 55%, #145840); }
+    body::before { inset: 0; border: 0; border-radius: 0; opacity: .38; background-image: radial-gradient(rgba(234,249,232,.18) .7px, transparent .7px); background-size: 29px 29px; }
+    body::after { background: radial-gradient(ellipse at 35% 48%, rgba(105,166,109,.12), transparent 62%); }
+    .entrance { width: min(1160px, calc(100% - 96px)); max-width: 1160px; grid-template-columns: minmax(0, 1fr) 420px; gap: 56px; margin: 30px auto; min-height: calc(100svh - 60px); }
+    .campus, .campus-inner { min-height: 590px; }
+    .crest-scene { width: min(100%, 500px); }
+    .crest-disc { inset: 9%; }
+    .crest-disc img { width: 100%; height: 100%; }
+    .campus::before { width: min(43vw, 560px); border-color: rgba(172,207,159,.09); box-shadow: 0 0 0 45px rgba(179,211,160,.025), 0 0 0 92px rgba(179,211,160,.018); }
+    .login-panel { left: 0; width: 100%; max-width: 420px; padding: 30px 32px 22px; border: 1px solid #d7dfd7; border-top: 4px solid #c9b54b; border-radius: 17px; background: #f8faf9; box-shadow: 0 22px 50px rgba(0,25,15,.2), 0 0 32px rgba(217,200,118,.07); }
+    .login-panel::before { display: none; }
+    .panel-top { position: absolute; top: 14px; right: 20px; }
+    .back-link { font-size: 9px; opacity: .7; }
+    .form-wrap { padding: 31px 0 0; }
+    .identity { display: none; }
+    .section-label { width: fit-content; margin: 0 auto 8px; padding: 4px 11px; border-radius: 999px; background: #eaf4ef; color: #178568; font-size: 9px; letter-spacing: .1em; text-align: center; }
+    .welcome { font-family: "Segoe UI", Arial, sans-serif; font-size: 26px; font-weight: 750; letter-spacing: -.035em; text-align: center; line-height: 1.25; }
+    .welcome .period { display: none; }
+    .intro { max-width: 300px; margin: 8px auto 21px; font-size: 11px; line-height: 1.6; text-align: center; color: #65756e; }
+    .field { margin-bottom: 14px; }
+    .label-row { margin-bottom: 5px; }
+    .label-row label { font-size: 11px; font-weight: 650; }
+    .input-shell, #emailGroup { min-height: 43px; border: 1px solid #dce6df; background: #edf5f1; border-radius: 10px; }
+    .login-input, #txtEmail { height: 41px; font-size: 12px; }
+    .input-shell:focus-within { border-color: #178568; box-shadow: 0 0 0 3px rgba(23,133,104,.15); }
+    .input-icon, #emailGroup .input-icon { color: #178568; }
+    .visibility-button { height: 41px; color: #65756e; }
+    .submit-shell { margin-top: 17px; border-radius: 12px; background: linear-gradient(90deg, #07523e, #178568); box-shadow: 0 8px 18px rgba(7,82,62,.19); }
+    .sign-in-button { height: 44px; text-align: center; padding: 0 30px; font-size: 13px; font-weight: 700; }
+    .submit-arrow { display: none; }
+    .security-note { margin: 11px 0 0; color: #65756e; font-size: 10px; }
+    .form-divider, .role-note { display: none; }
+    .panel-footer { margin-top: 17px; padding-top: 12px; }
+    .panel-footer p { font-size: 8px; }
+    .footer-link { font-size: 9px; }
+    body.scene-error .login-panel { border-color: #e56b62; box-shadow: 0 0 0 1px rgba(225,90,80,.55), 0 0 38px 9px rgba(216,57,48,.32), 0 22px 65px rgba(40,0,0,.24); }
+    @media (min-width: 1600px) { .entrance { width: min(1240px, calc(100% - 140px)); max-width: 1240px; grid-template-columns: minmax(0, 1fr) 440px; gap: 70px; } .login-panel { max-width: 440px; padding: 32px 35px 24px; } .crest-scene { width: 550px; } .welcome { font-size: 28px; } }
+    @media (max-width: 1100px) and (min-width: 801px) { .entrance { width: calc(100% - 70px); grid-template-columns: minmax(0, 1fr) 370px; gap: 35px; } .login-panel { left: 0; max-width: 370px; padding: 28px 26px 21px; } .crest-scene { width: 100%; } .campus, .campus-inner { min-height: 530px; } }
+    @media (max-width: 800px) { .entrance { width: min(440px, calc(100% - 44px)); display: flex; gap: 24px; margin: 25px auto; min-height: auto; } .campus, .campus-inner { min-height: 0; } .crest-scene { width: 210px; height: 210px; flex-basis: 210px; } .login-panel { left: 0; max-width: 420px; padding: 29px 28px 21px; } .welcome { font-size: 26px; } .campus::before { width: 240px; } }
+    @media (max-width: 420px) { .entrance { width: calc(100% - 36px); } .crest-scene { width: 170px; height: 170px; flex-basis: 170px; } .login-panel { padding: 27px 23px 20px; } .campus::before { width: 200px; } .welcome { font-size: 24px; } }
+    /* Exact original SVG and embedded university crest, restored without redrawing. */
+    .crest-scene { aspect-ratio: 400 / 460; height: auto; }
+    #grandUjLogoSvg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 20px 28px rgba(0,0,0,.3)); }
+    #shieldProgressRing { stroke: var(--scene-accent); stroke-dashoffset: calc(var(--email-offset) * 11.31); transition: stroke-dashoffset 500ms var(--ease-entrance), stroke 350ms; }
+    #flameGlowCircle { opacity: .6; transform-origin: 199px 130px; transition: opacity 300ms; }
+    @keyframes original-flame-breathe { 0%,100% { opacity: .4; } 50% { opacity: .85; } }
+    @keyframes original-flame-type { 0%,100% { opacity: .6; transform: scale(1); } 35% { opacity: 1; transform: scale(1.18); } }
+    @media (prefers-reduced-motion: no-preference) { #flameGlowCircle { animation: original-flame-breathe 2400ms ease-in-out infinite; } .crest-scene.is-typing #flameGlowCircle { animation: original-flame-type 600ms var(--ease-entrance); } }
+    @media (max-width: 800px) { .crest-scene { width: 210px; height: 242px; flex-basis: 242px; } }
+    @media (max-width: 420px) { .crest-scene { width: 170px; height: 196px; flex-basis: 196px; } }
+    @media (prefers-reduced-motion: reduce) { #flameGlowCircle { animation: none !important; } }
+    /* Original emblem behavior: lock stays hidden until real credential rejection. */
+    #errorRedLockOverlay { opacity: 0; visibility: hidden; transform-box: view-box; transform-origin: 200px 230px; transform: scale(.75); transition: opacity 250ms ease, transform 320ms var(--ease-entrance), visibility 250ms; pointer-events: none; }
+    body.credential-rejected #errorRedLockOverlay { opacity: 1; visibility: visible; transform: scale(1); }
+    #authenticShieldBody { transform-box: view-box; transform-origin: 200px 230px; }
+    .orbit-ring-cw, .orbit-ring-ccw { transform-box: view-box; transform-origin: 200px 225px; }
+    @keyframes original-ring-cw { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes original-ring-ccw { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+    @keyframes original-error-flip { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+    @media (prefers-reduced-motion: no-preference) {
+      .orbit-ring-cw { animation: original-ring-cw 28s linear infinite; }
+      .orbit-ring-ccw { animation: original-ring-ccw 20s linear infinite; }
+      body.credential-rejected #authenticShieldBody { animation: original-error-flip 650ms var(--ease-entrance); }
+    }
+    @media (prefers-reduced-motion: reduce) { .orbit-ring-cw, .orbit-ring-ccw, #authenticShieldBody { animation: none !important; } #errorRedLockOverlay { transition: none; } }
+    /* Equal left/right layout space; preserve component sizes and behavior. */
+    @media (min-width: 801px) {
+      .entrance { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-left: auto; margin-right: auto; }
+      .campus, .login-panel { justify-self: center; }
+      .campus { width: 100%; }
+    }
+    .panel-top { position: static; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 4px; }
+    .login-nav-link { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 36px; padding: 6px 13px; border: 1px solid #dce7df; border-radius: 8px; background: #eef5f0; color: #07523e; font-size: 11px; font-weight: 600; text-decoration: none; transition: background 180ms, border-color 180ms; }
+    .login-nav-link svg { width: 14px; height: 14px; }
+    .login-nav-link:hover { background: #e0eee5; border-color: #97bda9; }
+    .form-wrap { padding-top: 23px; }
+    .panel-footer { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+    .login-footer-nav { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; }
+    /* Public links in the dark page-wide bottom strip, outside the white card. */
+    #form1 { min-height: 100svh; display: flex; flex-direction: column; }
+    .entrance { flex: 1 0 auto; min-height: calc(100svh - 116px); }
+    .page-bottom-strip { position: relative; z-index: 2; flex-shrink: 0; width: 100%; margin-top: auto; padding: 10px 24px; background: #062d24; border-top: 1px solid rgba(224,239,218,.09); }
+    .page-bottom-strip .login-footer-nav { justify-content: center; gap: 12px; }
+    .page-bottom-strip .login-nav-link { min-height: 34px; border-color: rgba(211,230,203,.2); background: transparent; color: #e3eee2; padding: 5px 14px; }
+    .page-bottom-strip .login-nav-link:hover { background: rgba(217,235,209,.09); border-color: rgba(211,230,203,.4); }
+    @media (max-width: 800px) { .entrance { min-height: auto; } .page-bottom-strip { padding: 9px 18px; } }
+    @media (forced-colors: active) { .input-shell, .submit-shell, .modal-card { border: 1px solid CanvasText; } .sign-in-button { color: ButtonText; } }
   </style>
+  <script>
+    // The existing server recovery handler may call this before the form script loads.
+    window.openForgotModal = function () { window.uimsRecoveryRequested = true; };
+  </script>
 </head>
-<body>
-  <form id="form1" runat="server">
+<body data-animate="<%= IsPostBack ? "false" : "true" %>">
+  <form id="form1" runat="server" novalidate="novalidate">
     <a class="skip-link" href="#txtEmail">Skip to sign-in form</a>
-
-    <!-- Fixed Background Canvas & Elements -->
-<canvas id="bgCanvas"></canvas>
-  <div class="uims-bg" aria-hidden="true">
-    <div class="uims-bg-dots"></div>
-    <svg class="uims-bg-lines" data-bg-lines data-depth="1" viewBox="0 0 1919 860" preserveAspectRatio="xMidYMid slice" focusable="false">
-      <circle cx="1800" cy="190" r="405" /><circle cx="1800" cy="190" r="555" />
-    </svg>
-    <svg class="uims-bg-lines" data-bg-lines data-depth="2" viewBox="0 0 1919 860" preserveAspectRatio="xMidYMid slice" focusable="false">
-      <circle cx="0" cy="1060" r="388" /><circle cx="0" cy="1060" r="557" />
-    </svg>
-  </div>
-
-
-  <!-- 4. MAIN SPLIT LOGIN CARD -->
-
-    <!-- Main Stage: Single Container -->
-    <main class="main-stage">
-      <div class="split-login-card" id="loginCard">
-
-        <!-- Left Panel: Official UJ Crest -->
-<div class="shield-showcase-panel" aria-hidden="true">
-
-        <!-- Giant Interactive Official UJ Crest (>78% of Card Height) -->
-        <div class="uj-shield-viewport">
-          <svg id="grandUjLogoSvg" viewBox="0 0 400 460">
+    <main class="entrance">
+      <section class="campus" aria-label="The University of Jordan">
+        <div class="campus-spotlight" aria-hidden="true"></div>
+        <div class="campus-frame" aria-hidden="true"><span class="frame-stroke top"></span><span class="frame-stroke right"></span><span class="frame-stroke bottom"></span><span class="frame-stroke left"></span></div>
+        <div class="campus-inner">
+          <div class="crest-scene" aria-hidden="true">
+            <div class="crest-depth">
+<svg id="grandUjLogoSvg" viewBox="0 0 400 460">
             <defs>
               <!-- Dynamic Background Aura Behind Shield -->
               <radialGradient id="shieldAuraGrad" cx="50%" cy="48%" r="50%">
@@ -721,562 +697,310 @@
               <path d="M200 241 V252" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
             </g>
           </svg>
+            </div>
+            <span class="crest-message" id="crestMessage">Your journey starts with you.</span>
+          </div>
+
         </div>
-      </div>
+      </section>
+      <section class="login-panel" aria-labelledby="welcome-title">
 
-      <!-- ================================================================== -->
-      <!-- RIGHT PANEL: RECENTERED LOGIN FORM (NO TOP LOGO, NO CLUTTER)       -->
-      <!-- ================================================================== -->
-      
-
-        <!-- Right Panel: Sign-In Box -->
-        <div class="login-form-panel">
-          <div class="login-form-inner">
-
-<div class="portal-heading-box">
-            <div class="fp-logo"><img src="data:image/webp;base64,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" alt="University of Jordan" width="44" height="58"></div>
-            <span class="fp-pill">Field Training System</span>
-            <h1 class="portal-main-title">Welcome back</h1>
-            <p class="portal-sub-title">Sign in to the University Internship Management System.<br>King Abdullah II School of Information Technology (KASIT)</p>
-          </div>
-
-          <!-- Dynamic Alert Box (Shown only on form submit) -->
-          <div class="official-alert" id="officialAlertBox" role="alert">
-            <span id="officialAlertText"></span>
-          </div>
-
-          <!-- Recentered Email & Password Form -->
-          
-
-            <!-- Dynamic Client Alert Box -->
-            <div class="official-alert alert-error" id="officialAlertBox" role="alert" style="display:none;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span id="officialAlertText"></span>
+        <div class="form-wrap">
+          <div class="identity entrance-item" style="--step:0"><img src="<%= ResolveUrl("~/login/images/uj-logo.png") %>" width="43" height="55" alt="University of Jordan crest" /><div><span class="identity-name">The University of Jordan</span><span class="identity-system">University Internship<br />Management System</span></div></div>
+          <div class="entrance-item" style="--step:1"><p class="section-label">Field Training System</p><h2 class="welcome" id="welcome-title">Welcome Back<span class="period">.</span></h2></div>
+          <p class="intro entrance-item" style="--step:2">Sign in to continue your internship journey.</p>
+          <div class="official-alert" id="officialAlertBox" role="alert" hidden><span id="officialAlertText"></span></div>
+          <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="official-alert alert-error" role="alert" tabindex="-1"><asp:Literal ID="litErrorMsg" runat="server" /></asp:Panel>
+          <asp:Panel ID="pnlSuccess" runat="server" Visible="false" CssClass="official-alert alert-success" role="status"><asp:Literal ID="litSuccessMsg" runat="server" /></asp:Panel>
+          <div class="field entrance-item" style="--step:3">
+            <div class="label-row"><label for="txtEmail">Email address</label></div>
+            <div class="input-shell" id="emailGroup">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 6 9 7 9-7" /></svg>
+              <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="login-input" placeholder="name@example.com" autocomplete="username" autocapitalize="none" spellcheck="false" inputmode="email" aria-describedby="emailError" ClientIDMode="Static" required="required" />
             </div>
-
-            <!-- Server Error Alert Box -->
-            <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="official-alert alert-error">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span><asp:Literal ID="litErrorMsg" runat="server" /></span>
-            </asp:Panel>
-
-            <!-- Server Success Alert Box -->
-            <asp:Panel ID="pnlSuccess" runat="server" Visible="false" CssClass="official-alert alert-success">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;margin-top:1px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <span><asp:Literal ID="litSuccessMsg" runat="server" /></span>
-            </asp:Panel>
-
-            <div class="form-group">
-              <div class="form-label-row">
-                <label for="txtEmail" class="form-label">Email address</label>
-              </div>
-              <div class="uims-input-group" id="emailGroup">
-                <div class="uims-input-addon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                </div>
-                <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" CssClass="uims-input" placeholder="name@example.com" autocomplete="username" autocapitalize="none" spellcheck="false" inputmode="email" aria-describedby="officialAlertBox" ClientIDMode="Static" required="required" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <div class="form-label-row">
-                <label for="txtPassword" class="form-label">Password</label>
-                <button type="button" class="forgot-link" id="forgotPasswordBtn">Forgot password?</button>
-              </div>
-              <div class="uims-input-group" id="passwordGroup">
-                <div class="uims-input-addon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="uims-input" placeholder="Enter your password" autocomplete="current-password" aria-describedby="officialAlertBox" ClientIDMode="Static" required="required" />
-                <button type="button" class="uims-eye-btn" id="togglePasswordBtn" title="Show / Hide Password" aria-label="Show password" aria-pressed="false">
-                  <svg id="eyeIconOpen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" style="display:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  <svg id="eyeIconClosed" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                </button>
-              </div>
-            </div>
-
-            <asp:Button ID="btnLogin" runat="server" Text="Sign In" OnClick="btnLogin_Click" CssClass="sign-in-btn" ClientIDMode="Static" />
-
-<div class="fp-secure">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
-            <span>Secure sign-in with Firebase Authentication</span>
+            <p id="emailError" class="field-error" hidden></p>
           </div>
+          <div class="field entrance-item" style="--step:4">
+            <div class="label-row"><label for="txtPassword">Password</label><button type="button" class="forgot-link" id="forgotPasswordBtn" aria-haspopup="dialog">Forgot password?</button></div>
+            <div class="input-shell" id="passwordGroup">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /><path d="M12 14v3" /></svg>
+              <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="login-input" placeholder="Enter your password" autocomplete="current-password" aria-describedby="passwordError" ClientIDMode="Static" required="required" />
+              <button type="button" class="visibility-button" id="togglePasswordBtn" aria-label="Show password" aria-pressed="false" aria-controls="txtPassword">
+                <svg data-eye-open viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg>
+                <svg data-eye-closed viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m3 3 18 18M10 5h2c6 0 10 7 10 7a19 19 0 0 1-3 4M6 6a21 21 0 0 0-4 6s4 7 10 7a13 13 0 0 0 5-1M10 10a3 3 0 0 0 4 4" /></svg>
+              </button>
+            </div>
+            <p id="passwordError" class="field-error" hidden></p>
           </div>
+          <div class="submit-shell entrance-item" id="loginSubmit" style="--step:5">
+            <asp:Button ID="btnLogin" runat="server" Text="Sign In" OnClick="btnLogin_Click" CssClass="sign-in-button" ClientIDMode="Static" />
+            <svg class="submit-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5" /></svg>
+            <span class="submit-progress" aria-hidden="true"><span class="spinner"></span>Signing you in…</span>
+          </div>
+          <span id="requestStatus" class="sr-only" role="status" aria-live="polite"></span>
+          <p class="security-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 3 8 3v5c0 5-8 10-8 10S4 16 4 11V6Z" /><path d="m8 12 3 3 5-6" /></svg>Secure sign-in with Firebase Authentication</p>
+          <div class="form-divider">ONE CONNECTED TRAINING JOURNEY</div>
+          <p class="role-note">Students · Companies · Academic Supervisors · Coordinators</p>
         </div>
-      </div>
+        <footer class="panel-footer"><p>© 2026 The University of Jordan<br />King Abdullah II School of Information Technology</p></footer>
+      </section>
     </main>
-
-    <!-- Full-Width Bottom Footer -->
-<footer class="fp-footer">
-    <span class="fp-footer-copy">© 2026 The University of Jordan · King Abdullah II School of Information Technology (KASIT)</span>
-    <nav class="fp-footer-nav" aria-label="Footer">
-      <button type="button" class="fp-footer-link" id="navHomeBtn">Home</button>
-      <button type="button" class="fp-footer-link" id="navContactBtn">Contact Us</button>
-    </nav>
-  </footer>
-
-  <!-- 5. OFFICIAL INFO MODAL -->
-  
-
-    <!-- Official Info Modal -->
-<div class="modal-overlay" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-card">
-      <div class="modal-head">
-        <span id="modalTitle" class="font-arabic">نظام التدريب الميداني (UIMS)</span>
-        <button type="button" id="closeModalBtn" aria-label="Close" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">&times;</button>
-      </div>
-      <div class="modal-body font-arabic" dir="rtl" lang="ar" id="modalBody"></div>
-      <div class="modal-foot">
-        <button type="button" id="closeModalFootBtn" class="nav-portal-btn font-arabic">إغلاق</button>
-      </div>
+    <footer class="page-bottom-strip"><nav class="login-footer-nav" aria-label="Public pages"><a class="login-nav-link" href="<%= ResolveUrl("~/index.aspx") %>" id="navHomeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/></svg>Home</a><a class="login-nav-link" href="<%= ResolveUrl("~/ContactUs/ContactPage/Contact.aspx") %>" id="navContactBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg>Contact Us</a></nav></footer>
+    <div class="modal-overlay" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+      <div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Here to help.</h2><button type="button" class="modal-close" id="closeModalBtn" aria-label="Close contact information">×</button></div><div class="modal-body" id="modalBody"><p>King Abdullah II School of Information Technology<br />The University of Jordan · Amman, Jordan</p><p>Phone: <a href="tel:+96265355000">+962 6 5355000</a></p><p><a href="<%= ResolveUrl("~/ContactUs/ContactPage/Contact.aspx") %>">Open Contact Us</a></p></div><div class="modal-foot"><button type="button" id="closeModalFootBtn" class="secondary-button">Close</button></div></div>
     </div>
-  </div>
-
-    <!-- Forgot Password Modal -->
-    <div class="modal-overlay" id="forgotModal" role="dialog" aria-modal="true" aria-labelledby="forgotTitle">
+    <div class="modal-overlay" id="forgotModal" role="dialog" aria-modal="true" aria-labelledby="forgotTitle" aria-describedby="recoveryDescription" tabindex="-1">
       <div class="modal-card">
-        <div class="modal-head">
-          <span id="forgotTitle" class="font-arabic">استعادة كلمة المرور</span>
-          <button type="button" id="closeForgotModalBtn" aria-label="Close" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">&times;</button>
+        <div class="modal-head"><h2 id="forgotTitle">A fresh start.</h2><button type="button" class="modal-close" id="closeForgotModalBtn" aria-label="Close password recovery">×</button></div>
+        <div class="modal-body"><p id="recoveryDescription">Enter your registered email address to request a password reset link.</p>
+          <asp:Panel ID="pnlRecoveryResult" runat="server" Visible="false" role="status"><asp:Literal ID="litRecoveryMsg" runat="server" /></asp:Panel>
+          <div class="label-row"><label for="txtRecoveryEmail">Email address</label></div>
+          <div class="input-shell" id="recoveryGroup"><asp:TextBox ID="txtRecoveryEmail" runat="server" TextMode="Email" CssClass="login-input" placeholder="name@example.com" autocomplete="email" autocapitalize="none" inputmode="email" spellcheck="false" aria-describedby="recoveryError" ClientIDMode="Static" /></div>
+          <p id="recoveryError" class="field-error" role="alert" hidden></p>
         </div>
-        <div class="modal-body font-arabic" dir="rtl" lang="ar">
-          <p style="margin-bottom:12px;font-size:14px;color:#334155;line-height:1.6;">
-            أدخل بريدك الإلكتروني المسجل في النظام ليتم إرسال رابط استعادة كلمة المرور.
-          </p>
-          <asp:Panel ID="pnlRecoveryResult" runat="server" Visible="false">
-            <asp:Literal ID="litRecoveryMsg" runat="server" />
-          </asp:Panel>
-          <div class="form-group" style="margin-top:14px;">
-            <label class="form-label" for="txtRecoveryEmail" style="display:block;margin-bottom:6px;font-size:13px;font-weight:700;color:#183B31;">البريد الإلكتروني:</label>
-            <asp:TextBox ID="txtRecoveryEmail" runat="server" TextMode="Email" CssClass="uims-input" placeholder="name@example.com" style="width:100%;height:44px;padding:0 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;background:#fff;" ClientIDMode="Static" />
-          </div>
-        </div>
-        <div class="modal-foot" style="display:flex;justify-content:space-between;gap:10px;">
-          <button type="button" id="cancelForgotBtn" class="nav-link-btn font-arabic" style="background:#f1f5f9;color:#475569;padding:6px 16px;border-radius:8px;border:none;cursor:pointer;">إلغاء</button>
-          <asp:Button ID="btnSendRecovery" runat="server" Text="إرسال رابط الاستعادة" OnClick="btnSendRecovery_Click" CssClass="nav-portal-btn font-arabic" style="background-color:#0b5c2c;color:#fff;padding:6px 18px;border-radius:8px;border:none;cursor:pointer;" ClientIDMode="Static" />
-        </div>
+        <div class="modal-foot"><button type="button" class="secondary-button" id="cancelForgotBtn">Cancel</button><asp:Button ID="btnSendRecovery" runat="server" Text="Send reset link" OnClick="btnSendRecovery_Click" CssClass="recovery-button" ClientIDMode="Static" formnovalidate="formnovalidate" /></div>
       </div>
     </div>
   </form>
-
   <script>
-(function() {
-  const bgCanvas = document.getElementById('bgCanvas');
-  const ctx = bgCanvas ? bgCanvas.getContext('2d') : null;
-  const loginCard = document.getElementById('loginCard');
+  (function () {
+    'use strict';
+    var form = document.getElementById('form1');
+    var email = document.getElementById('txtEmail');
+    var password = document.getElementById('txtPassword');
+    var login = document.getElementById('btnLogin');
+    var recovery = document.getElementById('btnSendRecovery');
+    var recoveryEmail = document.getElementById('txtRecoveryEmail');
+    var submitShell = document.getElementById('loginSubmit');
+    var alertBox = document.getElementById('officialAlertBox');
+    var alertText = document.getElementById('officialAlertText');
+    var status = document.getElementById('requestStatus');
+    var activeModal = null, lastFocus = null, pending = false, lastSubmitter = null;
 
-  const grandUjLogoSvg = document.getElementById('grandUjLogoSvg');
-  const shieldProgressRing = document.getElementById('shieldProgressRing');
-  const torchFlameGroup = document.getElementById('torchFlameGroup');
-  const leftStatusDot = document.getElementById('leftStatusDot') || { style: {} };
-
-  const emailInput = document.getElementById('txtEmail') || document.getElementById('emailInput');
-  const passwordInput = document.getElementById('txtPassword') || document.getElementById('passwordInput');
-  const emailGroup = document.getElementById('emailGroup');
-  const passwordGroup = document.getElementById('passwordGroup');
-  const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-  const eyeIconOpen = document.getElementById('eyeIconOpen');
-  const eyeIconClosed = document.getElementById('eyeIconClosed');
-  const uimsLoginForm = document.getElementById('form1') || document.getElementById('uimsLoginForm');
-  const signInBtn = document.getElementById('btnLogin') || document.getElementById('signInBtn');
-  const signInBtnText = document.getElementById('signInBtnText');
-  const officialAlertBox = document.getElementById('officialAlertBox');
-  const officialAlertText = document.getElementById('officialAlertText');
-
-  const infoModal = document.getElementById('infoModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-
-  let activeField = 'none';
-  let isPasswordVisible = false;
-  let pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
-  let particles = [];
-  let ripples = [];
-  const flameGlow = document.getElementById('flameGlowCircle');
-  const reduceQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false, addEventListener: function() {} };
-  const fineQuery = window.matchMedia ? window.matchMedia('(hover: hover) and (pointer: fine)') : { matches: true };
-  let reduceMotion = reduceQuery.matches;
-  let W = window.innerWidth, H = window.innerHeight, rafId = 0, flameTimer = 0, resizeTimer = 0;
-
-  // 1. Background Canvas & Ripples
-  function resizeCanvas() {
-    if (!bgCanvas || !ctx) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth; H = window.innerHeight;
-    bgCanvas.width = Math.round(W * dpr);
-    bgCanvas.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    if (reduceMotion) drawFrame();
-  }
-  window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(resizeCanvas, 120);
-  });
-  resizeCanvas();
-
-  function initParticles() {
-    particles = [];
-  }
-  initParticles();
-  const bgLayers = document.querySelectorAll('[data-bg-lines]');
-
-  function emitShieldRipple(color) {
-    if (reduceMotion || !grandUjLogoSvg || !ctx) return;
-    const rect = grandUjLogoSvg.getBoundingClientRect();
-    const cx = rect.left + rect.width * 0.5;
-    const cy = rect.top + rect.height * 0.48;
-    ripples.push({
-      x: cx,
-      y: cy,
-      r: 25,
-      maxR: Math.max(W, H) * 0.55,
-      alpha: 0.42,
-      color: color || '#10b981'
+    submitShell.addEventListener('pointerdown', function (event) {
+      if (pending) return;
+      var bounds = submitShell.getBoundingClientRect();
+      submitShell.style.setProperty('--press-x', (event.clientX - bounds.left) + 'px');
+      submitShell.style.setProperty('--press-y', (event.clientY - bounds.top) + 'px');
+      submitShell.classList.remove('is-pressed');
+      window.requestAnimationFrame(function () { submitShell.classList.add('is-pressed'); });
     });
-  }
-  window.emitShieldRipple = emitShieldRipple;
+    submitShell.addEventListener('animationend', function (event) {
+      if (event.animationName === 'button-ripple') submitShell.classList.remove('is-pressed');
+    });
 
-  function triggerErrorState() {
-    if (!loginCard) return;
-    loginCard.classList.remove('state-email', 'state-password');
-    loginCard.classList.remove('state-error');
-    void loginCard.offsetWidth;
-    loginCard.classList.add('state-error');
-    emitShieldRipple('#e60000');
-  }
-  window.triggerErrorState = triggerErrorState;
-
-  function drawFrame() {
-    if (!ctx) return;
-    const animate = !reduceMotion;
-    ctx.clearRect(0, 0, W, H);
-
-    const tilt = animate && (fineQuery.matches || !window.matchMedia);
-    pointer.x += (pointer.targetX - pointer.x) * 0.07;
-    pointer.y += (pointer.targetY - pointer.y) * 0.07;
-    if (tilt) bgLayers.forEach(function(el) { el.style.setProperty('--mx', pointer.x.toFixed(3)); el.style.setProperty('--my', pointer.y.toFixed(3)); });
-
-    const tiltX = pointer.y * -7;
-    const tiltY = pointer.x * 9;
-    if (tilt && grandUjLogoSvg) grandUjLogoSvg.style.transform = "rotateX(" + tiltX.toFixed(2) + "deg) rotateY(" + tiltY.toFixed(2) + "deg) translate3d(" + (pointer.x * 6).toFixed(1) + "px, " + (pointer.y * 5).toFixed(1) + "px, 0)";
-
-    for (let i = ripples.length - 1; i >= 0; i--) {
-      const rp = ripples[i];
-      rp.r += 5.2;
-      rp.alpha *= 0.962;
-      ctx.beginPath();
-      ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
-      ctx.strokeStyle = rp.color;
-      ctx.globalAlpha = rp.alpha;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-      if (rp.alpha < 0.015 || rp.r > rp.maxR) {
-        ripples.splice(i, 1);
+    var campus = document.querySelector('.campus');
+    var crest = document.querySelector('.crest-scene');
+    var crestMessage = document.getElementById('crestMessage');
+    var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    var pointerFrame = 0, waveFrame = 0, waveTimer = 0, latestPointer = null;
+    function neutralPointer() {
+      if (pointerFrame) window.cancelAnimationFrame(pointerFrame);
+      pointerFrame = 0;
+      campus.style.setProperty('--scene-x', '0'); campus.style.setProperty('--scene-y', '0');
+      document.body.classList.remove('is-pointing');
+    }
+    window.addEventListener('pointermove', function (event) {
+      if (motionPreference.matches || !finePointer.matches || document.hidden || (event.pointerType && event.pointerType !== 'mouse')) return;
+      latestPointer = { x: event.clientX, y: event.clientY };
+      if (pointerFrame) return;
+      pointerFrame = window.requestAnimationFrame(function () {
+        pointerFrame = 0;
+        var bounds = campus.getBoundingClientRect();
+        var x = Math.max(-1, Math.min(1, (latestPointer.x / window.innerWidth - .5) * 2));
+        var y = Math.max(-1, Math.min(1, (latestPointer.y / window.innerHeight - .5) * 2));
+        campus.style.setProperty('--scene-x', x.toFixed(3)); campus.style.setProperty('--scene-y', y.toFixed(3));
+        campus.style.setProperty('--spot-x', Math.max(0, Math.min(100, (latestPointer.x - bounds.left) / bounds.width * 100)) + '%');
+        campus.style.setProperty('--spot-y', Math.max(0, Math.min(100, (latestPointer.y - bounds.top) / bounds.height * 100)) + '%');
+        document.body.classList.add('is-pointing');
+      });
+    }, { passive: true });
+    document.addEventListener('mouseleave', neutralPointer);
+    document.addEventListener('visibilitychange', function () { document.body.classList.toggle('motion-paused', document.hidden); if (document.hidden) neutralPointer(); });
+    if (motionPreference.addEventListener) motionPreference.addEventListener('change', function () { neutralPointer(); window.cancelAnimationFrame(waveFrame); window.clearTimeout(waveTimer); crest.classList.remove('is-typing'); });
+    function emitCrestWave() {
+      if (motionPreference.matches) return;
+      crest.classList.remove('is-typing');
+      window.clearTimeout(waveTimer);
+      window.cancelAnimationFrame(waveFrame);
+      waveFrame = window.requestAnimationFrame(function () {
+        waveFrame = window.requestAnimationFrame(function () { if (!motionPreference.matches) crest.classList.add('is-typing'); });
+      });
+      waveTimer = window.setTimeout(function () { crest.classList.remove('is-typing'); }, 950);
+    }
+    function reflectField(field, clearError) {
+      if (clearError) { document.body.classList.remove('scene-error'); document.body.classList.remove('credential-rejected'); }
+      document.body.setAttribute('data-field', field);
+      if (document.body.classList.contains('scene-error')) { crestMessage.textContent = 'Check your sign-in details.'; return; }
+      if (field === 'email') {
+        var formatReady = validEmail(email.value.trim());
+        campus.style.setProperty('--email-offset', formatReady ? '0' : String(100 - Math.min(80, email.value.trim().length * 3)));
+        crestMessage.textContent = formatReady ? 'Email format looks good.' : 'Let’s start with your email.';
+      } else {
+        crestMessage.textContent = password.type === 'text' ? 'Password is visible.' : 'Your password stays hidden.';
       }
     }
-
-    ctx.globalAlpha = 1;
-  }
-  function renderLoop() {
-    drawFrame();
-    rafId = (!reduceMotion && !document.hidden) ? requestAnimationFrame(renderLoop) : 0;
-  }
-  function startLoop() { if (!rafId) rafId = requestAnimationFrame(renderLoop); }
-  document.addEventListener('visibilitychange', function() { if (!document.hidden) startLoop(); });
-  if (reduceQuery && reduceQuery.addEventListener) {
-    reduceQuery.addEventListener('change', function(e) {
-      reduceMotion = e.matches;
-      if (reduceMotion) { ripples.length = 0; if (grandUjLogoSvg) grandUjLogoSvg.style.transform = ''; drawFrame(); } else { startLoop(); }
+    [[email, 'email'], [password, 'password']].forEach(function (item) {
+      item[0].addEventListener('focus', function () { reflectField(item[1]); emitCrestWave(); });
+      item[0].addEventListener('input', function () { reflectField(item[1], true); emitCrestWave(); });
     });
-  }
-  renderLoop();
-
-  window.addEventListener('pointermove', function(e) {
-    if (e.pointerType && e.pointerType !== 'mouse') return;
-    pointer.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
-    pointer.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
-  }, { passive: true });
-
-  // 2. Shield Reactions
-  function pulseTorchFlame() {
-    if (reduceMotion || !flameGlow) return;
-    flameGlow.classList.add('pulse');
-    clearTimeout(flameTimer);
-    flameTimer = setTimeout(function() { flameGlow.classList.remove('pulse'); }, 180);
-  }
-
-  function updateEmailReaction() {
-    if (!emailInput || !shieldProgressRing) return;
-    const val = (emailInput.value || '').trim();
-    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-    const progress = Math.min(1, val.length / 20);
-
-    shieldProgressRing.style.strokeDashoffset = (1131 * (1 - progress)).toFixed(0);
-
-    if (isValid) {
-      shieldProgressRing.setAttribute('stroke', '#34d399');
-      if (leftStatusDot && leftStatusDot.style) leftStatusDot.style.backgroundColor = '#34d399';
-    } else {
-      shieldProgressRing.setAttribute('stroke', '#fbbf24');
-      if (leftStatusDot && leftStatusDot.style) leftStatusDot.style.backgroundColor = '#fbbf24';
-    }
-  }
-
-  if (emailInput) {
-    emailInput.addEventListener('focus', function() {
-      activeField = 'email';
-      if (loginCard && !loginCard.classList.contains('state-error')) {
-        loginCard.classList.remove('state-password');
-        loginCard.classList.add('state-email');
-      }
-      if (emailGroup) emailGroup.classList.remove('input-invalid');
-      emailInput.removeAttribute('aria-invalid');
-      updateEmailReaction();
+    document.getElementById('togglePasswordBtn').addEventListener('click', function () {
+      // The existing visibility handler below owns the actual input type.
+      window.requestAnimationFrame(function () {
+        document.body.classList.toggle('password-visible', password.type === 'text');
+        if (document.body.getAttribute('data-field') === 'password') reflectField('password');
+        emitCrestWave();
+      });
+    });
+    document.querySelector('.login-panel').addEventListener('focusout', function () {
+      window.requestAnimationFrame(function () {
+        if (!pending && document.activeElement !== email && document.activeElement !== password && document.activeElement.id !== 'togglePasswordBtn' && !document.body.classList.contains('scene-error')) {
+          document.body.removeAttribute('data-field');
+          campus.style.setProperty('--email-offset', '100');
+          crestMessage.textContent = 'Your journey starts with you.';
+        }
+      });
     });
 
-    emailInput.addEventListener('input', function() {
-      activeField = 'email';
-      pulseTorchFlame();
-      emitShieldRipple('#10b981');
-      updateEmailReaction();
-    });
-
-    emailInput.addEventListener('blur', function() {
-      activeField = 'none';
-      if (loginCard && !loginCard.classList.contains('state-error')) {
-        loginCard.classList.remove('state-email');
-      }
-    });
-  }
-
-  if (passwordInput) {
-    passwordInput.addEventListener('focus', function() {
-      activeField = 'password';
-      if (loginCard && !loginCard.classList.contains('state-error')) {
-        loginCard.classList.remove('state-email');
-        loginCard.classList.add('state-password');
-      }
-      if (passwordGroup) passwordGroup.classList.remove('input-invalid');
-      passwordInput.removeAttribute('aria-invalid');
-      if (shieldProgressRing) shieldProgressRing.setAttribute('stroke', '#fbbf24');
-      if (leftStatusDot && leftStatusDot.style) leftStatusDot.style.backgroundColor = '#fbbf24';
-      emitShieldRipple('#d4af37');
-    });
-
-    passwordInput.addEventListener('input', function() {
-      activeField = 'password';
-      const len = (passwordInput.value || '').length;
-      const progress = Math.min(1, len / 12);
-      if (shieldProgressRing) shieldProgressRing.style.strokeDashoffset = (1131 * (1 - progress)).toFixed(0);
-      pulseTorchFlame();
-      emitShieldRipple('#d4af37');
-    });
-
-    passwordInput.addEventListener('blur', function() {
-      activeField = 'none';
-      if (loginCard && !loginCard.classList.contains('state-error')) {
-        loginCard.classList.remove('state-password');
-      }
-    });
-  }
-
-  if (togglePasswordBtn && passwordInput) {
-    togglePasswordBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      isPasswordVisible = !isPasswordVisible;
-      passwordInput.type = isPasswordVisible ? 'text' : 'password';
-      togglePasswordBtn.setAttribute('aria-pressed', String(isPasswordVisible));
-      togglePasswordBtn.setAttribute('aria-label', isPasswordVisible ? 'Hide password' : 'Show password');
-      if (eyeIconOpen) eyeIconOpen.style.display = isPasswordVisible ? 'block' : 'none';
-      if (eyeIconClosed) eyeIconClosed.style.display = isPasswordVisible ? 'none' : 'block';
-      pulseTorchFlame();
-      emitShieldRipple(isPasswordVisible ? '#e60000' : '#d4af37');
-    });
-  }
-
-  // 3. Form Validation (runs before ASP.NET postback)
-  function validateLoginForm(e) {
-    const emailVal = emailInput ? (emailInput.value || '').trim() : '';
-    const passVal = passwordInput ? (passwordInput.value || '').trim() : '';
-    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
-
-    if (!emailVal || !isValid) {
-      if (e) e.preventDefault();
-      if (emailGroup) emailGroup.classList.add('input-invalid');
-      if (officialAlertBox) {
-        officialAlertBox.className = 'official-alert alert-error';
-        officialAlertBox.style.display = 'flex';
-      }
-      if (officialAlertText) officialAlertText.textContent = 'Please enter a valid email address.';
-      if (emailInput) {
-        emailInput.setAttribute('aria-invalid', 'true');
-        emailInput.focus();
-      }
-      triggerErrorState();
-      return false;
-    }
-
-    if (!passVal || passVal.length < 4) {
-      if (e) e.preventDefault();
-      if (passwordGroup) passwordGroup.classList.add('input-invalid');
-      if (officialAlertBox) {
-        officialAlertBox.className = 'official-alert alert-error';
-        officialAlertBox.style.display = 'flex';
-      }
-      if (officialAlertText) officialAlertText.textContent = 'Please enter your password.';
-      if (passwordInput) {
-        passwordInput.setAttribute('aria-invalid', 'true');
-        passwordInput.focus();
-      }
-      triggerErrorState();
-      return false;
-    }
-
-    if (loginCard) loginCard.classList.remove('state-error');
-    if (officialAlertBox) officialAlertBox.style.display = 'none';
-    if (signInBtn) {
-      if (signInBtn.tagName === 'INPUT') {
-        signInBtn.value = 'Authenticating...';
-      } else if (signInBtnText) {
-        signInBtnText.textContent = 'Authenticating...';
-      }
-    }
-    emitShieldRipple('#10b981');
-    return true;
-  }
-
-  if (signInBtn) {
-    signInBtn.addEventListener('click', function(e) {
-      if (!validateLoginForm(e)) {
-        return false;
-      }
-    });
-  }
-
-  [emailInput, passwordInput].forEach(function(el) {
-    if (el) {
-      el.addEventListener('input', function() {
-        if (loginCard) loginCard.classList.remove('state-error');
-        if (officialAlertBox) officialAlertBox.style.display = 'none';
+    var cardRejectFrame = 0;
+    var loginCard = document.querySelector('.login-panel');
+    function rejectField(groupId) {
+      document.getElementById(groupId).classList.add('input-invalid');
+      loginCard.classList.remove('card-reject-motion');
+      window.cancelAnimationFrame(cardRejectFrame);
+      if (motionPreference.matches) return;
+      cardRejectFrame = window.requestAnimationFrame(function () {
+        cardRejectFrame = window.requestAnimationFrame(function () {
+          if (!motionPreference.matches) loginCard.classList.add('card-reject-motion');
+        });
       });
     }
-  });
-
-  // 4. Header / Footer Navigation Modals
-  let lastFocus = null;
-  function showModal(title, bodyHtml) {
-    if (!infoModal) return;
-    lastFocus = document.activeElement;
-    if (modalTitle) modalTitle.textContent = title;
-    if (modalBody) modalBody.innerHTML = bodyHtml;
-    infoModal.classList.add('show');
-    const footBtn = document.getElementById('closeModalFootBtn');
-    if (footBtn) footBtn.focus();
-  }
-
-  function closeModal() {
-    if (infoModal) infoModal.classList.remove('show');
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
-  }
-
-  document.addEventListener('keydown', function(e) {
-    if (!infoModal || !infoModal.classList.contains('show')) return;
-    if (e.key === 'Escape') { closeModal(); return; }
-    if (e.key === 'Tab') {
-      const items = [document.getElementById('closeModalBtn'), document.getElementById('closeModalFootBtn')].filter(Boolean);
-      if (items.length === 0) return;
-      const i = items.indexOf(document.activeElement);
-      e.preventDefault();
-      items[(i + (e.shiftKey ? items.length - 1 : 1)) % items.length].focus();
+    loginCard.addEventListener('animationend', function (event) {
+      if (event.target === loginCard && event.animationName === 'card-reject') loginCard.classList.remove('card-reject-motion');
+    });
+    function setFieldError(input, groupId, errorId, message) {
+      document.getElementById(groupId).classList.toggle('input-invalid', !!message);
+      var error = document.getElementById(errorId);
+      error.textContent = message;
+      error.hidden = !message;
+      if (message) rejectField(groupId);
+      if (message) { document.body.classList.add('scene-error'); crestMessage.textContent = 'Check your sign-in details.'; emitCrestWave(); }
+      if (message) input.setAttribute('aria-invalid', 'true');
+      else input.removeAttribute('aria-invalid');
     }
-  });
-
-  const closeMBtn = document.getElementById('closeModalBtn');
-  if (closeMBtn) closeMBtn.addEventListener('click', closeModal);
-  const closeMFootBtn = document.getElementById('closeModalFootBtn');
-  if (closeMFootBtn) closeMFootBtn.addEventListener('click', closeModal);
-  if (infoModal) {
-    infoModal.addEventListener('click', function(e) {
-      if (e.target === infoModal) closeModal();
-    });
-  }
-
-  const navAbout = document.getElementById('navAboutBtn');
-  if (navAbout) {
-    navAbout.addEventListener('click', function() {
-      showModal(
-        'عن نظام التدريب الميداني (UIMS)',
-        '<p>منصة إلكترونية رسمية تابعة لكلية الملك عبدالله الثاني لتكنولوجيا المعلومات (KASIT) في الجامعة الأردنية لإدارة ومتابعة التدريب الميداني للطلبة.</p>'
-      );
-    });
-  }
-
-  const navContact = document.getElementById('navContactBtn');
-  if (navContact) {
-    navContact.addEventListener('click', function() {
-      showModal(
-        'تواصل معنا - كلية KASIT',
-        '<p><strong>الجامعة الأردنية - عمّان، الأردن</strong><br>هاتف: <span dir="ltr">+962 6 5355000</span></p>'
-      );
-    });
-  }
-
-  const navHome = document.getElementById('navHomeBtn');
-  if (navHome) {
-    navHome.addEventListener('click', function() {
-      if (officialAlertBox) officialAlertBox.style.display = 'none';
-      if (emailInput) emailInput.value = '';
-      if (passwordInput) passwordInput.value = '';
-      updateEmailReaction();
-    });
-  }
-
-  // 5. Password Reset / Recovery Modal
-  function openForgotModal() {
-    const modal = document.getElementById('forgotModal');
-    const emailIn = document.getElementById('txtEmail');
-    const recIn = document.getElementById('txtRecoveryEmail');
-    if (emailIn && recIn && emailIn.value) {
-      recIn.value = emailIn.value.trim();
+    function validEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); }
+    function resetPending() {
+      pending = false;
+      document.body.classList.remove('scene-pending');
+      submitShell.classList.remove('is-loading');
+      form.removeAttribute('aria-busy');
+      login.removeAttribute('aria-disabled');
+      recovery.removeAttribute('aria-disabled');
+      recovery.value = 'Send reset link';
+      status.textContent = '';
     }
-    if (modal) modal.classList.add('show');
-  }
-  window.openForgotModal = openForgotModal;
-
-  const forgotBtn = document.getElementById('forgotPasswordBtn');
-  if (forgotBtn) {
-    forgotBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      openForgotModal();
+    function openModal(id) {
+      if (activeModal) closeModal(false);
+      lastFocus = document.activeElement;
+      activeModal = document.getElementById(id);
+      activeModal.classList.add('show');
+      document.body.classList.add('modal-open');
+      // Keep the open dialog inside the server form, but remove the background from the tab order.
+      document.querySelector('.entrance').setAttribute('inert', '');
+      var target = id === 'forgotModal' ? recoveryEmail : activeModal.querySelector('button');
+      target.focus();
+    }
+    function closeModal(restoreFocus) {
+      if (!activeModal) return;
+      activeModal.classList.remove('show');
+      activeModal = null;
+      document.body.classList.remove('modal-open');
+      document.querySelector('.entrance').removeAttribute('inert');
+      if (restoreFocus !== false && lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    window.openForgotModal = function () {
+      if (!recoveryEmail.value && email.value) recoveryEmail.value = email.value.trim();
+      openModal('forgotModal');
+    };
+    document.getElementById('forgotPasswordBtn').addEventListener('click', window.openForgotModal);
+    // Public navigation uses ordinary links; password recovery retains its modal.
+    ['closeModalBtn', 'closeModalFootBtn', 'closeForgotModalBtn', 'cancelForgotBtn'].forEach(function (id) {
+      document.getElementById(id).addEventListener('click', function () { closeModal(); });
     });
-  }
-
-  const closeForgot = document.getElementById('closeForgotModalBtn');
-  if (closeForgot) {
-    closeForgot.addEventListener('click', function() {
-      const m = document.getElementById('forgotModal');
-      if (m) m.classList.remove('show');
+    document.querySelectorAll('.modal-overlay').forEach(function (modal) {
+      modal.addEventListener('click', function (event) { if (event.target === modal) closeModal(); });
     });
-  }
-
-  const cancelForgot = document.getElementById('cancelForgotBtn');
-  if (cancelForgot) {
-    cancelForgot.addEventListener('click', function() {
-      const m = document.getElementById('forgotModal');
-      if (m) m.classList.remove('show');
+    document.addEventListener('keydown', function (event) {
+      if (!activeModal) return;
+      if (event.key === 'Escape') { event.preventDefault(); closeModal(); return; }
+      if (event.key !== 'Tab') return;
+      var items = Array.prototype.filter.call(activeModal.querySelectorAll('a[href], button, input, [tabindex="0"]'), function (el) { return !el.disabled && el.offsetParent !== null; });
+      if (!items.length) { event.preventDefault(); activeModal.focus(); return; }
+      var first = items[0], last = items[items.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !activeModal.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && (document.activeElement === last || !activeModal.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
     });
-  }
-
-  // Check if server rendered an error on postback (e.g. wrong password/email from Firebase)
-  const serverErr = document.getElementById('pnlError');
-  if (serverErr && serverErr.style.display !== 'none' && loginCard) {
-    triggerErrorState();
-  }
-
-  // Initialize progress ring state
-  updateEmailReaction();
-})();
+    document.getElementById('togglePasswordBtn').addEventListener('click', function () {
+      var visible = password.type === 'password';
+      password.type = visible ? 'text' : 'password';
+      this.setAttribute('aria-pressed', String(visible));
+      this.setAttribute('aria-label', visible ? 'Hide password' : 'Show password');
+    });
+    [login, recovery].forEach(function (button) {
+      button.addEventListener('click', function () { lastSubmitter = button; });
+    });
+    recoveryEmail.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') { event.preventDefault(); recovery.click(); }
+    });
+    [email, password].forEach(function (input) {
+      input.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') { event.preventDefault(); login.click(); }
+      });
+    });
+    form.addEventListener('submit', function (event) {
+      var sender = event.submitter || lastSubmitter || login;
+      if (pending) { event.preventDefault(); return; }
+      if (sender === recovery) {
+        var recoveryError = validEmail(recoveryEmail.value.trim()) ? '' : 'Enter your registered email address.';
+        setFieldError(recoveryEmail, 'recoveryGroup', 'recoveryError', recoveryError);
+        if (recoveryError) { event.preventDefault(); recoveryEmail.focus(); return; }
+        recovery.value = 'Requesting reset link…';
+        recovery.setAttribute('aria-disabled', 'true');
+        status.textContent = 'Requesting a password reset link.';
+      } else {
+        var emailError = validEmail(email.value.trim()) ? '' : 'Enter a valid email address.';
+        // Match the existing client validation; the server remains the authentication authority.
+        var passwordError = password.value.trim().length >= 4 ? '' : 'Please enter your password.';
+        setFieldError(email, 'emailGroup', 'emailError', emailError);
+        setFieldError(password, 'passwordGroup', 'passwordError', passwordError);
+        if (emailError || passwordError) {
+          event.preventDefault();
+          alertText.textContent = 'Check the highlighted fields to continue.';
+          alertBox.hidden = false;
+          (emailError ? email : password).focus();
+          return;
+        }
+        alertBox.hidden = true;
+        submitShell.classList.add('is-loading');
+        login.setAttribute('aria-disabled', 'true');
+        status.textContent = 'Signing in. Please wait.';
+      }
+      // Do not disable or rename the ASP.NET submitter: its posted name triggers the existing handler.
+      pending = true;
+      document.body.classList.add('scene-pending');
+      crestMessage.textContent = sender === recovery ? 'Requesting your reset link…' : 'Checking your account…';
+      form.setAttribute('aria-busy', 'true');
+    });
+    [[email, 'emailGroup', 'emailError'], [password, 'passwordGroup', 'passwordError'], [recoveryEmail, 'recoveryGroup', 'recoveryError']].forEach(function (field) {
+      field[0].addEventListener('input', function () { setFieldError(field[0], field[1], field[2], ''); alertBox.hidden = true; });
+    });
+    window.addEventListener('pageshow', resetPending);
+    // A full postback and partial updates do not restart the entrance animation.
+    if (window.uimsRecoveryRequested || document.getElementById('pnlRecoveryResult')) window.openForgotModal();
+    var serverError = document.getElementById('pnlError');
+    if (serverError && !activeModal) { if (/invalid email address or password|incorrect password|invalid credential/i.test(serverError.textContent)) { document.body.classList.add('credential-rejected'); rejectField('emailGroup'); rejectField('passwordGroup'); } serverError.focus(); document.body.classList.add('scene-error'); crestMessage.textContent = 'Check your sign-in details.'; }
+  })();
   </script>
 </body>
 </html>
