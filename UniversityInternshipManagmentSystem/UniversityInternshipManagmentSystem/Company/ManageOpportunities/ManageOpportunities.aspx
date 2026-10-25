@@ -10,7 +10,7 @@
     <title>Manage Opportunities | UIMS</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" runat="server" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <link href="~/Shared/uims.css" rel="stylesheet" runat="server" />
+    <link href="~/Shared/uims.css?v=20261025-title3" rel="stylesheet" runat="server" />
     <link href="ManageOpportunities.css" rel="stylesheet" />
 </head>
 <body>
@@ -34,7 +34,7 @@
                 <main class="uims-content">
                     <div class="uims-page-head d-flex justify-content-between align-items-center mb-4">
                         <div>
-                            <h1 class="page-title mb-1">Manage Opportunities</h1>
+                            <h1 class="page-title mb-1 uims-page-title">Manage Opportunities</h1>
                             <p class="text-muted mb-0">Add, edit, and close internship opportunities, specify specializations, requirements, and available seats.</p>
                         </div>
                         <%-- hidden if the company has no profile --%>

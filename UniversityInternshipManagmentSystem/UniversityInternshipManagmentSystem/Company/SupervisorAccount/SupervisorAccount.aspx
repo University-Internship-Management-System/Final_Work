@@ -11,7 +11,7 @@
         <div class="account-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <div>
                 <span class="account-eyebrow">Corporate Supervision Portal</span>
-                <h1 class="account-title">Account &amp; Profile Settings</h1>
+                <h1 class="account-title uims-page-title">Account &amp; Profile Settings</h1>
                 <p class="account-subtitle">View and update your personal details, corporate profile, and change your password.</p>
             </div>
             <div class="d-flex align-items-center gap-2">

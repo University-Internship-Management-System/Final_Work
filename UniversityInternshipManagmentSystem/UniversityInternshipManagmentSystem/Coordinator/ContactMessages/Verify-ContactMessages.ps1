@@ -84,6 +84,64 @@ public static class InboxChecks {
   Console.WriteLine("PASS: "+count+" offline inbox identity, authorization, read-only transport, schema, bounds, search and error checks. No live Firebase requests.");
  }
 }
+
+public static class InboxPageChecks {
+ static int checks;
+ static void Check(bool value,string name){if(!value)throw new Exception(name);checks++;}
+ sealed class Harness:ContactInboxPage {
+  public List<ContactInboxRow> Rows;public int Reads;public bool Denied;
+  public Harness(List<ContactInboxRow> rows){
+   // Offline controls do not have a prior rendered __EVENTVALIDATION field. Production keeps event validation enabled.
+   EnableEventValidation=false; Rows=rows;
+   var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+   typeof(System.Web.UI.Page).GetField("_context",flags).SetValue(this,System.Web.HttpContext.Current);
+   typeof(System.Web.UI.Page).GetField("_request",flags).SetValue(this,System.Web.HttpContext.Current.Request);
+   typeof(System.Web.UI.Page).GetField("_response",flags).SetValue(this,System.Web.HttpContext.Current.Response);
+   Workspace=new System.Web.UI.WebControls.Panel{ID="Workspace"};NoticePanel=new System.Web.UI.WebControls.Panel{ID="NoticePanel",Visible=false};EmptyPanel=new System.Web.UI.WebControls.Panel{ID="EmptyPanel",Visible=false};
+   Notice=new System.Web.UI.WebControls.Literal();Summary=new System.Web.UI.WebControls.Literal();EmptyHeading=new System.Web.UI.WebControls.Literal();EmptyText=new System.Web.UI.WebControls.Literal();
+   SearchInput=new System.Web.UI.WebControls.TextBox{ID="SearchInput"};Messages=new System.Web.UI.WebControls.Repeater{ID="Messages",EnableViewState=false};
+   Controls.Add(Workspace);Controls.Add(NoticePanel);NoticePanel.Controls.Add(Notice);Workspace.Controls.Add(SearchInput);Workspace.Controls.Add(Summary);Workspace.Controls.Add(EmptyPanel);Workspace.Controls.Add(Messages);
+   EmptyPanel.Controls.Add(EmptyHeading);EmptyPanel.Controls.Add(EmptyText);TrackViewState();
+  }
+  protected override Task<List<ContactInboxRow>> ReadInboxAsync(){Reads++;if(Denied)throw new InboxAccessException("Fixture access denied");return Task.FromResult(Rows);}
+  public void LoadFixture(){LoadInboxAsync().GetAwaiter().GetResult();}
+  public object State(){return SaveViewState();}
+  public void Post(object state,string query){
+   LoadViewState(state);
+   typeof(System.Web.UI.Page).GetField("_requestValueCollection",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).SetValue(this,new System.Collections.Specialized.NameValueCollection());
+   var posted=new System.Collections.Specialized.NameValueCollection{{SearchInput.UniqueID,query}};
+   ((System.Web.UI.IPostBackDataHandler)SearchInput).LoadPostData(SearchInput.UniqueID,posted);
+  }
+  public void Search(){Search_Click(this,EventArgs.Empty);LoadFixture();}
+  public void Reload(){Reload_Click(this,EventArgs.Empty);LoadFixture();}
+  public void Expire(){ViewState["ContactInbox.Session"]="different-session";}
+  public int Count{get{return Messages.Items.Count;}}
+  public bool Toolbar{get{return Workspace.Visible&&SearchInput.Visible;}}
+  public bool Empty{get{return EmptyPanel.Visible;}}
+  public bool NoticeVisible{get{return NoticePanel.Visible;}}
+  public string SearchText{get{return SearchInput.Text;}}
+  public string SummaryText{get{return Summary.Text;}}
+ }
+ public static void Run(){
+  var context=new System.Web.HttpContext(new System.Web.HttpRequest("","http://localhost/",""),new System.Web.HttpResponse(new System.IO.StringWriter()));
+  System.Web.HttpContext.Current=context;
+  System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext(context,new System.Web.SessionState.HttpSessionStateContainer("offline-inbox-session",new System.Web.SessionState.SessionStateItemCollection(),new System.Web.HttpStaticObjectsCollection(),20,true,System.Web.HttpCookieMode.UseCookies,System.Web.SessionState.SessionStateMode.InProc,false));
+  try{
+   var rows=new List<ContactInboxRow>{new ContactInboxRow{FullName="Offline Lujain",Email="lujain@example.invalid",Subject="Training question",Message="A unique message body"},new ContactInboxRow{FullName="Offline Rana",Email="rana@example.invalid",Subject="Supervisor access",Message="Other fixture"}};
+   var first=new Harness(rows);first.LoadFixture();Check(first.Count==2&&first.Toolbar,"Initial messages/toolbar missing");object state=first.State();
+   foreach(string query in new[]{"Lujain","LUJAIN@EXAMPLE","Training question","unique message","  Lujain  "}){
+    var page=new Harness(rows);page.Post(state,query);Check(page.IsPostBack,"Fixture did not model a postback");page.Search();Check(page.Count==1&&page.Toolbar&&!page.NoticeVisible,"Matching search lost messages or toolbar: "+query);Check(page.Reads==1,"Search skipped protected repository boundary");
+   }
+   var none=new Harness(rows);none.Post(state,"not-a-match");none.Search();Check(none.Count==0&&none.Empty&&none.Toolbar&&!none.NoticeVisible,"No-match state removed search controls");
+   var reload=new Harness(rows);reload.Post(state,"not-a-match");reload.Reload();Check(reload.Count==2&&reload.SearchText==""&&reload.Toolbar,"Reload did not clear search and restore messages");
+   var empty=new Harness(new List<ContactInboxRow>());empty.LoadFixture();Check(empty.Toolbar&&empty.Empty&&empty.Count==0,"Empty inbox hid toolbar");
+   var denied=new Harness(rows);denied.Post(state,"Lujain");denied.Denied=true;denied.Search();Check(denied.Toolbar&&denied.NoticeVisible&&denied.Count==0,"Read error hid the search toolbar or exposed stale results");
+   var expired=new Harness(rows);expired.Post(state,"Lujain");expired.Expire();expired.Search();Check(expired.Reads==0&&expired.NoticeVisible&&expired.Toolbar&&expired.Count==0,"Expired form was not safely rejected");
+   var longQuery=new Harness(rows);longQuery.Post(state,new string('x',101));longQuery.Search();Check(longQuery.Reads==0&&longQuery.NoticeVisible&&longQuery.Toolbar,"Oversized input was not safely rejected");
+   Console.WriteLine("PASS: "+checks+" offline inbox page binding, posted search values, session-bound postbacks, Reload, empty/error and toolbar regression checks. No Firebase operations.");
+  }finally{System.Web.HttpContext.Current=null;}
+ }
+}
 '@
 $temporary=Join-Path ([IO.Path]::GetTempPath()) ('uims-inbox-checks-'+[guid]::NewGuid().ToString('N'))
 [void][IO.Directory]::CreateDirectory($temporary)
@@ -100,6 +158,7 @@ $output=Join-Path $temporary 'InboxChecks.dll'
 if($LASTEXITCODE) { throw 'Inbox test compilation failed' }
 [void][Reflection.Assembly]::LoadFrom($output)
 [InboxChecks]::Run()
+[InboxPageChecks]::Run()
 $markup=Get-Content (Join-Path $PSScriptRoot 'ContactMessages.aspx') -Raw
 foreach($field in @('FullName','Email','Subject','Message','DateLabel')) {
  if(!$markup.Contains('<%#: Eval("'+$field+'") %>')) { throw "Unencoded message field: $field" }
@@ -110,3 +169,6 @@ if(!$source.Contains('ViewStateUserKey = Session.SessionID;') -or !$source.Conta
 Write-Output 'PASS: encoded ASPX fields, shared master, async/CodeFile, session-bound postbacks and private-cache source checks. Runtime/browser checks are separate.'
 
 if(!$markup.Contains('<asp:Repeater ID="Messages" runat="server" EnableViewState="false">')) { throw 'Message payload must not be retained in ViewState' }
+
+if($markup.Contains('<asp:Panel ID="Workspace" runat="server" Visible="false">')) { throw 'Search controls must be available during the postback lifecycle' }
+if(!$markup.Contains('DefaultButton="SearchButton"')) { throw 'Enter-to-search integration missing' }

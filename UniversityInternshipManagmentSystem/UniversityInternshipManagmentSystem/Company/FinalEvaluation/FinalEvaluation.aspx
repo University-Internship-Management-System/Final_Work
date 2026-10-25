@@ -17,7 +17,7 @@
 
         <div class="st-header">
             <div>
-                <h1 class="page-title">Final Evaluation</h1>
+                <h1 class="page-title uims-page-title">Final Evaluation</h1>
                 <p class="text-muted mb-0">Sign the weekly training report of each trainee and complete the final evaluation (university form SUJ-KASIT-03-01-02).</p>
             </div>
         </div>

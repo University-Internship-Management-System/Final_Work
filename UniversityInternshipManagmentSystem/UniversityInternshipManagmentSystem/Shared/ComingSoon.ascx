@@ -15,7 +15,7 @@
 </script>
 
 <div class="uims-soon">
-    <h1 class="page-title"><%: PageTitle %></h1>
+    <h1 class="page-title uims-page-title"><%: PageTitle %></h1>
 
     <div class="card uims-soon-card">
         <span class="badge badge-pending">Coming soon</span>

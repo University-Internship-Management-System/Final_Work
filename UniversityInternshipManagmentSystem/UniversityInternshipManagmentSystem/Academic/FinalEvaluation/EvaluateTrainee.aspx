@@ -6,7 +6,7 @@
 </asp:Content>
 <asp:Content ID="PageMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="container-fluid py-3 af-page">
-    <div class="mb-4"><a href="<%: ResolveUrl("~/Academic/FinalEvaluation/Trainees.aspx") %>?companyId=<%: Server.UrlEncode(Request.QueryString["companyId"] ?? String.Empty) %>">&larr; Students</a><div class="small text-uppercase fw-bold text-success mt-3">Academic Supervisor</div><h1 class="af-title mb-1">Trainee final review</h1><p class="text-muted mb-0">Open a week to review its tasks, company comments, and your feedback.</p></div>
+    <div class="mb-4"><a href="<%: ResolveUrl("~/Academic/FinalEvaluation/Trainees.aspx") %>?companyId=<%: Server.UrlEncode(Request.QueryString["companyId"] ?? String.Empty) %>">&larr; Students</a><div class="small text-uppercase fw-bold text-success mt-3">Academic Supervisor</div><h1 class="af-title mb-1 uims-page-title">Trainee final review</h1><p class="text-muted mb-0">Open a week to review its tasks, company comments, and your feedback.</p></div>
     <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="alert" role="status"><asp:Literal ID="litMessage" runat="server" /></asp:Panel>
     <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="alert alert-danger" role="alert"><asp:Literal ID="litError" runat="server" /></asp:Panel>
     <asp:Panel ID="pnlReview" runat="server" Visible="false">

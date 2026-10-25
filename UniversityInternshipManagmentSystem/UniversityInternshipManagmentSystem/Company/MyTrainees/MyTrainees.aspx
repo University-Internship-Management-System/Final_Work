@@ -5,7 +5,7 @@
 </asp:Content>
 <asp:Content ID="TraineesContent" ContentPlaceHolderID="MainContent" runat="server">
     <section class="trainees-page" aria-labelledby="trainees-title">
-        <div class="trainees-heading"><div><p class="trainees-eyebrow">Company supervisor</p><h1 id="trainees-title">My Trainees</h1><p class="text-muted">Your accepted students, confirmed trainees, training details and task progress.</p></div><span class="trainees-readonly">Read-only</span></div>
+        <div class="trainees-heading"><div><p class="trainees-eyebrow">Company supervisor</p><h1 id="trainees-title" class="uims-page-title">My Trainees</h1><p class="text-muted">Your accepted students, confirmed trainees, training details and task progress.</p></div><span class="trainees-readonly">Read-only</span></div>
         <asp:Panel ID="Feedback" runat="server" Visible="false" CssClass="alert alert-warning" role="alert" EnableViewState="false"><asp:Literal ID="FeedbackText" runat="server" Mode="Encode" /></asp:Panel>
         <div class="row g-3 mb-4">
             <div class="col-md-5"><div class="card p-4 h-100"><p class="trainees-eyebrow">Accepted &amp; confirmed students</p><asp:Label ID="TotalCount" runat="server" Text="Unavailable" CssClass="trainees-count" /><p class="text-muted small mb-0 mt-2">Distinct students; Accepted and Confirmed are labelled separately.</p></div></div>

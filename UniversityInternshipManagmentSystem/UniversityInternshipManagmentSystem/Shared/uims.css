@@ -202,3 +202,63 @@ h3, .card-title  { font-size: 18px; font-weight: 600; }                     /* C
 .uims-brand-image { width: 42px; height: 50px; object-fit: contain; flex: none; }
 .uims-home-brand { display: inline-flex; align-items: center; gap: 9px; color: var(--uims-primary); text-decoration: none; }
 .uims-home-brand img { width: 28px; height: 34px; object-fit: contain; }
+
+
+/* Unified page titles. Home, Login, promotional heroes and certificates
+   are deliberately unmarked and keep their original appearance. */
+:root {
+    --uims-title-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+    --uims-title-color: #07523E;
+    --uims-title-size: 32px;
+}
+body .uims-shell main.uims-content .uims-page-title,
+body.uims-public .contact-page .uims-page-title,
+body.uims-public main[aria-labelledby="title"] .uims-page-title {
+    font-family: var(--uims-title-font) !important;
+    font-size: var(--uims-title-size) !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    line-height: 1.25 !important;
+    color: var(--uims-title-color) !important;
+    -webkit-text-fill-color: var(--uims-title-color) !important;
+    letter-spacing: -.025em !important;
+    text-transform: none !important;
+    text-shadow: none !important;
+    margin: 0 0 12px !important;
+    padding: 0 !important;
+    overflow-wrap: anywhere;
+}
+body .uims-shell main.uims-content { padding: 48px 32px 32px !important; }
+body .uims-shell main.uims-content > :is(.container, .container-fluid) { padding-inline: 0 !important; padding-block-start: 0 !important; }
+body.uims-public .contact-page,
+body.uims-public main[aria-labelledby="title"] { padding-block-start: 48px !important; }
+/* Remove only decorative labels immediately preceding the page title.
+   Breadcrumbs, back links, actions and descriptions are retained. */
+body .uims-shell main.uims-content :is(p,span,div):is([class*="eyebrow"],[class*="kicker"],.small.text-uppercase):has(+ .uims-page-title) { display: none !important; }
+body .uims-shell main.uims-content .uims-page-title + p,
+body.uims-public .contact-page .uims-page-title + p {
+    font-family: var(--uims-title-font) !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 1.7 !important;
+    color: var(--uims-muted) !important;
+    margin: 0 !important;
+    max-width: 78ch;
+}
+body .uims-shell main.uims-content :is(
+ .uims-page-head,.cd-header,.ad-heading,.ca-heading,.student-heading,
+ .academic-heading,.company-heading,.sd-heading,.sp-page-heading,
+ .trainees-heading,.ci-heading,.account-header,.progress-page-header,
+ .st-header,.hero-card,.cm-hero-card
+):has(.uims-page-title) { margin-block-start: 0 !important; margin-block-end: 28px !important; }
+body .uims-shell main.uims-content :is(.hero-card,.cm-hero-card):has(.uims-page-title) {
+    padding: 0 !important; border: 0 !important; border-radius: 0 !important;
+    background: transparent !important; box-shadow: none !important;
+}
+body .uims-shell main.uims-content .uims-page-title .sp-title-dot { color: var(--uims-title-color) !important; }
+@media (max-width: 767.98px) {
+    :root { --uims-title-size: 27px; }
+    body .uims-shell main.uims-content { padding: 30px 16px 24px !important; }
+    body.uims-public .contact-page,
+    body.uims-public main[aria-labelledby="title"] { padding-block-start: 30px !important; }
+}

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Explore Opportunities | UIMS</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" runat="server" />
-    <link href="~/Shared/uims.css" rel="stylesheet" runat="server" />
+    <link href="~/Shared/uims.css?v=20261025-title3" rel="stylesheet" runat="server" />
     <link href="Opportunities.css" rel="stylesheet" />
 </head>
 <body>
@@ -31,7 +31,7 @@
 
                     <div class="uims-page-head">
                         <div>
-                            <h1 class="page-title mb-1">Explore Opportunities</h1>
+                            <h1 class="page-title mb-1 uims-page-title">Explore Opportunities</h1>
                             <p class="text-muted mb-0">Internships that match your major.</p>
                         </div>
                         <asp:Label ID="lblCount" runat="server" ClientIDMode="Static" CssClass="small-label" />

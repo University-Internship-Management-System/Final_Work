@@ -2,7 +2,7 @@
 <asp:Content ID="head" ContentPlaceHolderID="HeadContent" runat="server"><link href="Dashboard.css?v=20261022-2" rel="stylesheet" /></asp:Content>
 <asp:Content ID="body" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="dashboardScripts" runat="server" />
-    <header class="ad-heading"><div><p class="ad-eyebrow">ACADEMIC SUPERVISION</p><h1 class="page-title">Academic dashboard</h1><p class="text-muted">An overview of the students assigned to you.</p></div></header>
+    <header class="ad-heading"><div><p class="ad-eyebrow">ACADEMIC SUPERVISION</p><h1 class="page-title uims-page-title">Academic dashboard</h1><p class="text-muted">An overview of the students assigned to you.</p></div></header>
     <asp:Panel ID="noticePanel" runat="server" Visible="false" CssClass="ad-error" role="alert"><asp:Literal ID="notice" Mode="Encode" runat="server" /></asp:Panel>
     <asp:Panel ID="workspace" runat="server" Visible="false" DefaultButton="searchButton">
         <div class="ad-welcome"><div><span class="ad-label">Academic supervisor</span><strong><asp:Literal ID="litAcademicName" runat="server" /></strong></div><div><span class="ad-label">Major</span><strong><asp:Literal ID="supervisorMajor" Mode="Encode" runat="server" /></strong></div></div>

@@ -22,7 +22,7 @@
     <div class="st-page">
 
         <div class="st-header">
-            <h1 class="page-title">My Tasks</h1>
+            <h1 class="page-title uims-page-title">My Tasks</h1>
             <p class="text-muted mb-0">Your training has 6 weeks. Open a week to see its tasks and submit your work.</p>
         </div>
 

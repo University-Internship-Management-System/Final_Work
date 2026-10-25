@@ -24,7 +24,7 @@
 
         <div class="st-header st-week-header">
             <div>
-                <h1 class="page-title">
+                <h1 class="page-title uims-page-title">
                     <asp:Label ID="lblName" runat="server" />
                     <asp:Label ID="lblStatus" runat="server" CssClass="badge" />
                 </h1>

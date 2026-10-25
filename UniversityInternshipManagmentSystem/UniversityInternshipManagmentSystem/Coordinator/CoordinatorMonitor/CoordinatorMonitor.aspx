@@ -5,7 +5,7 @@
 <asp:Content ID="PageMain" ContentPlaceHolderID="MainContent" runat="server">
             <div class="cm-hero-card">
                 <span class="cm-hero-kicker">FIELD TRAINING OFFICE</span>
-                <h1>Internship Placement Monitor</h1>
+                <h1 class="uims-page-title">Internship Placement Monitor</h1>
                 <p>Monitor students, companies, training hours, evaluations and progress.</p>
             </div>
             <p class="text-muted small mt-2">Live records from Realtime Database. This page is read only.</p>

@@ -42,7 +42,7 @@
 
         <div class="st-header st-week-header">
             <div>
-                <h1 class="page-title">
+                <h1 class="page-title uims-page-title">
                     <asp:Label ID="lblWeekTitle" runat="server" Text="Week" />
                     <asp:Label ID="lblWeekBadge" runat="server" CssClass="badge" />
                 </h1>

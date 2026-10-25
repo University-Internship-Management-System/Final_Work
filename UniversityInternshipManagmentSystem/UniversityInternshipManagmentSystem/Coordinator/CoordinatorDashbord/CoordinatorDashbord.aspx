@@ -12,7 +12,7 @@
     </svg>
                 <asp:Panel ID="pnlDashboard" runat="server">
                 <div class="hero-card">
-                    <div><span class="hero-kicker">FIELD TRAINING OFFICE</span><h1>Coordinator Dashboard</h1><p>The University of Jordan - Internship Management System</p></div>
+                    <div><span class="hero-kicker">FIELD TRAINING OFFICE</span><h1 class="uims-page-title">Coordinator Dashboard</h1><p>The University of Jordan - Internship Management System</p></div>
                 </div>
                 <asp:Label ID="lblDataError" runat="server" CssClass="alert alert-warning d-block" Visible="false" />
                 <div class="row g-3">

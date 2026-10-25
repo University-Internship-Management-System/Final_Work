@@ -29,7 +29,7 @@
                     COMPANY SUPERVISOR
                 </span>
 
-                <h1>Company Dashboard</h1>
+                <h1 class="uims-page-title">Company Dashboard</h1>
 
                 <p>
                     Monitor your trainees, assigned tasks
