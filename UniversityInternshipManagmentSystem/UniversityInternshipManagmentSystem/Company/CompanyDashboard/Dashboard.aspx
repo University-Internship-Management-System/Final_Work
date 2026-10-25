@@ -14,6 +14,7 @@
 
     <link href="Dashboard.css" rel="stylesheet" />
 
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/role-dashboards.css?v=20261025-1") %>" />
 </asp:Content>
 
 <asp:Content ID="CompanyContent"
@@ -23,19 +24,20 @@
     <div class="company-dashboard">
 
         <!-- Header -->
-        <div class="cd-header">
+        <div class="cd-header rd-company-hero">
             <div>
                 <span class="cd-eyebrow">
                     COMPANY SUPERVISOR
                 </span>
 
-                <h1 class="uims-page-title">Company Dashboard</h1>
+                <h1 class="uims-page-title">Company dashboard</h1>
 
                 <p>
-                    Monitor your trainees, assigned tasks
-                    and recent submissions.
+                    Support your trainees. Turn today's work into their next achievement.
                 </p>
+                <a class="rd-hero-action" href="../ManageTasks/ManageTasks.aspx">Manage tasks <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
             </div>
+            <div class="rd-hero-symbol" aria-hidden="true"><i class="bi bi-briefcase"></i></div>
         </div>
 
         <!-- Error -->
@@ -51,6 +53,7 @@
 
             <div class="col-lg-3 col-md-6">
                 <div class="cd-stat-card">
+                    <span class="rd-metric-icon" aria-hidden="true"><i class="bi bi-people"></i></span>
                     <div class="cd-stat-label">
                         Assigned Students
                     </div>
@@ -68,6 +71,7 @@
 
             <div class="col-lg-3 col-md-6">
                 <div class="cd-stat-card">
+                    <span class="rd-metric-icon" aria-hidden="true"><i class="bi bi-list-check"></i></span>
                     <div class="cd-stat-label">
                         Assigned Tasks
                     </div>
@@ -85,6 +89,7 @@
 
             <div class="col-lg-3 col-md-6">
                 <div class="cd-stat-card">
+                    <span class="rd-metric-icon" aria-hidden="true"><i class="bi bi-inbox"></i></span>
                     <div class="cd-stat-label">
                         Waiting for Review
                     </div>
@@ -102,6 +107,7 @@
 
             <div class="col-lg-3 col-md-6">
                 <div class="cd-stat-card">
+                    <span class="rd-metric-icon" aria-hidden="true"><i class="bi bi-check2-circle"></i></span>
                     <div class="cd-stat-label">
                         Evaluated
                     </div>
@@ -127,7 +133,7 @@
 
                     <div class="cd-panel-heading">
                         <div>
-                            <h2>My Trainees</h2>
+                            <h2>My trainees</h2>
                             <p>Students assigned to your company</p>
                         </div>
                     </div>
@@ -193,7 +199,7 @@
 
                     <div class="cd-panel-heading">
                         <div>
-                            <h2>Submissions Overview</h2>
+                            <h2>Submission overview</h2>
                             <p>Latest submission status</p>
                         </div>
                     </div>
@@ -244,7 +250,7 @@
 
             <div class="cd-panel-heading">
                 <div>
-                    <h2>Recent Submissions</h2>
+                    <h2>Recent submissions</h2>
                     <p>Latest work submitted by your trainees</p>
                 </div>
             </div>

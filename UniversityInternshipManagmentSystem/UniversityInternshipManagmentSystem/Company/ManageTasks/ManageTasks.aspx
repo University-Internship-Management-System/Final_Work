@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
     <%-- the task cards and the popup use the same styles as the student My Tasks page --%>
     <link href="../../Student/StudentTasksPage/StudentTasks.css" rel="stylesheet" />
-    <link href="ManageTasks.css" rel="stylesheet" />
+    <link href="ManageTasks.css?v=20261025-1" rel="stylesheet" />
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -21,7 +21,6 @@
                 <h1 class="page-title uims-page-title">Tasks</h1>
                 <p class="text-muted mb-0">Create tasks for your trainees and review their work.</p>
             </div>
-            <asp:LinkButton ID="btnNew" runat="server" CssClass="btn btn-primary" CausesValidation="false" OnClick="btnNew_Click">+ New task</asp:LinkButton>
         </div>
 
         <div class="st-summary">
@@ -45,7 +44,9 @@
             <asp:Literal ID="litWeekHours" runat="server" />
         </div>
 
-        <div class="st-toolbar">
+        <div class="st-toolbar mt-task-toolbar">
+            <div class="mt-week-filter">
+            <asp:Label runat="server" AssociatedControlID="ddlWeekFilter" CssClass="mt-filter-label" Text="Filter by week" />
             <asp:DropDownList ID="ddlWeekFilter" runat="server" CssClass="form-select st-select" AutoPostBack="true" OnSelectedIndexChanged="ddlWeekFilter_SelectedIndexChanged">
                 <asp:ListItem Value="0" Text="All weeks" Selected="True" />
                 <asp:ListItem Value="1" Text="Week 1" />
@@ -55,6 +56,8 @@
                 <asp:ListItem Value="5" Text="Week 5" />
                 <asp:ListItem Value="6" Text="Week 6" />
             </asp:DropDownList>
+            </div>
+            <asp:LinkButton ID="btnNew" runat="server" CssClass="btn btn-primary" CausesValidation="false" OnClick="btnNew_Click">+ New task</asp:LinkButton>
         </div>
 
         <%-- Task cards --%>

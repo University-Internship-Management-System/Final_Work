@@ -1,13 +1,15 @@
 <%@ Page Title="Academic Dashboard" Language="C#" Async="true" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Academic.Dashboard" %>
-<asp:Content ID="head" ContentPlaceHolderID="HeadContent" runat="server"><link href="Dashboard.css?v=20261022-2" rel="stylesheet" /></asp:Content>
+<asp:Content ID="head" ContentPlaceHolderID="HeadContent" runat="server"><link href="Dashboard.css?v=20261022-2" rel="stylesheet" /><link rel="stylesheet" href="<%= ResolveUrl("~/Content/role-dashboards.css?v=20261025-1") %>" /></asp:Content>
 <asp:Content ID="body" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="academic-dashboard">
+    <a class="rd-skip" href="#academic-directory">Skip to students</a>
     <asp:ScriptManager ID="dashboardScripts" runat="server" />
     <header class="ad-heading"><div><p class="ad-eyebrow">ACADEMIC SUPERVISION</p><h1 class="page-title uims-page-title">Academic dashboard</h1><p class="text-muted">An overview of the students assigned to you.</p></div></header>
     <asp:Panel ID="noticePanel" runat="server" Visible="false" CssClass="ad-error" role="alert"><asp:Literal ID="notice" Mode="Encode" runat="server" /></asp:Panel>
     <asp:Panel ID="workspace" runat="server" Visible="false" DefaultButton="searchButton">
-        <div class="ad-welcome"><div><span class="ad-label">Academic supervisor</span><strong><asp:Literal ID="litAcademicName" runat="server" /></strong></div><div><span class="ad-label">Major</span><strong><asp:Literal ID="supervisorMajor" Mode="Encode" runat="server" /></strong></div></div>
+        <div class="ad-welcome"><div class="rd-welcome-person"><span class="rd-welcome-icon" aria-hidden="true"><i class="bi bi-mortarboard"></i></span><div><span class="ad-label">Academic supervisor</span><strong><asp:Literal ID="litAcademicName" runat="server" /></strong></div></div><div><span class="ad-label">Major</span><strong><asp:Literal ID="supervisorMajor" Mode="Encode" runat="server" /></strong></div></div>
         <div class="ad-stats"><section class="card ad-stat"><div class="ad-stat-icon" aria-hidden="true"><i class="bi bi-people"></i></div><p>Assigned students</p><strong><asp:Literal ID="totalCount" Mode="Encode" runat="server" /></strong><small>Students under your supervision</small></section><section class="card ad-stat"><div class="ad-stat-icon" aria-hidden="true"><i class="bi bi-check2-circle"></i></div><p>Training confirmed</p><strong><asp:Literal ID="confirmedCount" Mode="Encode" runat="server" /></strong><small>Students who confirmed an internship</small></section><section class="card ad-stat"><div class="ad-stat-icon" aria-hidden="true"><i class="bi bi-hourglass-split"></i></div><p>Awaiting confirmation</p><strong><asp:Literal ID="waitingCount" Mode="Encode" runat="server" /></strong><small>No confirmed internship yet</small></section></div>
-        <section class="card ad-directory"><h2 class="section-title">My students</h2><p class="text-muted ad-description">Only students assigned to you by the coordinator appear here.</p>
+        <section class="card ad-directory" id="academic-directory"><h2 class="section-title">My students</h2><p class="text-muted ad-description">Only students assigned to you by the coordinator appear here.</p>
             <div class="ad-filters"><div><label for="studentSearch">Student or company</label><asp:TextBox ID="studentSearch" ClientIDMode="Static" runat="server" CssClass="form-control" MaxLength="120" placeholder="Search name, university email or company" /></div><asp:Button ID="searchButton" runat="server" Text="Search" CssClass="btn btn-outline-primary" /></div>
             <asp:UpdatePanel ID="studentResults" runat="server" UpdateMode="Conditional"><ContentTemplate>
             <table class="table ad-table"><thead><tr><th scope="col">Student</th><th scope="col">Major</th><th scope="col">Company / opportunity</th><th scope="col">Progress</th></tr></thead><tbody><asp:Repeater ID="students" runat="server"><ItemTemplate><tr><td><strong><%#: Eval("Name") %></strong><small><%#: Eval("UniEmail") %></small></td><td><%#: Eval("Major") %></td><td><strong><%#: Eval("Company") %></strong><small><%#: Eval("Opportunity") %></small></td><td><asp:HyperLink runat="server" NavigateUrl='<%# Eval("ProgressUrl") %>' CssClass="btn btn-outline-primary ad-progress" Text="Student progress" /></td></tr></ItemTemplate></asp:Repeater></tbody></table>
@@ -15,4 +17,5 @@
             </ContentTemplate><Triggers><asp:AsyncPostBackTrigger ControlID="studentSearch" EventName="TextChanged" /><asp:AsyncPostBackTrigger ControlID="searchButton" EventName="Click" /></Triggers></asp:UpdatePanel>
         </section>
     </asp:Panel>
+    </div>
 </asp:Content>
