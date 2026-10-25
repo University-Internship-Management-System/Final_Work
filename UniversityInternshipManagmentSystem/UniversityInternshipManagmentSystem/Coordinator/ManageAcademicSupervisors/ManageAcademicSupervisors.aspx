@@ -4,7 +4,7 @@
 </asp:Content>
 <asp:Content ID="body" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="academicScripts" runat="server" />
-    <header class="academic-heading"><div><p class="academic-eyebrow">COORDINATOR / ACCOUNT MANAGEMENT</p><h1 class="page-title">Academic supervisors</h1><p class="text-muted">Manage supervisor profiles and their academic specializations.</p></div><asp:HyperLink ID="addSupervisor" runat="server" Visible="false" CssClass="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Add supervisor</asp:HyperLink></header>
+    <header class="academic-heading"><div><p class="academic-eyebrow">COORDINATOR / ACCOUNT MANAGEMENT</p><h1 class="page-title uims-page-title">Academic supervisors</h1><p class="text-muted">Manage supervisor profiles and their academic specializations.</p></div><asp:HyperLink ID="addSupervisor" runat="server" Visible="false" CssClass="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Add supervisor</asp:HyperLink></header>
     <asp:Panel ID="notice" runat="server" role="alert" CssClass="academic-notice academic-error" Visible="false"><asp:Literal ID="noticeText" runat="server" Mode="Encode" /></asp:Panel>
     <asp:Panel ID="workspace" runat="server" Visible="false" DefaultButton="searchButton">
         <section class="academic-summary" aria-label="Academic supervisor total"><div class="academic-summary-main"><span class="academic-summary-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span><div><span class="academic-summary-label">Academic supervisors</span><strong><asp:Literal ID="total" runat="server" /></strong></div></div><p>Each supervisor has one major.<br />Assign students from the same specialization.</p></section>

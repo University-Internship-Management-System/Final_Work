@@ -5,7 +5,7 @@
 <asp:Content ID="content" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="companyScripts" runat="server" />
     <header class="company-heading">
-        <div><p class="company-eyebrow">COORDINATOR / ACCOUNT MANAGEMENT</p><h1 class="page-title">Company supervisors</h1><p class="text-muted">Manage company contacts and sign-in access.</p></div>
+        <div><p class="company-eyebrow">COORDINATOR / ACCOUNT MANAGEMENT</p><h1 class="page-title uims-page-title">Company supervisors</h1><p class="text-muted">Manage company contacts and sign-in access.</p></div>
         <asp:HyperLink ID="addCompany" runat="server" Visible="false" CssClass="btn btn-primary"><i class="bi bi-plus-lg" aria-hidden="true"></i> Add supervisor</asp:HyperLink>
     </header>
     <asp:Panel ID="messagePanel" runat="server" CssClass="company-notice company-error" role="alert" Visible="false"><asp:Literal ID="message" runat="server" Mode="Encode" /></asp:Panel>

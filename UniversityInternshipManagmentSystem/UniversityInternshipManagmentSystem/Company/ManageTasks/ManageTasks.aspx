@@ -18,7 +18,7 @@
 
         <div class="st-header">
             <div>
-                <h1 class="page-title">Tasks</h1>
+                <h1 class="page-title uims-page-title">Tasks</h1>
                 <p class="text-muted mb-0">Create tasks for your trainees and review their work.</p>
             </div>
             <asp:LinkButton ID="btnNew" runat="server" CssClass="btn btn-primary" CausesValidation="false" OnClick="btnNew_Click">+ New task</asp:LinkButton>

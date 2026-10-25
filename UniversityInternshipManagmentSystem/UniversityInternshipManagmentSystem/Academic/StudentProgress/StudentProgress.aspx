@@ -22,7 +22,7 @@
 </asp:Content>
 <asp:Content ID="PageMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="sp-page" lang="en">
-    <div class="sp-top"><span class="sp-icon" aria-hidden="true">◉</span><h1>Student Progress Monitor</h1></div>
+    <div class="sp-top"><span class="sp-icon" aria-hidden="true">◉</span><h1 class="uims-page-title">Student Progress Monitor</h1></div>
     <p class="sp-subtitle">Review training details, assigned tasks, submissions, and company feedback.</p>
     <asp:Label ID="lblMessage" runat="server" Visible="false" CssClass="alert alert-warning d-block" />
     <asp:Panel ID="pnlStudent" runat="server">

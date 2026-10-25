@@ -20,7 +20,7 @@
     <div class="my-progress-page">
 
         <div class="progress-page-header">
-            <h1 class="page-title">My Progress</h1>
+            <h1 class="page-title uims-page-title">My Progress</h1>
 
             <p>
                 <%: CoursePassed

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Apply for Internship | UIMS</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" runat="server" />
-    <link href="~/Shared/uims.css" rel="stylesheet" runat="server" />
+    <link href="~/Shared/uims.css?v=20261025-title3" rel="stylesheet" runat="server" />
     <link href="ApplicationForm.css" rel="stylesheet" />
 </head>
 <body>
@@ -32,7 +32,7 @@
                 <main class="uims-content">
                     <div class="uims-page-head">
                         <div>
-                            <h1 class="page-title mb-1">Internship Application Form</h1>
+                            <h1 class="page-title mb-1 uims-page-title">Internship Application Form</h1>
                             <p class="text-muted mb-0">Review your profile details and submit your application for this opportunity.</p>
                             <asp:Label ID="lblOpportunity" runat="server" CssClass="d-block mt-2" />
                         </div>

@@ -12,7 +12,7 @@
         <div id="page-content" tabindex="-1">
             <div class="sp-page-heading">
                 <div><a class="sp-back-link" href="<%= ResolveUrl("~/Student/StudentDashboardPage/Dashboard.aspx") %>"><i class="bi bi-arrow-left" aria-hidden="true"></i> Student workspace</a>
-                    <h1>My profile<span class="sp-title-dot" aria-hidden="true">.</span></h1><p>Your academic details & professional profile, together.</p></div>
+                    <h1 class="uims-page-title">My profile<span class="sp-title-dot" aria-hidden="true">.</span></h1><p>Your academic details & professional profile, together.</p></div>
                 <span class="sp-account-state<%: Workspace == null ? " sp-account-unavailable" : "" %>"><span class="sp-state-dot" aria-hidden="true"></span><%: ModeLabel %></span>
             </div>
             <input type="hidden" name="StudentCsrf" value="<%: CsrfToken %>" />

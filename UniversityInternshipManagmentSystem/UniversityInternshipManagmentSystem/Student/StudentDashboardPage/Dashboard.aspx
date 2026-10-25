@@ -18,7 +18,7 @@
 
             <div class="sd-heading">
                 <div>
-                    <span class="sd-eyebrow">Your internship, at a glance</span><h1>Student Dashboard</h1>
+                    <span class="sd-eyebrow">Your internship, at a glance</span><h1 class="uims-page-title">Student Dashboard</h1>
                     <p class="sd-muted">A clear view of your learning journey.</p>
                 </div>
                 <span class="sd-demo"><%: ModeLabel %></span>

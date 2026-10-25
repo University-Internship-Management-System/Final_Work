@@ -3,13 +3,14 @@
     <%-- Under the team's legacy request validation, ContactValidation rejects markup explicitly
          and controls encode values, allowing field feedback instead of a framework error. --%>
     <link rel="stylesheet" href="<%= ResolveUrl("~/ContactUs/ContactPage/Contact.css") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Shared/uims.css?v=20261025-title3") %>" />
 </asp:Content>
 <asp:Content ID="ContactBody" ContentPlaceHolderID="MainContent" runat="server">
     <section class="contact-page container py-5" aria-labelledby="contact-title">
         <div class="row g-4 g-lg-5 align-items-start">
             <div class="col-lg-4 contact-intro">
                 <span class="contact-eyebrow">UIMS &middot; University of Jordan</span>
-                <h1 id="contact-title" class="mt-3">Contact us</h1>
+                <h1 id="contact-title" class="mt-3 uims-page-title">Contact us</h1>
                 <p class="contact-lead">Have a question about the internship system? Sign in with your UIMS account and send a message to help us understand what you need.</p>
                 <div class="contact-note"><h2>Before you send</h2><p>Include relevant details about your question. Please do not send passwords, identification documents, or other sensitive information.</p></div>
             </div>

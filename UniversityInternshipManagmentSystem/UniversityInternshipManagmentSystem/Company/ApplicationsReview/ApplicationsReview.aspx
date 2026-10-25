@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Applications Review | UIMS</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" runat="server" />
-    <link href="~/Shared/uims.css" rel="stylesheet" runat="server" />
+    <link href="~/Shared/uims.css?v=20261025-title3" rel="stylesheet" runat="server" />
     <link href="ApplicationsReview.css" rel="stylesheet" />
 </head>
 <body>
@@ -33,7 +33,7 @@
                 <main class="uims-content">
                     <div class="uims-page-head">
                         <div>
-                            <h1 class="page-title mb-1">Applications Review</h1>
+                            <h1 class="page-title mb-1 uims-page-title">Applications Review</h1>
                             <p class="text-muted mb-0">Review the students who applied to your opportunities, then accept or reject them.</p>
                         </div>
                     </div>

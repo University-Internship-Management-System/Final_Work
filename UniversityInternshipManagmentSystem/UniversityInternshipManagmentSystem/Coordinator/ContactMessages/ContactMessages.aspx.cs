@@ -34,17 +34,19 @@ namespace UniversityInternshipManagmentSystem.Coordinator
         }
         protected void Search_Click(object sender, EventArgs e) { }
         protected void Reload_Click(object sender, EventArgs e) { SearchInput.Text = ""; }
-        private async Task LoadInboxAsync()
+        protected async Task LoadInboxAsync()
         {
-            Workspace.Visible = false; NoticePanel.Visible = false; Messages.DataSource = null; Messages.DataBind();
+            // Keep the search controls present through every Web Forms postback.
+            // Only the message results change; an error must not remove the toolbar.
+            Workspace.Visible = true; NoticePanel.Visible = false; EmptyPanel.Visible = false;
+            Messages.DataSource = null; Messages.DataBind();
+            Summary.Text = "Loading messages...";
             try
             {
                 if (IsPostBack && !IsValidPostback()) throw new InboxAccessException("Your form session has expired. Reload this page before searching.");
                 var query = (SearchInput.Text ?? "").Trim();
                 if (query.Length > 100) throw new InboxAccessException("Keep your search to 100 characters or fewer.");
-                var repository = new ContactInboxRepository(Client, AppConfig.DbUrl, AppConfig.ApiKey);
-                var rows = await repository.LoadAsync(Session["userId"] as string, Session["dbRecordId"] as string,
-                    Session["dbTable"] as string, Session["role"] as string, Session["idToken"] as string);
+                var rows = await ReadInboxAsync();
                 var matches = ContactInboxRepository.Filter(rows, query);
                 Messages.DataSource = matches; Messages.DataBind();
                 Summary.Text = matches.Count.ToString(CultureInfo.InvariantCulture) + " matching messages · " + rows.Count.ToString(CultureInfo.InvariantCulture) + " saved in total";
@@ -59,8 +61,20 @@ namespace UniversityInternshipManagmentSystem.Coordinator
             catch (TaskCanceledException) { Show("The message service timed out. Please reload and try again."); }
             catch (Exception) { Show("Messages are unavailable right now. No messages were changed. Please retry or contact the Firebase owner."); }
         }
+        // Production reads still perform the same token, role and record-ownership checks.
+        // The virtual boundary lets offline regression tests exercise real page binding.
+        protected virtual Task<List<ContactInboxRow>> ReadInboxAsync()
+        {
+            var repository = new ContactInboxRepository(Client, AppConfig.DbUrl, AppConfig.ApiKey);
+            return repository.LoadAsync(Session["userId"] as string, Session["dbRecordId"] as string,
+                Session["dbTable"] as string, Session["role"] as string, Session["idToken"] as string);
+        }
         private bool IsValidPostback() { return string.Equals(ViewState["ContactInbox.Session"] as string, Session.SessionID, StringComparison.Ordinal); }
-        private void Show(string text) { Notice.Text = text; NoticePanel.Visible = true; }
+        private void Show(string text)
+        {
+            Notice.Text = text; NoticePanel.Visible = true;
+            Summary.Text = "Messages could not be loaded. Search or reload to try again.";
+        }
     }
     public sealed class InboxAccessException : Exception { public InboxAccessException(string message) : base(message) { } }
     public sealed class ContactInboxRow
