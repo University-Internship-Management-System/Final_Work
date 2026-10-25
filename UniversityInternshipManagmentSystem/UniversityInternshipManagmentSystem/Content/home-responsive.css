@@ -1,0 +1,261 @@
+/* Home-page corrections only; desktop composition and portal styles stay intact. */
+.uims-nav-mobile-account {
+    display: none;
+}
+
+@media (max-width: 1100px) {
+    .uims-nav-container {
+        gap: 16px;
+    }
+
+    .uims-brand,
+    .uims-brand-text {
+        min-width: 0;
+    }
+
+    .uims-brand {
+        flex: 1;
+    }
+
+    .uims-nav-actions {
+        flex: 0 0 auto;
+    }
+
+    .uims-nav-actions > .uims-btn,
+    .uims-nav-actions > .uims-nav-signout {
+        display: none;
+    }
+
+    .uims-nav-toggle {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: 1px solid #ffffff40;
+        border-radius: 8px;
+        background: #ffffff08;
+        touch-action: manipulation;
+    }
+
+    .uims-nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        margin: 0;
+        padding: 12px 5% 16px;
+        max-height: calc(100dvh - 86px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        background: var(--dark);
+        border-top: 1px solid #ffffff20;
+        box-shadow: 0 16px 24px #032d2426;
+    }
+
+    .uims-nav-menu.open {
+        display: flex;
+    }
+
+    .uims-nav-menu .uims-nav-link {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 10px 12px;
+        font-size: 14px;
+        white-space: normal;
+        border-radius: 6px;
+        touch-action: manipulation;
+    }
+
+    .uims-nav-menu .uims-nav-link:hover {
+        background: #ffffff0a;
+    }
+
+    .uims-nav-mobile-account {
+        display: block;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #ffffff26;
+    }
+
+    .uims-nav-mobile-account + .uims-nav-mobile-account {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .uims-nav-container {
+        min-height: 72px;
+        gap: 12px;
+    }
+
+    .uims-brand {
+        gap: 10px;
+    }
+
+    .uims-brand-logo {
+        width: 30px;
+        height: 40px;
+        flex: 0 0 auto;
+    }
+
+    .uims-brand-title {
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    .uims-brand-subtitle {
+        line-height: 1.4;
+    }
+
+    .uims-nav-menu {
+        max-height: calc(100dvh - 72px);
+    }
+
+    .uims-hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .uims-hero-text {
+        min-width: 0;
+        padding: 40px 0 24px;
+    }
+
+    .uims-hero-badge {
+        max-width: 100%;
+        gap: 8px;
+        padding: 10px 12px;
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+
+    .uims-hero-title {
+        font-size: clamp(30px, 8.5vw, 38px);
+        letter-spacing: -1.15px;
+        line-height: 1.15;
+        text-wrap: balance;
+        margin-bottom: 20px;
+    }
+
+    .uims-hero-title-highlight {
+        font-size: clamp(20px, 5.5vw, 25px);
+        margin-top: 16px;
+        line-height: 1.35;
+    }
+
+    .uims-hero-desc {
+        color: #e5efe9;
+        font-size: 14px;
+        line-height: 1.85;
+        margin-bottom: 24px;
+    }
+
+    .uims-hero-actions {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .uims-hero-actions .uims-btn {
+        width: 100%;
+        min-height: 48px;
+        font-size: 13px;
+        padding: 13px 18px;
+        touch-action: manipulation;
+    }
+
+    /* Reserve a separate photo area instead of stacking the hidden 380px SVG. */
+    .uims-hero-tower-wrapper,
+    .uims-tower-container {
+        height: 320px;
+        min-width: 0;
+    }
+
+    .uims-hero-bg::after,
+    .uims-photo-clock-frame {
+        height: 320px;
+        top: auto;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .uims-hero-overlay {
+        background: linear-gradient(180deg, #031915f5 0%, #031915f0 62%, #03191547 82%, #03191533 100%);
+    }
+
+    .uims-hero-watermark {
+        opacity: .15;
+        animation: none;
+    }
+
+    .uims-hero-bg,
+    .uims-identity-visual img {
+        transform: none !important;
+    }
+
+    .reveal-left,
+    .reveal-right {
+        transform: none !important;
+        transition-property: opacity;
+    }
+
+    .uims-roles-grid,
+    .uims-jobs-grid,
+    .uims-identity-layout,
+    .uims-footer-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .uims-role-card,
+    .uims-job-card,
+    .uims-footer-grid > *,
+    .uims-identity-layout > * {
+        min-width: 0;
+    }
+
+    .uims-job-card h3,
+    .uims-job-card p,
+    .uims-footer-contact-item > span,
+    .uims-footer-contact-item > a {
+        overflow-wrap: anywhere;
+    }
+
+    .uims-search {
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    .uims-arrow-btn {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 auto;
+        touch-action: manipulation;
+    }
+
+    .uims-footer-bottom > .d-flex {
+        flex-wrap: wrap;
+        gap: 10px !important;
+    }
+
+    .uims-footer-bottom a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 500px) {
+    .uims-guide-preview {
+        aspect-ratio: auto;
+        height: 240px;
+    }
+}

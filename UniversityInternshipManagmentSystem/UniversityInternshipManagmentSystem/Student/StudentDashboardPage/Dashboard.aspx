@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Student Dashboard" Language="C#" ResponseEncoding="utf-8" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" Async="true" AsyncTimeout="70" CodeBehind="Dashboard.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Student.StudentDashboardPage.Dashboard" %>
+<%@ Page Title="Student Dashboard" Language="C#" ResponseEncoding="utf-8" MasterPageFile="~/Shared/Dashboard.Master" AutoEventWireup="true" Async="true" AsyncTimeout="70" CodeBehind="Dashboard.aspx.cs" Inherits="UniversityInternshipManagmentSystem.Student.StudentDashboardPage.Dashboard" %>
 
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl("~/Student/Content/Student.css") %>" />
@@ -38,7 +38,7 @@
                 { %><div class="sd-message" role="alert"><%: ActivityError %></div>
             <% } %>
             <% if (!ActivityAvailable && string.IsNullOrEmpty(ActivityError))
-                { %><div class="sd-message" role="note">Activity modules are not connected. Application, task, and deadline totals are unavailable; no activity or training-hour records are assumed.</div>
+                { %><div class="sd-message" role="note">Dashboard data is temporarily unavailable. Please refresh or sign in again.</div>
             <% } %>
             <div class="row g-3 mb-4" aria-label="Dashboard summaries">
                 <div class="col-6 col-xl-3">
@@ -80,7 +80,7 @@
                         <% if (Overview.Applications.Count == 0)
                             { %><div class="sd-empty">
                                 <span class="sd-empty-icon" aria-hidden="true">&#9707;</span><h3><%: ActivityAvailable ? "No applications to display" : "Applications unavailable" %></h3>
-                                <p>Applications and their statuses will appear when the applications module is connected.</p>
+                                <p>Your internship applications and their current statuses appear here.</p>
                             </div>
                         <% } %>
                         <asp:Repeater ID="ApplicationsList" runat="server">
@@ -107,7 +107,7 @@
                         <% if (Overview.Deadlines.Count == 0)
                             { %><div class="sd-empty">
                                 <span class="sd-empty-icon" aria-hidden="true">&#9633;</span><h3><%: TasksAvailable ? "No deadlines to display" : "Deadline summary unavailable" %></h3>
-                                <p>Upcoming dates will appear when connected modules provide them.</p>
+                                <p>There are no upcoming deadlines for work you can submit. Check My Tasks for overdue work.</p>
                             </div>
                         <% } %>
                         <asp:Repeater ID="DeadlinesList" runat="server">
@@ -136,7 +136,7 @@
                         <% if (Overview.Tasks.Count == 0)
                             { %><div class="sd-empty">
                                 <span class="sd-empty-icon" aria-hidden="true">&#9745;</span><h3>No assigned tasks to display</h3>
-                                <p>Your tasks, instructions, and statuses will appear when the tasks module is connected.</p>
+                                <p>Your company supervisor has not assigned any active tasks yet.</p>
                             </div>
                         <% } %>
                         <asp:Repeater ID="TasksList" runat="server">
@@ -171,7 +171,7 @@
                                 </div>
                             <% } %>
                             <div class="sd-training-detail"><span>Training-hour requirement</span><strong><%: Overview.RequiredHours.HasValue ? Overview.RequiredHours.Value.ToString("0.##") + " hours" : "Not provided" %></strong></div>
-                            <p class="sd-note">No training-hour records or official target are assumed. This summary is not an academic grade.</p>
+                            <p class="sd-note">Approved hours come from the weekly signatures in your company report. The training requirement is 90 hours; task scores are separate.</p>
                         </div>
                     </section>
                 </div>
@@ -184,7 +184,7 @@
                         <% if (Overview.Evaluations.Count == 0)
                             { %><div class="sd-empty">
                                 <span class="sd-empty-icon" aria-hidden="true">&#9734;</span><h3>No published evaluations or feedback</h3>
-                                <p>Only feedback released to you will appear after the evaluations module is connected.</p>
+                                <p>Reviewed task feedback and sent final evaluations appear here. Draft evaluation comments are not displayed.</p>
                             </div>
                         <% } %>
                         <asp:Repeater ID="EvaluationsList" runat="server">
@@ -196,7 +196,7 @@
                                     <div>
                                         <h3><%#: Eval("Title") %></h3>
                                         <p class="sd-feedback"><%#: Eval("Detail") %></p>
-                                        <p class="sd-muted">Due: <%#: FormatDeadline(Eval("DueUtc")) %></p>
+                                        <p class="sd-muted"><%#: FormatDeadline(Eval("DueUtc")) %></p>
                                     </div>
                                     <span class="sd-badge"><%#: Eval("Status") %></span></li>
                             </ItemTemplate>

@@ -4,6 +4,10 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 
 // 1. Mobile Navigation Menu Toggle
 const toggle=one('#uimsNavToggle'),menu=one('#uimsNavMenu'),navbar=one('#uimsNavbar');
+const closeMenu=()=>{
+    menu?.classList.remove('open');
+    toggle?.setAttribute('aria-expanded','false');
+};
 toggle?.addEventListener('click',()=>{
     const open=menu.classList.toggle('open');
     toggle.setAttribute('aria-expanded',String(open));
@@ -11,9 +15,20 @@ toggle?.addEventListener('click',()=>{
 
 // Close mobile menu on link click
 all('.uims-nav-link').forEach(link=>link.addEventListener('click',()=>{
-    menu?.classList.remove('open');
-    toggle?.setAttribute('aria-expanded','false');
+    closeMenu();
 }));
+document.addEventListener('keydown',event=>{
+    if(event.key==='Escape' && menu?.classList.contains('open')){
+        closeMenu();
+        toggle?.focus();
+    }
+});
+document.addEventListener('click',event=>{
+    if(menu?.classList.contains('open') && !navbar?.contains(event.target)) closeMenu();
+});
+window.matchMedia('(min-width: 1101px)').addEventListener('change',event=>{
+    if(event.matches) closeMenu();
+});
 
 // 2. Smooth Scrolling for In-Page Anchor Links (with Sticky Navbar Offset)
 all('a[href^="#"]').forEach(anchor => {

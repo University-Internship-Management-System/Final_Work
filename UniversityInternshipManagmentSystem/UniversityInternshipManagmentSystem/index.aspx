@@ -1,5 +1,9 @@
 <%@ Page Title="University Internship Management System" Language="C#" MasterPageFile="~/Shared/Public.Master" AutoEventWireup="true" Async="true" CodeBehind="index.aspx.cs" Inherits="UniversityInternshipManagmentSystem.PublicHome" %>
-<asp:Content ID="HomeHead" ContentPlaceHolderID="HeadContent" runat="server"><link href="<%= ResolveUrl("~/Content/uims.css") %>" rel="stylesheet" /><link href="<%= ResolveUrl("~/Content/student-guide.css") %>" rel="stylesheet" />    <link href="<%= ResolveUrl("~/Content/index-text-reveal.css") %>" rel="stylesheet" />
+<asp:Content ID="HomeHead" ContentPlaceHolderID="HeadContent" runat="server">
+    <link href="<%= ResolveUrl("~/Content/uims.css") %>" rel="stylesheet" />
+    <link href="<%= ResolveUrl("~/Content/student-guide.css") %>" rel="stylesheet" />
+    <link href="<%= ResolveUrl("~/Content/index-text-reveal.css") %>" rel="stylesheet" />
+    <link href="<%= ResolveUrl("~/Content/home-responsive.css?v=20261024-1") %>" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="HomeBody" ContentPlaceHolderID="MainContent" runat="server">
 <!-- Top Scroll Progress Bar -->
@@ -25,6 +29,10 @@
                     <li><a href="#opportunities" class="uims-nav-link">Internships</a></li>
                     <li><a href="#faq" class="uims-nav-link">FAQ</a></li>
                     <li><a href="#contact" class="uims-nav-link">Contact</a></li>
+                    <li class="uims-nav-mobile-account"><a href="<%: DashboardHref %>" class="uims-nav-link"><%: IsSignedIn ? "My Dashboard" : "Log In" %></a></li>
+                    <% if (IsSignedIn) { %>
+                    <li class="uims-nav-mobile-account"><a href="<%= ResolveUrl("~/login/Logout.aspx") %>" class="uims-nav-link">Sign Out</a></li>
+                    <% } %>
                 </ul>
             </nav>
 
@@ -34,7 +42,7 @@
                     <span><%: IsSignedIn ? "My Dashboard" : "Log In" %></span>
                     <i class="bi bi-arrow-up-right"></i>
                 </a>
-                <button type="button" class="uims-nav-toggle" id="uimsNavToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <button type="button" class="uims-nav-toggle" id="uimsNavToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="uimsNavMenu">
                     <i class="bi bi-list"></i>
                 </button>
             </div>
@@ -935,7 +943,7 @@
     <script type="application/json" id="home-data"><%= PublicDataJson %></script>
 
     <!-- UIMS Unified Interactive Scripts -->
-    <script src="<%= ResolveUrl("~/Scripts/uims.js") %>"></script>
+    <script src="<%= ResolveUrl("~/Scripts/uims.js?v=20261024-1") %>"></script>
     <script src="<%= ResolveUrl("~/Scripts/student-guide.js") %>"></script>
     <script src="<%= ResolveUrl("~/Scripts/index-text-reveal.js") %>"></script>
 

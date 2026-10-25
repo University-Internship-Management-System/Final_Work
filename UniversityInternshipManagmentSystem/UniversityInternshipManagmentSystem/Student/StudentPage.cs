@@ -133,11 +133,64 @@ namespace UniversityInternshipManagmentSystem.Student
         }
         protected async Task<JToken> ReadOwnApplicationsAsync()
         {
-            if (Workspace == null || verifiedToken == null) throw new UnauthorizedAccessException("Student authorization is required.");
+            return await ReadOwnRowsAsync("Applications");
+        }
+        protected async Task<JToken> ReadOwnSubmissionsAsync()
+        {
+            return await ReadOwnRowsAsync("TaskSubmissions");
+        }
+        private async Task<JToken> ReadOwnRowsAsync(string table)
+        {
+            RequireStudentWorkspace();
             var query = "&orderBy=" + Uri.EscapeDataString(JsonConvert.SerializeObject("StudentId")) + "&equalTo=" + Uri.EscapeDataString(JsonConvert.SerializeObject(VerifiedStudentId));
-            var rows = await ReadJsonAsync("Applications", verifiedToken, query);
-            if (rows.Type != JTokenType.Null && (rows.Type != JTokenType.Object || rows.Children<JProperty>().Any(row => row.Value.Type != JTokenType.Object || (string)row.Value["StudentId"] != VerifiedStudentId))) throw new UnauthorizedAccessException("Application records could not be restricted to your student account.");
+            var rows = await ReadJsonAsync(table, verifiedToken, query);
+            if (rows.Type != JTokenType.Null && (rows.Type != JTokenType.Object || rows.Children<JProperty>().Any(row => row.Value.Type != JTokenType.Object || (string)row.Value["StudentId"] != VerifiedStudentId))) throw new UnauthorizedAccessException("Records could not be restricted to your student account.");
             return rows;
+        }
+        protected async Task<Dictionary<string, Models.Tasks>> ReadOwnTasksAsync()
+        {
+            RequireStudentWorkspace();
+            if (string.IsNullOrWhiteSpace(Workspace.CompanyId)) return new Dictionary<string, Models.Tasks>();
+            ValidateRecordKey(Workspace.CompanyId);
+            var query = "&orderBy=" + Uri.EscapeDataString(JsonConvert.SerializeObject("CompanyId"))
+                + "&equalTo=" + Uri.EscapeDataString(JsonConvert.SerializeObject(Workspace.CompanyId));
+            var rows = await ReadJsonAsync("Tasks", verifiedToken, query);
+            return SelectAssignedTasks(rows, VerifiedStudentId, Workspace.CompanyId);
+        }
+        // Tasks.StudentIds and Tasks.CompanyId are the existing model's assignment fields.
+        internal static Dictionary<string, Models.Tasks> SelectAssignedTasks(JToken rows, string studentId, string companyId)
+        {
+            var selected = new Dictionary<string, Models.Tasks>();
+            if (rows.Type == JTokenType.Null) return selected;
+            if (rows.Type != JTokenType.Object) throw new StudentDataException("Firebase returned invalid tasks.");
+            foreach (var entry in rows.Children<JProperty>())
+            {
+                if (entry.Value.Type != JTokenType.Object || (string)entry.Value["CompanyId"] != companyId)
+                    throw new UnauthorizedAccessException("Tasks could not be restricted to your current placement.");
+                var task = entry.Value.ToObject<Models.Tasks>();
+                if (task.StudentIds == null || !task.StudentIds.Contains(studentId)) continue;
+                task.TaskId = entry.Name;
+                selected[entry.Name] = task;
+            }
+            return selected;
+        }
+        protected async Task<JToken> ReadOwnRecordAsync(string table)
+        {
+            RequireStudentWorkspace();
+            return await ReadJsonAsync(table + "/" + Uri.EscapeDataString(VerifiedStudentId), verifiedToken, null);
+        }
+        protected async Task<string> ReadPlacementCompanyNameAsync()
+        {
+            RequireStudentWorkspace();
+            if (string.IsNullOrWhiteSpace(Workspace.CompanyId)) return null;
+            ValidateRecordKey(Workspace.CompanyId);
+            // Read only the public display name, never another supervisor's complete profile.
+            var name = await ReadJsonAsync("CompanySupervisors/" + Uri.EscapeDataString(Workspace.CompanyId) + "/CompanyName", verifiedToken, null);
+            return name.Type == JTokenType.String ? (string)name : null;
+        }
+        private void RequireStudentWorkspace()
+        {
+            if (Workspace == null || verifiedToken == null || VerifiedStudentId == null) throw new UnauthorizedAccessException("Student authorization is required.");
         }
         protected async Task SaveProfileFieldsAsync(IDictionary<string, object> patch)
         {
