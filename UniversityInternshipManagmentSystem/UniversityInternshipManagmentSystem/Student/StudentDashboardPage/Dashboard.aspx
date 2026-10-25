@@ -3,6 +3,7 @@
 <asp:Content ID="PageHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="<%= ResolveUrl("~/Student/Content/Student.css") %>" />
     <link rel="stylesheet" href="<%= ResolveUrl("~/Student/StudentDashboardPage/Dashboard.css") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/role-dashboards.css?v=20261025-1") %>" />
 </asp:Content>
 <asp:Content ID="DashboardContent" ContentPlaceHolderID="MainContent" runat="server">
     <div class="student-dashboard">
@@ -19,7 +20,7 @@
             <div class="sd-heading">
                 <div>
                     <span class="sd-eyebrow">Your internship, at a glance</span><h1 class="uims-page-title">Student Dashboard</h1>
-                    <p class="sd-muted">A clear view of your learning journey.</p>
+                    <p class="sd-muted">Your applications, tasks and training progress in one place.</p>
                 </div>
                 <span class="sd-demo"><%: ModeLabel %></span>
             </div>
@@ -28,8 +29,9 @@
             <section class="sd-welcome sd-campus" aria-labelledby="welcome-title">
                 <div>
                     <span class="sd-eyebrow">The University of Jordan &#183; &#1575;&#1604;&#1580;&#1575;&#1605;&#1593;&#1577; &#1575;&#1604;&#1571;&#1585;&#1583;&#1606;&#1610;&#1577;</span><h2 id="welcome-title">Welcome, <%: DisplayName %>.</h2>
-                    <p>Your next chapter starts with a little progress, every day. Keep your information up to date and follow your internship journey here.</p>
+                    <p>Keep moving forward. Follow your tasks, check feedback and see every approved training hour count.</p>
                     <a class="sd-button mt-3" href="<%= ResolveUrl("~/Student/StudentProfilePage/Profile.aspx") %>">View my profile <span aria-hidden="true">&#8599;</span></a>
+                    <a class="rd-hero-link" href="<%= ResolveUrl("~/Student/StudentTasksPage/StudentTasksForm.aspx") %>">Open my tasks <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                 </div>
             </section>
             <% if (!string.IsNullOrEmpty(ActivityError))
@@ -41,28 +43,28 @@
             <div class="row g-3 mb-4" aria-label="Dashboard summaries">
                 <div class="col-6 col-xl-3">
                     <a class="sd-stat sd-stat-link" href="#applications">
-                        <div class="sd-stat-top">Applications<span class="sd-stat-icon" aria-hidden="true">&#9707;</span></div>
+                        <div class="sd-stat-top">Applications<span class="sd-stat-icon" aria-hidden="true"><i class="bi bi-send"></i></span></div>
                         <div class="sd-number"><%: ActivityCount(Overview.Applications.Count, ActivityAvailable) %></div>
                         <p class="sd-muted"><%: !ActivityAvailable ? "Applications unavailable" : Overview.Applications.Count == 0 ? "No applications to display" : "View application statuses" %></p>
                     </a>
                 </div>
                 <div class="col-6 col-xl-3">
                     <a class="sd-stat sd-stat-link" href="#tasks">
-                        <div class="sd-stat-top">Assigned tasks<span class="sd-stat-icon" aria-hidden="true">&#9745;</span></div>
+                        <div class="sd-stat-top">Assigned tasks<span class="sd-stat-icon" aria-hidden="true"><i class="bi bi-list-check"></i></span></div>
                         <div class="sd-number"><%: ActivityCount(Overview.Tasks.Count, TasksAvailable) %></div>
                         <p class="sd-muted"><%: !TasksAvailable ? "Task summary unavailable" : Overview.Tasks.Count == 0 ? "No assigned tasks to display" : "View task statuses" %></p>
                     </a>
                 </div>
                 <div class="col-6 col-xl-3">
                     <a class="sd-stat sd-stat-link" href="#deadlines">
-                        <div class="sd-stat-top">Upcoming deadlines<span class="sd-stat-icon" aria-hidden="true">&#9633;</span></div>
+                        <div class="sd-stat-top">Upcoming deadlines<span class="sd-stat-icon" aria-hidden="true"><i class="bi bi-calendar-event"></i></span></div>
                         <div class="sd-number"><%: ActivityCount(Overview.Deadlines.Count, TasksAvailable) %></div>
                         <p class="sd-muted"><%: !TasksAvailable ? "Deadline summary unavailable" : Overview.Deadlines.Count == 0 ? "No deadlines to display" : "View upcoming dates" %></p>
                     </a>
                 </div>
                 <div class="col-6 col-xl-3">
                     <a class="sd-stat sd-stat-link" href="#progress">
-                        <div class="sd-stat-top">Approved hours<span class="sd-stat-icon" aria-hidden="true">&#9684;</span></div>
+                        <div class="sd-stat-top">Approved hours<span class="sd-stat-icon" aria-hidden="true"><i class="bi bi-clock-history"></i></span></div>
                         <div class="sd-number"><%: HoursText %></div>
                         <p class="sd-muted">Approved training hours only</p>
                     </a>

@@ -47,30 +47,29 @@
     <script id="dashboardData" type="application/json"><asp:Literal ID="litChartData" runat="server" /></script>
     <script>
 (function () {
-    var source = document.getElementById('dashboardData');
+    const source = document.getElementById('dashboardData');
+    if (!source) return;
     var data = JSON.parse(source.textContent || '{}');
 
-    function element(tag, className, text) {
+    function element(tag = 'div', className = '', text = '') {
         var node = document.createElement(tag);
         if (className) node.className = className;
-        if (text !== undefined) node.textContent = text;
+        if (text !== undefined) node.textContent = String(text);
         return node;
     }
 
-    function sortedCounts(counts) {
-        var rows = [];
-        Object.keys(counts || {}).forEach(function (name) {
-            rows.push({ name: name, count: counts[name] });
-        });
-        rows.sort(function (a, b) {
+    function sortedCounts(counts = Object.create(null)) {
+        return Object.keys(counts || {}).map(function (name) {
+            return { name: name, count: Number(counts[name]) };
+        }).sort(function (a, b) {
             if (a.count !== b.count) return b.count - a.count;
             return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
         });
-        return rows;
     }
 
     var majors = sortedCounts(data.Majors);
-    var majorTarget = document.getElementById('majorChart');
+    const majorTarget = document.getElementById('majorChart');
+    if (!majorTarget) return;
     if (!majors.length) {
         majorTarget.appendChild(element('p', 'chart-empty', 'No student majors to display.'));
     } else {
@@ -79,8 +78,8 @@
         chart.setAttribute('role', 'img');
         chart.setAttribute('aria-label', 'Number of students in each major');
         var axis = element('div', 'major-y-axis');
-        axis.appendChild(element('span', '', majors[0].count));
-        axis.appendChild(element('span', '', Math.round(majors[0].count / 2)));
+        axis.appendChild(element('span', '', String(majors[0].count)));
+        axis.appendChild(element('span', '', String(Math.round(majors[0].count / 2))));
         axis.appendChild(element('span', '', '0'));
         chart.appendChild(axis);
         var scroll = element('div', 'major-chart-scroll');
@@ -89,7 +88,7 @@
             var column = element('div', 'major-column');
             column.title = major.name + ': ' + major.count + ' students';
             var space = element('div', 'major-bar-space');
-            space.appendChild(element('strong', 'major-bar-value', major.count));
+            space.appendChild(element('strong', 'major-bar-value', String(major.count)));
             var bar = element('span', 'major-bar');
             bar.style.height = Math.round(170 * major.count / majors[0].count) + 'px';
             bar.style.backgroundColor = colors[index % colors.length];
@@ -104,7 +103,8 @@
     }
 
     var companies = sortedCounts(data.PlacedCompanies);
-    var companyTarget = document.getElementById('companyChart');
+    const companyTarget = document.getElementById('companyChart');
+    if (!companyTarget) return;
     if (!companies.length) {
         companyTarget.appendChild(element('p', 'chart-empty', 'No students are assigned to companies yet.'));
     } else {
@@ -114,7 +114,7 @@
             var name = element('span', '', company.name);
             name.title = company.name;
             label.appendChild(name);
-            label.appendChild(element('strong', '', company.count));
+            label.appendChild(element('strong', '', String(company.count)));
             row.appendChild(label);
             var track = element('div', 'chart-track');
             track.setAttribute('aria-hidden', 'true');
@@ -127,7 +127,8 @@
     }
 
     var opportunities = sortedCounts(data.OpportunityCompanies);
-    var opportunityTarget = document.getElementById('opportunityCharts');
+    const opportunityTarget = document.getElementById('opportunityCharts');
+    if (!opportunityTarget) return;
     if (!data.TotalOpportunities) {
         opportunityTarget.appendChild(element('p', 'chart-empty', 'No opportunities in Firebase yet.'));
         return;
@@ -143,14 +144,13 @@
     pie.setAttribute('role', 'img');
     pie.setAttribute('aria-label', 'Share of opportunities by company');
     var legend = element('div', 'opportunity-pie-legend');
-    var gradientParts = [];
     var counted = 0;
-    opportunities.forEach(function (company, index) {
+    var gradientParts = opportunities.map(function (company, index) {
         var color = 'hsl(' + ((index * 137 + 205) % 360) + ', 68%, 56%)';
         var column = element('div', 'opportunity-bar-column');
         column.title = company.name + ': ' + company.count + ' opportunities';
         var space = element('div', 'opportunity-bar-space');
-        space.appendChild(element('strong', '', company.count));
+        space.appendChild(element('strong', '', String(company.count)));
         var bar = element('span', 'opportunity-bar');
         bar.style.height = Math.round(160 * company.count / opportunities[0].count) + 'px';
         bar.style.backgroundColor = color;
@@ -162,15 +162,16 @@
         var start = 100 * counted / data.TotalOpportunities;
         counted += company.count;
         var end = 100 * counted / data.TotalOpportunities;
-        gradientParts.push(color + ' ' + start + '% ' + end + '%');
+        var gradientPart = color + ' ' + start + '% ' + end + '%';
         var item = element('span');
         item.title = company.name;
         var square = element('i');
         square.style.backgroundColor = color;
         item.appendChild(square);
         item.appendChild(element('span', 'pie-company-name', company.name));
-        item.appendChild(element('strong', '', company.count));
+        item.appendChild(element('strong', '', String(company.count)));
         legend.appendChild(item);
+        return gradientPart;
     });
     barsScroll.appendChild(bars);
     barsPanel.appendChild(barsScroll);
